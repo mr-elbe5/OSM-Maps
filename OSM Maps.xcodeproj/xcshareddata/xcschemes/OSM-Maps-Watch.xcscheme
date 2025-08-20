@@ -16,8 +16,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4E2157FF2DF1DFA9001ED51D"
-               BuildableName = "Maps4OSM-WatchOS.app"
-               BlueprintName = "Maps4OSM-WatchOS"
+               BuildableName = "OSM-Maps-Watch.app"
+               BlueprintName = "OSM-Maps-Watch"
                ReferencedContainer = "container:OSM Maps.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -30,8 +30,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4E2157D02DF1DE73001ED51D"
-               BuildableName = "Maps4OSM-IOS.app"
-               BlueprintName = "Maps4OSM-IOS"
+               BuildableName = "OSM-Maps-Mobile.app"
+               BlueprintName = "OSM-Maps-Mobile"
                ReferencedContainer = "container:OSM Maps.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -60,8 +60,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4E2157FF2DF1DFA9001ED51D"
-            BuildableName = "Maps4OSM-WatchOS.app"
-            BlueprintName = "Maps4OSM-WatchOS"
+            BuildableName = "OSM-Maps-Watch.app"
+            BlueprintName = "OSM-Maps-Watch"
             ReferencedContainer = "container:OSM Maps.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -77,8 +77,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4E2157FF2DF1DFA9001ED51D"
-            BuildableName = "Maps4OSM-WatchOS.app"
-            BlueprintName = "Maps4OSM-WatchOS"
+            BuildableName = "OSM-Maps-Watch.app"
+            BlueprintName = "OSM-Maps-Watch"
             ReferencedContainer = "container:OSM Maps.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

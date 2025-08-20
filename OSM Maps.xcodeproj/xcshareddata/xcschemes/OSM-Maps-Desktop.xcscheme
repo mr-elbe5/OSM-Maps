@@ -16,8 +16,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4E2157EC2DF1DF5A001ED51D"
-               BuildableName = "Maps4OSM-MacOS.app"
-               BlueprintName = "Maps4OSM-MacOS"
+               BuildableName = "OSM-Maps-Desktop.app"
+               BlueprintName = "OSM-Maps-Desktop"
                ReferencedContainer = "container:OSM Maps.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,8 +45,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4E2157EC2DF1DF5A001ED51D"
-            BuildableName = "Maps4OSM-MacOS.app"
-            BlueprintName = "Maps4OSM-MacOS"
+            BuildableName = "OSM-Maps-Desktop.app"
+            BlueprintName = "OSM-Maps-Desktop"
             ReferencedContainer = "container:OSM Maps.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -62,8 +62,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4E2157EC2DF1DF5A001ED51D"
-            BuildableName = "Maps4OSM-MacOS.app"
-            BlueprintName = "Maps4OSM-MacOS"
+            BuildableName = "OSM-Maps-Desktop.app"
+            BlueprintName = "OSM-Maps-Desktop"
             ReferencedContainer = "container:OSM Maps.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
