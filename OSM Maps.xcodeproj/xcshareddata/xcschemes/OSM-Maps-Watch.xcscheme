@@ -16,7 +16,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4E2157FF2DF1DFA9001ED51D"
-               BuildableName = "OSM-Maps-Watch.app"
+               BuildableName = "OSM Maps.app"
                BlueprintName = "OSM-Maps-Watch"
                ReferencedContainer = "container:OSM Maps.xcodeproj">
             </BuildableReference>
@@ -30,7 +30,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4E2157D02DF1DE73001ED51D"
-               BuildableName = "OSM-Maps-Mobile.app"
+               BuildableName = "OSM Maps.app"
                BlueprintName = "OSM-Maps-Mobile"
                ReferencedContainer = "container:OSM Maps.xcodeproj">
             </BuildableReference>

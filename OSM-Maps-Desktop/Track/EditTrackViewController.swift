@@ -5,6 +5,7 @@
  */
 
 import AppKit
+import CoreLocation
 
 class EditTrackViewController: ModalViewController {
     
@@ -66,7 +67,7 @@ class EditTrackViewController: ModalViewController {
     
     override func viewDidAppear() {
         super.viewDidAppear()
-        //view.window?.makeFirstResponder(nil)
+        view.window?.makeFirstResponder(nil)
     }
     
     func updateTrackpointDetailView(){
@@ -118,6 +119,43 @@ extension EditTrackViewController: EditTrackMenuDelegate{
             }
         }
         updateTrackpointDetailView()
+    }
+    
+    func insertTrackpoint(){
+        if let i = getSelectedTrackpointTupleIndex(){
+            let tp1 = newItem.track.trackpoints[i]
+            let tp2 = newItem.track.trackpoints[i+1]
+            let newLatitude = (tp1.coordinate.latitude + tp2.coordinate.latitude)/2
+            let newLongitude = (tp1.coordinate.longitude + tp2.coordinate.longitude)/2
+            let newDate = Date(timeIntervalSince1970: (tp1.timestamp.timeIntervalSince1970 + tp2.timestamp.timeIntervalSince1970)/2)
+            let newTp = Trackpoint(coordinate: CLLocationCoordinate2D(latitude: newLatitude, longitude: newLongitude), altitude: (tp1.altitude + tp2.altitude)/2, timestamp: newDate)
+            newItem.track.trackpoints.insert(newTp, at: i+1)
+            newItem.track.trackpoints.deselectAll()
+            newItem.track.trackpoints[i+1].selected = true
+            newItem.trackpointsChanged()
+            mapView.trackpointsChanged()
+            updateTrackpointDetailView()
+        }
+    }
+    
+    private func  getSelectedTrackpointTupleIndex() -> Int?{
+        for i in 0..<newItem.track.trackpoints.count{
+            var tp = newItem.track.trackpoints[i]
+            if tp.selected{
+                if i<(newItem.track.trackpoints.count-1), newItem.track.trackpoints[i+1].selected{
+                    for j in i+2..<newItem.track.trackpoints.count{
+                        if newItem.track.trackpoints[j].selected{
+                            return nil
+                        }
+                    }
+                    return i
+                }
+                else{
+                    return nil
+                }
+            }
+        }
+        return nil
     }
     
     func deleteSelectedTrackpoints() {
