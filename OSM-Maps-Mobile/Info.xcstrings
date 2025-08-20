@@ -1,0 +1,210 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "detailInfoText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detailansichten können einzelne Ansichten von Bildern, Notizen oder Touren sein. Es können aber auch wie in den Listenansichten aus dem oberen Menü Listen von solchen Elementen sein. "
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Details may be single views of images, notes or tracks or it may be a list of such items like in the list views from top menu."
+          }
+        }
+      }
+    },
+    "elbe5LegalInfo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regeln für das Laden von Elbe5.de"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Legal Info for tiles from Elbe5.de"
+          }
+        }
+      }
+    },
+    "generalInfoText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese App zeigt OSM-basierte Karten aus wählbaren Quellen (siehe Einstellungen), kann Bilder aufnehmen, Bilder und Notizen zuordnen und Tourenaufnahmen erzeugen.\n\nSie kann all dies über Backup-Dateien mit der Desktop-App synchronisieren."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This app shows OSM based maps from a selectable source (see top menu - gear icon), can take photos, add images and notes and create tracks.\nIt can synchronize all of that via backup files with the desktop app."
+          }
+        }
+      }
+    },
+    "info" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Info"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Info"
+          }
+        }
+      }
+    },
+    "infoDetails" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einzelansichten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detail Views"
+          }
+        }
+      }
+    },
+    "infoGeneral" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allgemein"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "General"
+          }
+        }
+      }
+    },
+    "infoLists" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listenansichten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "List views"
+          }
+        }
+      }
+    },
+    "infoMap" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karte"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Map"
+          }
+        }
+      }
+    },
+    "infoMenus" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menüs"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menus"
+          }
+        }
+      }
+    },
+    "listInfoText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus Listenansichten kannst du Einzelansichten öffnen, sie auf der Karten anzeigen oder auch einzelne ausgewählte Elemente löschen.\nIn der Bilderleiste können Bilder importiert und exportiert werden.\nIn der Tourliste können Touren im GPX-Format importiert oder exportiert werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "From list views, you can show item details, show them on the map or delete some if selected.\nIn the image list you can import and export images.\nIn the track list you can import and export tracks in GPX format."
+          }
+        }
+      }
+    },
+    "mapInfoText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auf der Karte werden Bilder, Notizen und Touren mit Nadeln angezeigt, wobei die Farben auf die Inhalte hinweisen: grün: nur Notiz, rot: mit Bild, blau: Tourstart, violett: Bild und Tour. Liegen mehrere Markierungen eng zusammen, wird diese Gruppe durch ein Icon mit drei Nadeln angezeigt. Diese kann man durch Hineinzoomen auflösen.\n\nAnklicken einer Markierung öffnet eine Detailansicht mit allen enthaltenen Elementen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On the map images, notes and tracks are shown with pin icons in several colors: green: only notes, red: with image, blue: track start, purple: image and track.\nIf several locations are too close, this group is shown with a triple pin icon. You can dissolve it by zooming in.\n\nClicking on a marker opens a detail view with all contained items."
+          }
+        }
+      }
+    },
+    "menuInfoText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menü oben:\nLinks:\n - Liste aller Bilder\n - Liste aller Notizen\n - Liste aller aufgezeichneten Touren\nMitte:\n - Zentrales Kreuz ein- oder ausblenden\n - Auf aktuellen Ort zentrieren\nRechts:\n - Suche\n - Einstellungen, Vorladen und Sicherung\n - Diese Info\n\nLinkes Menü:\n- Anzeige für aktuellen Fokus: Wenn das zentrale Kreuz sichtbar ist, beziehen sich alle Aktionen auf dessen Ort, andernfalls auf den aktuellen Ort\n- Info über den jeweiligen Ort\n- Ein Foto aufnehmen (nur für aktuellen Ort)\n- Ein Bild aus der gewählten Quelle hinzufügen (siehe Einstellungen)\n- Eine Notiz für den jeweiligen Ort erstellen\n- Eine Touraufzeichnung starten oder stoppen\n\nRechtes Menü:\n- Hineinzoomen\n- Herauszoomen\n- Bildmarker ein- oder ausblenden\n- Notizmarker ein- oder ausblenden\n- Tourmarker ein- oder ausblenden\n- Aktueller Position mit der Karte folgen oder nicht\n\nUnterer Status:\n- Aktuelle Richtung\nWenn eine Tour aufgezeichnet wird:\n- Rechter Schalter zum Pausieren/Wiederaufnehmen der Touraufnahme \n- Tourdauer\n- Distanz und Höhenmeter\n- Aktuelle Koordinaten\n- Aktuelle Richtung und Höhe\n"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top menu:\nLeft:\n - List of all images\n - List of all notes\n - List of all recorded tracks\nCenter:\n - Show or hide center cross button\n - Center to current location\nRight:\n - Search\n - Settings, preload and backup\n - This info\n\nLeft menu:\n- Marker for current scope: If the center cross is visible, all actions are related to its location, otherwise they will be related to the current location\n- Info about the location in scope\n- Take a photo (only for current location)\n- Add an image from the selected source (see settings)\n- Add a note for the location in scope\n- Start or stop tracking\n\nRight menu:\n- Zoom in\n- Zoom out\n- Show or hide image markers\n- Show or hide note markers\n- Show or hide track markers\n- Activate or deactivate following the current location\n\nBottom  status:\n- Current direction\nIf a track is active:\n- Right button for pause/resume recording\n- Duration\n- Horizontal and Upward distance\n- Current Coordinate\n- Direction and current altitude\n"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

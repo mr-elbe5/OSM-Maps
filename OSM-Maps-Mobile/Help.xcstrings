@@ -1,0 +1,907 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "arrowDownIcon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abwärts zurückgelegt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Covered Downhill"
+          }
+        }
+      }
+    },
+    "arrowRightIcon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zurückgelegte Entfernung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Covered Distance"
+          }
+        }
+      }
+    },
+    "arrowUpIcon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aufwärts zurückgelegt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Covered Uphill"
+          }
+        }
+      }
+    },
+    "centerCross" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kreuz (Schaltfläche) in Kartenmitte"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cross (Button) at Map Center"
+          }
+        }
+      }
+    },
+    "centerIcon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karte auf aktuelle Position zentrieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Center Map to current Position"
+          }
+        }
+      }
+    },
+    "clockIcon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verstrichene Zeit auf Tour"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tracking time"
+          }
+        }
+      }
+    },
+    "compassIcon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuelle Richtung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current Direction"
+          }
+        }
+      }
+    },
+    "gpsStrength" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GPS-Stärke"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GPS Strength"
+          }
+        }
+      }
+    },
+    "help" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hilfe"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Help"
+          }
+        }
+      }
+    },
+    "helpBackup" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Backup/Restore"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Backup/Restore"
+          }
+        }
+      }
+    },
+    "helpBackupText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kannst Backups erstellen und als zip-Datei speichern. Du kannst Daten mit solchen Dateien wiederherstellen, sogar aus Backups des älteren Maps For OSM."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can create backups and save them as a zip file. You can restore data from these files, even from backups from the older Maps For OSM."
+          }
+        }
+      }
+    },
+    "helpGeneral" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allgemein"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "General"
+          }
+        }
+      }
+    },
+    "helpGeneralText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese App zeigt OSM Karten aus wählbaren Quellen (OSM oder Elbe5). Dazu kann man Notizen erstellen, Bilder und Touren im GPX-Format hinzufügen und editieren sowie eigene Touren aufzeichnen.\nSie hat eine Listenansichten für alle hinzugefügten Elemente.\nSie kann all dies über die iCloud oder Backup-Dateien mit der Desktop-App synchronisieren."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This app shows OSM maps from a selectable sources (OSM or Elbe5). You can create Notes add and edit photos and tracks in GPX format add record own tracks. It has list views of all attached items. It can synchronize all of this via iCloud or backup files with the desktop app."
+          }
+        }
+      }
+    },
+    "helpICloud" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud"
+          }
+        }
+      }
+    },
+    "helpICloudText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daten können mit anderen Geräten über iCloud synchronisiert werden. Die Synchronisierung erfolgt manuell in eine oder beide Richtungen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data can be synchronized with other devices via iCloud. The synchronization is done manually in one or both directions."
+          }
+        }
+      }
+    },
+    "helpImages" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilder"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photos"
+          }
+        }
+      }
+    },
+    "helpImagesText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Liste zeigt alle Bilder der App. Sie können dort selektiert, in voller Größe angezeigt, ihr Ort auf der Karte angezeigt, exportiert oder gelöscht werden.\nDas Menü oben von links:\n- alle auswählen/abwählen\n- Bilder importieren\n- ausgewählte Bilder exportieren\n- ausgewählte Bilder löschen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The list shows all images of this app.\nThere they can be selected, displayed in full size, shown their location on the map, exported or deleteed.\nThe top menu from left:\n- select/deselect all\n- import photos\n- export selected images\n- delete selected photos"
+          }
+        }
+      }
+    },
+    "helpMap" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karte"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Map"
+          }
+        }
+      }
+    },
+    "helpMapText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Kartensicht zeigt Karten auf der Basis der ausgewählten Quelle (siehe Einstellungen) an.\nSie kann verschoben und gezoomt werden, sowohl mit der Maus als auch mit den Plus- und Minus-Zeichen.\nAuf der Karte werden Orte von Notizen, Bildern und Touren angezeigt, wobei die Farben auf die Inhalte hinweisen: grün für Notiz, rot für Bild, blau für Tour. Liegen mehrere Markierungen eng zusammen, wird diese Gruppe durch ein Icon mit drei Nadeln angezeigt (violett für Bilder und Touren). Die Gruppen kann man durch Hineinzoomen auflösen.\nAnklicken einer Markierung öffnet eine Listenansicht der Elemente.\nÜber die Detailansicht könnan Elemente auf der Karte angezeigt oder editiert werden\nWeiterhin kann über das Kreuz in der Kartenmitte eine eine Notiz oder ein Bild hinzugefügt werden. Wird ein Bild auf diese Weise hinzugefügt, werden dessen GPS-Daten auf diese Position geändert.\nDas Menü oben von links:\n- Kreuz in der Kartenmitte einblenden/ausblenden\n zu aktueller Position wechseln\n- Suche öffnen\nWenn auf der Karte ein Platzhalter erscheint (Zahnrad), dann wird dieser Teil der Karte noch geladen. Man kann das mit dem \"Neu laden\"-Knopf rechts überprüfen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The map view shows maps on the basis of the selected source (see preferences).\nIt can be scrolled, zoomed, using the mouse or using the plus and minus icons on the right.\nOn the map items are shown with pin icons in several colors: green for note, red for photo , blue for track.\nIf several items are too close, this group is shown with a triple pin icon (purple for images and tracks). You can dissolve it by zooming in.\nClicking on a pin opens the list view of its elements.\nUsing the detail view you can show item on the map (map icon) or edit them.\nFurther, you can add notes and photos using the cross in the center of the map. If a photo is add this way, its GPS data is changed to this position.\nThe top menu from left:\n- show/hide the cross in the map center\n- jump to the current position\n- open search\nIf the map shows a placeholder (gear image), this part of the map is still loading. You may check this with the refresh button on the right."
+          }
+        }
+      }
+    },
+    "helpNotes" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notizen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notes"
+          }
+        }
+      }
+    },
+    "helpNotesText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Liste zeigt alle Notizen der App. Sie können dort auf der Karte angezeigt, editiert oder gelöscht werden.\n\nDas Menü oben von links:\n- Notiz editieren\n- Auswahl umkehren\n- ausgewählte löschen\n\nDas Notizmenü von links:\n- Kartenposition anzeigen\n- Notiz editieren\n- Auswahl umkehren\n"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The note list shows all notes of this app.\nThere they can be shown on the map, edited or deleted.\n\nThe top menu from left:\n- toggle sorting\n- toggle selection\n- delete selected\n\nThe cell menu from left:\n- show position on map\n- edit note\n- toggle selection\n"
+          }
+        }
+      }
+    },
+    "helpPreferences" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        }
+      }
+    },
+    "helpPreferencesText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Einstellungen können diverse Voreinstellungen geändert sowie Kartenkacheln für Offline-Nutzung vorgeladen werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Preferences you can change various presets of the app and preload map tiles for offline use."
+          }
+        }
+      }
+    },
+    "helpText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hilfetext"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Help Text"
+          }
+        }
+      }
+    },
+    "helpTracks" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tracks"
+          }
+        }
+      }
+    },
+    "helpTracksText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Liste zeigt alle Touren der App. Sie können dort auf der Karte angezeigt, importiert, exportiert oder gelöscht werden.\nDas Menü oben von links:\n- Tour exportieren\n- alle auswählen/abwählen\n- ausgewählte löschen\n"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The list shows all tracks of this app.\nThere they can be shown on the map, exported or deleted.\nThe top menu from left:\n- import track\n- select/deselect all\n- delete selected\n"
+          }
+        }
+      }
+    },
+    "helpViewFilter" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ansichtsfilter"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View Filter"
+          }
+        }
+      }
+    },
+    "helpViewFilterText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit dem Ansichtsfilter kann die Sichtbarkeit der Kartenelemente nach Datum beschränkt werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "With the view filter you can limit the visibility of map items by date."
+          }
+        }
+      }
+    },
+    "iconHelp" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Symbollegende"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "icon legend"
+          }
+        }
+      }
+    },
+    "imageGroupMarker" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markierung für Gruppe von Bildern"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Image Group Marker"
+          }
+        }
+      }
+    },
+    "imageMarker" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildmarkierung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Image Marker"
+          }
+        }
+      }
+    },
+    "imagesList" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bilderliste"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photo List"
+          }
+        }
+      }
+    },
+    "map" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karte"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Map"
+          }
+        }
+      }
+    },
+    "mapMenus" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kartenmenüs"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Map Menus"
+          }
+        }
+      }
+    },
+    "mixedGroupMarker" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markierung für gemischte Gruppe"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mixed Group Marker"
+          }
+        }
+      }
+    },
+    "mountainIcon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuelle Höhe"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current Altitude"
+          }
+        }
+      }
+    },
+    "noteGroupMarker" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markierung für Gruppe von Notizen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Note Group Marker"
+          }
+        }
+      }
+    },
+    "noteMarker" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notizmarkierung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Note Marker"
+          }
+        }
+      }
+    },
+    "notesList" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notizenliste"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Note List"
+          }
+        }
+      }
+    },
+    "pauseIcon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touraufnahme pausieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause Tracking"
+          }
+        }
+      }
+    },
+    "refreshIcon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karte aktualisieren (und Touranzeige löschen)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Refresh Map (and hide track)"
+          }
+        }
+      }
+    },
+    "searchIcon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suche öffnen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Search"
+          }
+        }
+      }
+    },
+    "settings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ansichtsfilter, iCloud, Sicherung, Karteneinstellungen, Karten vorladen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View Filter, iCloud, Backup, MapSettings, Tile Preload"
+          }
+        }
+      }
+    },
+    "startTrackIcon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touraufnahme starten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start Tracking"
+          }
+        }
+      }
+    },
+    "stopIcon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touraufnahme beiden (und optional speichern)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop Tracking (and optionally save track)"
+          }
+        }
+      }
+    },
+    "thisHelp" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Hilfe"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This Help"
+          }
+        }
+      }
+    },
+    "topMenu" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hauptmenü"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top Menu"
+          }
+        }
+      }
+    },
+    "trackGroupMarker" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markierung für Gruppe von Touren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Track Group Marker"
+          }
+        }
+      }
+    },
+    "tracking" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touraufnahme"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tracking"
+          }
+        }
+      }
+    },
+    "trackMarker" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tourmarkierung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Track Marker"
+          }
+        }
+      }
+    },
+    "tracksList" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tourenliste"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Track List"
+          }
+        }
+      }
+    },
+    "zoomInIcon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hineinzoomen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zoom In"
+          }
+        }
+      }
+    },
+    "zoomOutIcon" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herauszoomen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zoom Out"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

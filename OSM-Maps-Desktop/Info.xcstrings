@@ -1,0 +1,397 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "elbe5LegalInfo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regeln für das Laden von Elbe5.de"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Legal Info for tiles from Elbe5.de"
+          }
+        }
+      }
+    },
+    "help" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hilfe"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Help"
+          }
+        }
+      }
+    },
+    "helpGeneral" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allgemein"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "General"
+          }
+        }
+      }
+    },
+    "helpGrid" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bild-Raster"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Image Grid"
+          }
+        }
+      }
+    },
+    "helpGridText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Rasteransicht zeigt alle Bilder, die Orten zugeordnet sind. Sie können dort selektiert (mehrere mit cmd + Maus), in der Diaschau angezeigt, ihr Ort auf der Karte angezeigt, ihre Bilddaten angesehen, exportiert oder gelöscht werden.\n\nDas Menü links von oben:\n- alle auswählen/abwählen\n- selektierte Bilder als Diaschau anzeigen\n- Bilder importieren (benötigen GPS-Daten)\n- selektierte Bilder exportieren\n- Rasterelemente vergrössern\n- Rasterelemente verkleinern\n"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The grid view shows all images which are attached to a location.\nThere they can be selected (more with cmd + mouse), displayed in the slideshow, show their location on the map, view image data, export or delete them.\n\nThe left menu from top:\n- select/deselect all\n- show selected images in the slideshow\n- import images (need GPS data)\n- export selected images\n- increase raster item size\n- decrease raster item size\n"
+          }
+        }
+      }
+    },
+    "helpInfoText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese App ist eine Begleit-App für die mobile App \"Maps for OSM\", kann aber auch einzeln verwendet werden.\n\nSie zeigt OSM Karten aus wählbaren Quellen, kann Ortsmarkierungen setzen, Bilder, Tonaufnahmen, Videos und Notizen zuordnen und Touren im GPX-Format hinzufügen und editieren.\n\nSie hat eine Rasteransicht für zugeordnete Bilder und eine Diaschau für alle Medien.\n\nSie kann all dies über die iCloud oder Backup-Dateien mit der mobilen App synchronisieren."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This app is a companion app for the mobile app \"Maps for OSM\", though it can also be used standalone.\n\nIt shows OSM maps from a selectable source, can set and edit Location markers, attach images, audios, videos and notes to locations, add and edit tracks in GPX format have a grid view and slideshow of attached images and other media.\n\nIt can synchronize all of that via iCloud or backup files with the mobile app."
+          }
+        }
+      }
+    },
+    "helpMap" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karte"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Map"
+          }
+        }
+      }
+    },
+    "helpMapText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Kartensicht zeigt Karten auf der Basis der ausgewählten Quelle (oberes Menü - Kartensymbol) an.\nSie kann verschoben und gezoomt werden, sowohl mit der Maus als auch mit den Plus- und Minus-Zeichen oben links.\n\nAuf der Karte werden markierte Orte und ggf. Touren angezeigt, wobei die Farben auf die Inhalte hinweisen: grün - keine Medien, rot mit Medien, blau - Tourbeginn, violett - Medien und Tour. Liegen mehrere Markierungen eng zusammen, wird diese Gruppe durch ein Icon mit drei Nadeln angezeigt. Diese kann man durch Hineinzoomen auflösen.\n\nAnklicken einer Markierung öffnet die Detailansicht rechts.\n\nEs können über die Detailansicht von Orten Touren auf der Karten angezeigt werden (Kartensymbol).\n\nWeiterhin kann über das blaue Kreuz in der Kartenmitte eine Markierung gesetzt, eine Notiz, ein Bild oder andere Medien hinzugefügt werden.\n\nDer rechte Teil der Kartenansicht zeigt Details einer Gruppe oder eines einzelnen Ortes mit ihren zugeordneten Elementen. Diese können dort im Detail oder auf der Karte angezeigt, editiert oder gelöscht werden.\n\nInsbesondere können auch Touren im GPX-Format importiert, editiert und exportiert werden (Bleistift-Symbol).\n\nDas Menü links von oben:\n- Hineinzoomen\n- Herauszoomen\n- Kreuz in der Kartenmitte einblenden/ausblenden \n- auf aktuelle Position zentrieren\n- Ansicht neu laden\n- angezeigte Tour ausblenden\n\nWenn auf der Karte ein Platzhalter erscheint (Zahnrad), dann wird dieser Teil der Karte noch geladen. Man kann das mit dem \"Neu laden\"-Knopf überprüfen. "
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The map view shows maps on the basis of the selected source (top menu - map icon).\nIt can be scrolled, zoomed, as well using the mouse as using the plus and minus icons on the top left.\n\nOn the map marked locations are shown with pin icons in several colors: green - no media, red - with media, blue - track start, purple - media and track.\nIf several locations are too close, this group is shown with a triple pin icon. You can dissolve it by zooming in.\n\nClicking on a marker open the detail view on the right.\n\nUsing the detail view of locations you can show tracks which start there on the map (map icon).\n\nFurther, you can place a marker using the blue cross in the center of the map. There you can also add a note, an image or other media.\n\nThe right part of the map view shows details of a group or a single location with its attached items. These can can be viewed in detail or on the map, be edited or deleted.\n\nEspecially tracks in GPX format can be imported, viewed, edited and exported (pencil icon).\n\nThe left menu from the top:\n- zoom in\n- zoom out\n- show/hide the blue cross in the map center\n- refresh the map\n- hide a displayed track\n\nIf the map shows a placeholder (gear image), this part of the map is still loading. You may check this with the refresh button."
+          }
+        }
+      }
+    },
+    "helpPresenter" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diashow"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slideshow"
+          }
+        }
+      }
+    },
+    "helpPresenterText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In der Diaschau kann mit den Pfeilen rechts und links zwischen den enthaltenen Bildern. Videos und Audios navigiert werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In the slideshow view you can navigate between the selected media with the arrows on the left and on the right."
+          }
+        }
+      }
+    },
+    "info" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Info"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Info"
+          }
+        }
+      }
+    },
+    "infoMode" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffnet diese Info"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens this Info"
+          }
+        }
+      }
+    },
+    "infoURL" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "https://elbe5.de/openstreetmapkarten/mapsforosmiosapp.html"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "https://en.elbe5.de/openstreetmapmaps/mapsforosmiosapp.html"
+          }
+        }
+      }
+    },
+    "mapPreloadHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hier kannst Du Kartenkacheln für den aktuell sichtbaren Kartenbereich und verschiedene Zoomebenen vorladen.\nBITTE BEACHTEN! Für Massendownloads solltest Du die entsprechenden Rechte haben."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Here you can preload map tiles for the currently visible map area for selected zoom levels.\nPLEASE NOTE! For mass downloads you should have respective rights."
+          }
+        }
+      }
+    },
+    "maxMergeDistanceHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wenn ein neuer Ort benötigt wird und es existiert ein Ort in einer Entfernung unter diesem Wert, wird dieser Ort benutzt und kein neuer erstellt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If a new location is needed and its coordinates are closer than this distance to another locations coordinates, this location is used and no new location is created."
+          }
+        }
+      }
+    },
+    "nameOrDescriptionHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trage bitte einen Namen oder eine Beschreibung für diese Tour ein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please enter a name for this track"
+          }
+        }
+      }
+    },
+    "osmLegalInfo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regeln für das Laden von OpenStreetMap.org"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Legal Info for tiles from OpenStreetMap.org"
+          }
+        }
+      }
+    },
+    "preloadHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie finden Links zu den Regeln in den Einstellungen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can find links to legal infos under preferences."
+          }
+        }
+      }
+    },
+    "progressHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopieren von Dateien aus der Cloud und in die Cloud kann abhängig von ihrer Größe eine Weile dauern."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Up- and download of files may take a while depending on their size."
+          }
+        }
+      }
+    },
+    "restoreBackupHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Wiederherstellen löscht alle aktuellen Inhalte."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restoring a backup will delete all current content."
+          }
+        }
+      }
+    },
+    "trackEditorHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kannst Punkte auf der Karte auswählen (mehrere mit cmd), um sie zu löschen (rotes Icon oben), Punkte bewegen (Zeiten werden nicht verändert) oder die ganze Tour vereinfachen, indem ein minimaler Abstand zwischen zwei Punkten gesetzt wird."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can select points on the map (more with cmd) for deleting (red icon on top), you can move points on the map (timestamps are not changed) or you can simplify the whole track by setting a minimum distance between points."
+          }
+        }
+      }
+    },
+    "trackSettingsHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die folgenden numerischen Einstellungen dienen dem Tunen der GPS-Verfolgung. Insbesondere hat die Zeit zwischen zwei Punkten einen deutlichen Effekt auf den Stromverbrauch. Die minimale Distanz zwischen Punkten beeinflusst die Größe und Genauigkeit der Tourdaten."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The following numerical settings serve for tuning your location tracking. Especially the time between tracking points can have a considerable effect on power consumption. The minimal distance between points affects the size and exactness of your track data."
+          }
+        }
+      }
+    },
+    "watchUploadInfo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wenn Du eine verbundene Uhr hast, kannst Du hier Kartenkacheln auf die Uhr vorladen. Die Kacheln sollten bereits hier geladen sein und nicht zu viele sein (möglichst nur für den aktuellen Zoom-Wert auf der Uhr - Standard ist 16)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If you have a connected watch, you can preload tiles to your watch app. Tiles should already be loaded to your phone and it should be a small amount (preferably only your watch zoom - default is 16)."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

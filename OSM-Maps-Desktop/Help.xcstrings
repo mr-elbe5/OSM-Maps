@@ -1,0 +1,159 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "help" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hilfe"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Help"
+          }
+        }
+      }
+    },
+    "helpGeneral" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allgemein"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "General"
+          }
+        }
+      }
+    },
+    "helpGeneralText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Diese App ist eine Begleit-App für die mobile App „OSM Maps\", kann aber auch einzeln verwendet werden.\n\nSie zeigt OSM Karten aus wählbaren Quellen, kann Bilder hinzufügen, Notizen erstellen und Touren im GPX-Format hinzufügen und editieren.\n\nSie hat eine Rasteransicht für Bilder und Touren.\n\nSie kann all dies über die iCloud oder Backup-Dateien mit der mobilen App synchronisieren."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This app is a companion app for the mobile app „OSM Maps\", though it can also be used standalone.\n\nIt shows OSM maps from a selectable source, can set and edit images and notes , add and edit tracks in GPX format, it has grid views of attached images and tracks.\n\nIt can synchronize all of that via iCloud or backup files with the mobile app."
+          }
+        }
+      }
+    },
+    "helpImageGrid" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bild-Raster"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Image Grid"
+          }
+        }
+      }
+    },
+    "helpImageGridText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Rasteransicht zeigt alle Bilder, der App. Sie können dort selektiert (mehrere mit cmd + Maus), in der Diaschau angezeigt, ihr Ort auf der Karte angezeigt, ihre Bilddaten angesehen, exportiert oder gelöscht werden.\n\nDas Menü links von oben:\n- alle auswählen/abwählen\n- selektierte Bilder als Diaschau anzeigen\n- Bilder importieren (benötigen GPS-Daten)\n- selektierte Bilder exportieren\n- Rasterelemente vergrössern\n- Rasterelemente verkleinern\n"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The image grid view shows all images of this app.\nThere they can be selected (more with cmd + mouse), displayed in the slideshow, show their location on the map, view image data, export or delete them.\n\nThe left menu from top:\n- select/deselect all\n- show selected images in the slideshow\n- import images (need GPS data)\n- export selected images\n- increase raster preview size\n- decrease raster preview size\n"
+          }
+        }
+      }
+    },
+    "helpMap" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karte"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Map"
+          }
+        }
+      }
+    },
+    "helpMapText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Die Kartensicht zeigt Karten auf der Basis der ausgewählten Quelle (oberes Menü - Kartensymbol) an.\nSie kann verschoben und gezoomt werden, sowohl mit der Maus als auch mit den Plus- und Minus-Zeichen oben links.\n\nAuf der Karte werden Orte von Notizen, Bildern und  Touren angezeigt, wobei die Farben auf die Inhalte hinweisen: grün - Notiz, rot Notiz und/oder Bild, blau - Tour, violett - Bild und Tour. Liegen mehrere Markierungen eng zusammen, wird diese Gruppe durch ein Icon mit drei Nadeln angezeigt. Diese kann man durch Hineinzoomen auflösen.\n\nAnklicken einer Markierung öffnet die Detailansicht rechts.\n\nEs können über die Detailansicht Touren auf der Karte angezeigt oder editiert werden\n\nWeiterhin kann über das Kreuz in der Kartenmitte eine eine Notiz oder ein Bild hinzugefügt werden. Wird ein Bild auf diese Weise hinzugefügt, werden dessen GPS-Daten auf diese Position geändert.\n\nDas Menü links von oben:\n- Hineinzoomen\n- Herauszoomen\n- Kreuz in der Kartenmitte einblenden/ausblenden \n- Ansicht neu laden (und\nangezeigte Tour ausblenden)\n- Suche öffnen\n\nWenn auf der Karte ein Platzhalter erscheint (Zahnrad), dann wird dieser Teil der Karte noch geladen. Man kann das mit dem \"Neu laden\"-Knopf überprüfen. "
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The map view shows maps on the basis of the selected source (top menu - map icon).\nIt can be scrolled, zoomed, as well using the mouse as using the plus and minus icons on the top left.\n\nOn the map items are shown with pin icons in several colors: green - note only, red - image , blue - track, purple - image and track.\nIf several items are too close, this group is shown with a triple pin icon. You can dissolve it by zooming in.\n\nClicking on a marker opens the detail view on the right.\n\nUsing the detail view you can show tracks on the map (map icon) or edit them.\n\nFurther, you can add notes and images using the blue cross in the center of the map.\n\nEspecially tracks in GPX format can be imported, viewed, edited and exported (pencil icon).\n\nThe left menu from the top:\n- zoom in\n- zoom out\n- show/hide the blue cross in the map center\n- refresh the map\n- hide a displayed track\n\nIf the map shows a placeholder (gear image), this part of the map is still loading. You may check this with the refresh button."
+          }
+        }
+      }
+    },
+    "helpTrackGrid" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touren-Raster"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Track Grid"
+          }
+        }
+      }
+    },
+    "helpTrackGridText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Rasteransicht zeigt alle Touren der App. Sie können dort auf der Karte angezeigt, exportiert oder gelöscht werden.\n\nDas Menü links von oben:\n- Tour importieren\n- Rasterelemente vergrössern\n- Rasterelemente verkleinern\n"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The track grid view shows all tracks of this app.\nThere they can be shown on the map, exported or deleted.\n\nThe left menu from top:\n- import track\n- increase raster preview size\n- decrease raster preview size\n"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

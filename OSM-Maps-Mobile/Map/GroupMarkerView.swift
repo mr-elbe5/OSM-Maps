@@ -1,0 +1,54 @@
+/*
+ OSM Maps
+ Display and use of OSM maps
+ Copyright: Michael Rönnau mr@elbe5.de
+ */
+
+import UIKit
+
+class GroupMarkerView : MarkerView{
+    
+    var group : MapItemGroup
+    
+    override var hasImage : Bool{
+        group.hasImage
+    }
+    
+    override var hasTrack : Bool{
+        group.hasTrack
+    }
+    
+    override var hasNote : Bool{
+        group.hasNote
+    }
+    
+    init(itemGroup: MapItemGroup){
+        self.group = itemGroup
+        super.init(frame: .zero)
+        updateImage()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func updateImage(){
+        if hasImage{
+            if hasTrack{
+                setImage(MapDefaults.mapMixedGroupIcon, for: .normal)
+            }
+            else{
+                setImage(MapDefaults.mapImageGroupIcon, for: .normal)
+            }
+        }
+        else if hasTrack{
+            setImage(MapDefaults.mapTrackGroupIcon, for: .normal)
+        }
+        else{
+            setImage(MapDefaults.mapPlaceGroupIcon, for: .normal)
+        }
+    }
+    
+}
+
+

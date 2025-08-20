@@ -1,0 +1,880 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4E21580A2DF1DFAA001ED51D /* Maps4OSM-WatchOS.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 4E2158002DF1DFA9001ED51D /* Maps4OSM-WatchOS.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4E9C207F2DF4A2B400ACE6C1 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = 4E9C207E2DF4A2B400ACE6C1 /* Zip */; };
+		4E9C212E2DF4AEF900ACE6C1 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = 4E9C212D2DF4AEF900ACE6C1 /* Zip */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4E2158082DF1DFAA001ED51D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4E2157C92DF1DE73001ED51D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4E2157FF2DF1DFA9001ED51D;
+			remoteInfo = "Maps4OSM-WatchOS Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4E21580E2DF1DFAA001ED51D /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				4E21580A2DF1DFAA001ED51D /* Maps4OSM-WatchOS.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4E2157D12DF1DE73001ED51D /* Maps4OSM-IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Maps4OSM-IOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E2157ED2DF1DF5A001ED51D /* Maps4OSM-MacOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Maps4OSM-MacOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E2158002DF1DFA9001ED51D /* Maps4OSM-WatchOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Maps4OSM-WatchOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		4E2157E32DF1DE74001ED51D /* Exceptions for "OSM-Maps-Mobile" folder in "Maps4OSM-IOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 4E2157D02DF1DE73001ED51D /* Maps4OSM-IOS */;
+		};
+		4E9C20492DF49FAD00ACE6C1 /* Exceptions for "Common" folder in "Maps4OSM-WatchOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Application/BasePaths.swift,
+				Data/ArrayIterator.swift,
+				Data/AsyncOperation.swift,
+				Data/GenericError.swift,
+				Data/OSLog.swift,
+				Data/Selectable.swift,
+				Data/StatusManager.swift,
+				Extensions/Array.swift,
+				"Extensions/CGPoint+CL.swift",
+				Extensions/CGRect.swift,
+				"Extensions/CGRect+CL.swift",
+				Extensions/CKContainer.swift,
+				Extensions/CKRecord.swift,
+				Extensions/CLLocation.swift,
+				Extensions/CLLocationCoordinate2D.swift,
+				Extensions/CLPlacemark.swift,
+				Extensions/Codable.swift,
+				Extensions/Data.swift,
+				Extensions/Date.swift,
+				Extensions/Dictionary.swift,
+				Extensions/Double.swift,
+				Extensions/FileManager.swift,
+				Extensions/KeyedDecodingContainer.swift,
+				Extensions/OSImage.swift,
+				Extensions/String.swift,
+				Extensions/StringProtocol.swift,
+				Extensions/TimeInterval.swift,
+				Extensions/URL.swift,
+				Extensions/UTType.swift,
+				Hints.xcstrings,
+				Location/CoordinateRegion.swift,
+				Location/CoordinateSpan.swift,
+				Location/LocationData.swift,
+				Location/LocationService.swift,
+				Location/World.swift,
+				Map/DrawTile.swift,
+				Map/ElevationProvider.swift,
+				Map/LocationDistance.swift,
+				Map/MapDefaults.swift,
+				Map/MapSource.swift,
+				Map/MapTile.swift,
+				Map/TileCache.swift,
+				Map/TileDownloadOperation.swift,
+				Map/TileProvider.swift,
+				MapItem/MapItem.swift,
+				Track/GPXData.swift,
+				Track/Track.swift,
+				Track/Trackpoint.swift,
+				Track/TrackpointInterval.swift,
+				Track/TrackpointList.swift,
+				Track/TrackRecorder.swift,
+			);
+			target = 4E2157FF2DF1DFA9001ED51D /* Maps4OSM-WatchOS */;
+		};
+		4E9C21002DF4AD9000ACE6C1 /* Exceptions for "Common" folder in "Maps4OSM-MacOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Application/AppData.swift,
+				Application/Backup.swift,
+				Application/BasePaths.swift,
+				Data/ArrayIterator.swift,
+				Data/AsyncOperation.swift,
+				Data/GenericError.swift,
+				Data/OSLog.swift,
+				Data/Selectable.swift,
+				Data/StatusManager.swift,
+				Extensions/Array.swift,
+				"Extensions/CGPoint+CL.swift",
+				Extensions/CGRect.swift,
+				"Extensions/CGRect+CL.swift",
+				Extensions/CKAsset.swift,
+				Extensions/CKContainer.swift,
+				Extensions/CKRecord.swift,
+				Extensions/CLLocation.swift,
+				Extensions/CLLocationCoordinate2D.swift,
+				Extensions/CLPlacemark.swift,
+				Extensions/Codable.swift,
+				Extensions/Data.swift,
+				Extensions/Date.swift,
+				Extensions/Dictionary.swift,
+				Extensions/Double.swift,
+				Extensions/FileManager.swift,
+				Extensions/KeyedDecodingContainer.swift,
+				Extensions/OSImage.swift,
+				Extensions/OSInsets.swift,
+				Extensions/PHPhotoLibrary.swift,
+				Extensions/String.swift,
+				Extensions/StringProtocol.swift,
+				Extensions/TimeInterval.swift,
+				Extensions/URL.swift,
+				Extensions/UTType.swift,
+				Hints.xcstrings,
+				iCloud/CloudSynchronizer.swift,
+				Image/ImageItem.swift,
+				Image/ImageMetaData.swift,
+				Localizable.xcstrings,
+				Location.xcstrings,
+				Location/CoordinateRegion.swift,
+				Location/CoordinateSpan.swift,
+				Location/LocationData.swift,
+				Location/LocationStatus.swift,
+				Location/World.swift,
+				Map/DrawTile.swift,
+				Map/ElevationProvider.swift,
+				Map/LocationDistance.swift,
+				Map/MapDefaults.swift,
+				Map/MapSource.swift,
+				Map/MapStatus.swift,
+				Map/MapTile.swift,
+				Map/TileCache.swift,
+				Map/TileDownloadOperation.swift,
+				Map/TileProvider.swift,
+				MapItem/MapItem.swift,
+				MapItem/MapItemGroup.swift,
+				MapItem/MapItemMetaData.swift,
+				MapItem/OldMapItems.swift,
+				Note/NoteItem.swift,
+				Search/Nominatim.swift,
+				Search/SearchQuery.swift,
+				Search/SearchStatus.swift,
+				Track/DrawTrackpoint.swift,
+				Track/GPXCreator.swift,
+				Track/GPXData.swift,
+				Track/GPXParser.swift,
+				Track/Track.swift,
+				Track/TrackImageCreator.swift,
+				Track/TrackItem.swift,
+				Track/Trackpoint.swift,
+				Track/TrackpointInterval.swift,
+				Track/TrackpointList.swift,
+				Track/VisibleTrack.swift,
+				View/OSView.swift,
+				View/OSViewController.swift,
+				View/TileView.swift,
+				View/ViewFilter.swift,
+			);
+			target = 4E2157EC2DF1DF5A001ED51D /* Maps4OSM-MacOS */;
+		};
+		4EB848302E2F6D540037E411 /* Exceptions for "OSM-Maps-Desktop" folder in "Maps4OSM-MacOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 4E2157EC2DF1DF5A001ED51D /* Maps4OSM-MacOS */;
+		};
+		4EF5F9BD2DF6CD9A009783CF /* Exceptions for "OSM-Maps-Watch" folder in "Maps4OSM-WatchOS" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 4E2157FF2DF1DFA9001ED51D /* Maps4OSM-WatchOS */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		4E2157D32DF1DE73001ED51D /* OSM-Maps-Mobile */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				4E2157E32DF1DE74001ED51D /* Exceptions for "OSM-Maps-Mobile" folder in "Maps4OSM-IOS" target */,
+			);
+			path = "OSM-Maps-Mobile";
+			sourceTree = "<group>";
+		};
+		4E2157EE2DF1DF5A001ED51D /* OSM-Maps-Desktop */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				4EB848302E2F6D540037E411 /* Exceptions for "OSM-Maps-Desktop" folder in "Maps4OSM-MacOS" target */,
+			);
+			path = "OSM-Maps-Desktop";
+			sourceTree = "<group>";
+		};
+		4E2158012DF1DFA9001ED51D /* OSM-Maps-Watch */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				4EF5F9BD2DF6CD9A009783CF /* Exceptions for "OSM-Maps-Watch" folder in "Maps4OSM-WatchOS" target */,
+			);
+			path = "OSM-Maps-Watch";
+			sourceTree = "<group>";
+		};
+		4E9C1FAB2DF49F2300ACE6C1 /* Common */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				4E9C21002DF4AD9000ACE6C1 /* Exceptions for "Common" folder in "Maps4OSM-MacOS" target */,
+				4E9C20492DF49FAD00ACE6C1 /* Exceptions for "Common" folder in "Maps4OSM-WatchOS" target */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4E2157CE2DF1DE73001ED51D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E9C207F2DF4A2B400ACE6C1 /* Zip in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E2157EA2DF1DF5A001ED51D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E9C212E2DF4AEF900ACE6C1 /* Zip in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E2157FD2DF1DFA9001ED51D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4E2157C82DF1DE73001ED51D = {
+			isa = PBXGroup;
+			children = (
+				4E9C1FAB2DF49F2300ACE6C1 /* Common */,
+				4E2157D32DF1DE73001ED51D /* OSM-Maps-Mobile */,
+				4E2157EE2DF1DF5A001ED51D /* OSM-Maps-Desktop */,
+				4E2158012DF1DFA9001ED51D /* OSM-Maps-Watch */,
+				4E9C207D2DF4A2B400ACE6C1 /* Frameworks */,
+				4E2157D22DF1DE73001ED51D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4E2157D22DF1DE73001ED51D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4E2157D12DF1DE73001ED51D /* Maps4OSM-IOS.app */,
+				4E2157ED2DF1DF5A001ED51D /* Maps4OSM-MacOS.app */,
+				4E2158002DF1DFA9001ED51D /* Maps4OSM-WatchOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4E9C207D2DF4A2B400ACE6C1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4E2157D02DF1DE73001ED51D /* Maps4OSM-IOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4E2157E42DF1DE74001ED51D /* Build configuration list for PBXNativeTarget "Maps4OSM-IOS" */;
+			buildPhases = (
+				4E2157CD2DF1DE73001ED51D /* Sources */,
+				4E2157CE2DF1DE73001ED51D /* Frameworks */,
+				4E2157CF2DF1DE73001ED51D /* Resources */,
+				4E21580E2DF1DFAA001ED51D /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4E2158092DF1DFAA001ED51D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				4E2157D32DF1DE73001ED51D /* OSM-Maps-Mobile */,
+				4E9C1FAB2DF49F2300ACE6C1 /* Common */,
+			);
+			name = "Maps4OSM-IOS";
+			packageProductDependencies = (
+				4E9C207E2DF4A2B400ACE6C1 /* Zip */,
+			);
+			productName = Maps4OSM;
+			productReference = 4E2157D12DF1DE73001ED51D /* Maps4OSM-IOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4E2157EC2DF1DF5A001ED51D /* Maps4OSM-MacOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4E2157F92DF1DF5B001ED51D /* Build configuration list for PBXNativeTarget "Maps4OSM-MacOS" */;
+			buildPhases = (
+				4E2157E92DF1DF5A001ED51D /* Sources */,
+				4E2157EA2DF1DF5A001ED51D /* Frameworks */,
+				4E2157EB2DF1DF5A001ED51D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				4E2157EE2DF1DF5A001ED51D /* OSM-Maps-Desktop */,
+			);
+			name = "Maps4OSM-MacOS";
+			packageProductDependencies = (
+				4E9C212D2DF4AEF900ACE6C1 /* Zip */,
+			);
+			productName = "Maps4OSM-MacOS";
+			productReference = 4E2157ED2DF1DF5A001ED51D /* Maps4OSM-MacOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4E2157FF2DF1DFA9001ED51D /* Maps4OSM-WatchOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4E21580B2DF1DFAA001ED51D /* Build configuration list for PBXNativeTarget "Maps4OSM-WatchOS" */;
+			buildPhases = (
+				4E2157FC2DF1DFA9001ED51D /* Sources */,
+				4E2157FD2DF1DFA9001ED51D /* Frameworks */,
+				4E2157FE2DF1DFA9001ED51D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				4E2158012DF1DFA9001ED51D /* OSM-Maps-Watch */,
+			);
+			name = "Maps4OSM-WatchOS";
+			packageProductDependencies = (
+			);
+			productName = "Maps4OSM-WatchOS Watch App";
+			productReference = 4E2158002DF1DFA9001ED51D /* Maps4OSM-WatchOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4E2157C92DF1DE73001ED51D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					4E2157D02DF1DE73001ED51D = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					4E2157EC2DF1DF5A001ED51D = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					4E2157FF2DF1DFA9001ED51D = {
+						CreatedOnToolsVersion = 16.4;
+					};
+				};
+			};
+			buildConfigurationList = 4E2157CC2DF1DE73001ED51D /* Build configuration list for PBXProject "OSM Maps" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				de,
+			);
+			mainGroup = 4E2157C82DF1DE73001ED51D;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				4E9C207C2DF4A29900ACE6C1 /* XCRemoteSwiftPackageReference "Zip" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 4E2157D22DF1DE73001ED51D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4E2157D02DF1DE73001ED51D /* Maps4OSM-IOS */,
+				4E2157EC2DF1DF5A001ED51D /* Maps4OSM-MacOS */,
+				4E2157FF2DF1DFA9001ED51D /* Maps4OSM-WatchOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4E2157CF2DF1DE73001ED51D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E2157EB2DF1DF5A001ED51D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E2157FE2DF1DFA9001ED51D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4E2157CD2DF1DE73001ED51D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E2157E92DF1DF5A001ED51D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4E2157FC2DF1DFA9001ED51D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4E2158092DF1DFAA001ED51D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4E2157FF2DF1DFA9001ED51D /* Maps4OSM-WatchOS */;
+			targetProxy = 4E2158082DF1DFAA001ED51D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4E2157E52DF1DE74001ED51D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "OSM-Maps-Mobile/OSM-Maps-Mobile.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_TEAM = 5UG99476V8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "OSM-Maps-Mobile/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "OSM Maps";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = NO;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Your location is needed for showing your current position and record it on demand.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Your location is needed for showing your current position and record it on demand.";
+				INFOPLIST_KEY_NSLocationUsageDescription = "Your location is needed for showing and saving your current position.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is needed for showing your current position and record it on demand.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "The access to the photo library is needed, when photos from the app are exported to the library or when photos from the library are assigned to a location.";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.elbe5.osmmaps;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4E2157E62DF1DE74001ED51D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "OSM-Maps-Mobile/OSM-Maps-Mobile.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 5;
+				DEVELOPMENT_TEAM = 5UG99476V8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "OSM-Maps-Mobile/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "OSM Maps";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = NO;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Your location is needed for showing your current position and record it on demand.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Your location is needed for showing your current position and record it on demand.";
+				INFOPLIST_KEY_NSLocationUsageDescription = "Your location is needed for showing and saving your current position.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is needed for showing your current position and record it on demand.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "The access to the photo library is needed, when photos from the app are exported to the library or when photos from the library are assigned to a location.";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.elbe5.osmmaps;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		4E2157E72DF1DE74001ED51D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 5UG99476V8;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		4E2157E82DF1DE74001ED51D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 5UG99476V8;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4E2157FA2DF1DF5B001ED51D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "OSM-Maps-Desktop/OSM-Maps-Desktop.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = 5UG99476V8;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "OSM-Maps-Desktop/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "OSM Maps";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
+				INFOPLIST_KEY_MetalCaptureEnabled = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "The app can select and modify photos";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.elbe5.osmmaps;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		4E2157FB2DF1DF5B001ED51D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "OSM-Maps-Desktop/OSM-Maps-Desktop.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = 5UG99476V8;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "OSM-Maps-Desktop/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "OSM Maps";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
+				INFOPLIST_KEY_MetalCaptureEnabled = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "The app can select and modify photos";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.elbe5.osmmaps;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		4E21580C2DF1DFAA001ED51D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "OSM-Maps-Watch/OSM-Maps-Watch.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = 5UG99476V8;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "OSM-Maps-Watch/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "OSM Maps";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "This is for heart rate output";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "This is for heart rate output";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This is needed for location updates in the background";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = de.elbe5.osmmaps;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.elbe5.osmmaps.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Debug;
+		};
+		4E21580D2DF1DFAA001ED51D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "OSM-Maps-Watch/OSM-Maps-Watch.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = 5UG99476V8;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "OSM-Maps-Watch/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "OSM Maps";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "This is for heart rate output";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "This is for heart rate output";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This is needed for location updates in the background";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = de.elbe5.osmmaps;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.elbe5.osmmaps.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4E2157CC2DF1DE73001ED51D /* Build configuration list for PBXProject "OSM Maps" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E2157E72DF1DE74001ED51D /* Debug */,
+				4E2157E82DF1DE74001ED51D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4E2157E42DF1DE74001ED51D /* Build configuration list for PBXNativeTarget "Maps4OSM-IOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E2157E52DF1DE74001ED51D /* Debug */,
+				4E2157E62DF1DE74001ED51D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4E2157F92DF1DF5B001ED51D /* Build configuration list for PBXNativeTarget "Maps4OSM-MacOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E2157FA2DF1DF5B001ED51D /* Debug */,
+				4E2157FB2DF1DF5B001ED51D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4E21580B2DF1DFAA001ED51D /* Build configuration list for PBXNativeTarget "Maps4OSM-WatchOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E21580C2DF1DFAA001ED51D /* Debug */,
+				4E21580D2DF1DFAA001ED51D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4E9C207C2DF4A29900ACE6C1 /* XCRemoteSwiftPackageReference "Zip" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/marmelroy/Zip.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4E9C207E2DF4A2B400ACE6C1 /* Zip */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E9C207C2DF4A29900ACE6C1 /* XCRemoteSwiftPackageReference "Zip" */;
+			productName = Zip;
+		};
+		4E9C212D2DF4AEF900ACE6C1 /* Zip */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4E9C207C2DF4A29900ACE6C1 /* XCRemoteSwiftPackageReference "Zip" */;
+			productName = Zip;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 4E2157C92DF1DE73001ED51D /* Project object */;
+}

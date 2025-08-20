@@ -1,0 +1,493 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "addAtCenterHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Positionsdaten (GPS) des Bildes werden auch auf Dateiebene geändert (Exif-Daten)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The image’s location/gps data will also be changed on file level (exif data)"
+          }
+        }
+      }
+    },
+    "autoSynchronizeHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wenn an, synchronisiert die App bei Start und Ende."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When on, the app will synchronize on start and end of the app."
+          }
+        }
+      }
+    },
+    "backupHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hier kannst du eine Backup-Zip-Datei erzeugen, um später Daten wiederherzustellen oder sie auf die Mac App zu übertragen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Here you can create a backup zip file for later restore or for transferring data to the Mac App."
+          }
+        }
+      }
+    },
+    "clearCloudHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All Appdaten aus der iCloud löschen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete all app data from iCloud"
+          }
+        }
+      }
+    },
+    "deleteAllDataHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dies löscht alle Daten. Diese Aktion kann nicht rückgängig gemacht werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This deletes all data. This action cannot be undone."
+          }
+        }
+      }
+    },
+    "deleteAllTilesHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dies löscht alle gemachten Kartenkacheln. Es kann bei einem Wechsel der Kartenquelle nützlich sein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This deletes all cached map tiles. It may be useful after changing the map source."
+          }
+        }
+      }
+    },
+    "deleteHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Aktion kann nicht rückgängig gemacht werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This action cannot be undone."
+          }
+        }
+      }
+    },
+    "distanceFilterHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dies ist ist die Mindestentfernung für die App, um eine neue Position anzuzeigen. Höhere Werte sparen Strom."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This is the minimum distance for the app to change the current position. Higher values save power."
+          }
+        }
+      }
+    },
+    "exifChangeHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Bilddaten werden auch auf Dateiebene geändert (Exif-Daten)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The image’s data will also be changed on file level (exif data)"
+          }
+        }
+      }
+    },
+    "exifHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wenn aktiviert werden Ortsangaben in die Foto-Exif-Daten geschrieben."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When activated, the location is written to the image exif data"
+          }
+        }
+      }
+    },
+    "help" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hilfe"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Help"
+          }
+        }
+      }
+    },
+    "imageSourceHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beim Hinzufügen von Bildern wird diese Quelle benutzt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When adding photos, this will be the source."
+          }
+        }
+      }
+    },
+    "mapHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kannst Einträge (Nadeln) auswählen, scrollen (linke Maustaste halten oder Mausrad) und zoomen (Opt-Taste und Mausrad oder linkes Menü). Starte eine Suche mit dem Lupen-Icon. Zeige den Mittenknopf mit dem Kreisplus-Icon. Dort können Notizen und Bilder hinzugefügt werden. Wenn die Karte ein Zahnrad zeigt, wird dieser Teil noch geladen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can select Entries (pins), scroll (hold left mouse button, use scroll wheel, zoom in and and out (opt key and scroll wheel or left menu). Use the circle plus icon on the left to toggle the center button. You can add notes and images there. Use the magnifying glassine the left to start a search. If the map shows a gear image, this part is still loading."
+          }
+        }
+      }
+    },
+    "mapPreloadHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Hier kannst Du Kartenkacheln für den aktuellen sichtbaren Kartenbereich vorladen."
+          }
+        }
+      }
+    },
+    "mapPreloadNote" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hier kannst Du Kartenkacheln für ausgewählte Zoomebenen vorladen.\nDer ausgewählte Kartenbereich ist der auf der Karte sichtbare Ausschnitt. Zum Ändern gehe zur Kartenansicht, verschiebe und zoome den gewünschten Bereich und kehre hierhin zurück.\nBITTE BEACHTEN! Für Massendownloads solltest Du die entsprechenden Rechte haben. Downloads sind grundsätzlich auf 5000 Kacheln begrenzt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Here you can preload map tiles for selected zoom levels.\nThe covered area is the one you just saw on the map. If you want to change it, please return to the map, scroll and zoom to the desired area and return to here.\nPLEASE NOTE! For mass downloads you should have respective rights. Downloads are generally limited to 5000 tiles."
+          }
+        }
+      }
+    },
+    "mapServerHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OSM ist die offizielle OpenStreetMap-Quelle.\nElbe5 ist die private Quelle des Autors im OSM-Stil.\nElbe5 topo ist die private Quelle des Autors im topografischen Stil mit Schatten, Höhenlinien und Wanderwegen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OSM is the official OpenStreetMap source.\nElbe5 is the author’s private source in OSM style.\nElbe5 topo is the author’s private server with a topographic style including shades, elevation lines a hiking paths. "
+          }
+        }
+      }
+    },
+    "nameOrDescriptionHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trage bitte einen Namen oder eine Beschreibung für diese Tour ein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please enter a name for this track"
+          }
+        }
+      }
+    },
+    "preloadHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sie finden Links zu den Regeln in den Einstellungen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can find links to legal infos under preferences."
+          }
+        }
+      }
+    },
+    "progressHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopieren von Dateien aus der Cloud und in die Cloud kann abhängig von ihrer Größe eine Weile dauern."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Up- and download of files may take a while depending on their size."
+          }
+        }
+      }
+    },
+    "restoreBackupHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hier kannst du ein vorheriges Backup wieder einspielen. Das Wiederherstellen löscht alle aktuellen Inhalte."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Here you can restore a backup from a previous backup. This will delete all current content."
+          }
+        }
+      }
+    },
+    "restoreFromMapsForOSMHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hier kannst du ein Backup von MapsForOSM einspielen. Das Wiederherstellen löscht alle aktuellen Inhalte. Audios und Videos werden nicht unterstützt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Here you can restore a backup from MapsForOSM. This will delete all current content. Audios and Videos are not supported. "
+          }
+        }
+      }
+    },
+    "synchronizeFromCloudHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nur aus der iCloud zu lokalen Daten synchronisieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronize only from iCloud to local data"
+          }
+        }
+      }
+    },
+    "synchronizeHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dies synchronisiert mit der iCloud in beiden Richtungen.\nDie Übertragung von Bildern kann einige Zeit dauern."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This synchronizes with iCloud in both directions. Loading images may take some time."
+          }
+        }
+      }
+    },
+    "synchronizeToCloudHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nur in die iCloud aus lokalen Daten synchronisieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronize only to iCloud from local data"
+          }
+        }
+      }
+    },
+    "trackEditHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kannst Punkte auf der Karte auswählen (mehrere mit cmd), um sie zu löschen (rotes Icon oben), Punkte bewegen (Zeiten werden nicht verändert) oder die ganze Tour vereinfachen, indem ein minimaler Abstand zwischen zwei Punkten gesetzt wird."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can select points on the map (more with cmd) for deleting (red icon on top), you can move points on the map (timestamps are not changed) or you can simplify the whole track by setting a minimum distance between points."
+          }
+        }
+      }
+    },
+    "trackEditorHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kannst Punkte auf der Karte auswählen (mehrere mit cmd), um sie zu löschen (rotes Icon oben), Punkte bewegen (Zeiten werden nicht verändert) oder die ganze Tour vereinfachen, indem ein minimaler Abstand zwischen zwei Punkten gesetzt wird."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can select points on the map (more with cmd) for deleting (red icon on top), you can move points on the map (timestamps are not changed) or you can simplify the whole track by setting a minimum distance between points."
+          }
+        }
+      }
+    },
+    "trackpointDistanceHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dies ist die Mindestentfernung von zwei Punkten beim Aufzeichnen von Touren. Höhere Werte sparen Strom, machen die Aufzeichnung aber weniger genau."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This is the minimal distance between recording track points. Higher values save power but make the track less accurate."
+          }
+        }
+      }
+    },
+    "trackpointIntervalHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dies ist die Mindestzeit zwischen zwei Punkten beim Aufzeichnen von Touren. Höhere Werte sparen Strom, machen die Aufzeichnung aber weniger genau."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This is the minimal time between recording track points. Higher values save power but make the track less accurate."
+          }
+        }
+      }
+    },
+    "watchUploadHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wenn Du eine verbundene Uhr hast, kannst Du hier Kartenkacheln auf die Uhr vorladen. Die Kacheln sollten bereits hier geladen sein."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If you have a connected watch, you can preload tiles to your watch app. Tiles should already be loaded to your phone."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

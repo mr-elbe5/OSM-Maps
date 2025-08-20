@@ -1,0 +1,36 @@
+/*
+ OSM Maps
+ Display and use of OSM maps
+ Copyright: Michael Rönnau mr@elbe5.de
+ */
+
+import UIKit
+
+class MarkerView : UIButton{
+    
+    static var baseFrame = CGRect(x: -12,y: -12, width: 24, height: 24)
+    
+    var hasImage : Bool{
+        false
+    }
+    
+    var hasNote : Bool{
+        false
+    }
+    
+    var hasTrack : Bool{
+        false
+    }
+    
+    func updatePosition(to pos: CGPoint){
+        //Log.debug("marker positon: \(pos)")
+        frame = MarkerView.baseFrame.offsetBy(dx: pos.x, dy: pos.y)
+        setNeedsDisplay()
+    }
+    
+    func updateImage(){
+    }
+    
+}
+
+
