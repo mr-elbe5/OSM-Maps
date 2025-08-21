@@ -23,7 +23,7 @@ class EditTrackViewController: ModalViewController {
     init(item: TrackItem){
         self.item = item
         for tp in item.track.trackpoints{
-            newItem.track.trackpoints.append(Trackpoint(coordinate: tp.coordinate, altitude: tp.altitude, timestamp: tp.timestamp))
+            newItem.track.addTrackpoint(Trackpoint(coordinate: tp.coordinate, altitude: tp.altitude, timestamp: tp.timestamp))
         }
         menuView = EditTrackMenuView()
         mapView = EditTrackMapView(track: newItem)
@@ -67,7 +67,7 @@ class EditTrackViewController: ModalViewController {
     
     override func viewDidAppear() {
         super.viewDidAppear()
-        view.window?.makeFirstResponder(nil)
+        view.window?.resignFirstResponder()
     }
     
     func updateTrackpointDetailView(){
@@ -106,6 +106,70 @@ class EditTrackViewController: ModalViewController {
 
 extension EditTrackViewController: EditTrackMenuDelegate{
     
+    func selectLeading() {
+        //Log.debug("select leading")
+        let track = newItem.track
+        if let idx = track.getSingleSelectedTrackpointIndex(), idx > 0{
+            //Log.debug("idx = \(idx)")
+            track.selectSingleTrackpoint(at: idx - 1)
+        }
+        else if !track.trackpoints.isEmpty{
+            track.selectSingleTrackpoint(at: track.trackpoints.count - 1)
+        }
+        newItem.trackpointsChanged()
+        mapView.trackpointsChanged()
+        updateTrackpointDetailView()
+    }
+    
+    func selectTrailing() {
+        //Log.debug("select trailing")
+        let track = newItem.track
+        if let idx = track.getSingleSelectedTrackpointIndex(), idx < track.trackpoints.count-1{
+            //Log.debug("idx = \(idx)")
+            track.selectSingleTrackpoint(at: idx + 1)
+        }
+        else if !track.trackpoints.isEmpty{
+            track.selectSingleTrackpoint(at: 0)
+        }
+        newItem.trackpointsChanged()
+        mapView.trackpointsChanged()
+        updateTrackpointDetailView()
+    }
+    
+    func insertTrackpointAfter() {
+        let track = newItem.track
+        if let i = track.getSingleSelectedTrackpointIndex(){
+            if i < 0 || i >= track.trackpoints.count-1{
+                return
+            }
+            let tp1 = newItem.track.trackpoints[i]
+            let tp2 = newItem.track.trackpoints[i+1]
+            let newTp = Trackpoint.getTrackpointBetween(tp1: tp1, tp2: tp2)
+            newItem.track.trackpoints.insert(newTp, at: i+1)
+            newItem.track.selectSingleTrackpoint(at: i + 1)
+            newItem.trackpointsChanged()
+            mapView.trackpointsChanged()
+            updateTrackpointDetailView()
+        }
+    }
+    
+    func insertTrackpointBefore() {
+        let track = newItem.track
+        if let i = track.getSingleSelectedTrackpointIndex(){
+            if i < 1 || i >= track.trackpoints.count{
+                return
+            }
+            let tp1 = newItem.track.trackpoints[i-1]
+            let tp2 = newItem.track.trackpoints[i]
+            let newTp = Trackpoint.getTrackpointBetween(tp1: tp1, tp2: tp2)
+            newItem.track.trackpoints.insert(newTp, at: i)
+            newItem.track.selectSingleTrackpoint(at: i)
+            newItem.trackpointsChanged()
+            mapView.trackpointsChanged()
+            updateTrackpointDetailView()
+        }
+    }
+    
     func toggleSelectAllTrackpoints() {
         if newItem.track.trackpoints.allSelected{
             newItem.track.trackpoints.deselectAll()
@@ -119,43 +183,6 @@ extension EditTrackViewController: EditTrackMenuDelegate{
             }
         }
         updateTrackpointDetailView()
-    }
-    
-    func insertTrackpoint(){
-        if let i = getSelectedTrackpointTupleIndex(){
-            let tp1 = newItem.track.trackpoints[i]
-            let tp2 = newItem.track.trackpoints[i+1]
-            let newLatitude = (tp1.coordinate.latitude + tp2.coordinate.latitude)/2
-            let newLongitude = (tp1.coordinate.longitude + tp2.coordinate.longitude)/2
-            let newDate = Date(timeIntervalSince1970: (tp1.timestamp.timeIntervalSince1970 + tp2.timestamp.timeIntervalSince1970)/2)
-            let newTp = Trackpoint(coordinate: CLLocationCoordinate2D(latitude: newLatitude, longitude: newLongitude), altitude: (tp1.altitude + tp2.altitude)/2, timestamp: newDate)
-            newItem.track.trackpoints.insert(newTp, at: i+1)
-            newItem.track.trackpoints.deselectAll()
-            newItem.track.trackpoints[i+1].selected = true
-            newItem.trackpointsChanged()
-            mapView.trackpointsChanged()
-            updateTrackpointDetailView()
-        }
-    }
-    
-    private func  getSelectedTrackpointTupleIndex() -> Int?{
-        for i in 0..<newItem.track.trackpoints.count{
-            var tp = newItem.track.trackpoints[i]
-            if tp.selected{
-                if i<(newItem.track.trackpoints.count-1), newItem.track.trackpoints[i+1].selected{
-                    for j in i+2..<newItem.track.trackpoints.count{
-                        if newItem.track.trackpoints[j].selected{
-                            return nil
-                        }
-                    }
-                    return i
-                }
-                else{
-                    return nil
-                }
-            }
-        }
-        return nil
     }
     
     func deleteSelectedTrackpoints() {

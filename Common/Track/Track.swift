@@ -97,7 +97,7 @@ class Track: Codable{
         for segment in gpx.segments{
             for point in segment.points{
                 let trackpoint = Trackpoint(coordinate: point.coordinate, altitude: point.altitude, timestamp: point.timestamp ?? Date())
-                trackpoints.append(trackpoint)
+                addTrackpoint(trackpoint)
                 name = gpx.name
             }
         }
@@ -151,6 +151,48 @@ class Track: Codable{
             pauseLength += pauseTime.distance(to: Date.localDate)
             self.pauseTime = nil
         }
+    }
+    
+    func trackpointIndex(of tp: Trackpoint) -> Int {
+        if let index = trackpoints.firstIndex(where: { $0.id == tp.id }) {
+            return index
+        }
+        return -1
+    }
+    
+    func  getSingleSelectedTrackpointIndex() -> Int?{
+        var idx: Int?
+        for i in 0..<trackpoints.count{
+            let tp = trackpoints[i]
+            if tp.selected{
+                if idx == nil {
+                    idx = i
+                }
+                else{
+                    idx = nil
+                    break
+                }
+            }
+        }
+        return idx
+    }
+    
+    func  selectSingleTrackpoint(at idx: Int){
+        trackpoints.deselectAll()
+        trackpoints[idx].selected = true
+    }
+    
+    func addTrackpoint(_ tp: Trackpoint){
+        trackpoints.append(tp)
+        updateFromTrackpoints()
+    }
+    
+    func insertTrackpoint(_ tp: Trackpoint, at index: Int){
+        if index < 0 || index >= trackpoints.count - 1{
+            return
+        }
+        trackpoints.insert(tp, at: index)
+        updateFromTrackpoints()
     }
     
     func setTrackpoints(_ trackpoints: TrackpointList){

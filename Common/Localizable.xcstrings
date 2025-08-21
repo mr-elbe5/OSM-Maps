@@ -2092,6 +2092,40 @@
         }
       }
     },
+    "insertTrackpointAfter" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wegpunkt dahinter einfügen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insert Trackpoint after"
+          }
+        }
+      }
+    },
+    "insertTrackpointBefore" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wegpunkt davor einfügen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insert Trackpoint before"
+          }
+        }
+      }
+    },
     "interruptedTrackFound" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3452,6 +3486,23 @@
         }
       }
     },
+    "selectLeading" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorhergehenden selektieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select Leading"
+          }
+        }
+      }
+    },
     "selectSmallerRegion" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3465,6 +3516,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Please select a smaller region"
+          }
+        }
+      }
+    },
+    "selectTrailing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folgenden selektieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select Trailing"
           }
         }
       }

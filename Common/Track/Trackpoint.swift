@@ -8,6 +8,13 @@ import CoreLocation
 
 class Trackpoint: Codable, Identifiable, Selectable{
     
+    static func getTrackpointBetween(tp1: Trackpoint, tp2: Trackpoint) -> Trackpoint{
+        let newLatitude = (tp1.coordinate.latitude + tp2.coordinate.latitude)/2
+        let newLongitude = (tp1.coordinate.longitude + tp2.coordinate.longitude)/2
+        let newDate = Date(timeIntervalSince1970: (tp1.timestamp.timeIntervalSince1970 + tp2.timestamp.timeIntervalSince1970)/2)
+        return Trackpoint(coordinate: CLLocationCoordinate2D(latitude: newLatitude, longitude: newLongitude), altitude: (tp1.altitude + tp2.altitude)/2, timestamp: newDate)
+    }
+    
     enum CodingKeys: String, CodingKey{
         case latitude
         case longitude

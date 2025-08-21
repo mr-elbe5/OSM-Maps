@@ -81,7 +81,7 @@ class TrackRecorder: NSObject{
         if let track = track{
             let tp = Trackpoint(location: location)
             if track.trackpoints.isEmpty{
-                track.trackpoints.append(tp)
+                track.addTrackpoint(tp)
                 lastCoordinate = location.coordinate
                 lastAltitude = location.altitude
                 uphill = 0
@@ -116,7 +116,7 @@ class TrackRecorder: NSObject{
             }
             lastCoordinate = location.coordinate
             //Log.debug("adding trackpoint at \(tp.coordinate.debugString)")
-            track.trackpoints.append(tp)
+            track.addTrackpoint(tp)
             track.distance += horizontalDiff
             //checking uphill
             let verticalDiff = tp.altitude - lastAltitude
