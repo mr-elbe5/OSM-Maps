@@ -27,27 +27,27 @@ class ImageCell: MapItemCell{
     override func updateIconView(){
         iconView.removeAllSubviews()
         if let image = item{
-            let selectedButton = UIButton().asIconButton(image.selected ? "checkmark.square" : "square", color: .label)
+            let selectedButton = UIButton().asDarkIconButton(image.selected ? "checkmark.square" : "square")
             selectedButton.addAction(UIAction(){ action in
                 image.selected = !image.selected
                 selectedButton.setImage(UIImage(systemName: image.selected ? "checkmark.square" : "square"), for: .normal)
             }, for: .touchDown)
             iconView.addSubviewToLeft(selectedButton, insets: iconInsets)
-            let showOnMapButton = UIButton().asIconButton("map", color: .label)
+            let showOnMapButton = UIButton().asDarkIconButton("map")
             showOnMapButton.addAction(UIAction(){ action in
                 MainViewController.shared.navigationController?.popToRootViewController(animated: true)
                 MainViewController.shared.showItemOnMap(item: image)
             }, for: .touchDown)
             iconView.addSubviewToLeft(showOnMapButton, rightView: selectedButton, insets: iconInsets)
             showOnMapButton.isEnabled = image.hasValidCoordinate
-            let editButton = UIButton().asIconButton("pencil", color: .label)
+            let editButton = UIButton().asDarkIconButton("pencil")
             editButton.addAction(UIAction(){ action in
                 let controller = EditImageViewController(item: image)
                 controller.delegate = self
                 MainViewController.shared.navigationController?.pushViewController(controller, animated: true)
             }, for: .touchDown)
             iconView.addSubviewToLeft(editButton, rightView: showOnMapButton, insets: iconInsets)
-            let viewButton = UIButton().asIconButton("magnifyingglass", color: .label)
+            let viewButton = UIButton().asDarkIconButton("magnifyingglass")
             viewButton.addAction(UIAction(){ action in
                 if let uiImage = image.preview{
                     MainViewController.shared.navigationController?.pushViewController(ImageViewController(image: uiImage), animated: true)

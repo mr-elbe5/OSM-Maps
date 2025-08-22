@@ -59,13 +59,13 @@ class EditTrackViewController: ScrollViewController{
         contentView.addSubviewBelow(pointLabel, upperView: nameField, insets: .zero)
         minDistanceField.setupView(labelText: "simplifyByDistance".localize())
         contentView.addSubviewBelow(minDistanceField, upperView: pointLabel)
-        let applyButton = UIButton().asTextButton("apply".localize()).withTextColor(color: .systemBlue)
+        let applyButton = TextButton(text: "apply".localize())
         applyButton.addAction(UIAction(){ action in
             self.apply()
         }, for: .touchDown)
         contentView.addSubviewCenteredBelow(applyButton, upperView: minDistanceField)
             .centerX(contentView.centerXAnchor)
-        let saveButton = UIButton().asTextButton("save".localize()).withTextColor(color: .systemBlue)
+        let saveButton = TextButton(text: "save".localize())
         saveButton.addAction(UIAction(){ action in
             self.save()
         }, for: .touchDown)

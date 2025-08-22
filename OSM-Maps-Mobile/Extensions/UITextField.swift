@@ -35,5 +35,11 @@ extension UITextField{
         return self
     }
     
+    @discardableResult
+    func withBackgroundColor(_ color: UIColor) -> UITextField{
+        self.backgroundColor = color
+        return self
+    }
+    
 }
 

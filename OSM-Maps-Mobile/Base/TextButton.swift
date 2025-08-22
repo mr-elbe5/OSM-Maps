@@ -11,7 +11,7 @@ class TextButton : UIButton{
     
     var hasBorder: Bool
     
-    init(text: String, tintColor: UIColor = .label, backgroundColor: UIColor? = .tertiarySystemBackground, withBorder: Bool = true){
+    init(text: String, tintColor: UIColor = .systemBlue, backgroundColor: UIColor? = .tertiarySystemBackground, withBorder: Bool = true){
         self.hasBorder = withBorder
         super.init(frame: .zero)
         setTitle(text, for: .normal)

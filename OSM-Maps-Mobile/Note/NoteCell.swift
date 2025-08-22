@@ -24,20 +24,20 @@ class NoteCell: MapItemCell{
     override func updateIconView(){
         iconView.removeAllSubviews()
         if let note = item{
-            let selectedButton = UIButton().asIconButton(note.selected ? "checkmark.square" : "square", color: .label)
+            let selectedButton = UIButton().asDarkIconButton(note.selected ? "checkmark.square" : "square")
             selectedButton.addAction(UIAction(){ action in
                 note.selected = !note.selected
                 selectedButton.setImage(UIImage(systemName: note.selected ? "checkmark.square" : "square"), for: .normal)
             }, for: .touchDown)
             iconView.addSubviewToLeft(selectedButton, insets: iconInsets)
-            let editButton = UIButton().asIconButton("pencil", color: .label)
+            let editButton = UIButton().asDarkIconButton("pencil")
             editButton.addAction(UIAction(){ action in
                 let controller = EditNoteViewController(item: note)
                 controller.delegate = self
                 MainViewController.shared.navigationController?.pushViewController(controller, animated: true)
             }, for: .touchDown)
             iconView.addSubviewToLeft(editButton, rightView: selectedButton, insets: iconInsets)
-            let mapButton = UIButton().asIconButton("map", color: .label)
+            let mapButton = UIButton().asDarkIconButton("map")
             mapButton.addAction(UIAction(){ action in
                 MainViewController.shared.showItemOnMap(item: note)
                 MainViewController.shared.navigationController?.popToRootViewController(animated: true)

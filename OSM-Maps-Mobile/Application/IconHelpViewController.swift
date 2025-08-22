@@ -36,10 +36,10 @@ class IconHelpViewController: ScrollViewController{
         iconText = HelpText(icon: "gearshape", key: "settings")
         contentView.addSubviewBelow(iconText, upperView: lastView)
         lastView = iconText
-        iconText = HelpText(icon: "questionmark.bubble", key: "thisHelp")
+        iconText = HelpText(icon: "questionmark.diamond", key: "thisHelp")
         contentView.addSubviewBelow(iconText, upperView: lastView)
         lastView = iconText
-        iconText = HelpText(icon: "questionmark.circle", key: "helpText")
+        iconText = HelpText(icon: "questionmark.text.page", key: "helpText")
         contentView.addSubviewBelow(iconText, upperView: lastView)
         lastView = iconText
         

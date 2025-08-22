@@ -45,12 +45,12 @@ class CrossMenuViewController: UIViewController{
         let hint = UILabel(hint: "addAtCenterHint".localize(table: "Hints"))
         hint .textAlignment = .center
         view.addSubviewWithAnchors(hint, leading: view.leadingAnchor, trailing: view.trailingAnchor, bottom: view.bottomAnchor)
-        let addImagesButton = UIButton().asTextButton("addImages".localize()).withTextColor(color: .systemBlue).withRoundedCorners()
+        let addImagesButton = TextButton(text: "addImages".localize())
         addImagesButton.menu = getImagesMenu()
         addImagesButton.showsMenuAsPrimaryAction = true
         view.addSubviewWithAnchors(addImagesButton, bottom: hint.topAnchor)
             .centerX(view.centerXAnchor)
-        let addNoteButton = UIButton().asTextButton("addNote".localize()).withTextColor(color: .systemBlue).withRoundedCorners()
+        let addNoteButton = TextButton(text: "addNote".localize())
         addNoteButton.addAction(UIAction(){ action in
             self.dismiss(animated: false)
             let item = NoteItem(coordinate: self.coordinate)

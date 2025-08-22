@@ -12,7 +12,7 @@ class TextEditArea : UITextView{
         let tv = UITextView()
         
         tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.backgroundColor = .clear
+        tv.backgroundColor = .tertiarySystemBackground
         tv.isScrollEnabled = false
         tv.textColor = .placeholderText
         tv.isUserInteractionEnabled = false
@@ -43,9 +43,12 @@ class TextEditArea : UITextView{
         self.placeholder = placeholder
     }
     
-    func defaultWithBorder() -> TextEditArea{
+    func defaultWithBorder(color: UIColor? = nil) -> TextEditArea{
         setGrayRoundedBorders()
         setDefaults()
+        if let color = color{
+            textColor = color
+        }
         isScrollEnabled = false
         setKeyboardToolbar(doneTitle: "done".localize())
         return self

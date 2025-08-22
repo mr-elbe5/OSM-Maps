@@ -19,7 +19,7 @@ extension UIViewController{
         navigationController?.navigationBar.backgroundColor = backgroundColor
         navigationController?.navigationBar.tintColor = .white
         if let title = self.title{
-            self.navigationItem.titleView = UILabel(text: title).withTextColor(navigationController?.navigationBar.tintColor ?? .label)
+            self.navigationItem.titleView = UILabel(text: title, color: navigationController?.navigationBar.tintColor)
         }
     }
     

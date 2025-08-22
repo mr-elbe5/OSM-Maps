@@ -18,6 +18,8 @@ class AppData : Codable{
         if let data: AppData = StatusManager.shared.getCodable(key: storeKey){
             Log.debug("got \(data.notes.count) local notes")
             Log.debug("got \(data.images.count) local images")
+            Log.debug("got \(data.audios.count) local audios")
+            Log.debug("got \(data.videos.count) local videos")
             Log.debug("got \(data.tracks.count) local tracks")
             shared = data
         }
@@ -30,6 +32,8 @@ class AppData : Codable{
         if StatusManager.shared.saveCodable(key: Self.storeKey, value: self){
             Log.debug("saved \(notes.count) local notes")
             Log.debug("saved \(images.count) local images")
+            Log.debug("saved \(audios.count) local audios")
+            Log.debug("saved \(videos.count) local videos")
             Log.debug("saved \(tracks.count) local tracks")
         }
         else{
@@ -93,6 +97,32 @@ class AppData : Codable{
             }
             trackItems.sortByDate(ascending: ViewFilter.shared.defaultSortAscending)
             return trackItems
+        }
+    }
+    
+    var audios: AudioItemList{
+        get{
+            var audioItems = AudioItemList()
+            for item in _mapItems{
+                if item is AudioItem{
+                    audioItems.append(item as! AudioItem)
+                }
+            }
+            audioItems.sortByDate(ascending: ViewFilter.shared.defaultSortAscending)
+            return audioItems
+        }
+    }
+    
+    var videos: VideoItemList{
+        get{
+            var videoItems = VideoItemList()
+            for item in _mapItems{
+                if item is VideoItem{
+                    videoItems.append(item as! VideoItem)
+                }
+            }
+            videoItems.sortByDate(ascending: ViewFilter.shared.defaultSortAscending)
+            return videoItems
         }
     }
     

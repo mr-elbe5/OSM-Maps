@@ -9,8 +9,8 @@ import CoreLocation
 
 class LocationStatusView : UIView{
     
-    var compassLabel = UILabel(text: "0°").withTextColor(.darkText)
-    var heightLabel = UILabel(text: "0 m").withTextColor(.darkText)
+    var compassLabel = UILabel(text: "0°", color: .darkColor)
+    var heightLabel = UILabel(text: "0 m", color: .darkColor)
     
     func setup(){
         layer.cornerRadius = 10
@@ -19,7 +19,7 @@ class LocationStatusView : UIView{
         let compassIcon = UIImageView(image: UIImage(systemName: "safari"))
         compassIcon.tintColor = .darkText
         addSubviewToRight(compassIcon, insets: OSInsets.smallInsets)
-        compassLabel = UILabel(text: "0°").withTextColor(.darkText)
+        compassLabel = UILabel(text: "0°", color: .darkColor)
         addSubviewToRight(compassLabel, leftView: compassIcon, insets: OSInsets.smallInsets)
         let heightIcon = UIImageView(image: UIImage(systemName: "mountain.2.circle"))
         heightIcon.tintColor = .darkText

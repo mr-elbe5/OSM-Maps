@@ -8,45 +8,43 @@ import UIKit
 
 extension UILabel{
     
-    func setDefaults(text : String){
-        self.text = text
-    }
-    
-    convenience init(text: String){
+    convenience init(text: String, color: UIColor? = nil){
         self.init()
         self.text = text
         numberOfLines = 0
-        textColor = .label
+        if let color = color{
+            self.textColor = color
+        }
     }
     
-    convenience init(header: String){
+    convenience init(header: String, color: UIColor? = nil){
         self.init()
         self.text = header
         font = .preferredFont(forTextStyle: .headline)
         numberOfLines = 0
-        textColor = .label
+        if let color = color{
+            self.textColor = color
+        }
     }
     
-    convenience init(subheader: String){
+    convenience init(subheader: String, color: UIColor? = nil){
         self.init()
         self.text = subheader
         font = .preferredFont(forTextStyle: .body)
         numberOfLines = 0
-        textColor = .label
+        if let color = color{
+            self.textColor = color
+        }
     }
     
-    convenience init(hint: String){
+    convenience init(hint: String, color: UIColor? = nil){
         self.init()
         self.text = hint
         font = UIFont.systemFont(ofSize: UIFont.smallSystemFontSize)
         numberOfLines = 0
-        textColor = .label
-    }
-    
-    @discardableResult
-    func withTextColor(_ color: UIColor) -> UILabel{
-        self.textColor = color
-        return self
+        if let color = color{
+            self.textColor = color
+        }
     }
     
 }

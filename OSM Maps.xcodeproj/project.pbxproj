@@ -104,6 +104,7 @@
 				Track/TrackpointInterval.swift,
 				Track/TrackpointList.swift,
 				Track/TrackRecorder.swift,
+				View/OSColor.swift,
 			);
 			target = 4E2157FF2DF1DFA9001ED51D /* OSM-Maps-Watch */;
 		};
@@ -184,6 +185,7 @@
 				Track/TrackpointInterval.swift,
 				Track/TrackpointList.swift,
 				Track/VisibleTrack.swift,
+				View/OSColor.swift,
 				View/OSView.swift,
 				View/OSViewController.swift,
 				View/TileView.swift,

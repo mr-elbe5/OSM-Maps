@@ -20,7 +20,7 @@ class TableViewCell: UITableViewCell{
         isUserInteractionEnabled = true
         backgroundColor = .clear
         contentView.backgroundColor = .clear
-        cellBody.backgroundColor = .tableCellColor
+        cellBody.backgroundColor = .tertiarySystemBackground
         contentView.addSubviewFilling(cellBody, insets: OSInsets.smallInsets)
         setupCellBody()
         accessoryType = .none

@@ -50,7 +50,7 @@ class EditImageViewController: ScrollViewController{
         contentView.addSubviewBelow(header, upperView: imageView)
         coordinateLabel.text = item.coordinate.asShortString
         contentView.addSubviewBelow(coordinateLabel, upperView: header)
-        let changeButton = UIButton().asTextButton("changeCoordinateToMapCenter".localize()).withTextColor(color: .systemBlue)
+        let changeButton = TextButton(text: "changeCoordinateToMapCenter".localize())
         changeButton.addAction(UIAction(){ action in
             self.changeToMapCenter()
         }, for: .touchDown)
@@ -61,7 +61,7 @@ class EditImageViewController: ScrollViewController{
         let hint = UILabel(hint: "exifChangeHint".localize(table: "Hints"))
         hint .textAlignment = .center
         view.addSubviewBelow(hint, upperView: datePicker)
-        let saveButton = UIButton().asTextButton("save".localize()).withTextColor(color: .systemBlue)
+        let saveButton = TextButton(text: "save".localize())
         saveButton.addAction(UIAction(){ action in
             self.save()
         }, for: .touchDown)

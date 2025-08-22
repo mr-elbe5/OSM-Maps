@@ -275,5 +275,37 @@ class Track: Codable{
         }
     }
     
+    func findClosestTrackpoint(to coordinate: CLLocationCoordinate2D) -> (Trackpoint, Double)? {
+        var closestTrackpoint: Trackpoint?
+        var minDistance: Double?
+        for trackpoint in self.trackpoints {
+            let distance = trackpoint.coordinate.distance(to: coordinate)
+            if minDistance == nil || distance < minDistance! {
+                closestTrackpoint = trackpoint
+                minDistance = distance
+            }
+        }
+        if let tp = closestTrackpoint, let dist = minDistance {
+            return (tp, dist)
+        }
+        return nil
+    }
+    
+    func findClosestTrackpoint(at date: Date) -> (Trackpoint, TimeInterval)?{
+        var closestTrackpoint: Trackpoint?
+        var minDistance: TimeInterval?
+        for trackpoint in self.trackpoints {
+            let distance = trackpoint.timestamp.distance(to: date)
+            if minDistance == nil || distance < minDistance! {
+                closestTrackpoint = trackpoint
+                minDistance = distance
+            }
+        }
+        if let tp = closestTrackpoint, let dist = minDistance {
+            return (tp, dist)
+        }
+        return nil
+    }
+    
 }
 

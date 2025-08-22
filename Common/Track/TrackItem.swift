@@ -147,4 +147,35 @@ extension TrackItemList{
         }
     }
     
+    func findClosestTrackpoint(to coordinate: CLLocationCoordinate2D, maxMeterDiff: Double = 100) -> (Trackpoint, Double)? {
+        var result: (Trackpoint, Double)?
+        for item in self {
+            if let closests = item.track.findClosestTrackpoint(to: coordinate){
+                if closests.1 < (result?.1 ?? Double.greatestFiniteMagnitude){
+                    result = closests
+                }
+            }
+        }
+        if let result = result, result.1 > maxMeterDiff{
+            return nil
+        }
+        return result
+    }
+    
+    func findClosestTrackpoint(at date: Date, maxMinDiff: Double = 60) -> (Trackpoint, TimeInterval)?{
+        var result: (Trackpoint, Double)?
+        for item in self {
+            if let closests = item.track.findClosestTrackpoint(at: date){
+                if closests.1 < (result?.1 ?? Double.greatestFiniteMagnitude){
+                    result = closests
+                }
+            }
+        }
+        // distance must be less than 1h
+        if let result = result, result.1 > maxMinDiff*60{
+            return nil
+        }
+        return result
+    }
+    
 }

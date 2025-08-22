@@ -20,14 +20,14 @@ class TrackCell: MapItemCell{
     override func updateIconView(){
         iconView.removeAllSubviews()
         if let track = item{
-            let selectedButton = UIButton().asIconButton(track.selected ? "checkmark.square" : "square", color: .label)
+            let selectedButton = UIButton().asDarkIconButton(track.selected ? "checkmark.square" : "square")
             selectedButton.addAction(UIAction(){ action in
                 track.selected = !track.selected
                 selectedButton.setImage(UIImage(systemName: track.selected ? "checkmark.square" : "square"), for: .normal)
             }, for: .touchDown)
             iconView.addSubviewToLeft(selectedButton, insets: iconInsets)
             
-            let exportButton = UIButton().asIconButton("square.and.arrow.up", color: .label)
+            let exportButton = UIButton().asDarkIconButton("square.and.arrow.up")
             exportButton.addAction(UIAction(){ action in
                 if let track = self.item?.track, let url = GPXCreator.createTemporaryFile(track: track){
                     let controller = UIDocumentPickerViewController(forExporting: [url], asCopy: false)
@@ -37,7 +37,7 @@ class TrackCell: MapItemCell{
             }, for: .touchDown)
             iconView.addSubviewToLeft(exportButton, rightView: selectedButton, insets: iconInsets)
             
-            let editButton = UIButton().asIconButton("pencil", color: .label)
+            let editButton = UIButton().asDarkIconButton("pencil")
             editButton.addAction(UIAction(){ action in
                 let controller = EditTrackViewController(item: track)
                 controller.delegate = self
@@ -45,7 +45,7 @@ class TrackCell: MapItemCell{
             }, for: .touchDown)
             iconView.addSubviewToLeft(editButton, rightView: exportButton, insets: iconInsets)
             
-            let mapButton = UIButton().asIconButton("map", color: .label)
+            let mapButton = UIButton().asDarkIconButton("map")
             mapButton.addAction(UIAction(){ action in
                 MainViewController.shared.showTrackOnMap(item: track)
                 MainViewController.shared.navigationController?.popViewController(animated: true)

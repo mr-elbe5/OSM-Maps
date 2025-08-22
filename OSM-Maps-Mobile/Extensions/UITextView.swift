@@ -39,5 +39,11 @@ extension UITextView{
         return self
     }
     
+    @discardableResult
+    func withBackgroundColor(_ color: UIColor) -> UITextView{
+        self.backgroundColor = color
+        return self
+    }
+    
 }
 

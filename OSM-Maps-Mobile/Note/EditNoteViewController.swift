@@ -31,16 +31,16 @@ class EditNoteViewController: ScrollViewController{
         super.loadView()
         title = "note".localize()
         view.addSubviewFillingSafeArea(scrollView, insets: .zero)
-        scrollView.backgroundColor = .systemBackground
         setupScrollView()
         loadScrollableSubviews()
         setupKeyboard()
+        noteEditView.becomeFirstResponder()
     }
     
     func loadScrollableSubviews() {
         noteEditView.text = item.note
         contentView.addSubviewBelow(noteEditView)
-        let saveButton = UIButton().asTextButton("save".localize()).withTextColor(color: .systemBlue)
+        let saveButton = TextButton(text: "save".localize())
             saveButton.addAction(UIAction(){ action in
                 self.save()
             }, for: .touchDown)

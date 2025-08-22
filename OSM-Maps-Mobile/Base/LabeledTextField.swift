@@ -28,6 +28,7 @@ class LabeledTextField : UIView{
         
         textField.setDefaults()
         textField.text = text
+        textField.backgroundColor = .tertiarySystemBackground
         label.font = .preferredFont(forTextStyle: .headline)
         textField.autocapitalizationType = .none
         textField.autocorrectionType = .no

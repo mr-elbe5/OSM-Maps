@@ -16,11 +16,28 @@ extension UIButton{
     }
     
     @discardableResult
-    func asIconButton(_ icon: String, color: UIColor = .label) -> UIButton{
+    func asIconButton(_ icon: String, color: UIColor? = nil) -> UIButton{
         setImage(UIImage(systemName: icon), for: .normal)
-        self.tintColor = color
+        if let color = color{
+            self.tintColor = color
+        }
         self.scaleBy(1.25)
         return self
+    }
+    
+    @discardableResult
+    func asLightIconButton(_ icon: String) -> UIButton{
+        return asIconButton(icon, color: .lightColor)
+    }
+    
+    @discardableResult
+    func asDarkIconButton(_ icon: String) -> UIButton{
+        return asIconButton(icon, color: .darkColor)
+    }
+    
+    @discardableResult
+    func asWarnIconButton(_ icon: String) -> UIButton{
+        return asIconButton(icon, color: .warnColor)
     }
     
     @discardableResult
@@ -30,27 +47,39 @@ extension UIButton{
     }
     
     @discardableResult
-    func asTextButton(_ text: String) -> UIButton{
+    func asTextButton(_ text: String, color: UIColor? = nil) -> UIButton{
         setTitle(text, for: .normal)
+        if let color = color{
+            setTitleColor(color, for: .normal)
+        }
         return self
     }
     
     @discardableResult
-    func withTextColor(color: UIColor) -> UIButton{
-        setTitleColor(color, for: .normal)
-        return self
+    func asLightTextButton(_ text: String) -> UIButton{
+        return asTextButton(text, color: .lightColor)
     }
     
     @discardableResult
-    func withBackgroundColor(color: UIColor) -> UIButton{
-        self.backgroundColor = color
-        layer.cornerRadius = 5
-        layer.masksToBounds = true
-        return self
+    func asDarkTextButton(_ text: String) -> UIButton{
+        return asTextButton(text, color: .lightColor)
     }
     
     @discardableResult
-    func withRoundedCorners() -> UIButton{
+    func asBlueTextButton(_ text: String) -> UIButton{
+        return asTextButton(text, color: .blueColor)
+    }
+    
+    @discardableResult
+    func asWarnTextButton(_ text: String) -> UIButton{
+        return asTextButton(text, color: .warnColor)
+    }
+    
+    @discardableResult
+    func withRoundedCorners(backgroundColor: UIColor? = nil) -> UIButton{
+        if let backgroundColor = backgroundColor{
+            self.backgroundColor = backgroundColor
+        }
         layer.cornerRadius = 5
         layer.masksToBounds = true
         return self

@@ -18,4 +18,10 @@ extension UITableView {
         return self
     }
     
+    @discardableResult
+    func withBackgroundColor(_ color: UIColor) -> UITableView{
+        self.backgroundColor = color
+        return self
+    }
+    
 }
