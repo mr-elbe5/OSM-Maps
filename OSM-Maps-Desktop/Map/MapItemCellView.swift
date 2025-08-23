@@ -6,7 +6,7 @@
 
 import AppKit
 
-protocol MapItemDelegate: NoteCellDelegate, ImageCellDelegate, TrackCellDelegate{
+protocol MapItemDelegate: NoteCellDelegate, ImageCellDelegate, AudioCellDelegate, VideoCellDelegate, TrackCellDelegate{
     func itemsChanged()
 }
 

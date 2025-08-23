@@ -165,6 +165,12 @@ class MainViewController: ViewController {
         presenterView.isHidden = false
     }
     
+    //videos
+    
+    func showVideo(_ video: VideoItem){
+        
+    }
+    
     // tracks
     
     func showTrackOnMap(_ item: TrackItem?){

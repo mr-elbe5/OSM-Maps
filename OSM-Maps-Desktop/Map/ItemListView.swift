@@ -48,14 +48,14 @@ class ItemListView: NSView{
                 let view = ImageCellView(image: item as! ImageItem)
                 view.delegate = self
                 itemView = view
-            /*case AudioItem.itemType:
-                let view = AudioCellView(image: item as! AudioItem)
+            case AudioItem.itemType:
+                let view = AudioCellView(audio: item as! AudioItem)
                 view.delegate = self
                 itemView = view
             case VideoItem.itemType:
-                let view = VideoCellView(image: item as! VideoItem)
+                let view = VideoCellView(video: item as! VideoItem)
                 view.delegate = self
-                itemView = view*/
+                itemView = view
             case NoteItem.itemType:
                 let view = NoteCellView(note: item as! NoteItem)
                 view.delegate = self
@@ -133,6 +133,14 @@ extension ItemListView: MapItemDelegate{
     
     func editImage(_ image: ImageItem) {
         MainViewController.shared.editImage(image)
+    }
+    
+    func editAudio(_ audio: AudioItem) {
+        MainViewController.shared.editAudio(audio)
+    }
+    
+    func editVideo(_ video: VideoItem) {
+        MainViewController.shared.editVideo(video)
     }
     
     func editTrack(_ track: TrackItem) {

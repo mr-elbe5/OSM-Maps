@@ -96,6 +96,18 @@ extension MainViewController {
         }
     }
     
+    func editAudio(_ audio: AudioItem) {
+        let controller = EditAudioViewController(item: audio)
+        if ModalWindow.run(title: "editAudio".localize(), viewController: controller, outerWindow: MainWindowController.instance.window!, minSize: CGSize(width: 300, height: 200)) == .OK{
+        }
+    }
+    
+    func editVideo(_ video: VideoItem) {
+        let controller = EditVideoViewController(item: video)
+        if ModalWindow.run(title: "editVideo".localize(), viewController: controller, outerWindow: MainWindowController.instance.window!, minSize: CGSize(width: 300, height: 200)) == .OK{
+        }
+    }
+    
     func editTrack(_ track: TrackItem) {
         let controller = EditTrackViewController(item: track)
         if ModalWindow.run(title: "editTrack".localize(), viewController: controller, outerWindow: MainWindowController.instance.window!, minSize: CGSize(width: 300, height: 200)) == .OK{
