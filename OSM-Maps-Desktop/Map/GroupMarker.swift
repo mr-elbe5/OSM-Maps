@@ -10,8 +10,8 @@ class GroupMarker : MarkerView{
     
     var group : MapItemGroup
     
-    override var hasImage : Bool{
-        group.hasImage
+    override var hasMedia : Bool{
+        group.hasMedia
     }
     
     override var hasTrack : Bool{
@@ -38,12 +38,12 @@ class GroupMarker : MarkerView{
     }
     
     override func updateImage(){
-        if hasImage{
+        if hasMedia{
             if hasTrack{
                 image = MapDefaults.mapMixedGroupIcon
             }
             else{
-                image = MapDefaults.mapImageGroupIcon
+                image = MapDefaults.mapMediaGroupIcon
             }
         }
         else if hasTrack{

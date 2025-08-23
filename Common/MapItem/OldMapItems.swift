@@ -30,12 +30,36 @@ class OldMapItems{
                     item.creationDate = oldItem.creationDate
                     item.fileName = oldItem.fileName
                     if let data = FileManager.default.readFile(url: oldItem.tempURL), let image = OSImage(data: data){
-                        if !item.copyImageAndCreatePreview(originalURL: oldItem.tempURL, original: image){
+                        if !item.copyImageAndCreatePreview(from: oldItem.tempURL, original: image){
                             Log.debug( "Could not create files for \(item.id)")
                             continue
                         }
                     }
                     item.loadMetaData()
+                    items.append(item)
+                }
+                else if let oldItem = oldItem as? OldAudioItem{
+                    let item = AudioItem(coordinate: location.coordinate)
+                    item.id = oldItem.id
+                    item.creationDate = oldItem.creationDate
+                    item.fileName = oldItem.fileName
+                    item.time = oldItem.time
+                    if !item.copyAudio(from: oldItem.tempURL){
+                        Log.debug( "Could not create file for \(item.id)")
+                        continue
+                    }
+                    items.append(item)
+                }
+                else if let oldItem = oldItem as? OldVideoItem{
+                    let item = VideoItem(coordinate: location.coordinate)
+                    item.id = oldItem.id
+                    item.creationDate = oldItem.creationDate
+                    item.fileName = oldItem.fileName
+                    item.time = oldItem.time
+                    if !item.copyVideo(from: oldItem.tempURL){
+                        Log.debug( "Could not create file for \(item.id)")
+                        continue
+                    }
                     items.append(item)
                 }
                 else if let oldItem = oldItem as? OldTrackItem{
@@ -129,6 +153,64 @@ class OldImageItem : LocatedItem{
     
 }
 
+class OldAudioItem : LocatedItem{
+    
+    static var previewSize: CGFloat = 512
+    
+    enum CodingKeys: String, CodingKey {
+        case time
+        case fileName
+    }
+    
+    override var type : LocatedItemType{
+        .audio
+    }
+    
+    var fileName : String
+    var time: Double
+    
+    var tempURL : URL{
+        BasePaths.tempURL.appendingPathComponent("media").appendingPathComponent(fileName)
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        time = try values.decode(Double.self, forKey: .time)
+        fileName = try values.decode(String.self, forKey: .fileName)
+        try super.init(from: decoder)
+    }
+    
+}
+
+class OldVideoItem : LocatedItem{
+    
+    static var previewSize: CGFloat = 512
+    
+    enum CodingKeys: String, CodingKey {
+        case time
+        case fileName
+    }
+    
+    override var type : LocatedItemType{
+        .video
+    }
+    
+    var fileName : String
+    var time: Double
+    
+    var tempURL : URL{
+        BasePaths.tempURL.appendingPathComponent("media").appendingPathComponent(fileName)
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        time = try values.decode(Double.self, forKey: .time)
+        fileName = try values.decode(String.self, forKey: .fileName)
+        try super.init(from: decoder)
+    }
+    
+}
+
 class OldTrackItem : LocatedItem{
     
     private enum CodingKeys: String, CodingKey {
@@ -216,12 +298,14 @@ class LocatedItemMetaData : Decodable{
         switch type{
         case .image:
             data = try values.decode(OldImageItem.self, forKey: .data)
+        case .audio:
+            data = try values.decode(OldAudioItem.self, forKey: .data)
+        case .video:
+            data = try values.decode(OldVideoItem.self, forKey: .data)
         case .track:
             data = try values.decode(OldTrackItem.self, forKey: .data)
         case .note:
             data = try values.decode(OldNoteItem.self, forKey: .data)
-        default:
-            data = nil
         }
     }
     

@@ -3979,6 +3979,17 @@
         }
       }
     },
+    "synchronize" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronize with iCloud"
+          }
+        }
+      }
+    },
     "synchronized" : {
       "extractionState" : "manual",
       "localizations" : {

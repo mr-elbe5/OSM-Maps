@@ -48,6 +48,14 @@ class ItemListView: NSView{
                 let view = ImageCellView(image: item as! ImageItem)
                 view.delegate = self
                 itemView = view
+            /*case AudioItem.itemType:
+                let view = AudioCellView(image: item as! AudioItem)
+                view.delegate = self
+                itemView = view
+            case VideoItem.itemType:
+                let view = VideoCellView(image: item as! VideoItem)
+                view.delegate = self
+                itemView = view*/
             case NoteItem.itemType:
                 let view = NoteCellView(note: item as! NoteItem)
                 view.delegate = self

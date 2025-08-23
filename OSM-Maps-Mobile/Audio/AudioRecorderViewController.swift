@@ -7,17 +7,11 @@
 import UIKit
 import AVFoundation
 
-protocol AudioCaptureDelegate{
-    func audioCaptured(audio: AudioItem)
-}
-
 class AudioRecorderViewController : ScrollViewController, AVAudioRecorderDelegate{
     
     var audioRecorder = AudioRecorderView()
     var commentField = UITextField()
     var saveButton = UIButton()
-    
-    var delegate: AudioCaptureDelegate? = nil
     
     override func loadView() {
         super.loadView()
@@ -49,13 +43,14 @@ class AudioRecorderViewController : ScrollViewController, AVAudioRecorderDelegat
     }
     
     func save(){
-        let audioFile = AudioItem()
-        audioFile.time = (audioRecorder.currentTime*100).rounded() / 100
+        let audioItem = AudioItem(coordinate: MapStatus.shared.centerCoordinate)
+        audioItem.time = (audioRecorder.currentTime*100).rounded() / 100
         //Log.debug("AudioRecorderViewController saving url \(audioFile.fileURL)")
-        if FileManager.default.copyFile(fromURL: audioRecorder.tmpFileURL, toURL: audioFile.url){
+        if FileManager.default.copyFile(fromURL: audioRecorder.tmpFileURL, toURL: audioItem.url){
+            AppData.shared.addItem(audioItem)
             audioRecorder.cleanup()
             self.close()
-            self.delegate?.audioCaptured(audio: audioFile)
+            MainViewController.shared.audioCaptured(audio: audioItem)
         }
         
     }

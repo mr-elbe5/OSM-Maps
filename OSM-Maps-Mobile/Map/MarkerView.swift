@@ -10,7 +10,7 @@ class MarkerView : UIButton{
     
     static var baseFrame = CGRect(x: -12,y: -12, width: 24, height: 24)
     
-    var hasImage : Bool{
+    var hasMedia : Bool{
         false
     }
     

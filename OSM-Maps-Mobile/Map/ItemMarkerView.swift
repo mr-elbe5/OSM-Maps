@@ -10,8 +10,8 @@ class ItemMarkerView : MarkerView{
     
     var item : MapItem
     
-    override var hasImage : Bool{
-        item is ImageItem
+    override var hasMedia : Bool{
+        item is ImageItem || item is AudioItem || item is VideoItem
     }
     
     override var hasNote : Bool{
@@ -33,8 +33,8 @@ class ItemMarkerView : MarkerView{
     }
     
     override func updateImage(){
-        if hasImage{
-            setImage(MapDefaults.mapImageIcon, for: .normal)
+        if hasMedia{
+            setImage(MapDefaults.mapMediaIcon, for: .normal)
         }
         else if hasTrack{
             setImage(MapDefaults.mapTrackIcon, for: .normal)

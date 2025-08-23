@@ -31,9 +31,9 @@ class MapItemGroup {
         items.append(item)
     }
     
-    var hasImage: Bool{
+    var hasMedia: Bool{
         for item in items{
-            if item is ImageItem{
+            if item is ImageItem || item is AudioItem || item is VideoItem{
                 return true
             }
         }

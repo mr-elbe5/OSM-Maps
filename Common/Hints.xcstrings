@@ -227,8 +227,14 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Hier kannst Du Kartenkacheln für den aktuellen sichtbaren Kartenbereich vorladen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Here you can preload map tiles of the currently visible map area for offline use"
           }
         }
       }
@@ -399,6 +405,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Synchronize only to iCloud from local data"
+          }
+        }
+      }
+    },
+    "synchronizeWarnHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dies kann nicht rückgängig gemacht werden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This cannot be undone"
           }
         }
       }

@@ -116,7 +116,7 @@ extension ImageListViewController: PHPickerViewControllerDelegate{
                         }
                         image.originalFileName = url.lastPathComponent
                         image.generateFileName()
-                        if image.copyImageAndCreatePreview(originalURL: url, original: img){
+                        if image.copyImageAndCreatePreview(from: url, original: img){
                             AppData.shared.addItem(image)
                             AppData.shared.sortItemsByDate(ascending: ViewFilter.shared.defaultSortAscending)
                             DispatchQueue.main.async {

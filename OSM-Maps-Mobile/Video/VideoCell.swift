@@ -6,20 +6,26 @@
 
 import UIKit
 
+protocol VideoCellDelegate {
+    func videoChanged(_ item: VideoItem)
+}
+
 class VideoCell: MapItemCell{
     
     static let CELL_IDENT = "videoCell"
     
-    var video : VideoItem? = nil {
+    var item : VideoItem? = nil {
         didSet {
             updateCell()
-            setSelected(video?.selected ?? false, animated: false)
+            setSelected(item?.selected ?? false, animated: false)
         }
     }
     
+    var delegate : VideoCellDelegate?
+    
     override func updateIconView(){
         iconView.removeAllSubviews()
-        if let video = video{
+        if let video = item{
             let selectedButton = UIButton().asIconButton(video.selected ? "checkmark.square" : "square", color: .darkGray)
             selectedButton.addAction(UIAction(){ action in
                 video.selected = !video.selected
@@ -37,12 +43,12 @@ class VideoCell: MapItemCell{
     }
     
     override func updateTimeLabel(){
-        timeLabel.text = video?.creationDate.dateTimeString()
+        timeLabel.text = item?.creationDate.dateTimeString()
     }
     
     override func updateItemView(){
         itemView.removeAllSubviews()
-        if let video = video{
+        if let video = item{
             let videoView = VideoPlayerView()
             videoView.setRoundedBorders()
             itemView.addSubviewWithAnchors(videoView, top: iconView.bottomAnchor, leading: itemView.leadingAnchor, trailing: itemView.trailingAnchor, insets: UIEdgeInsets(top: 2, left: 0, bottom: OSInsets.defaultInset, right: 0))

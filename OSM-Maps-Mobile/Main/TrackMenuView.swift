@@ -13,6 +13,8 @@ class TrackMenuView: UIView {
     var trackingIcon = UIImageView(image: UIImage(systemName: "figure.walk.motion"))
     var pauseResumeButton = UIButton().asIconButton("pause.circle", color: .darkText)
     var stopButton = UIButton().asIconButton("stop.circle", color: .darkText)
+    var cameraButton = UIButton().asIconButton("camera", color: .darkText)
+    var audioButton = UIButton().asIconButton("microphone", color: .darkText)
     
     let insets = UIEdgeInsets(top: 20, left: 5, bottom: 20, right: 5)
     
@@ -32,12 +34,20 @@ class TrackMenuView: UIView {
         }, for: .touchDown)
         stopButton.menu = getEndTrackingMenu()
         stopButton.showsMenuAsPrimaryAction = true
+        cameraButton.addAction(UIAction(){ action in
+            self.openCamera()
+        }, for: .touchDown)
+        audioButton.addAction(UIAction(){ action in
+            self.openAudioRecorder()
+        }, for: .touchDown)
         setupForIdle()
     }
     
     func setupForIdle(){
         removeAllSubviews()
         addSubviewBelow(startTrackingButton, insets: insets)
+        addSubviewBelow(cameraButton, upperView: startTrackingButton, insets: insets)
+        addSubviewBelow(audioButton, upperView: cameraButton, insets: insets)
             .connectToBottom(of: self, inset: 20)
     }
     
@@ -46,6 +56,8 @@ class TrackMenuView: UIView {
         addSubviewBelow(trackingIcon, insets: insets)
         addSubviewBelow(pauseResumeButton, upperView: trackingIcon, insets: insets)
         addSubviewBelow(stopButton, upperView: pauseResumeButton, insets: insets)
+        addSubviewBelow(cameraButton, upperView: stopButton, insets: insets)
+        addSubviewBelow(audioButton, upperView: cameraButton, insets: insets)
             .connectToBottom(of: self, inset: 20)
     }
     
@@ -70,6 +82,14 @@ class TrackMenuView: UIView {
             self.setupForIdle()
         })
         return UIMenu(title: "", children: actions)
+    }
+    
+    func openCamera(){
+        MainViewController.shared.openCamera()
+    }
+    
+    func openAudioRecorder(){
+        MainViewController.shared.openAudioRecorder()
     }
     
 }

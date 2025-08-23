@@ -44,6 +44,8 @@ class ItemListViewController: UIViewController{
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(ImageCell.self, forCellReuseIdentifier: ImageCell.CELL_IDENT)
+        tableView.register(AudioCell.self, forCellReuseIdentifier: AudioCell.CELL_IDENT)
+        tableView.register(VideoCell.self, forCellReuseIdentifier: VideoCell.CELL_IDENT)
         tableView.register(TrackCell.self, forCellReuseIdentifier: TrackCell.CELL_IDENT)
         tableView.register(NoteCell.self, forCellReuseIdentifier: NoteCell.CELL_IDENT)
     }
@@ -173,6 +175,28 @@ extension ItemListViewController: UITableViewDelegate, UITableViewDataSource{
                 Log.error("no valid item/cell for image")
                 return UITableViewCell()
             }
+        case AudioItem.itemType:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: AudioCell.CELL_IDENT, for: indexPath) as? AudioCell, let audio = item as? AudioItem{
+                cell.item = audio
+                cell.updateCell()
+                cell.delegate = self
+                return cell
+            }
+            else{
+                Log.error("no valid item/cell for audio")
+                return UITableViewCell()
+            }
+        case VideoItem.itemType:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: VideoCell.CELL_IDENT, for: indexPath) as? VideoCell, let video = item as? VideoItem{
+                cell.item = video
+                cell.updateCell()
+                cell.delegate = self
+                return cell
+            }
+            else{
+                Log.error("no valid item/cell for audio")
+                return UITableViewCell()
+            }
         case TrackItem.itemType:
             if let cell = tableView.dequeueReusableCell(withIdentifier: TrackCell.CELL_IDENT, for: indexPath) as? TrackCell, let track = item as? TrackItem{
                 cell.item = track
@@ -227,6 +251,26 @@ extension ItemListViewController : ImageCellDelegate{
         MainViewController.shared.updateItemLayer()
     }
     
+}
+
+extension ItemListViewController : AudioCellDelegate{
+    
+    func audioChanged(_ item: AudioItem) {
+        setupData()
+        tableView.reloadData()
+        MainViewController.shared.updateItemLayer()
+    }
+
+}
+
+extension ItemListViewController : VideoCellDelegate{
+    
+    func videoChanged(_ item: VideoItem) {
+        setupData()
+        tableView.reloadData()
+        MainViewController.shared.updateItemLayer()
+    }
+
 }
 
 extension ItemListViewController : TrackCellDelegate{

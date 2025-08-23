@@ -27,6 +27,10 @@ class MapItemMetaData : Codable{
         switch type{
         case ImageItem.itemType:
             data = try values.decode(ImageItem.self, forKey: .data)
+        case AudioItem.itemType:
+            data = try values.decode(AudioItem.self, forKey: .data)
+        case VideoItem.itemType:
+            data = try values.decode(VideoItem.self, forKey: .data)
         case TrackItem.itemType:
             data = try values.decode(TrackItem.self, forKey: .data)
         case NoteItem.itemType:
@@ -61,6 +65,14 @@ extension MapItemMetaDataList{
             switch metaData.type{
             case ImageItem.itemType:
                 if let item = metaData.data as? ImageItem{
+                    result.append(item)
+                }
+            case AudioItem.itemType:
+                if let item = metaData.data as? AudioItem{
+                    result.append(item)
+                }
+            case VideoItem.itemType:
+                if let item = metaData.data as? VideoItem{
                     result.append(item)
                 }
             case TrackItem.itemType:

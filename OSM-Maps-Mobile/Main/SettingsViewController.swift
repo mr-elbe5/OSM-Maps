@@ -451,34 +451,42 @@ extension SettingsViewController{
     // cloud
     
     func synchronizeFull(){
-        let synchronizer = CloudSynchronizer(syncType: .full)
-        synchronizer.delegate = self
-        Task{
-            synchronizer.synchronize()
+        showDestructiveApprove(title: "synchronize".localize(), text: "synchronizeWarnHint".localize(table: "Hints")){
+            let synchronizer = CloudSynchronizer(syncType: .full)
+            synchronizer.delegate = self
+            Task{
+                synchronizer.synchronize()
+            }
         }
     }
     
     func synchronizeFromCloud(){
-        let synchronizer = CloudSynchronizer(syncType: .fromCloud)
-        synchronizer.delegate = self
-        Task{
-            synchronizer.synchronize()
+        showDestructiveApprove(title: "synchronizeFromCloud".localize(), text: "synchronizeWarnHint".localize(table: "Hints")){
+            let synchronizer = CloudSynchronizer(syncType: .fromCloud)
+            synchronizer.delegate = self
+            Task{
+                synchronizer.synchronize()
+            }
         }
     }
     
     func synchronizeToCloud(){
-        let synchronizer = CloudSynchronizer(syncType: .toCloud)
-        synchronizer.delegate = self
-        Task{
-            synchronizer.synchronize()
+        showDestructiveApprove(title: "synchronizeToCloud".localize(), text: "synchronizeWarnHint".localize(table: "Hints")){
+            let synchronizer = CloudSynchronizer(syncType: .toCloud)
+            synchronizer.delegate = self
+            Task{
+                synchronizer.synchronize()
+            }
         }
     }
     
     func clearCloud(){
-        let synchronizer = CloudSynchronizer()
-        synchronizer.delegate = self
-        Task{
-            synchronizer.clear()
+        showDestructiveApprove(title: "synchronize".localize(), text: "synchronizeHint".localize(table: "Hints")){
+            let synchronizer = CloudSynchronizer()
+            synchronizer.delegate = self
+            Task{
+                synchronizer.clear()
+            }
         }
     }
     

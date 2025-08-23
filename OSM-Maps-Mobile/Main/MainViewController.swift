@@ -280,6 +280,24 @@ class MainViewController: UIViewController {
         mapView.updateTrackLayer()
     }
     
+    // camera
+    
+    func openCamera(){
+        let controller = CameraViewController()
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    // audio
+    
+    func openAudioRecorder(){
+        let controller = AudioRecorderViewController()
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    func audioCaptured(audio: AudioItem){
+        mapView.updateItemLayer()
+    }
+    
     // video
     
     func showVideo(item: VideoItem){

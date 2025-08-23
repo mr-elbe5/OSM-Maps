@@ -13,14 +13,14 @@ class MapDefaults{
     
     static var elbe5ElevationUrl = "https://gdalserver.elbe5.de/elevation?latitude={lat}&longitude={lon}"
     
-    static var mapPlaceIcon = OSImage(named: "marker_place")!
-    static var mapImageIcon = OSImage(named: "marker_photo")!
-    static var mapTrackIcon = OSImage(named: "marker_track")!
+    static var mapPlaceIcon = OSImage(named: "mappin.green")!
+    static var mapMediaIcon = OSImage(named: "mappin.red")!
+    static var mapTrackIcon = OSImage(named: "mappin.blue")!
     
-    static var mapPlaceGroupIcon = OSImage(named: "marker_places")!
-    static var mapImageGroupIcon = OSImage(named: "marker_photos")!
-    static var mapTrackGroupIcon = OSImage(named: "marker_tracks")!
-    static var mapMixedGroupIcon = OSImage(named: "marker_mixed")!
+    static var mapPlaceGroupIcon = OSImage(named: "mappin.group.green")!
+    static var mapMediaGroupIcon = OSImage(named: "mappin.group.red")!
+    static var mapTrackGroupIcon = OSImage(named: "mappin.group.blue")!
+    static var mapMixedGroupIcon = OSImage(named: "mappin.group.purple")!
     
     static var mapItemImageOffset: CGFloat = 16
     

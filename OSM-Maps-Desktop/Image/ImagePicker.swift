@@ -72,7 +72,7 @@ class ImagePicker: NSObject  {
                             }
                         }
                     }
-                    else if image.copyImageAndCreatePreview(originalURL: url, original: img){
+                    else if image.copyImageAndCreatePreview(from: url, original: img){
                         if image.metaData!.hasGPSData{
                             image.coordinate = CLLocationCoordinate2D(latitude: image.metaData!.latitude!, longitude: image.metaData!.longitude!)
                         }
@@ -141,7 +141,7 @@ extension ImagePicker: PHPickerViewControllerDelegate{
                                 image.coordinate = coordinate
                                 image.metaData?.latitude = image.coordinate.latitude
                                 image.metaData?.longitude = image.coordinate.longitude
-                                if image.copyImageAndCreatePreview(originalURL: url, original: img){
+                                if image.copyImageAndCreatePreview(from: url, original: img){
                                     AppData.shared.addItem(image)
                                     AppData.shared.sortItemsByDate(ascending: ViewFilter.shared.defaultSortAscending)
                                     AppData.shared.save()

@@ -11,7 +11,7 @@ class MarkerView : NSButton{
     static var size : CGFloat{32}
     static var baseFrame = CGRect(x: -size/2,y: -size, width: size, height: size)
     
-    var hasImage : Bool{
+    var hasMedia : Bool{
         false
     }
     

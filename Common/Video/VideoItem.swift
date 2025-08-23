@@ -56,16 +56,58 @@ class VideoItem : MapItem{
         fileName = "video_\(id).mp4"
     }
     
+    override init(coordinate: CLLocationCoordinate2D){
+        time = 0.0
+        super.init(coordinate: coordinate)
+        fileName = "video_\(id).mp4"
+    }
+    
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: VideoCodingKeys.self)
         time = try values.decodeIfPresent(Double.self, forKey: .time) ?? 0.0
         try super.init(from: decoder)
+        fileName = "video_\(id).mp4"
     }
     
     override func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
         var container = encoder.container(keyedBy: VideoCodingKeys.self)
         try container.encode(time, forKey: .time)
+    }
+    
+    override var dataRecord: CKRecord{
+        get{
+            let record = super.dataRecord
+            let asset = CKAsset(fileURL: url)
+            record["file"] = asset
+            return record
+        }
+    }
+    
+    @discardableResult
+    func saveVideo(data: Data) -> Bool{
+        return FileManager.default.saveFile(data: data, url: url)
+    }
+    
+    @discardableResult
+    func copyVideo(from: URL) -> Bool{
+        return FileManager.default.copyFile(fromURL: from, toURL: url, replace: true)
+    }
+    
+    @discardableResult
+    func deleteFiles() -> Bool{
+        var success = true
+        if FileManager.default.fileExists(url: url){
+            if !FileManager.default.deleteFile(url: url){
+                Log.error("VideoItem could not delete file: \(fileName)")
+                success = false
+            }
+        }
+        return success
+    }
+    
+    override func prepareToDelete(){
+        deleteFiles()
     }
     
 }

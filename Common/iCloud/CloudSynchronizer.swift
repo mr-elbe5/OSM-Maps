@@ -280,9 +280,27 @@ class CloudSynchronizer: @unchecked Sendable{
                 if let fileRecord = try await readFileRecord(for: remoteRecord), let json = remoteRecord.json, let imageItem: ImageItem = ImageItem.fromJSON(encoded: json), let asset = fileRecord.file(), let fileURL = asset.fileURL, let imageData = asset.data, let image = OSImage(data: imageData){
                     imageItem.cloudVersion = remoteRecord.version
                     //Log.info("copying image at \(imageItem.url.path()) from \(fileURL.path())")
-                    if imageItem.copyImageAndCreatePreview(originalURL: fileURL, original: image){
+                    if imageItem.copyImageAndCreatePreview(from: fileURL, original: image){
                         Log.info("creating local image item")
                         AppData.shared.addItem(imageItem)
+                    }
+                }
+            case AudioItem.itemType:
+                if let fileRecord = try await readFileRecord(for: remoteRecord), let json = remoteRecord.json, let audioItem: AudioItem = AudioItem.fromJSON(encoded: json), let asset = fileRecord.file(), let fileURL = asset.fileURL, let imageData = asset.data{
+                    audioItem.cloudVersion = remoteRecord.version
+                    //Log.info("copying audio at \(audioItem.url.path()) from \(fileURL.path())")
+                    if audioItem.copyAudio(from: fileURL){
+                        Log.info("creating local audio item")
+                        AppData.shared.addItem(audioItem)
+                    }
+                }
+            case VideoItem.itemType:
+                if let fileRecord = try await readFileRecord(for: remoteRecord), let json = remoteRecord.json, let videoItem: VideoItem = VideoItem.fromJSON(encoded: json), let asset = fileRecord.file(), let fileURL = asset.fileURL{
+                    videoItem.cloudVersion = remoteRecord.version
+                    //Log.info("copying video at \(videoItem.url.path()) from \(fileURL.path())")
+                    if videoItem.copyVideo(from: fileURL){
+                        Log.info("creating local video item")
+                        AppData.shared.addItem(videoItem)
                     }
                 }
             case TrackItem.itemType:

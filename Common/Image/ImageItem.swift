@@ -157,8 +157,8 @@ class ImageItem: MapItem{
     }
     
     @discardableResult
-    func copyImageAndCreatePreview(originalURL: URL, original: OSImage) -> Bool{
-        if copyImage(remoteURL: originalURL), createPreviewFile(original: original){
+    func copyImageAndCreatePreview(from: URL, original: OSImage) -> Bool{
+        if copyImage(from: from), createPreviewFile(original: original){
             Log.debug("save image and preview")
             return true
         }
@@ -172,8 +172,8 @@ class ImageItem: MapItem{
     }
     
     @discardableResult
-    func copyImage(remoteURL: URL) -> Bool{
-        return FileManager.default.copyFile(fromURL: remoteURL, toURL: url, replace: true)
+    func copyImage(from: URL) -> Bool{
+        return FileManager.default.copyFile(fromURL: from, toURL: url, replace: true)
     }
     
     @discardableResult

@@ -6,16 +6,22 @@
 
 import UIKit
 
+protocol AudioCellDelegate {
+    func audioChanged(_ item: AudioItem)
+}
+
 class AudioCell: MapItemCell{
     
     static let CELL_IDENT = "audioCell"
     
-    var audio : AudioItem? = nil {
+    var item : AudioItem? = nil {
         didSet {
             updateCell()
-            setSelected(audio?.selected ?? false, animated: false)
+            setSelected(item?.selected ?? false, animated: false)
         }
     }
+    
+    var delegate: AudioCellDelegate?
     
     override func setupCellBody(){
         cellBody.setRoundedBorders()
@@ -29,7 +35,7 @@ class AudioCell: MapItemCell{
     
     override func updateIconView(){
         iconView.removeAllSubviews()
-        if let audio = audio{
+        if let audio = item{
             let selectedButton = UIButton().asIconButton(audio.selected ? "checkmark.square" : "square", color: .label)
             selectedButton.addAction(UIAction(){ action in
                 audio.selected = !audio.selected
@@ -41,15 +47,15 @@ class AudioCell: MapItemCell{
     }
     
     override func updateTimeLabel(){
-        timeLabel.text = audio?.creationDate.dateTimeString()
+        timeLabel.text = item?.creationDate.dateTimeString()
     }
     
     override func updateItemView(){
         itemView.removeAllSubviews()
-        if let audio = audio{
+        if let audio = item{
             let audioView = AudioPlayerView()
             audioView.setupView()
-            itemView.addSubviewWithAnchors(audioView, top: itemView.topAnchor, leading: itemView.leadingAnchor, trailing: itemView.trailingAnchor, insets: UIEdgeInsets(top: 1, left: OSInsets.defaultInset, bottom: OSInsets.defaultInset, right: OSInsets.defaultInset))
+            itemView.addSubviewWithAnchors(audioView, top: itemView.topAnchor, leading: itemView.leadingAnchor, trailing: itemView.trailingAnchor, bottom: itemView.bottomAnchor, insets: UIEdgeInsets(top: 1, left: OSInsets.defaultInset, bottom: OSInsets.defaultInset, right: OSInsets.defaultInset))
             audioView.url = audio.url
             audioView.enablePlayer()
         }

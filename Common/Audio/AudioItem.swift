@@ -56,16 +56,58 @@ class AudioItem : MapItem{
         fileName = "audio_\(id).m4a"
     }
     
+    override init(coordinate: CLLocationCoordinate2D){
+        time = 0.0
+        super.init(coordinate: coordinate)
+        fileName = "audio_\(id).m4a"
+    }
+    
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: AudioCodingKeys.self)
         time = try values.decode(Double.self, forKey: .time)
         try super.init(from: decoder)
+        fileName = "audio_\(id).m4a"
     }
     
     override func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
         var container = encoder.container(keyedBy: AudioCodingKeys.self)
         try container.encode(time, forKey: .time)
+    }
+    
+    override var dataRecord: CKRecord{
+        get{
+            let record = super.dataRecord
+            let asset = CKAsset(fileURL: url)
+            record["file"] = asset
+            return record
+        }
+    }
+    
+    @discardableResult
+    func saveAudio(data: Data) -> Bool{
+        return FileManager.default.saveFile(data: data, url: url)
+    }
+    
+    @discardableResult
+    func copyAudio(from: URL) -> Bool{
+        return FileManager.default.copyFile(fromURL: from, toURL: url, replace: true)
+    }
+    
+    @discardableResult
+    func deleteFiles() -> Bool{
+        var success = true
+        if FileManager.default.fileExists(url: url){
+            if !FileManager.default.deleteFile(url: url){
+                Log.error("AudioItem could not delete file: \(fileName)")
+                success = false
+            }
+        }
+        return success
+    }
+    
+    override func prepareToDelete(){
+        deleteFiles()
     }
     
 }

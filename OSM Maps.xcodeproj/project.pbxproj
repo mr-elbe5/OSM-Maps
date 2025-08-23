@@ -114,6 +114,8 @@
 				Application/AppData.swift,
 				Application/Backup.swift,
 				Application/BasePaths.swift,
+				Audio/AudioItem.swift,
+				"Audio/AVCaptureDevice+Audio.swift",
 				Data/ArrayIterator.swift,
 				Data/AsyncOperation.swift,
 				Data/GenericError.swift,
@@ -185,6 +187,7 @@
 				Track/TrackpointInterval.swift,
 				Track/TrackpointList.swift,
 				Track/VisibleTrack.swift,
+				Video/VideoItem.swift,
 				View/OSColor.swift,
 				View/OSView.swift,
 				View/OSViewController.swift,
@@ -492,11 +495,13 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "OSM Maps";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = NO;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Access to the camera is needed for taking photos, which will be stored in the app in connection with its location.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Your location is needed for showing your current position and record it on demand.";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Your location is needed for showing your current position and record it on demand.";
 				INFOPLIST_KEY_NSLocationUsageDescription = "Your location is needed for showing and saving your current position.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is needed for showing your current position and record it on demand.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "The access to the photo library is needed, when photos from the app are exported to the library or when photos from the library are assigned to a location.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "The microphone is needed for recording audio and video, which will be stored in the app in connection with its location.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "The access to the photo library is needed, when photos from the app are exported to the library or when photos from the library are assigned to a location and to save photos.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -529,11 +534,13 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "OSM Maps";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.navigation";
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = NO;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Access to the camera is needed for taking photos, which will be stored in the app in connection with its location.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Your location is needed for showing your current position and record it on demand.";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Your location is needed for showing your current position and record it on demand.";
 				INFOPLIST_KEY_NSLocationUsageDescription = "Your location is needed for showing and saving your current position.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is needed for showing your current position and record it on demand.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "The access to the photo library is needed, when photos from the app are exported to the library or when photos from the library are assigned to a location.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "The microphone is needed for recording audio and video, which will be stored in the app in connection with its location.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "The access to the photo library is needed, when photos from the app are exported to the library or when photos from the library are assigned to a location and to save photos.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
