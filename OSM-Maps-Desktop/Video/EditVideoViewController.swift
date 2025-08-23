@@ -65,7 +65,7 @@ class EditVideoViewController: ModalViewController {
         let newCoord: CLLocationCoordinate2D? = newCoordinate != item.coordinate ? newCoordinate : nil
         let newDate: Date? = datePicker.date != item.creationDate ? datePicker.date : nil
         if newCoord != nil || newDate != nil{
-            item.updateEditedVideo(coordinate: newCoordinate, creationDate: datePicker.date)
+            item.updateEditedMedia(coordinate: newCoordinate, creationDate: datePicker.date)
             AppData.shared.save()
             MainViewController.shared.updateItemLayer()
         }

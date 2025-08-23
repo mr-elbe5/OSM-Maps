@@ -7,9 +7,7 @@
 import Foundation
 import CloudKit
 
-class AudioItem : MapItem{
-    
-    static var itemType: String = "audio"
+class AVMediaItem : MapItem{
     
     enum AudioCodingKeys: String, CodingKey {
         case time
@@ -21,12 +19,6 @@ class AudioItem : MapItem{
     var url: URL{
         get{
             BasePaths.audioDirURL.appendingPathComponent(fileName)
-        }
-    }
-    
-    override var itemType : String{
-        get{
-            return AudioItem.itemType
         }
     }
     
@@ -42,31 +34,28 @@ class AudioItem : MapItem{
         return true
     }
     
-    var audioData: Data?{
+    var mediaData: Data?{
         if let data = FileManager.default.readFile(url: url){
             return data
         }
-        Log.error("audio file does not exist: \(url)")
+        Log.error("media file does not exist: \(url)")
         return nil
     }
     
     override init(){
         time = 0.0
         super.init()
-        fileName = "audio_\(id).m4a"
     }
     
     override init(coordinate: CLLocationCoordinate2D){
         time = 0.0
         super.init(coordinate: coordinate)
-        fileName = "audio_\(id).m4a"
     }
     
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: AudioCodingKeys.self)
         time = try values.decode(Double.self, forKey: .time)
         try super.init(from: decoder)
-        fileName = "audio_\(id).m4a"
     }
     
     override func encode(to encoder: Encoder) throws {
@@ -85,12 +74,12 @@ class AudioItem : MapItem{
     }
     
     @discardableResult
-    func saveAudio(data: Data) -> Bool{
+    func saveData(data: Data) -> Bool{
         return FileManager.default.saveFile(data: data, url: url)
     }
     
     @discardableResult
-    func copyAudio(from: URL) -> Bool{
+    func copyFile(from: URL) -> Bool{
         return FileManager.default.copyFile(fromURL: from, toURL: url, replace: true)
     }
     
@@ -99,7 +88,7 @@ class AudioItem : MapItem{
         var success = true
         if FileManager.default.fileExists(url: url){
             if !FileManager.default.deleteFile(url: url){
-                Log.error("AudioItem could not delete file: \(fileName)")
+                Log.error("media item could not delete file: \(fileName)")
                 success = false
             }
         }
@@ -110,7 +99,7 @@ class AudioItem : MapItem{
         deleteFiles()
     }
     
-    func updateEditedAudio(coordinate: CLLocationCoordinate2D?, creationDate: Date?){
+    func updateEditedMedia(coordinate: CLLocationCoordinate2D?, creationDate: Date?){
         if let data = FileManager.default.readFile(url: url){
             if let coordinate = coordinate{
                 self.coordinate = coordinate
@@ -123,9 +112,9 @@ class AudioItem : MapItem{
     
 }
 
-typealias AudioItemList = SelectableList<AudioItem>
+typealias AVMediaItemList = SelectableList<AVMediaItem>
 
-extension AudioItemList{
+extension AVMediaItemList{
     
     mutating func sortByDate(ascending: Bool){
         if ascending{

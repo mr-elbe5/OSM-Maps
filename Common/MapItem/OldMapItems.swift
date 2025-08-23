@@ -44,7 +44,7 @@ class OldMapItems{
                     item.creationDate = oldItem.creationDate
                     item.fileName = oldItem.fileName
                     item.time = oldItem.time
-                    if !item.copyAudio(from: oldItem.tempURL){
+                    if !item.copyFile(from: oldItem.tempURL){
                         Log.debug( "Could not create file for \(item.id)")
                         continue
                     }
@@ -56,7 +56,7 @@ class OldMapItems{
                     item.creationDate = oldItem.creationDate
                     item.fileName = oldItem.fileName
                     item.time = oldItem.time
-                    if !item.copyVideo(from: oldItem.tempURL){
+                    if !item.copyFile(from: oldItem.tempURL){
                         Log.debug( "Could not create file for \(item.id)")
                         continue
                     }

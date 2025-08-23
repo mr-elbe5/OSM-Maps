@@ -62,6 +62,11 @@ class MainViewController: UIViewController {
             controller.loadItems()
             self.navigationController?.pushViewController(controller, animated: true)
         }))
+        items.append(UIBarButtonItem(title: "avMedia".localize(), image: UIImage(systemName: "video.badge.waveform"), primaryAction: UIAction(){ action in
+            let controller = AVMediaListViewController()
+            controller.loadItems()
+            self.navigationController?.pushViewController(controller, animated: true)
+        }))
         items.append(UIBarButtonItem(title: "tracks".localize(), image: UIImage(systemName: "figure.walk"), primaryAction: UIAction(){ action in
             let controller = TrackListViewController()
             controller.loadItems()
