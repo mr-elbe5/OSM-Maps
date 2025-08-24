@@ -1242,6 +1242,23 @@
         }
       }
     },
+    "editAudio" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Audio bearbeiten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit Audio"
+          }
+        }
+      }
+    },
     "editImage" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1289,6 +1306,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Edit Track"
+          }
+        }
+      }
+    },
+    "editVideo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Video bearbeiten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit Video"
           }
         }
       }

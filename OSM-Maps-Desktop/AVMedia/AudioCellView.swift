@@ -31,15 +31,17 @@ class AudioCellView : MapItemCellView{
     override func setupView() {
         super.setupView()
         let titleField = NSTextField(wrappingLabelWithString: "audio".localize()).asHeadline()
-        addSubviewWithAnchors(titleField, top: topAnchor, insets: OSInsets.smallInsets).centerX(centerXAnchor)
+        addSubviewWithAnchors(titleField, top: topAnchor,leading: leadingAnchor, insets: OSInsets.defaultInsets)
         let iconBar = IconBar()
         addSubviewWithAnchors(iconBar, top: topAnchor, trailing: trailingAnchor)
         let editButton = NSButton(icon: "pencil", target: self, action: #selector(editAudio))
         iconBar.addArrangedSubview(editButton)
         selectedButton = NSButton(icon: audio.selected ? "checkmark.square" : "square", target: self, action: #selector(selectionChanged))
         iconBar.addArrangedSubview(selectedButton)
-        let audioView = AVPlayerView()
-        audioView.player = AVPlayer(url: audio.url)
+        let audioView = AudioPlayerView()
+        audioView.setupView()
+        audioView.url = audio.url
+        audioView.enablePlayer()
         addSubviewWithAnchors(audioView, top: iconBar.bottomAnchor, leading: leadingAnchor, trailing: trailingAnchor)
         audioView.bottom(bottomAnchor)
     }

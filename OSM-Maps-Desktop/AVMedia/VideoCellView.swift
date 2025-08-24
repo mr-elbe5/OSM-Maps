@@ -43,7 +43,7 @@ class VideoCellView : MapItemCellView{
     override func setupView() {
         super.setupView()
         let titleField = NSTextField(wrappingLabelWithString: "video".localize()).asHeadline()
-        addSubviewWithAnchors(titleField, top: topAnchor, insets: OSInsets.smallInsets).centerX(centerXAnchor)
+        addSubviewWithAnchors(titleField, top: topAnchor, leading: leadingAnchor, insets: OSInsets.defaultInsets)
         let iconBar = IconBar()
         addSubviewWithAnchors(iconBar, top: topAnchor, trailing: trailingAnchor)
         let showButton = NSButton(icon: "magnifyingglass", target: self, action: #selector(showVideo))

@@ -31,8 +31,10 @@ class EditAudioViewController: ModalViewController {
         view.frame = CGRect(origin: .zero, size: CGSize(width: 500, height: 0))
         var header = NSTextField(labelWithString: "editAudio".localize()).asHeadline()
         view.addSubviewBelow(header)
-        let audioView = AVPlayerView()
-        audioView.player = AVPlayer(url: item.url)
+        let audioView = AudioPlayerView()
+        audioView.setupView()
+        audioView.url = item.url
+        audioView.enablePlayer()
         view.addSubviewBelow(audioView, upperView: header)
         header = NSTextField(labelWithString: "coordinate".localize()).asHeadline()
         view.addSubviewBelow(header, upperView: audioView)
