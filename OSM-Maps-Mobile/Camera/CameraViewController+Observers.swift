@@ -9,7 +9,7 @@ import AVFoundation
 import CoreLocation
 import Photos
 
-extension E5CameraViewController{
+extension CameraViewController{
     
     func addObservers() {
         let keyValueObservation = session.observe(\.isRunning, options: .new) { _, change in
@@ -17,7 +17,7 @@ extension E5CameraViewController{
             
             DispatchQueue.main.async {
                 //Log.debug("observers: enable/disable buttons")
-                self.cameraButton.isEnabled = isSessionRunning && AVCaptureDevice.DiscoverySession(deviceTypes: E5CameraViewController.discoverableDeviceTypes, mediaType: .video, position: .unspecified).uniqueDevicePositionsCount > 1
+                self.cameraButton.isEnabled = isSessionRunning && AVCaptureDevice.DiscoverySession(deviceTypes: CameraViewController.discoverableDeviceTypes, mediaType: .video, position: .unspecified).uniqueDevicePositionsCount > 1
                 self.captureButton.isEnabled = isSessionRunning
                 self.captureModeControl.isEnabled = isSessionRunning
             }
@@ -67,13 +67,13 @@ extension E5CameraViewController{
     override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
         switch UIDevice.current.orientation {
         case UIDeviceOrientation.portraitUpsideDown:
-            previewView.videoPreviewLayer.connection?.videoOrientation = .portraitUpsideDown
+            previewView.videoPreviewLayer.connection?.videoRotationAngle = 270
         case UIDeviceOrientation.landscapeLeft:
-            previewView.videoPreviewLayer.connection?.videoOrientation = .landscapeRight
+            previewView.videoPreviewLayer.connection?.videoRotationAngle = 0
         case UIDeviceOrientation.landscapeRight:
-            previewView.videoPreviewLayer.connection?.videoOrientation = .landscapeLeft
+            previewView.videoPreviewLayer.connection?.videoRotationAngle = 180
         case UIDeviceOrientation.portrait:
-            previewView.videoPreviewLayer.connection?.videoOrientation = .portrait
+            previewView.videoPreviewLayer.connection?.videoRotationAngle = 90
         default:
             break
         }

@@ -100,13 +100,11 @@ class AVMediaItem : MapItem{
     }
     
     func updateEditedMedia(coordinate: CLLocationCoordinate2D?, creationDate: Date?){
-        if let data = FileManager.default.readFile(url: url){
-            if let coordinate = coordinate{
-                self.coordinate = coordinate
-            }
-            if let creationDate = creationDate{
-                self.creationDate = creationDate
-            }
+        if let coordinate = coordinate{
+            self.coordinate = coordinate
+        }
+        if let creationDate = creationDate{
+            self.creationDate = creationDate
         }
     }
     

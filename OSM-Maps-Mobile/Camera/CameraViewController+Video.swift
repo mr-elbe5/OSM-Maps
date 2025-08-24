@@ -9,7 +9,7 @@ import AVFoundation
 import CoreLocation
 import Photos
 
-extension E5CameraViewController{
+extension CameraViewController{
     
     func toggleMovieRecording() {
         guard let movieFileOutput = self.movieFileOutput else {
@@ -100,7 +100,7 @@ extension E5CameraViewController{
         }
         DispatchQueue.main.async {
             //Log.debug("file output: enable buttons")
-            self.cameraButton.isEnabled = AVCaptureDevice.DiscoverySession(deviceTypes: E5CameraViewController.discoverableDeviceTypes, mediaType: .video, position: .unspecified).uniqueDevicePositionsCount > 1
+            self.cameraButton.isEnabled = AVCaptureDevice.DiscoverySession(deviceTypes: CameraViewController.discoverableDeviceTypes, mediaType: .video, position: .unspecified).uniqueDevicePositionsCount > 1
             self.captureButton.isEnabled = true
             self.captureModeControl.isEnabled = true
             self.supportedInterfaceOrientations = UIInterfaceOrientationMask.all

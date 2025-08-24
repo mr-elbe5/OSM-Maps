@@ -9,7 +9,7 @@ import AVFoundation
 import CoreLocation
 import Photos
 
-extension E5CameraViewController{
+extension CameraViewController{
     
     func configurePhotoOutput() -> Bool {
         if isCaptureEnabled, let supportedMaxPhotoDimensions = currentDevice?.activeFormat.supportedMaxPhotoDimensions{

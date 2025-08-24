@@ -286,7 +286,7 @@ class CloudSynchronizer: @unchecked Sendable{
                     }
                 }
             case AudioItem.itemType:
-                if let fileRecord = try await readFileRecord(for: remoteRecord), let json = remoteRecord.json, let audioItem: AudioItem = AudioItem.fromJSON(encoded: json), let asset = fileRecord.file(), let fileURL = asset.fileURL, let imageData = asset.data{
+                if let fileRecord = try await readFileRecord(for: remoteRecord), let json = remoteRecord.json, let audioItem: AudioItem = AudioItem.fromJSON(encoded: json), let asset = fileRecord.file(), let fileURL = asset.fileURL{
                     audioItem.cloudVersion = remoteRecord.version
                     //Log.info("copying audio at \(audioItem.url.path()) from \(fileURL.path())")
                     if audioItem.copyFile(from: fileURL){

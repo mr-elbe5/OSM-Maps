@@ -9,7 +9,7 @@ import AVFoundation
 import CoreLocation
 import Photos
 
-extension E5CameraViewController{
+extension CameraViewController{
     
     func enableControls(_ enable: Bool){
         //Log.debug("enable controls: \(enable)")
