@@ -239,6 +239,23 @@
         }
       }
     },
+    "audio" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Audio"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Audio"
+          }
+        }
+      }
+    },
     "autoSynchronize" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4615,6 +4632,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vertical Uncertainty"
+          }
+        }
+      }
+    },
+    "video" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Video"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Video"
           }
         }
       }

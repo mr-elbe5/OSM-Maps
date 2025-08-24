@@ -26,14 +26,16 @@ class VideoViewController: UIViewController {
         
         if let url = videoURL{
             videoView.url = url
-            contentView.addSubviewWithAnchors(videoView, top: contentView.topAnchor, leading: contentView.leadingAnchor, trailing: contentView.trailingAnchor)
+            contentView.addSubviewBelow(videoView)
             videoView.setAspectRatioConstraint()
-            
+            volumeView.tintColor = .white
+            volumeView.thumbTintColor = .white
             volumeView.addAction(UIAction(){ action in
                 self.videoView.player.volume = self.volumeView.value
             }, for: .valueChanged)
-            view.addSubviewWithAnchors(volumeView, top: videoView.bottomAnchor, leading: contentView.leadingAnchor, trailing: contentView.trailingAnchor, bottom: contentView.bottomAnchor)
+            contentView.addSubviewBelow(volumeView, upperView: videoView)
                 .height(25)
+                .connectToBottom(of: contentView)
         }
     }
     

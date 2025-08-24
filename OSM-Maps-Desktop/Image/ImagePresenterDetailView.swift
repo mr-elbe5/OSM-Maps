@@ -7,7 +7,6 @@
 import AppKit
 import CoreLocation
 
-//todo image presenter detail
 class ImagePresenterDetailView: NSView {
     
     static func maxImageWidth(outerWidth: CGFloat)-> CGFloat{

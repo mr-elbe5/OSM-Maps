@@ -306,7 +306,9 @@ class MainViewController: UIViewController {
     // video
     
     func showVideo(item: VideoItem){
-        //todo
+        let controller = VideoViewController()
+        controller.videoURL = item.url
+        self.navigationController?.pushViewController(controller, animated: true)
     }
     
     //search
