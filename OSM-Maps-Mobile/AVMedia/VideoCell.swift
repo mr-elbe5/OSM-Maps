@@ -31,14 +31,20 @@ class VideoCell: MapItemCell{
                 video.selected = !video.selected
                 selectedButton.setImage(UIImage(systemName: video.selected ? "checkmark.square" : "square"), for: .normal)
             }, for: .touchDown)
-            iconView.addSubviewWithAnchors(selectedButton, top: iconView.topAnchor, trailing: iconView.trailingAnchor , bottom: iconView.bottomAnchor, insets: iconInsets)
-            
+            iconView.addSubviewToLeft(selectedButton, insets: iconInsets)
+            let editButton = UIButton().asDarkIconButton("pencil")
+            editButton.addAction(UIAction(){ action in
+                let controller = EditVideoViewController(item: video)
+                controller.delegate = self
+                MainViewController.shared.navigationController?.pushViewController(controller, animated: true)
+            }, for: .touchDown)
+            iconView.addSubviewToLeft(editButton, rightView: selectedButton, insets: iconInsets)
             let viewButton = UIButton().asIconButton("magnifyingglass", color: .darkGray)
             viewButton.addAction(UIAction(){ action in
                 MainViewController.shared.showVideo(item: video)
             }, for: .touchDown)
-            iconView.addSubviewWithAnchors(viewButton, top: iconView.topAnchor, leading: iconView.leadingAnchor, trailing: selectedButton.leadingAnchor, bottom: iconView.bottomAnchor, insets: iconInsets)
-            
+            iconView.addSubviewToLeft(viewButton, rightView: editButton, insets: iconInsets)
+                .connectToLeft(of: iconView)
         }
     }
     
@@ -60,6 +66,13 @@ class VideoCell: MapItemCell{
     
 }
 
+extension VideoCell : EditVideoDelegate{
+    
+    func videoChanged(item: VideoItem) {
+      delegate?.videoChanged(item)
+    }
+    
+}
 
 
 

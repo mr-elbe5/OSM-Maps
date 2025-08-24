@@ -98,6 +98,15 @@ class ViewFilter: Identifiable, Codable{
         }
     }
     
+    func filteredImages(media: AVMediaItemList) -> AVMediaItemList{
+        if !useDateFilterForLists{
+            return media
+        }
+        return media.filter(){ item in
+            return isInFilter(item: item)
+        }
+    }
+    
     func filteredTracks(tracks: TrackItemList) -> TrackItemList{
         if !useDateFilterForLists{
             return tracks

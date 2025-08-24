@@ -100,6 +100,22 @@ class AppData : Codable{
         }
     }
     
+    var avMedia: AVMediaItemList{
+        get{
+            var mediaItems = AVMediaItemList()
+            for item in _mapItems{
+                if item is AudioItem{
+                    mediaItems.append(item as! AudioItem)
+                }
+                else if item is VideoItem{
+                    mediaItems.append(item as! VideoItem)
+                }
+            }
+            mediaItems.sortByDate(ascending: ViewFilter.shared.defaultSortAscending)
+            return mediaItems
+        }
+    }
+    
     var audios: AudioItemList{
         get{
             var audioItems = AudioItemList()

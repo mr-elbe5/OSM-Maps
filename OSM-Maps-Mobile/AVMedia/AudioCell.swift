@@ -41,8 +41,15 @@ class AudioCell: MapItemCell{
                 audio.selected = !audio.selected
                 selectedButton.setImage(UIImage(systemName: audio.selected ? "checkmark.square" : "square"), for: .normal)
             }, for: .touchDown)
-            iconView.addSubviewWithAnchors(selectedButton, top: iconView.topAnchor, leading: iconView.leadingAnchor, trailing: iconView.trailingAnchor , bottom: iconView.bottomAnchor, insets: iconInsets)
-            
+            iconView.addSubviewToLeft(selectedButton, insets: iconInsets)
+            let editButton = UIButton().asDarkIconButton("pencil")
+            editButton.addAction(UIAction(){ action in
+                let controller = EditAudioViewController(item: audio)
+                controller.delegate = self
+                MainViewController.shared.navigationController?.pushViewController(controller, animated: true)
+            }, for: .touchDown)
+            iconView.addSubviewToLeft(editButton, rightView: selectedButton, insets: iconInsets)
+            .connectToLeft(of: iconView)
         }
     }
     
@@ -61,6 +68,14 @@ class AudioCell: MapItemCell{
         }
     }
 
+}
+
+extension AudioCell : EditAudioDelegate{
+    
+    func audioChanged(item: AudioItem) {
+      delegate?.audioChanged(item)
+    }
+    
 }
 
 

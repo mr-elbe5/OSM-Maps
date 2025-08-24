@@ -45,10 +45,10 @@ class AVMediaListViewController: ItemListViewController{
     
     func loadItems(){
         if ViewFilter.shared.isActive{
-            items = ViewFilter.shared.filteredImages(images: AppData.shared.images)
+            items = ViewFilter.shared.filteredImages(media: AppData.shared.avMedia)
         }
         else{
-            items = AppData.shared.images
+            items = AppData.shared.avMedia
         }
         setupData()
         self.tableView.reloadData()

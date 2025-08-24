@@ -18,7 +18,7 @@ class AVMediaItem : MapItem{
     
     var url: URL{
         get{
-            BasePaths.audioDirURL.appendingPathComponent(fileName)
+            BasePaths.avMediaDirURL.appendingPathComponent(fileName)
         }
     }
     
@@ -28,7 +28,7 @@ class AVMediaItem : MapItem{
     
     var fileExists: Bool{
         if !FileManager.default.fileExists(atPath: url.path){
-            Log.error("audio file does not exist: \(url)")
+            Log.error("media file does not exist: \(url)")
             return false
         }
         return true
