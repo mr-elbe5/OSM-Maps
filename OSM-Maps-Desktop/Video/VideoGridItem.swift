@@ -14,7 +14,7 @@ protocol VideoGridItemDelegate{
     func deleteItem(_ video: VideoItem)
 }
 
-class VideoGridItem: NSCollectionViewItem, AudioGridItemViewDelegate, VideoGridItemViewDelegate{
+class VideoGridItem: NSCollectionViewItem, VideoGridItemViewDelegate{
     
     var item: VideoItem
     

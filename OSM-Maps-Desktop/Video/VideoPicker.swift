@@ -9,9 +9,9 @@ import AVFoundation
 import CoreLocation
 import PhotosUI
 
-class MediaPicker: NSObject  {
+class VideoPicker: NSObject  {
     
-    static var shared: MediaPicker?
+    static var shared: VideoPicker?
     
     var controller: NSViewController
     var atCenter: Bool = false
@@ -40,7 +40,7 @@ class MediaPicker: NSObject  {
         }
     }
     
-    func addMediaFromFiles(atCenter: Bool, onCompletion: (() -> Void)? = nil) {
+    func addVideosFromFiles(atCenter: Bool, onCompletion: (() -> Void)? = nil) {
         self.atCenter = atCenter
         self.completionHandler = onCompletion
         let panel = NSOpenPanel()
@@ -92,7 +92,7 @@ class MediaPicker: NSObject  {
     
 }
 
-extension MediaPicker: PHPickerViewControllerDelegate{
+extension VideoPicker: PHPickerViewControllerDelegate{
     
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         for result in results{
@@ -108,7 +108,7 @@ extension MediaPicker: PHPickerViewControllerDelegate{
                 }
             }
             let itemProvider = result.itemProvider
-            itemProvider.loadFileRepresentation(forTypeIdentifier: "public.image") { (url, error) in
+            itemProvider.loadFileRepresentation(forTypeIdentifier: "public.video") { (url, error) in
                 if error != nil {
                     print("error \(error!)");
                 } else {
@@ -153,7 +153,7 @@ extension MediaPicker: PHPickerViewControllerDelegate{
                         }
                     }
                     else{
-                        Log.error("invalid image, not imported")
+                        Log.error("invalid video, not imported")
                     }
                 }
             }

@@ -8,11 +8,11 @@ import AppKit
 
 import UniformTypeIdentifiers
 
-class AVGridView: GridView{
+class VideoGridView: GridView{
     
-    var items = Array<AudioItem>()
+    var items = Array<VideoItem>()
     
-    var menuView = AVGridMenuView()
+    var menuView = VideoGridMenuView()
     
     override func setupView() {
         addSubviewWithAnchors(menuView, top: topAnchor, leading: leadingAnchor, bottom: bottomAnchor, insets: .zero)
@@ -23,7 +23,7 @@ class AVGridView: GridView{
         setupCollectionView()
         collectionView.delegate = self
         collectionView.dataSource = self
-        items.append(contentsOf: AppData.shared.avMedia)
+        items.append(contentsOf: AppData.shared.videos)
         collectionView.reloadData()
     }
     
@@ -34,12 +34,12 @@ class AVGridView: GridView{
     
     func updateData(){
         items.removeAll()
-        items.append(contentsOf: AppData.shared.avMedia)
+        items.append(contentsOf: AppData.shared.videos)
         collectionView.reloadData()
     }
     
-    func getSelectedItems() -> AVMediaItemList{
-        var arr = AVMediaItemList()
+    func getSelectedItems() -> MapItemList{
+        var arr = MapItemList()
         for path in collectionView.selectionIndexPaths{
             arr.append(items[path.item])
         }
@@ -49,7 +49,7 @@ class AVGridView: GridView{
     
 }
 
-extension AVGridView: NSCollectionViewDataSource{
+extension VideoGridView: NSCollectionViewDataSource{
     
     func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
         items.count
@@ -60,35 +60,20 @@ extension AVGridView: NSCollectionViewDataSource{
         if item.selected{
             collectionView.selectionIndexPaths.insert(indexPath)
         }
-        if let audio = item as? AudioItem{
-            let item = AudioGridItem(item: audio)
-            item.isSelected = audio.selected
-            item.setHighlightState()
-            item.delegate = self
-            return item
-        }
-        if let video = item as? VideoItem{
-            let item = VideoGridItem(item: video)
-            item.isSelected = video.selected
-            item.setHighlightState()
-            item.delegate = self
-            return item
-        }
-        return NSCollectionViewItem()
+        let video = VideoGridItem(item: item)
+        video.isSelected = item.selected
+        video.setHighlightState()
+        video.delegate = self
+        return video
     }
     
 }
 
-extension AVGridView: NSCollectionViewDelegate{
+extension VideoGridView: NSCollectionViewDelegate{
     
     func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
         for indexPath in indexPaths{
-            if let item = collectionView.item(at: indexPath) as? AudioGridItem{
-                item.select(true)
-                print("selected \(item.item.fileName)")
-                item.setHighlightState()
-            }
-            else if let item = collectionView.item(at: indexPath) as? VideoGridItem{
+            if let item = collectionView.item(at: indexPath) as? VideoGridItem{
                 item.select(true)
                 print("selected \(item.item.fileName)")
                 item.setHighlightState()
@@ -98,12 +83,7 @@ extension AVGridView: NSCollectionViewDelegate{
     
     func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
         for indexPath in indexPaths{
-            if let item = collectionView.item(at: indexPath) as? AudioGridItem{
-                item.select(false)
-                print("deselected \(item.item.fileName)")
-                item.setHighlightState()
-            }
-            else if let item = collectionView.item(at: indexPath) as? VideoGridItem{
+            if let item = collectionView.item(at: indexPath) as? VideoGridItem{
                 item.select(false)
                 print("deselected \(item.item.fileName)")
                 item.setHighlightState()
@@ -113,7 +93,7 @@ extension AVGridView: NSCollectionViewDelegate{
     
 }
 
-extension AVGridView: AVGridMenuDelegate{
+extension VideoGridView: VideoGridMenuDelegate{
     
     func toggleSelectAll() {
         if items.allSelected{
@@ -125,14 +105,14 @@ extension AVGridView: AVGridMenuDelegate{
         collectionView.reloadData()
     }
     
-    func importMediaFromPhotos() {
+    func importVideosFromPhotos() {
         MainViewController.shared.addMediaFromPhotos(){
             MainViewController.shared.mapView.updateItemLayer()
             self.updateData()
         }
     }
     
-    func importMediaFromFiles() {
+    func importVideosFromFiles() {
         MainViewController.shared.addMediaFromFiles(){
             MainViewController.shared.mapView.updateItemLayer()
             self.updateData()
@@ -154,7 +134,7 @@ extension AVGridView: AVGridMenuDelegate{
     
 }
 
-extension AVGridView: AudioGridItemDelegate, VideoGridItemDelegate{
+extension VideoGridView: VideoGridItemDelegate{
     
     func showVideoFullSize(_ video: VideoItem) {
         MainViewController.shared.showVideo(video)

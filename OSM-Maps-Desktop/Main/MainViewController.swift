@@ -28,7 +28,7 @@ class MainViewController: ViewController {
     var mapView = MapView()
     var mapDetailView = ItemListView()
     var imageGridView = ImageGridView()
-    var avGridView = AVGridView()
+    var avGridView = VideoGridView()
     var trackGridView = TrackGridView()
     
     var presenterView = ImagePresenterView()

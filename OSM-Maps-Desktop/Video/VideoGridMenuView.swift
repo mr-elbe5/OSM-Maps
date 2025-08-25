@@ -6,15 +6,15 @@
 
 import AppKit
 
-protocol AVGridMenuDelegate: GridMenuDelegate{
+protocol VideoGridMenuDelegate: GridMenuDelegate{
     
     func toggleSelectAll()
-    func importMediaFromPhotos()
-    func importMediaFromFiles()
+    func importVideosFromPhotos()
+    func importVideosFromFiles()
     func deleteSelected()
 }
 
-class AVGridMenuView: NSView{
+class VideoGridMenuView: NSView{
     
     var selectAllButton: NSButton!
     var increaseSizeButton: NSButton!
@@ -23,7 +23,7 @@ class AVGridMenuView: NSView{
     var importMediaFromFilesButton: NSButton!
     var deleteButton: NSButton!
     
-    var delegate: AVGridMenuDelegate? = nil
+    var delegate: VideoGridMenuDelegate? = nil
     
     var insets = OSInsets(top: 10, left: 5, bottom: 10, right: 5)
     
@@ -35,7 +35,7 @@ class AVGridMenuView: NSView{
         increaseSizeButton.toolTip = "increaseImageSize".localize()
         decreaseSizeButton = NSButton(icon: "minus", target: self, action: #selector(decreasePreviewSize))
         decreaseSizeButton.toolTip = "decreaseImageSize".localize()
-        importMediaFromPhotosButton = NSButton(icon: "photo.badge.plus", target: self, action: #selector(importMediaFromPhotos))
+        importMediaFromPhotosButton = NSButton(icon: "photo.badge.plus", target: self, action: #selector(importVideosFromPhotos))
         importMediaFromPhotosButton.toolTip = "importMediaFromPhotos".localize()
         importMediaFromFilesButton = NSButton(icon: "photo.badge.plus.fill", target: self, action: #selector(importMediaFromFiles))
         importMediaFromFilesButton.toolTip = "importMediaFromFiles".localize()
@@ -68,12 +68,12 @@ class AVGridMenuView: NSView{
         delegate?.decreasePreviewSize()
     }
     
-    @objc func importMediaFromPhotos(){
-        delegate?.importMediaFromPhotos()
+    @objc func importVideosFromPhotos(){
+        delegate?.importVideosFromPhotos()
     }
     
     @objc func importMediaFromFiles(){
-        delegate?.importMediaFromFiles()
+        delegate?.importVideosFromFiles()
     }
     
     @objc func deleteSelected(){
