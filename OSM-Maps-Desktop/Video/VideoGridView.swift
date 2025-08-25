@@ -38,8 +38,8 @@ class VideoGridView: GridView{
         collectionView.reloadData()
     }
     
-    func getSelectedItems() -> MapItemList{
-        var arr = MapItemList()
+    func getSelectedVideos() -> VideoItemList{
+        var arr = VideoItemList()
         for path in collectionView.selectionIndexPaths{
             arr.append(items[path.item])
         }
@@ -60,11 +60,11 @@ extension VideoGridView: NSCollectionViewDataSource{
         if item.selected{
             collectionView.selectionIndexPaths.insert(indexPath)
         }
-        let video = VideoGridItem(item: item)
-        video.isSelected = item.selected
-        video.setHighlightState()
-        video.delegate = self
-        return video
+        let gridItem = VideoGridItem(item: item)
+        gridItem.isSelected = item.selected
+        gridItem.setHighlightState()
+        gridItem.delegate = self
+        return gridItem
     }
     
 }
@@ -105,6 +105,13 @@ extension VideoGridView: VideoGridMenuDelegate{
         collectionView.reloadData()
     }
     
+    func showSelected() {
+        let selected = getSelectedVideos()
+        if !selected.isEmpty{
+            MainViewController.shared.showVideos(selected)
+        }
+    }
+    
     func importVideosFromPhotos() {
         MainViewController.shared.addMediaFromPhotos(){
             MainViewController.shared.mapView.updateItemLayer()
@@ -120,7 +127,7 @@ extension VideoGridView: VideoGridMenuDelegate{
     }
     
     func deleteSelected() {
-        let selected = getSelectedItems()
+        let selected = getSelectedVideos()
         if !selected.isEmpty{
             if NSAlert.acceptWarning(message: "deleteItemsWarning".localize()){
                 AppData.shared.deleteItems(selected)

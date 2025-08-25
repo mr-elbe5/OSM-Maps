@@ -20,8 +20,6 @@ class VideoGridItem: NSCollectionViewItem, VideoGridItemViewDelegate{
     
     var delegate: VideoGridItemDelegate? = nil
     
-    let videoPlayerView = AVPlayerView()
-    
     init(item: VideoItem) {
         self.item = item
         super.init(nibName: "", bundle: nil)
@@ -30,10 +28,6 @@ class VideoGridItem: NSCollectionViewItem, VideoGridItemViewDelegate{
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    deinit{
-        videoPlayerView.player = nil
     }
     
     override func loadView() {
@@ -46,8 +40,9 @@ class VideoGridItem: NSCollectionViewItem, VideoGridItemViewDelegate{
         
         let dateView = NSTextField(labelWithString: item.creationDate.dateTimeString())
         view.addSubviewWithAnchors(dateView, top: view.topAnchor, insets: OSInsets.smallInsets).centerX(view.centerXAnchor)
-        videoPlayerView.player = AVPlayer(url: item.url)
-        view.addSubviewFilling(videoPlayerView, insets: NSEdgeInsets(top: 25, left: 5, bottom: 25, right: 5))
+        
+        let imgView = NSImageView(image: item.preview ?? NSImage(named: "gear.grey")!)
+        view.addSubviewFilling(imgView, insets: NSEdgeInsets(top: 25, left: 5, bottom: 25, right: 5))
         
         let iconView = NSView()
         view.addSubviewWithAnchors(iconView, bottom: view.bottomAnchor, insets: OSInsets.smallInsets).centerX(view.centerXAnchor)
@@ -58,7 +53,7 @@ class VideoGridItem: NSCollectionViewItem, VideoGridItemViewDelegate{
         let showOnMapButton = NSButton(image: NSImage(systemSymbolName: "map", accessibilityDescription: nil)!, target: itemView, action: #selector(itemView.showItemOnMap))
         showOnMapButton.bezelStyle = .smallSquare
         iconView.addSubviewToRight(showOnMapButton, leftView: showFullSizeButton, insets: OSInsets.flatInsets)
-        
+            .connectToRight(of: iconView)
         setHighlightState()
     }
     
@@ -110,10 +105,6 @@ class VideoGridItemView: NSView{
     
     @objc func showItemOnMap(){
         delegate?.showItemOnMap()
-    }
-    
-    @objc func deleteItem(){
-        delegate?.deleteItem()
     }
     
 }

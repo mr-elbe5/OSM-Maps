@@ -28,10 +28,11 @@ class MainViewController: ViewController {
     var mapView = MapView()
     var mapDetailView = ItemListView()
     var imageGridView = ImageGridView()
-    var avGridView = VideoGridView()
+    var videoGridView = VideoGridView()
     var trackGridView = TrackGridView()
     
-    var presenterView = ImagePresenterView()
+    var imagePresenterView = ImagePresenterView()
+    var videoPresenterView = VideoPresenterView()
     
     var viewType: MainViewType = .map
     
@@ -42,7 +43,7 @@ class MainViewController: ViewController {
         case .imageGrid:
             return imageGridView
         case .avGrid:
-            return avGridView
+            return videoGridView
         case.trackGrid:
             return trackGridView
         }
@@ -67,17 +68,20 @@ class MainViewController: ViewController {
         view.addSubviewBelow(imageGridView, upperView: mainMenu, insets: .zero)
             .connectToBottom(of: view, inset: .zero)
         imageGridView.isHidden = true
-        avGridView.setupView()
-        view.addSubviewBelow(avGridView, upperView: mainMenu, insets: .zero)
+        videoGridView.setupView()
+        view.addSubviewBelow(videoGridView, upperView: mainMenu, insets: .zero)
             .connectToBottom(of: view, inset: .zero)
-        avGridView.isHidden = true
+        videoGridView.isHidden = true
         trackGridView.setupView()
         view.addSubviewBelow(trackGridView, upperView: mainMenu, insets: .zero)
             .connectToBottom(of: view, inset: .zero)
         trackGridView.isHidden = true
-        view.addSubviewFilling(presenterView, insets: .zero)
-        presenterView.setupView()
-        presenterView.isHidden = true
+        view.addSubviewFilling(imagePresenterView, insets: .zero)
+        view.addSubviewFilling(videoPresenterView, insets: .zero)
+        imagePresenterView.setupView()
+        imagePresenterView.isHidden = true
+        videoPresenterView.setupView()
+        videoPresenterView.isHidden = true
     }
     
     override func viewWillAppear() {
@@ -99,22 +103,22 @@ class MainViewController: ViewController {
         case .map:
             mapSplitView.isHidden = false
             imageGridView.isHidden = true
-            avGridView.isHidden = true
+            videoGridView.isHidden = true
             trackGridView.isHidden = true
         case .imageGrid:
             mapSplitView.isHidden = true
             imageGridView.isHidden = false
-            avGridView.isHidden = true
+            videoGridView.isHidden = true
             trackGridView.isHidden = true
         case .avGrid:
             mapSplitView.isHidden = true
             imageGridView.isHidden = true
-            avGridView.isHidden = false
+            videoGridView.isHidden = false
             trackGridView.isHidden = true
         case .trackGrid:
             mapSplitView.isHidden = true
             imageGridView.isHidden = true
-            avGridView.isHidden = true
+            videoGridView.isHidden = true
             trackGridView.isHidden = false
         }
         viewType = type
@@ -172,19 +176,25 @@ class MainViewController: ViewController {
     // images
     
     func showImage(_ image: ImageItem){
-        presenterView.setImage(item: image)
-        presenterView.isHidden = false
+        imagePresenterView.setImage(item: image)
+        imagePresenterView.isHidden = false
     }
     
     func showImages(_ images: [ImageItem]){
-        presenterView.setImages(images)
-        presenterView.isHidden = false
+        imagePresenterView.setImages(images)
+        imagePresenterView.isHidden = false
     }
     
     //videos
     
     func showVideo(_ video: VideoItem){
-        
+        videoPresenterView.setVideo(item: video)
+        videoPresenterView.isHidden = false
+    }
+    
+    func showVideos(_ videos: [VideoItem]){
+        videoPresenterView.setVideos(videos)
+        videoPresenterView.isHidden = false
     }
     
     // tracks
@@ -209,8 +219,12 @@ class MainViewController: ViewController {
     
     // presenter
     
-    func closePresenter(){
-        presenterView.isHidden = true
+    func closeImagePresenter(){
+        imagePresenterView.isHidden = true
+    }
+    
+    func closeVideoPresenter(){
+        videoPresenterView.isHidden = true
     }
    
 }

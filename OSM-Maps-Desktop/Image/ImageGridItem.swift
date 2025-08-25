@@ -119,10 +119,6 @@ fileprivate class ImageGridItemView: NSView{
         delegate?.showImageDetail()
     }
     
-    @objc func deleteImage(){
-        delegate?.deleteImage()
-    }
-    
 }
 
 

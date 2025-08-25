@@ -17,8 +17,6 @@ class EditVideoViewController: ModalViewController {
     var coordinateLabel = NSTextField(labelWithString: "")
     var datePicker = LabeledDatePicker()
     
-    let videoPlayerView = AVPlayerView()
-    
     init(item: VideoItem){
         self.item = item
         super.init()
@@ -28,31 +26,31 @@ class EditVideoViewController: ModalViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit{
-        videoPlayerView.player = nil
-    }
-    
     override func loadView() {
         super.loadView()
         view.frame = CGRect(origin: .zero, size: CGSize(width: 500, height: 0))
-        var header = NSTextField(labelWithString: "editAudio".localize()).asHeadline()
+        var header = NSTextField(labelWithString: "editVideo".localize()).asHeadline()
         view.addSubviewBelow(header)
-        videoPlayerView.player = AVPlayer(url: item.url)
-        view.addSubviewBelow(videoPlayerView, upperView: header)
-            .height(300)
+        var lastView: NSView = header
+        if let image = item.preview{
+            let imageView = NSImageView(image: image)
+            imageView.compressable()
+            imageView.setAspectRatioConstraint()
+            view.addSubviewCenteredBelow(imageView, upperView: header)
+                .height(300)
+            lastView = imageView
+        }
         header = NSTextField(labelWithString: "coordinate".localize()).asHeadline()
-        view.addSubviewBelow(header, upperView: videoPlayerView)
+        view.addSubviewBelow(header, upperView: lastView)
         coordinateLabel.stringValue = item.coordinate.asShortString
         view.addSubviewBelow(coordinateLabel, upperView: header)
         let changeButton = NSButton(title: "changeCoordinateToMapCenter".localize(), target: self, action: #selector(changeToMapCenter))
         view.addSubviewCenteredBelow(changeButton, upperView: coordinateLabel)
-        datePicker.setupView(labelText: "audioDateTime".localize(), date: item.creationDate)
+        datePicker.setupView(labelText: "creationDate".localize(), date: item.creationDate)
         datePicker.mode = .single
         view.addSubviewBelow(datePicker, upperView: changeButton, insets: .zero)
-        let hint = NSTextField(wrappingLabelWithString: "exifChangeHint".localize(table: "Hints"))
-        view.addSubviewBelow(hint, upperView: datePicker)
         let saveButton = NSButton(title: "save".localize(), target: self, action: #selector(save))
-        view.addSubviewWithAnchors(saveButton, top: hint.bottomAnchor, bottom: view.bottomAnchor)
+        view.addSubviewWithAnchors(saveButton, top: datePicker.bottomAnchor, bottom: view.bottomAnchor)
             .centerX(view.centerXAnchor)
     }
     

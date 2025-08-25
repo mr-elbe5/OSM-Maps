@@ -9,6 +9,7 @@ import AppKit
 protocol VideoGridMenuDelegate: GridMenuDelegate{
     
     func toggleSelectAll()
+    func showSelected()
     func importVideosFromPhotos()
     func importVideosFromFiles()
     func deleteSelected()
@@ -17,6 +18,7 @@ protocol VideoGridMenuDelegate: GridMenuDelegate{
 class VideoGridMenuView: NSView{
     
     var selectAllButton: NSButton!
+    var showPresenterButton: NSButton!
     var increaseSizeButton: NSButton!
     var decreaseSizeButton: NSButton!
     var importMediaFromPhotosButton: NSButton!
@@ -31,6 +33,8 @@ class VideoGridMenuView: NSView{
         super.init(frame: .zero)
         selectAllButton = NSButton(icon: "checkmark.square", target: self, action: #selector(toggleSelectAll))
         selectAllButton.toolTip = "selectAll".localize()
+        showPresenterButton = NSButton(icon: "video", target: self, action: #selector(showSelected))
+        showPresenterButton.toolTip = "showSelectedVideos".localize()
         increaseSizeButton = NSButton(icon: "plus", target: self, action: #selector(increasePreviewSize))
         increaseSizeButton.toolTip = "increaseImageSize".localize()
         decreaseSizeButton = NSButton(icon: "minus", target: self, action: #selector(decreasePreviewSize))
@@ -49,7 +53,8 @@ class VideoGridMenuView: NSView{
     
     override func setupView(){
         addSubviewBelow(selectAllButton, insets: insets)
-        addSubviewBelow(increaseSizeButton, upperView: selectAllButton, insets: insets)
+        addSubviewBelow(showPresenterButton, upperView: selectAllButton, insets: insets)
+        addSubviewBelow(increaseSizeButton, upperView: showPresenterButton, insets: insets)
         addSubviewBelow(decreaseSizeButton, upperView: increaseSizeButton, insets: insets)
         addSubviewBelow(importMediaFromPhotosButton, upperView: decreaseSizeButton, insets: insets)
         addSubviewBelow(importMediaFromFilesButton, upperView: importMediaFromPhotosButton, insets: insets)
@@ -58,6 +63,10 @@ class VideoGridMenuView: NSView{
     
     @objc func toggleSelectAll(){
         delegate?.toggleSelectAll()
+    }
+    
+    @objc func showSelected(){
+        delegate?.showSelected()
     }
     
     @objc func increasePreviewSize() {

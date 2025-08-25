@@ -4687,6 +4687,23 @@
         }
       }
     },
+    "videos" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Videos"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Videos"
+          }
+        }
+      }
+    },
     "viewSettings" : {
       "extractionState" : "manual",
       "localizations" : {

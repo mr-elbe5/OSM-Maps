@@ -61,11 +61,6 @@ class VideoCellView : MapItemCellView{
             lastView = imageView
         }
         lastView.bottom(bottomAnchor)
-        /*videoPlayerView.player = AVPlayer(url: video.url)
-        addSubviewWithAnchors(videoPlayerView, top: iconBar.bottomAnchor, leading: leadingAnchor, trailing: trailingAnchor)
-            .height(300)
-        videoPlayerView.bottom(bottomAnchor)
-         */
     }
     
     override func updateIconView() {

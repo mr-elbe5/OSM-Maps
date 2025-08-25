@@ -9,28 +9,28 @@ import AVFoundation
 import AVKit
 
 
-class ImagePresenterView: NSView {
+class VideoPresenterView: NSView {
     
-    var items = ImageItemList()
+    var items = VideoItemList()
     var currentIdx = 0
     
-    var imageView = NSImageView()
+    var videoPlayer = AVPlayerView()
     var nextButton: NSButton!
     var previousButton: NSButton!
     var closeButton: NSButton!
     
+    deinit{
+        videoPlayer.player = nil
+    }
+    
     override func setupView(){
         backgroundColor = .black
-        imageView.autoresizingMask = [.height, .width]
-        imageView.imageScaling = .scaleProportionallyUpOrDown
-        imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
-        imageView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        addSubviewFilling(imageView)
+        addSubviewFilling(videoPlayer)
         
         let config = NSImage.SymbolConfiguration(textStyle: .headline, scale: .large)
         let closeConfig = NSImage.SymbolConfiguration(textStyle: .headline, scale: .large)
         nextButton = NSButton(image: NSImage(systemSymbolName: "chevron.right", accessibilityDescription: nil)!
-            .withSymbolConfiguration(config)!, target: self, action: #selector(nextImage))
+            .withSymbolConfiguration(config)!, target: self, action: #selector(nextVideo))
         nextButton.bezelStyle = .inline
         nextButton.keyEquivalent = NSString(characters: [unichar(NSRightArrowFunctionKey)], length: 1) as String
         addSubview(nextButton)
@@ -56,33 +56,33 @@ class ImagePresenterView: NSView {
         isHidden = !flag
     }
     
-    func setImages(_ items: ImageItemList){
+    func setVideos(_ items: VideoItemList){
         self.items = items
-        setImageView(item: items.first)
+        setVideoView(item: items.first)
         currentIdx = 0
         checkButtons()
     }
     
-    func setImage(item: ImageItem){
-        var arr = ImageItemList()
+    func setVideo(item: VideoItem){
+        var arr = VideoItemList()
         arr.append(item)
-        setImages(arr)
+        setVideos(arr)
         checkButtons()
     }
     
-    func setImageView(item: ImageItem?){
-        imageView.image = nil
-        imageView.isHidden = true
-        if let item = item, let img = item.image{
-            imageView.isHidden = false
-            imageView.image = img
+    func setVideoView(item: VideoItem?){
+        videoPlayer.player = nil
+        videoPlayer.isHidden = true
+        if let item = item{
+            videoPlayer.isHidden = false
+            videoPlayer.player = AVPlayer(url: item.url)
         }
     }
     
-    @objc func nextImage(){
+    @objc func nextVideo(){
         if currentIdx < items.count - 1{
             currentIdx += 1
-            setImageView(item: items[currentIdx])
+            setVideoView(item: items[currentIdx])
             checkButtons()
         }
     }
@@ -90,13 +90,13 @@ class ImagePresenterView: NSView {
     @objc func previousImage(){
         if currentIdx > 0{
             currentIdx -= 1
-            setImageView(item: items[currentIdx])
+            setVideoView(item: items[currentIdx])
             checkButtons()
         }
     }
     
     @objc func close(){
-        MainViewController.shared.closePresenter()
+        MainViewController.shared.closeVideoPresenter()
     }
     
     private func checkButtons(){

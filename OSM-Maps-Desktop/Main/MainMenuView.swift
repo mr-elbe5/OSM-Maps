@@ -24,12 +24,13 @@ class MainMenuView: NSView{
         var centerImages = Array<NSImage>()
         centerImages.append(NSImage(systemSymbolName: "map", accessibilityDescription: "map".localize())!)
         centerImages.append(NSImage(systemSymbolName: "photo", accessibilityDescription: "images".localize())!)
-        centerImages.append(NSImage(systemSymbolName: "video.badge.waveform", accessibilityDescription: "avMedia".localize())!)
+        centerImages.append(NSImage(systemSymbolName: "video", accessibilityDescription: "videos".localize())!)
         centerImages.append(NSImage(systemSymbolName: "figure.walk", accessibilityDescription: "tracks".localize())!)
         centerMenu = NSSegmentedControl(images: centerImages, trackingMode: NSSegmentedControl.SwitchTracking.selectOne, target: self, action: #selector(centerMenuChanged))
         centerMenu.setLabel("map".localize(), forSegment: 0)
         centerMenu.setLabel("images".localize(), forSegment: 1)
-        centerMenu.setLabel("tracks".localize(), forSegment: 2)
+        centerMenu.setLabel("videos".localize(), forSegment: 2)
+        centerMenu.setLabel("tracks".localize(), forSegment: 3)
         centerMenu.selectedSegment = 0
         
         openViewSettingsButton = NSButton(icon: "calendar", target: self, action: #selector(openViewSettings))

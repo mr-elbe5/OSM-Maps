@@ -31,7 +31,7 @@ class GridView: NSView, GridMenuDelegate{
             Preferences.shared.gridSizeFactorIndex += 1
             let gridSize = gridSize
             layout.minimumItemSize = CGSize(width: gridSize * 0.75, height: gridSize * 0.75)
-            layout.minimumItemSize = CGSize(width: gridSize * 1.25, height: gridSize * 1.25)
+            layout.maximumItemSize = CGSize(width: gridSize * 1.25, height: gridSize * 1.25)
         }
     }
     
@@ -39,7 +39,7 @@ class GridView: NSView, GridMenuDelegate{
         if Preferences.shared.gridSizeFactorIndex > 0{
             Preferences.shared.gridSizeFactorIndex -= 1
             layout.minimumItemSize = CGSize(width: gridSize * 0.75, height: gridSize * 0.75)
-            layout.minimumItemSize = CGSize(width: gridSize * 1.25, height: gridSize * 1.25)
+            layout.maximumItemSize = CGSize(width: gridSize * 1.25, height: gridSize * 1.25)
         }
     }
     
