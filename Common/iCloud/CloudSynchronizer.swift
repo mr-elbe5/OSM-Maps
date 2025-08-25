@@ -298,7 +298,7 @@ class CloudSynchronizer: @unchecked Sendable{
                 if let fileRecord = try await readFileRecord(for: remoteRecord), let json = remoteRecord.json, let videoItem: VideoItem = VideoItem.fromJSON(encoded: json), let asset = fileRecord.file(), let fileURL = asset.fileURL{
                     videoItem.cloudVersion = remoteRecord.version
                     //Log.info("copying video at \(videoItem.url.path()) from \(fileURL.path())")
-                    if videoItem.copyFile(from: fileURL){
+                    if videoItem.copyFile(from: fileURL), videoItem.createPreviewFile(){
                         Log.info("creating local video item")
                         AppData.shared.addItem(videoItem)
                     }

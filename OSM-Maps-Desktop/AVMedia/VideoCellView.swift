@@ -52,10 +52,20 @@ class VideoCellView : MapItemCellView{
         iconBar.addArrangedSubview(editButton)
         selectedButton = NSButton(icon: video.selected ? "checkmark.square" : "square", target: self, action: #selector(selectionChanged))
         iconBar.addArrangedSubview(selectedButton)
-        videoPlayerView.player = AVPlayer(url: video.url)
+        var lastView: NSView = iconBar
+        if let image = video.preview{
+            let imageView = NSImageView(image: image)
+            imageView.compressable()
+            imageView.setAspectRatioConstraint()
+            addSubviewWithAnchors(imageView, top: lastView.bottomAnchor, leading: leadingAnchor, trailing: trailingAnchor)
+            lastView = imageView
+        }
+        lastView.bottom(bottomAnchor)
+        /*videoPlayerView.player = AVPlayer(url: video.url)
         addSubviewWithAnchors(videoPlayerView, top: iconBar.bottomAnchor, leading: leadingAnchor, trailing: trailingAnchor)
             .height(300)
         videoPlayerView.bottom(bottomAnchor)
+         */
     }
     
     override func updateIconView() {

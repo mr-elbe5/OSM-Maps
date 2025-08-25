@@ -24,6 +24,7 @@ class MainMenuView: NSView{
         var centerImages = Array<NSImage>()
         centerImages.append(NSImage(systemSymbolName: "map", accessibilityDescription: "map".localize())!)
         centerImages.append(NSImage(systemSymbolName: "photo", accessibilityDescription: "images".localize())!)
+        centerImages.append(NSImage(systemSymbolName: "video.badge.waveform", accessibilityDescription: "avMedia".localize())!)
         centerImages.append(NSImage(systemSymbolName: "figure.walk", accessibilityDescription: "tracks".localize())!)
         centerMenu = NSSegmentedControl(images: centerImages, trackingMode: NSSegmentedControl.SwitchTracking.selectOne, target: self, action: #selector(centerMenuChanged))
         centerMenu.setLabel("map".localize(), forSegment: 0)
@@ -63,7 +64,8 @@ class MainMenuView: NSView{
         switch centerMenu.selectedSegment{
         case 0: MainViewController.shared.setView(.map)
         case 1: MainViewController.shared.setView(.imageGrid)
-        case 2: MainViewController.shared.setView(.trackGrid)
+        case 2: MainViewController.shared.setView(.avGrid)
+        case 3: MainViewController.shared.setView(.trackGrid)
         default: return
         }
     }

@@ -287,7 +287,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
                 }
             case .configurationFailed:
                 DispatchQueue.main.async {
-                    let alertController = UIAlertController(title: "E5Cam", message: "captureFailed".localize(table: "Camera"), preferredStyle: .alert)
+                    let alertController = UIAlertController(title: "camera".localize(), message: "captureFailed".localize(table: "Camera"), preferredStyle: .alert)
                     alertController.addAction(UIAlertAction(title: "ok".localize(table: "Base"), style: .cancel, handler: nil))
                     self.present(alertController, animated: true, completion: nil)
                 }

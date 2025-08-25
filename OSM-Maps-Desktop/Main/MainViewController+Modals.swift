@@ -89,6 +89,16 @@ extension MainViewController {
         ImagePicker.shared!.addImagesFromFiles(atCenter: true, onCompletion: onCompletion)
     }
     
+    func addMediaFromPhotos(onCompletion: (() -> Void)? = nil) {
+        ImagePicker.shared = ImagePicker(controller: self)
+        ImagePicker.shared!.addImagesFromPhotos(atCenter: false, onCompletion: onCompletion)
+    }
+    
+    func addMediaFromFiles(onCompletion: (() -> Void)? = nil) {
+        ImagePicker.shared = ImagePicker(controller: self)
+        ImagePicker.shared!.addImagesFromFiles(atCenter: false, onCompletion: onCompletion)
+    }
+    
     func editImage(_ image: ImageItem) {
         let controller = EditImageViewController(item: image)
         if ModalWindow.run(title: "editImage".localize(), viewController: controller, outerWindow: MainWindowController.instance.window!, minSize: CGSize(width: 300, height: 200)) == .OK{

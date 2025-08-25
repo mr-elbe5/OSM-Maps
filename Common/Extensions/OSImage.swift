@@ -37,6 +37,10 @@ extension OSImage{
     convenience init?(iconName: String){
         self.init(systemSymbolName: iconName, accessibilityDescription: nil)
     }
+    
+    convenience init(cgImage: CGImage){
+        self.init(cgImage: cgImage, size: .zero)
+    }
 #else
     convenience init?(iconName: String){
         self.init(systemName: iconName)

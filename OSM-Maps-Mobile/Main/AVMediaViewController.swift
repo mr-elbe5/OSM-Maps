@@ -10,10 +10,6 @@ import PhotosUI
 
 class AVMediaListViewController: ItemListViewController{
     
-    var mediaItems: AVMediaItemList{
-        items as! AVMediaItemList
-    }
-    
     init(){
         super.init(title: "avMedia".localize())
         loadItems()
@@ -45,7 +41,7 @@ class AVMediaListViewController: ItemListViewController{
     
     func loadItems(){
         if ViewFilter.shared.isActive{
-            items = ViewFilter.shared.filteredImages(media: AppData.shared.avMedia)
+            items = ViewFilter.shared.filteredItems(items: AppData.shared.avMedia)
         }
         else{
             items = AppData.shared.avMedia
@@ -56,10 +52,17 @@ class AVMediaListViewController: ItemListViewController{
     
     func exportSelected(){
         var exportList = [URL]()
-        for i in 0..<mediaItems.count{
-            let item = mediaItems[i]
-            if item.selected, FileManager.default.fileExists(url: item.url){
-                exportList.append(item.url)
+        for i in 0..<items.count{
+            let item = items[i]
+            if let audio = item as? AudioItem{
+                if audio.selected, FileManager.default.fileExists(url: audio.url){
+                    exportList.append(audio.url)
+                }
+            }
+            else if let video = item as? VideoItem{
+                if video.selected, FileManager.default.fileExists(url: video.url){
+                    exportList.append(video.url)
+                }
             }
         }
         if exportList.isEmpty{

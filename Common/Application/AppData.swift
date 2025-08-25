@@ -100,9 +100,9 @@ class AppData : Codable{
         }
     }
     
-    var avMedia: AVMediaItemList{
+    var avMedia: MapItemList{
         get{
-            var mediaItems = AVMediaItemList()
+            var mediaItems = MapItemList()
             for item in _mapItems{
                 if item is AudioItem{
                     mediaItems.append(item as! AudioItem)

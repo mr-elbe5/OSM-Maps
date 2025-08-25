@@ -54,7 +54,7 @@ class GridView: NSView, GridMenuDelegate{
         layout.minimumInteritemSpacing = OSInsets.smallInset
         let gridSize = gridSize
         layout.minimumItemSize = CGSize(width: gridSize * 0.75, height: gridSize * 0.75)
-        layout.minimumItemSize = CGSize(width: gridSize * 1.25, height: gridSize * 1.25)
+        layout.maximumItemSize = CGSize(width: gridSize * 1.25, height: gridSize * 1.25)
         collectionView.collectionViewLayout = layout
         
     }

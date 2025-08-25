@@ -80,6 +80,15 @@ class ViewFilter: Identifiable, Codable{
         return true
     }
     
+    func filteredItems(items: MapItemList) -> MapItemList{
+        if !useDateFilterForLists{
+            return items
+        }
+        return items.filter(){ item in
+            return isInFilter(item: item)
+        }
+    }
+    
     func filteredNotes(notes: NoteItemList) -> NoteItemList{
         if !useDateFilterForLists{
             return notes
@@ -98,26 +107,11 @@ class ViewFilter: Identifiable, Codable{
         }
     }
     
-    func filteredImages(media: AVMediaItemList) -> AVMediaItemList{
-        if !useDateFilterForLists{
-            return media
-        }
-        return media.filter(){ item in
-            return isInFilter(item: item)
-        }
-    }
-    
     func filteredTracks(tracks: TrackItemList) -> TrackItemList{
         if !useDateFilterForLists{
             return tracks
         }
         return tracks.filter(){ item in
-            return isInFilter(item: item)
-        }
-    }
-    
-    func filteredItems(items: MapItemList) -> MapItemList{
-        return items.filter(){ item in
             return isInFilter(item: item)
         }
     }

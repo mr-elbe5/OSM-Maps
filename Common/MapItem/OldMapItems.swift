@@ -55,12 +55,15 @@ class OldMapItems{
                     item.id = oldItem.id
                     item.creationDate = oldItem.creationDate
                     item.fileName = oldItem.fileName
+                    item.previewName = "preview_\(oldItem.id).jpg"
                     item.time = oldItem.time
-                    if !item.copyFile(from: oldItem.tempURL){
+                    if item.copyFile(from: oldItem.tempURL), item.createPreviewFile(){
+                        items.append(item)
+                    }
+                    else{
                         Log.debug( "Could not create file for \(item.id)")
                         continue
                     }
-                    items.append(item)
                 }
                 else if let oldItem = oldItem as? OldTrackItem{
                     let item = TrackItem()

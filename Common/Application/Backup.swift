@@ -19,6 +19,10 @@ class Backup{
             }
             var paths = Array<URL>()
             paths.append(BasePaths.imageDirURL)
+            paths.append(BasePaths.previewDirURL)
+            paths.append(BasePaths.audioDirURL)
+            paths.append(BasePaths.videoDirURL)
+            paths.append(BasePaths.videoPreviewDirURL)
             if let url = AppData.shared.saveAsFile(){
                 paths.append(url)
             }
@@ -65,13 +69,29 @@ class Backup{
         if count > 0{
             Log.debug("\(count) image file(s) deleted before restore")
         }
+        var fileNames = FileManager.default.listAllFiles(dirPath: BasePaths.tempURL.appendingPathComponent("images").path)
+        for name in fileNames{
+            FileManager.default.copyFile(fromURL: BasePaths.tempURL.appendingPathComponent("images").appendingPathComponent(name), toURL: BasePaths.imageDirURL.appendingPathComponent(name), replace: true)
+        }
         count = FileManager.default.deleteAllFiles(dirURL: BasePaths.previewDirURL)
         if count > 0{
             Log.debug("\(count) preview file(s) deleted before restore")
         }
-        let fileNames = FileManager.default.listAllFiles(dirPath: BasePaths.tempURL.appendingPathComponent("images").path)
+        fileNames = FileManager.default.listAllFiles(dirPath: BasePaths.tempURL.appendingPathComponent("previews").path)
         for name in fileNames{
-            FileManager.default.copyFile(fromURL: BasePaths.tempURL.appendingPathComponent("images").appendingPathComponent(name), toURL: BasePaths.imageDirURL.appendingPathComponent(name), replace: true)
+            FileManager.default.copyFile(fromURL: BasePaths.tempURL.appendingPathComponent("previews").appendingPathComponent(name), toURL: BasePaths.previewDirURL.appendingPathComponent(name), replace: true)
+        }
+        fileNames = FileManager.default.listAllFiles(dirPath: BasePaths.tempURL.appendingPathComponent("audios").path)
+        for name in fileNames{
+            FileManager.default.copyFile(fromURL: BasePaths.tempURL.appendingPathComponent("audios").appendingPathComponent(name), toURL: BasePaths.audioDirURL.appendingPathComponent(name), replace: true)
+        }
+        fileNames = FileManager.default.listAllFiles(dirPath: BasePaths.tempURL.appendingPathComponent("videos").path)
+        for name in fileNames{
+            FileManager.default.copyFile(fromURL: BasePaths.tempURL.appendingPathComponent("videos").appendingPathComponent(name), toURL: BasePaths.videoDirURL.appendingPathComponent(name), replace: true)
+        }
+        fileNames = FileManager.default.listAllFiles(dirPath: BasePaths.tempURL.appendingPathComponent("videoPreviews").path)
+        for name in fileNames{
+            FileManager.default.copyFile(fromURL: BasePaths.tempURL.appendingPathComponent("videoPreviews").appendingPathComponent(name), toURL: BasePaths.previewDirURL.appendingPathComponent(name), replace: true)
         }
         let url = BasePaths.tempURL.appendingPathComponent(AppData.storeKey + ".json")
         AppData.shared.loadFromFile(url: url)
@@ -102,6 +122,18 @@ class Backup{
         count = FileManager.default.deleteAllFiles(dirURL: BasePaths.previewDirURL)
         if count > 0{
             Log.debug("\(count) preview file(s) deleted before restore")
+        }
+        count = FileManager.default.deleteAllFiles(dirURL: BasePaths.audioDirURL)
+        if count > 0{
+            Log.debug("\(count) audio file(s) deleted before restore")
+        }
+        count = FileManager.default.deleteAllFiles(dirURL: BasePaths.videoDirURL)
+        if count > 0{
+            Log.debug("\(count) video file(s) deleted before restore")
+        }
+        count = FileManager.default.deleteAllFiles(dirURL: BasePaths.videoPreviewDirURL)
+        if count > 0{
+            Log.debug("\(count) video preview file(s) deleted before restore")
         }
         let url = BasePaths.tempURL.appendingPathComponent("locations.json")
         let oldMapItems = OldMapItems()

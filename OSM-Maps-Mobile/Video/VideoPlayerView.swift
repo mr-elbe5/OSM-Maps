@@ -53,7 +53,7 @@ class VideoPlayerView: UIView {
         playButton.addAction(UIAction(){ action in
             self.togglePlay()
         }, for: .touchDown)
-        addSubviewWithAnchors(playButton, bottom: bottomAnchor)
+        addSubviewWithAnchors(playButton, bottom: bottomAnchor, insets: OSInsets.doubleInsets)
             .centerX(centerXAnchor)
     }
 

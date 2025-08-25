@@ -495,19 +495,24 @@ extension SettingsViewController{
     func createBackup(){
         let url = FileManager.default.temporaryDirectory.appendingPathComponent("maps4osm_backup_\(Date.localDate.shortFileDate()).zip")
         let spinner = startSpinner()
-        if Backup.createBackupFile(at: url){
-            let picker = UIDocumentPickerViewController(forExporting: [url])
-            picker.delegate = nil
-            picker.title = "backup".localize()
-            present(picker, animated: true)
-            stopSpinner(spinner)
-        }
-        else{
-            DispatchQueue.main.async {
-                self.showError("backupNotCreated".localize())
+        DispatchQueue.global(qos: .userInitiated).async {
+            if Backup.createBackupFile(at: url){
+                DispatchQueue.main.async {
+                    let picker = UIDocumentPickerViewController(forExporting: [url])
+                    picker.delegate = nil
+                    picker.title = "backup".localize()
+                    self.present(picker, animated: true)
+                    self.stopSpinner(spinner)
+                }
             }
-            self.stopSpinner(spinner)
+            else{
+                DispatchQueue.main.async {
+                    self.showError("backupNotCreated".localize())
+                    self.stopSpinner(spinner)
+                }
+            }
         }
+        
     }
     
     func deleteAllData(){

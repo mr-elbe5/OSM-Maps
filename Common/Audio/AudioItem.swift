@@ -6,8 +6,11 @@
 
 import Foundation
 import CloudKit
+import AVKit
 
-class AVMediaItem : MapItem{
+class AudioItem : MapItem{
+    
+    static var itemType: String = "audio"
     
     enum AudioCodingKeys: String, CodingKey {
         case time
@@ -18,7 +21,13 @@ class AVMediaItem : MapItem{
     
     var url: URL{
         get{
-            BasePaths.avMediaDirURL.appendingPathComponent(fileName)
+            BasePaths.audioDirURL.appendingPathComponent(fileName)
+        }
+    }
+    
+    override var itemType : String{
+        get{
+            return AudioItem.itemType
         }
     }
     
@@ -45,17 +54,20 @@ class AVMediaItem : MapItem{
     override init(){
         time = 0.0
         super.init()
+        fileName = "audio_\(id).m4a"
     }
     
     override init(coordinate: CLLocationCoordinate2D){
         time = 0.0
         super.init(coordinate: coordinate)
+        fileName = "audio_\(id).m4a"
     }
     
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: AudioCodingKeys.self)
         time = try values.decode(Double.self, forKey: .time)
         try super.init(from: decoder)
+        fileName = "audio_\(id).m4a"
     }
     
     override func encode(to encoder: Encoder) throws {
@@ -74,12 +86,8 @@ class AVMediaItem : MapItem{
     }
     
     @discardableResult
-    func saveData(data: Data) -> Bool{
-        return FileManager.default.saveFile(data: data, url: url)
-    }
-    
-    @discardableResult
     func copyFile(from: URL) -> Bool{
+        Log.info("save audio file: \(fileName)")
         return FileManager.default.copyFile(fromURL: from, toURL: url, replace: true)
     }
     
@@ -110,9 +118,9 @@ class AVMediaItem : MapItem{
     
 }
 
-typealias AVMediaItemList = SelectableList<AVMediaItem>
+typealias AudioItemList = SelectableList<AudioItem>
 
-extension AVMediaItemList{
+extension AudioItemList{
     
     mutating func sortByDate(ascending: Bool){
         if ascending{

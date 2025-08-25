@@ -40,13 +40,14 @@ class EditVideoViewController: ScrollViewController{
     }
     
     func loadScrollableSubviews() {
-        let videoView = VideoPlayerView()
-        videoView.setRoundedBorders()
-        contentView.addSubviewWithAnchors(videoView, top: contentView.topAnchor, leading: contentView.leadingAnchor, trailing: contentView.trailingAnchor)
-        videoView.url = item.url
-        videoView.setAspectRatioConstraint()
+        let imageView = UIImageView()
+        imageView.withDefaults()
+        imageView.setRoundedBorders()
+        imageView.image = item.preview
+        imageView.setAspectRatioConstraint()
+        contentView.addSubviewBelow(imageView)
         let header = UILabel(header: "coordinate".localize())
-        contentView.addSubviewBelow(header, upperView: videoView)
+        contentView.addSubviewBelow(header, upperView: imageView)
         coordinateLabel.text = item.coordinate.asShortString
         contentView.addSubviewBelow(coordinateLabel, upperView: header)
         let changeButton = TextButton(text: "changeCoordinateToMapCenter".localize())

@@ -1,0 +1,312 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "backLensSelector" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Objektivauswahl unten links wählt die rückwärtige Kamera aus (wennn es mehr als eine gibt)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This lens selector on the bottom left lets you choose a back lens, if there are more than one."
+          }
+        }
+      }
+    },
+    "camera" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kamera"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Camera"
+          }
+        }
+      }
+    },
+    "cameraSelector" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Kameraauswahl wechselt zwischen Selfie- und rückwärtiger Kamera."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The camera selector on the bottom right lets you switch between back and front camera"
+          }
+        }
+      }
+    },
+    "cameraUnavailable" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Kamera verfügbar"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Camera is unavailable"
+          }
+        }
+      }
+    },
+    "captureButton" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der rote Auslöseknopf löst das Aufnehmen eines Fotos oder die Aufnahme eines Videos aus. Bei laufender Videoaufnahme erscheint das Innere als Quadrat. Antippen beendet die Aufnahme und speichert das Video."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The red capture button lets you take a photo or start recording a video. While a video is recorded the rad area is squared and lets you save the video."
+          }
+        }
+      }
+    },
+    "captureFailed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kein Aufnahmegerät verfügbar"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No capture device available"
+          }
+        }
+      }
+    },
+    "flashModeAuto" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Blitz ist im Automodus"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flash is on auto mode"
+          }
+        }
+      }
+    },
+    "flashModeOff" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Blitz ist aus"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flash is off"
+          }
+        }
+      }
+    },
+    "flashModeOn" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Blitz ist an"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flash is on"
+          }
+        }
+      }
+    },
+    "hdrMode" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du bist im HDR-Modus (nur im Video-Modus, antippen zum Wechseln)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You are in HDR mode (only in video mode, tap for change)"
+          }
+        }
+      }
+    },
+    "info" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Info"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Info"
+          }
+        }
+      }
+    },
+    "infoMode" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffnet diese Info"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open this Info"
+          }
+        }
+      }
+    },
+    "noHDRMode" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du bist nicht im HDR-Modus (nur im Video-Modus, antippen zum Wechseln)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You are not in HDR mode (only in video mode, tap to change)"
+          }
+        }
+      }
+    },
+    "noPrivacyPermission" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die App hat kein Recht, die Kamera zu nutzen, bitte Einstellungen ändern"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The app has no permission to use the camera, please change privacy settings"
+          }
+        }
+      }
+    },
+    "photoMode" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Icon startet den Fotomodus (Aufnehmen eines Fotos)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This icon starts photo mode (take photos)"
+          }
+        }
+      }
+    },
+    "screenActions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auf dem Vorschaufenster kannst du einen Punkt antippen, um Fokus und Belichtung für diesen Punkt zu optimieren. Du kannst auch mit zwei Fingern zoomen (Software-Zoom)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On the preview screen you can tap on any point to set focus and exposure for this point. You can also pinch for zooming (software zoom)."
+          }
+        }
+      }
+    },
+    "videoMode" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Icon startet den Videomodus (Aufnehmen eines Videos)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This icon starts video mode (record videos)"
+          }
+        }
+      }
+    },
+    "zoomIndicator" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Text unterhalb des Modusselektors zeigt den aktuellen Vergrößerungsfaktor. Dies ist ein Software-Zoom, der durch den Zwei-Finger-Zoom erzeugt wird. Er erstellt ein Foto oder Video eines Ausschnitts des Sensors, der auf volle Größe skaliert wird."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The text below the mode selector shows the current zoom factor. This is the software zoom created by pinching the preview screen. It creates a photo or video from a reduced area of the sensor blown up to full size."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

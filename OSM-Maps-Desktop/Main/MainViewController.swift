@@ -11,6 +11,7 @@ import CoreLocation
 enum MainViewType: Int{
     case map
     case imageGrid
+    case avGrid
     case trackGrid
 }
 
@@ -27,6 +28,7 @@ class MainViewController: ViewController {
     var mapView = MapView()
     var mapDetailView = ItemListView()
     var imageGridView = ImageGridView()
+    var avGridView = AVGridView()
     var trackGridView = TrackGridView()
     
     var presenterView = ImagePresenterView()
@@ -37,8 +39,10 @@ class MainViewController: ViewController {
         switch viewType{
         case .map:
             return mapSplitView
-        case.imageGrid:
+        case .imageGrid:
             return imageGridView
+        case .avGrid:
+            return avGridView
         case.trackGrid:
             return trackGridView
         }
@@ -63,6 +67,10 @@ class MainViewController: ViewController {
         view.addSubviewBelow(imageGridView, upperView: mainMenu, insets: .zero)
             .connectToBottom(of: view, inset: .zero)
         imageGridView.isHidden = true
+        avGridView.setupView()
+        view.addSubviewBelow(avGridView, upperView: mainMenu, insets: .zero)
+            .connectToBottom(of: view, inset: .zero)
+        avGridView.isHidden = true
         trackGridView.setupView()
         view.addSubviewBelow(trackGridView, upperView: mainMenu, insets: .zero)
             .connectToBottom(of: view, inset: .zero)
@@ -91,14 +99,22 @@ class MainViewController: ViewController {
         case .map:
             mapSplitView.isHidden = false
             imageGridView.isHidden = true
+            avGridView.isHidden = true
             trackGridView.isHidden = true
         case .imageGrid:
             mapSplitView.isHidden = true
             imageGridView.isHidden = false
+            avGridView.isHidden = true
+            trackGridView.isHidden = true
+        case .avGrid:
+            mapSplitView.isHidden = true
+            imageGridView.isHidden = true
+            avGridView.isHidden = false
             trackGridView.isHidden = true
         case .trackGrid:
             mapSplitView.isHidden = true
             imageGridView.isHidden = true
+            avGridView.isHidden = true
             trackGridView.isHidden = false
         }
         viewType = type

@@ -55,12 +55,12 @@ class VideoCell: MapItemCell{
     override func updateItemView(){
         itemView.removeAllSubviews()
         if let video = item{
-            let videoView = VideoPlayerView()
-            videoView.setRoundedBorders()
-            itemView.addSubviewWithAnchors(videoView, top: iconView.bottomAnchor, leading: itemView.leadingAnchor, trailing: itemView.trailingAnchor, insets: UIEdgeInsets(top: 2, left: 0, bottom: OSInsets.defaultInset, right: 0))
-            videoView.url = video.url
-            videoView.setAspectRatioConstraint()
-            videoView.bottom(itemView.bottomAnchor)
+            let imageView = UIImageView()
+            imageView.withDefaults()
+            imageView.setRoundedBorders()
+            imageView.image = video.preview
+            imageView.setAspectRatioConstraint()
+            itemView.addSubviewFilling(imageView)
         }
     }
     

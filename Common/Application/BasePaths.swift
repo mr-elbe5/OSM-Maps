@@ -14,7 +14,9 @@ struct BasePaths {
     static var statusDirURL : URL = privateURL.appendingPathComponent("status")
     static var imageDirURL : URL = BasePaths.privateURL.appendingPathComponent("images")
     static var previewDirURL : URL = BasePaths.privateURL.appendingPathComponent("previews")
-    static var avMediaDirURL : URL = BasePaths.privateURL.appendingPathComponent("avmedia")
+    static var audioDirURL : URL = BasePaths.privateURL.appendingPathComponent("audios")
+    static var videoDirURL : URL = BasePaths.privateURL.appendingPathComponent("videos")
+    static var videoPreviewDirURL : URL = BasePaths.privateURL.appendingPathComponent("videoPreviews")
     static var cloudTokenURL : URL = BasePaths.privateURL.appendingPathComponent("cloudToken.bin")
     
     static func initializeDirs() {
@@ -28,8 +30,12 @@ struct BasePaths {
         //Log.debug("image dir is: \(imageDirURL.path)")
         try! FileManager.default.createDirectory(at: previewDirURL, withIntermediateDirectories: true, attributes: nil)
         //Log.debug("preview dir is: \(previewDirURL.path)")
-        try! FileManager.default.createDirectory(at: avMediaDirURL, withIntermediateDirectories: true, attributes: nil)
-        //Log.debug("audio dir is: \(avMediaDirURL.path)")
+        try! FileManager.default.createDirectory(at: audioDirURL, withIntermediateDirectories: true, attributes: nil)
+        //Log.debug("audio dir is: \(audioDirURL.path)")
+        try! FileManager.default.createDirectory(at: videoDirURL, withIntermediateDirectories: true, attributes: nil)
+        //Log.debug("video dir is: \(videoDirURL.path)")
+        try! FileManager.default.createDirectory(at: videoPreviewDirURL, withIntermediateDirectories: true, attributes: nil)
+        //Log.debug("video preview dir is: \(videoPreviewDirURL.path)")
     }
     
 }
