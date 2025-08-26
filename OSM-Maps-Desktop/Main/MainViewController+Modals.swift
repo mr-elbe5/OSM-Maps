@@ -89,14 +89,24 @@ extension MainViewController {
         ImagePicker.shared!.addImagesFromFiles(atCenter: true, onCompletion: onCompletion)
     }
     
-    func addMediaFromPhotos(onCompletion: (() -> Void)? = nil) {
-        ImagePicker.shared = ImagePicker(controller: self)
-        ImagePicker.shared!.addImagesFromPhotos(atCenter: false, onCompletion: onCompletion)
+    func addVideosFromPhotos(onCompletion: (() -> Void)? = nil) {
+        VideoPicker.shared = VideoPicker(controller: self)
+        VideoPicker.shared!.addVideosFromPhotos(atCenter: false, onCompletion: onCompletion)
     }
     
-    func addMediaFromFiles(onCompletion: (() -> Void)? = nil) {
-        ImagePicker.shared = ImagePicker(controller: self)
-        ImagePicker.shared!.addImagesFromFiles(atCenter: false, onCompletion: onCompletion)
+    func addVideosFromFiles(onCompletion: (() -> Void)? = nil) {
+        VideoPicker.shared = VideoPicker(controller: self)
+        VideoPicker.shared!.addVideosFromFiles(atCenter: false, onCompletion: onCompletion)
+    }
+    
+    func addVideosFromPhotosAtCenter(onCompletion: (() -> Void)? = nil) {
+        VideoPicker.shared = VideoPicker(controller: self)
+        VideoPicker.shared!.addVideosFromPhotos(atCenter: true, onCompletion: onCompletion)
+    }
+    
+    func addVideosFromFilesAtCenter(onCompletion: (() -> Void)? = nil) {
+        VideoPicker.shared = VideoPicker(controller: self)
+        VideoPicker.shared!.addVideosFromFiles(atCenter: true, onCompletion: onCompletion)
     }
     
     func editImage(_ image: ImageItem) {

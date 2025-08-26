@@ -47,36 +47,21 @@ class VideoPicker: NSObject  {
         panel.canChooseFiles = true
         panel.canChooseDirectories = false
         panel.allowsMultipleSelection = true
-        panel.allowedContentTypes = [.audio, .video]
-        panel.directoryURL = FileManager.imagesURL
+        panel.allowedContentTypes = [.video, .movie]
+        panel.directoryURL = FileManager.movieLibraryURL
         if panel.runModal() == .OK{
             for url in panel.urls{
-                let image = ImageItem()
-                if let data = FileManager.default.readFile(url: url), let img = OSImage(data: data){
-                    image.originalFileName = url.lastPathComponent
-                    image.generateFileName()
-                    image.loadMetaData(from: data)
-                    if let dateTime = image.metaData!.dateTime{
-                        image.creationDate = dateTime
-                    }
-                    if atCenter{
-                        image.coordinate = MapStatus.shared.centerCoordinate
-                        image.metaData?.latitude = image.coordinate.latitude
-                        image.metaData?.longitude = image.coordinate.longitude
-                        if let data = image.updateData(data), image.saveImageAndCreatePreview(data: data){
-                            AppData.shared.addItem(image)
-                            AppData.shared.sortItemsByDate(ascending: ViewFilter.shared.defaultSortAscending)
-                            AppData.shared.save()
-                            DispatchQueue.main.async {
-                                self.completionHandler?()
-                            }
+                let video = VideoItem()
+                if FileManager.default.fileExists(url: url){
+                    video.fileName = url.lastPathComponent
+                    if video.copyFile(from: url), video.createPreviewFile(){
+                        if self.atCenter{
+                            video.coordinate = MapStatus.shared.centerCoordinate
                         }
-                    }
-                    else if image.copyImageAndCreatePreview(from: url, original: img){
-                        if image.metaData!.hasGPSData{
-                            image.coordinate = CLLocationCoordinate2D(latitude: image.metaData!.latitude!, longitude: image.metaData!.longitude!)
+                        else{
+                            video.coordinate = .zero
                         }
-                        AppData.shared.addItem(image)
+                        AppData.shared.addItem(video)
                         AppData.shared.sortItemsByDate(ascending: ViewFilter.shared.defaultSortAscending)
                         AppData.shared.save()
                         DispatchQueue.main.async {
@@ -85,7 +70,6 @@ class VideoPicker: NSObject  {
                     }
                 }
             }
-            
         }
         Self.shared = nil
     }
@@ -96,71 +80,50 @@ extension VideoPicker: PHPickerViewControllerDelegate{
     
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         for result in results{
-            var location: CLLocation? = nil
-            var creationDate : Date? = nil
+            var asset: PHAsset? = nil
             if let ident = result.assetIdentifier{
-                if let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [ident], options: nil).firstObject{
-                    location = fetchResult.location
-                    creationDate = fetchResult.creationDate
-                    if fetchResult.mediaType != .image{
-                        continue
-                    }
+                asset = PHAsset.fetchAssets(withLocalIdentifiers: [ident], options: nil).firstObject
+                if asset?.mediaType != .video{
+                    continue
                 }
             }
             let itemProvider = result.itemProvider
-            itemProvider.loadFileRepresentation(forTypeIdentifier: "public.video") { (url, error) in
-                if error != nil {
-                    print("error \(error!)");
-                } else {
-                    if let url = url {
-                        let image = ImageItem()
-                        if let data = FileManager.default.readFile(url: url), let img = OSImage(data: data){
-                            image.originalFileName = url.lastPathComponent
-                            image.generateFileName()
-                            image.loadMetaData(from: data)
-                            if let dateTime = image.metaData!.dateTime{
-                                image.creationDate = dateTime
-                            }
-                            else if let date = creationDate{
-                                image.creationDate = date
-                            }
-                            if self.atCenter{
-                                image.coordinate = MapStatus.shared.centerCoordinate
-                                image.metaData?.latitude = image.coordinate.latitude
-                                image.metaData?.longitude = image.coordinate.longitude
-                                if let data = image.updateData(data), image.saveImageAndCreatePreview(data: data){
-                                    AppData.shared.addItem(image)
-                                    AppData.shared.sortItemsByDate(ascending: ViewFilter.shared.defaultSortAscending)
-                                    AppData.shared.save()
-                                    DispatchQueue.main.async {
-                                        self.completionHandler?()
-                                    }
-                                }
-                            }
-                            else if let coordinate = location?.coordinate{
-                                image.coordinate = coordinate
-                                image.metaData?.latitude = image.coordinate.latitude
-                                image.metaData?.longitude = image.coordinate.longitude
-                                if image.copyImageAndCreatePreview(from: url, original: img){
-                                    AppData.shared.addItem(image)
-                                    AppData.shared.sortItemsByDate(ascending: ViewFilter.shared.defaultSortAscending)
-                                    AppData.shared.save()
-                                    DispatchQueue.main.async {
-                                        MainViewController.shared.updateItemLayer()
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else{
-                        Log.error("invalid video, not imported")
-                    }
+            if itemProvider.hasItemConformingToTypeIdentifier(UTType.movie.identifier){
+                itemProvider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier){ (url, error) in
+                    self.addVideo(url: url, asset: asset)
+                }
+            }
+            if itemProvider.hasItemConformingToTypeIdentifier(UTType.video.identifier){
+                itemProvider.loadFileRepresentation(forTypeIdentifier: UTType.video.identifier){ (url, error) in
+                    self.addVideo(url: url, asset: asset)
                 }
             }
         }
         controller.dismiss(picker)
         completionHandler?()
         Self.shared = nil
+    }
+    
+    func addVideo(url: URL?, asset: PHAsset?){
+        if let url = url, FileManager.default.fileExists(url: url){
+            let video = VideoItem()
+            video.fileName = url.lastPathComponent
+            if video.copyFile(from: url), video.createPreviewFile(){
+                if self.atCenter{
+                    video.coordinate = MapStatus.shared.centerCoordinate
+                }
+                else{
+                    video.coordinate = asset?.location?.coordinate ?? .zero
+                }
+                video.creationDate = asset?.creationDate ?? Date()
+                AppData.shared.addItem(video)
+                AppData.shared.sortItemsByDate(ascending: ViewFilter.shared.defaultSortAscending)
+                AppData.shared.save()
+                DispatchQueue.main.async {
+                    self.completionHandler?()
+                }
+            }
+        }
     }
     
 }

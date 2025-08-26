@@ -41,12 +41,28 @@ class CrossButtonMenu: PopoverViewController, CrossButtonViewDelegate {
         }
     }
     
+    func addVideosFromPhotos(){
+        close()
+        MainViewController.shared.addVideosFromPhotosAtCenter(){
+            MainViewController.shared.updateItemLayer()
+        }
+    }
+    
+    func addVideosFromFiles(){
+        close()
+        MainViewController.shared.addVideosFromFilesAtCenter(){
+            MainViewController.shared.updateItemLayer()
+        }
+    }
+    
 }
 
 protocol CrossButtonViewDelegate{
     func addNote(text: String)
     func addImagesFromPhotos()
     func addImagesFromFiles()
+    func addVideosFromPhotos()
+    func addVideosFromFiles()
 }
 
 class CrossButtonMenuView: NSView{
@@ -65,15 +81,21 @@ class CrossButtonMenuView: NSView{
         let noteButton = NSButton(title: "addNote".localize(), target: self, action: #selector(addNote))
         noteButton.bezelColor = PopoverViewController.bezelColor
         addSubviewCenteredBelow(noteButton, upperView: coordinateLabel)
-        let photoImageButton = NSButton(title: "addImagesFromPhotoLibrary".localize(), target: self, action: #selector(addImageFromFotos))
+        let photoImageButton = NSButton(title: "addImagesFromPhotoLibrary".localize(), target: self, action: #selector(addImagesFromPhotos))
         photoImageButton.bezelColor = PopoverViewController.bezelColor
         addSubviewCenteredBelow(photoImageButton, upperView: noteButton)
-        let fileImageButton = NSButton(title: "addImagesFromFileSystem".localize(), target: self, action: #selector(addImageFromFiles))
+        let fileImageButton = NSButton(title: "addImagesFromFileSystem".localize(), target: self, action: #selector(addImagesFromFiles))
         fileImageButton.bezelColor = PopoverViewController.bezelColor
         addSubviewCenteredBelow(fileImageButton, upperView: photoImageButton)
+        let photoVideoButton = NSButton(title: "addVideosFromPhotoLibrary".localize(), target: self, action: #selector(addVideosFromPhotos))
+        photoVideoButton.bezelColor = PopoverViewController.bezelColor
+        addSubviewCenteredBelow(photoVideoButton, upperView: fileImageButton)
+        let fileVideoButton = NSButton(title: "addVideosFromFileSystem".localize(), target: self, action: #selector(addVideosFromFiles))
+        fileVideoButton.bezelColor = PopoverViewController.bezelColor
+        addSubviewCenteredBelow(fileVideoButton, upperView: photoVideoButton)
         let hint = NSTextField(wrappingLabelWithString: "addAtCenterHint".localize(table: "Hints"))
         hint.font = .systemFont(ofSize: 12)
-        addSubviewBelow(hint, upperView: fileImageButton)
+        addSubviewBelow(hint, upperView: fileVideoButton)
             .connectToBottom(of: self)
         CLPlacemark.getPlacemark(for: location){ placemark in
             if let locationmark = placemark{
@@ -89,12 +111,20 @@ class CrossButtonMenuView: NSView{
         delegate?.addNote(text: nameLabel.stringValue)
     }
     
-    @objc func addImageFromFotos(){
+    @objc func addImagesFromPhotos(){
         delegate?.addImagesFromPhotos()
     }
     
-    @objc func addImageFromFiles(){
+    @objc func addImagesFromFiles(){
         delegate?.addImagesFromFiles()
+    }
+    
+    @objc func addVideosFromPhotos(){
+        delegate?.addVideosFromPhotos()
+    }
+    
+    @objc func addVideosFromFiles(){
+        delegate?.addVideosFromFiles()
     }
     
 }

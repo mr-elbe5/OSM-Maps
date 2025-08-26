@@ -21,8 +21,8 @@ class VideoGridMenuView: NSView{
     var showPresenterButton: NSButton!
     var increaseSizeButton: NSButton!
     var decreaseSizeButton: NSButton!
-    var importMediaFromPhotosButton: NSButton!
-    var importMediaFromFilesButton: NSButton!
+    var importVideosFromPhotosButton: NSButton!
+    var importVideosFromFilesButton: NSButton!
     var deleteButton: NSButton!
     
     var delegate: VideoGridMenuDelegate? = nil
@@ -39,10 +39,10 @@ class VideoGridMenuView: NSView{
         increaseSizeButton.toolTip = "increaseImageSize".localize()
         decreaseSizeButton = NSButton(icon: "minus", target: self, action: #selector(decreasePreviewSize))
         decreaseSizeButton.toolTip = "decreaseImageSize".localize()
-        importMediaFromPhotosButton = NSButton(icon: "photo.badge.plus", target: self, action: #selector(importVideosFromPhotos))
-        importMediaFromPhotosButton.toolTip = "importMediaFromPhotos".localize()
-        importMediaFromFilesButton = NSButton(icon: "photo.badge.plus.fill", target: self, action: #selector(importMediaFromFiles))
-        importMediaFromFilesButton.toolTip = "importMediaFromFiles".localize()
+        importVideosFromPhotosButton = NSButton(icon: "video.badge.plus", target: self, action: #selector(importVideosFromPhotos))
+        importVideosFromPhotosButton.toolTip = "importVideosFromPhotos".localize()
+        importVideosFromFilesButton = NSButton(icon: "video.badge.plus.fill", target: self, action: #selector(importVideosFromFiles))
+        importVideosFromFilesButton.toolTip = "importVideosFromFiles".localize()
         deleteButton = NSButton(icon: "trash.square", color: .systemRed, target: self, action: #selector(deleteSelected))
         deleteButton.toolTip = "deleteSelectedImages".localize()
     }
@@ -56,9 +56,9 @@ class VideoGridMenuView: NSView{
         addSubviewBelow(showPresenterButton, upperView: selectAllButton, insets: insets)
         addSubviewBelow(increaseSizeButton, upperView: showPresenterButton, insets: insets)
         addSubviewBelow(decreaseSizeButton, upperView: increaseSizeButton, insets: insets)
-        addSubviewBelow(importMediaFromPhotosButton, upperView: decreaseSizeButton, insets: insets)
-        addSubviewBelow(importMediaFromFilesButton, upperView: importMediaFromPhotosButton, insets: insets)
-        addSubviewBelow(deleteButton, upperView: importMediaFromFilesButton, insets: insets)
+        addSubviewBelow(importVideosFromPhotosButton, upperView: decreaseSizeButton, insets: insets)
+        addSubviewBelow(importVideosFromFilesButton, upperView: importVideosFromPhotosButton, insets: insets)
+        addSubviewBelow(deleteButton, upperView: importVideosFromFilesButton, insets: insets)
     }
     
     @objc func toggleSelectAll(){
@@ -81,7 +81,7 @@ class VideoGridMenuView: NSView{
         delegate?.importVideosFromPhotos()
     }
     
-    @objc func importMediaFromFiles(){
+    @objc func importVideosFromFiles(){
         delegate?.importVideosFromFiles()
     }
     
