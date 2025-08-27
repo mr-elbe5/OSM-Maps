@@ -54,6 +54,7 @@ class VideoGridItem: NSCollectionViewItem, VideoGridItemViewDelegate{
         showOnMapButton.bezelStyle = .smallSquare
         iconView.addSubviewToRight(showOnMapButton, leftView: showFullSizeButton, insets: OSInsets.flatInsets)
             .connectToRight(of: iconView)
+        showOnMapButton.isHidden = !item.hasValidCoordinate
         setHighlightState()
     }
     

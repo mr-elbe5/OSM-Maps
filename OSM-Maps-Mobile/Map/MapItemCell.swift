@@ -7,6 +7,10 @@
 import UIKit
 import CoreLocation
 
+protocol MapItemCellDelegate {
+    func selectionChanged()
+}
+
 class MapItemCell: TableViewCell{
     
     var dateTimeView = UIView()

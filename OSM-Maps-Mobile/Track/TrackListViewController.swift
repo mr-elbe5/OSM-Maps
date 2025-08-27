@@ -53,7 +53,7 @@ class TrackListViewController: ItemListViewController{
         self.tableView.reloadData()
     }
     
-    func exportSelected(){
+    override func exportSelected(){
         var exportList = [URL]()
         for i in 0..<tracks.count{
             let item = tracks[i]

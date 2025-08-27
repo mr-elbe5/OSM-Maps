@@ -25,19 +25,15 @@ class ViewFilter: Identifiable, Codable{
     enum CodingKeys: String, CodingKey {
         case dateFilterMinDate
         case dateFilterMaxDate
-        case useDateFilterForLists
-        case useDateFilterForMap
         case defaultSortAscending
     }
     
     var dateFilterMinDate: Date? = nil
     var dateFilterMaxDate: Date? = nil
-    var useDateFilterForLists: Bool = true
-    var useDateFilterForMap: Bool = true
     var defaultSortAscending: Bool = false
     
     var isActive: Bool {
-        return (useDateFilterForMap || useDateFilterForLists) && (dateFilterMinDate != nil || dateFilterMaxDate != nil)
+        return dateFilterMinDate != nil || dateFilterMaxDate != nil
     }
     
     init(){
@@ -47,8 +43,6 @@ class ViewFilter: Identifiable, Codable{
         let values = try decoder.container(keyedBy: CodingKeys.self)
         dateFilterMinDate = try values.decodeIfPresent(Date.self, forKey: .dateFilterMinDate)
         dateFilterMaxDate = try values.decodeIfPresent(Date.self, forKey: .dateFilterMaxDate)
-        useDateFilterForLists = try values.decodeIfPresent(Bool.self, forKey: .useDateFilterForLists) ?? true
-        useDateFilterForMap = try values.decodeIfPresent(Bool.self, forKey: .useDateFilterForMap) ?? true
         defaultSortAscending = try values.decodeIfPresent(Bool.self, forKey: .defaultSortAscending) ?? false
     }
     
@@ -60,8 +54,6 @@ class ViewFilter: Identifiable, Codable{
         if let dateFilterMaxDate = dateFilterMaxDate {
             try container.encode(dateFilterMaxDate, forKey: .dateFilterMaxDate)
         }
-        try container.encode(useDateFilterForLists, forKey: .useDateFilterForLists)
-        try container.encode(useDateFilterForMap, forKey: .useDateFilterForMap)
         try container.encode(defaultSortAscending, forKey: .defaultSortAscending)
     }
     
@@ -81,7 +73,7 @@ class ViewFilter: Identifiable, Codable{
     }
     
     func filteredItems(items: MapItemList) -> MapItemList{
-        if !useDateFilterForLists{
+        if !isActive{
             return items
         }
         return items.filter(){ item in
@@ -90,7 +82,7 @@ class ViewFilter: Identifiable, Codable{
     }
     
     func filteredNotes(notes: NoteItemList) -> NoteItemList{
-        if !useDateFilterForLists{
+        if !isActive{
             return notes
         }
         return notes.filter(){ item in
@@ -99,7 +91,7 @@ class ViewFilter: Identifiable, Codable{
     }
     
     func filteredImages(images: ImageItemList) -> ImageItemList{
-        if !useDateFilterForLists{
+        if !isActive{
             return images
         }
         return images.filter(){ item in
@@ -108,7 +100,7 @@ class ViewFilter: Identifiable, Codable{
     }
     
     func filteredTracks(tracks: TrackItemList) -> TrackItemList{
-        if !useDateFilterForLists{
+        if !isActive{
             return tracks
         }
         return tracks.filter(){ item in

@@ -6,7 +6,7 @@
 
 import UIKit
 
-protocol TrackCellDelegate: EditTrackDelegate {
+protocol TrackCellDelegate: MapItemCellDelegate, EditTrackDelegate {
 }
 
 class TrackCell: MapItemCell{
@@ -24,6 +24,7 @@ class TrackCell: MapItemCell{
             selectedButton.addAction(UIAction(){ action in
                 track.selected = !track.selected
                 selectedButton.setImage(UIImage(systemName: track.selected ? "checkmark.square" : "square"), for: .normal)
+                self.delegate?.selectionChanged()
             }, for: .touchDown)
             iconView.addSubviewToLeft(selectedButton, insets: iconInsets)
             

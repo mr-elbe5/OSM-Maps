@@ -6,7 +6,7 @@
 
 import UIKit
 
-protocol NoteCellDelegate: EditNoteDelegate {
+protocol NoteCellDelegate: MapItemCellDelegate, EditNoteDelegate {
 }
 
 class NoteCell: MapItemCell{
@@ -28,6 +28,7 @@ class NoteCell: MapItemCell{
             selectedButton.addAction(UIAction(){ action in
                 note.selected = !note.selected
                 selectedButton.setImage(UIImage(systemName: note.selected ? "checkmark.square" : "square"), for: .normal)
+                self.delegate?.selectionChanged()
             }, for: .touchDown)
             iconView.addSubviewToLeft(selectedButton, insets: iconInsets)
             let editButton = UIButton().asDarkIconButton("pencil")

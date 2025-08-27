@@ -171,6 +171,23 @@
         }
       }
     },
+    "addVideo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Video hinzufügen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Video"
+          }
+        }
+      }
+    },
     "allTilesForDownload" : {
       "extractionState" : "manual",
       "localizations" : {

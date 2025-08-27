@@ -37,7 +37,7 @@ public extension OSView {
     }
     
     static var defaultPriority : Float{
-        900
+        800
     }
     
     //anchors
@@ -194,6 +194,13 @@ public extension OSView {
         }
         constraint.isActive = true
         return self
+    }
+    
+    func getZeroHeightConstraint() -> NSLayoutConstraint?{
+        let constraint = heightAnchor.constraint(equalToConstant: 0.0)
+        constraint.priority = OSLayoutPriority(950)
+        constraint.isActive = false
+        return constraint
     }
     
     @discardableResult

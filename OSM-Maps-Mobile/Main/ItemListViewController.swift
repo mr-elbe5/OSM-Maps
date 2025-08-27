@@ -25,7 +25,11 @@ class ItemListViewController: UIViewController{
     var days = Array<Day>()
     var sortAscending = ViewFilter.shared.defaultSortAscending
     
+    var controlView = UIView()
+    var controlViewHeightConstraint: NSLayoutConstraint?
     var tableView = UITableView().withLayout(backgroundColor: .black)
+    
+    var controlInsets = UIEdgeInsets(top: 0, left: 10, bottom: 5, right: 10)
     
     init(title: String){
         super.init(nibName: nil, bundle: nil)
@@ -38,8 +42,13 @@ class ItemListViewController: UIViewController{
     
     override func loadView() {
         super.loadView()
-        view.addSubviewFillingSafeArea(tableView, insets: .zero)
+        view.addSubviewWithAnchors(controlView, top: view.safeAreaLayoutGuide.topAnchor, leading: view.safeAreaLayoutGuide.leadingAnchor, trailing: view.safeAreaLayoutGuide.trailingAnchor, insets: .flatInsets)
+        controlViewHeightConstraint = controlView.getZeroHeightConstraint()
+        controlViewHeightConstraint?.isActive = true
+        controlView.isHidden = true
+        view.addSubviewWithAnchors(tableView, top: controlView.bottomAnchor, leading: view.safeAreaLayoutGuide.leadingAnchor, trailing: view.safeAreaLayoutGuide.trailingAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, insets: .zero)
         setupNavigationItems()
+        setupControlView()
         tableView.backgroundColor = .black
         tableView.delegate = self
         tableView.dataSource = self
@@ -70,10 +79,22 @@ class ItemListViewController: UIViewController{
         items.append(UIBarButtonItem(title: "selectAll".localize(), image: UIImage(systemName: "checkmark.square"), primaryAction: UIAction(){ action in
             self.toggleSelectAll()
         }))
-        items.append(UIBarButtonItem(title: "deleteSelected".localize(), image: UIImage(systemName: "trash.square")?.withTintColor(.systemRed, renderingMode: .alwaysOriginal), primaryAction: UIAction(){ action in
-            self.deleteSelected()
-        }))
         return items
+    }
+    
+    func setupControlView(){
+        controlView.removeAllSubviews()
+        let deleteSelectedButton = UIButton().asTextButton("deleteSelected".localize(), color: .systemRed)
+        deleteSelectedButton.addAction(UIAction(){ action in
+            self.deleteSelected()
+        }, for: .touchDown)
+        controlView.addSubviewBelow(deleteSelectedButton, insets: controlInsets)
+        let exportSelectedButton = UIButton().asTextButton("exportSelected".localize(), color: .white)
+        exportSelectedButton.addAction(UIAction(){ action in
+            self.exportSelected()
+        }, for: .touchDown)
+        controlView.addSubviewBelow(exportSelectedButton, upperView: deleteSelectedButton, insets: controlInsets)
+            .connectToBottom(of: controlView)
     }
     
     func loadItems(_ items: MapItemList){
@@ -115,6 +136,18 @@ class ItemListViewController: UIViewController{
         for cell in tableView.visibleCells{
             (cell as? TableViewCell)?.updateIconView()
         }
+        updateControlView()
+    }
+    
+    func updateControlView(){
+        if items.anySelected{
+            controlViewHeightConstraint?.isActive = false
+            controlView.isHidden = false
+        }
+        else{
+            controlView.isHidden = true
+            controlViewHeightConstraint?.isActive = true
+        }
     }
     
     func deleteSelected(){
@@ -138,6 +171,10 @@ class ItemListViewController: UIViewController{
             self.setupData()
             self.tableView.reloadData()
         }
+    }
+    
+    func exportSelected(){
+        
     }
     
 }
@@ -230,6 +267,14 @@ extension ItemListViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false
+    }
+    
+}
+
+extension ItemListViewController : MapItemCellDelegate{
+    
+    func selectionChanged() {
+        updateControlView()
     }
     
 }

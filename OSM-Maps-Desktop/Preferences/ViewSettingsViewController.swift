@@ -23,8 +23,6 @@ class ViewSettingsViewController: ModalViewController{
 class ViewSettingsView: NSView{
     
     var dateFilterView = DateFilterView().withColor(.white)
-    var useFilterForListsCheckbox = Checkbox().withColor(.white)
-    var useFilterForMapCheckbox = Checkbox().withColor(.white)
     var sortAscendingCheckbox = Checkbox().withColor(.white)
     
     override func setupView() {
@@ -33,15 +31,9 @@ class ViewSettingsView: NSView{
         dateFilterView.setupView(minLabelText: "minimumDate".localize(), maxLabelText: "maximumDate".localize(), minDate: ViewFilter.shared.dateFilterMinDate, maxDate: ViewFilter.shared.dateFilterMaxDate)
         dateFilterView.delegate = self
         addSubviewBelow(dateFilterView, upperView: header, insets: NSEdgeInsets(top: 10, left: 10, bottom: 10, right: 20))
-        useFilterForListsCheckbox.setup(title: "useFilterForLists".localize(), index: 0, isOn: ViewFilter.shared.useDateFilterForLists)
-        useFilterForListsCheckbox.delegate = self
-        addSubviewWithAnchors(useFilterForListsCheckbox, top: dateFilterView.bottomAnchor, leading: leadingAnchor)
-        useFilterForMapCheckbox.setup(title: "useFilterForMap".localize(), index: 1, isOn: ViewFilter.shared.useDateFilterForMap)
-        useFilterForMapCheckbox.delegate = self
-        addSubviewWithAnchors(useFilterForMapCheckbox, top: useFilterForListsCheckbox.bottomAnchor, leading: leadingAnchor)
         header = NSTextField(labelWithString: "sorting".localize())
-        addSubviewBelow(header, upperView: useFilterForMapCheckbox)
-        sortAscendingCheckbox.setup(title: "sortAscending".localize(), index: 2, isOn: ViewFilter.shared.defaultSortAscending)
+        addSubviewBelow(header, upperView: dateFilterView)
+        sortAscendingCheckbox.setup(title: "sortAscending".localize(), index: 0, isOn: ViewFilter.shared.defaultSortAscending)
         sortAscendingCheckbox.delegate = self
         addSubviewWithAnchors(sortAscendingCheckbox, top: header.bottomAnchor, leading: leadingAnchor)
             .connectToBottom(of: self)
@@ -65,19 +57,11 @@ extension ViewSettingsView: CheckboxDelegate{
     func checkboxIsSelected(index: Int, value: String) {
         switch index {
         case 0:
-            ViewFilter.shared.useDateFilterForLists = useFilterForListsCheckbox.isOn
-            ViewFilter.shared.save()
-        case 1:
-            ViewFilter.shared.useDateFilterForMap = useFilterForMapCheckbox.isOn
-            ViewFilter.shared.save()
-            MainViewController.shared.updateItemLayer()
-        case 2:
             ViewFilter.shared.defaultSortAscending = sortAscendingCheckbox.isOn
             ViewFilter.shared.save()
         default:
             break
         }
-        MainViewController.shared.updateItemLayer()
     }
     
     

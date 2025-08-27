@@ -32,6 +32,12 @@ extension SelectableList{
         }
     }
     
+    var anySelected: Bool{
+        get{
+            !allUnselected
+        }
+    }
+    
     mutating func selectAll(){
         for item in self{
             item.selected = true

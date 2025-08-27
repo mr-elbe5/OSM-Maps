@@ -75,7 +75,7 @@ extension ImageGridView: NSCollectionViewDelegate{
         for indexPath in indexPaths{
             if let item = collectionView.item(at: indexPath) as? ImageGridItem{
                 item.select(true)
-                print("selected \(item.image.fileName)")
+                print("selected \(item.item.fileName)")
                 item.setHighlightState()
             }
         }
@@ -85,7 +85,7 @@ extension ImageGridView: NSCollectionViewDelegate{
         for indexPath in indexPaths{
             if let item = collectionView.item(at: indexPath) as? ImageGridItem{
                 item.select(false)
-                print("deselected \(item.image.fileName)")
+                print("deselected \(item.item.fileName)")
                 item.setHighlightState()
             }
         }

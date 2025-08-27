@@ -14,12 +14,12 @@ protocol ImageGridItemDelegate{
 
 class ImageGridItem: NSCollectionViewItem, ImageGridItemViewDelegate{
     
-    var image: ImageItem
+    var item: ImageItem
     
     var delegate: ImageGridItemDelegate? = nil
     
     init(image: ImageItem) {
-        self.image = image
+        self.item = image
         super.init(nibName: "", bundle: nil)
         setHighlightState()
     }
@@ -36,10 +36,10 @@ class ImageGridItem: NSCollectionViewItem, ImageGridItemViewDelegate{
         view.wantsLayer = true
         view.setGrayRoundedBorders()
         
-        let dateView = NSTextField(labelWithString: image.creationDate.dateTimeString())
+        let dateView = NSTextField(labelWithString: item.creationDate.dateTimeString())
         view.addSubviewWithAnchors(dateView, top: view.topAnchor, insets: OSInsets.smallInsets).centerX(view.centerXAnchor)
         
-        let imgView = NSImageView(image: image.preview ?? NSImage(named: "gear.grey")!)
+        let imgView = NSImageView(image: item.preview ?? NSImage(named: "gear.grey")!)
         view.addSubviewFilling(imgView, insets: NSEdgeInsets(top: 25, left: 5, bottom: 25, right: 5))
         
         let iconView = NSView()
@@ -51,6 +51,7 @@ class ImageGridItem: NSCollectionViewItem, ImageGridItemViewDelegate{
         let showOnMapButton = NSButton(image: NSImage(systemSymbolName: "map", accessibilityDescription: nil)!, target: itemView, action: #selector(itemView.showImageOnMap))
         showOnMapButton.bezelStyle = .smallSquare
         iconView.addSubviewToRight(showOnMapButton, leftView: showFullSizeButton, insets: OSInsets.flatInsets)
+        showOnMapButton.isHidden = !item.hasValidCoordinate
         let showDetailButton = NSButton(image: NSImage(systemSymbolName: "list.bullet", accessibilityDescription: nil)!, target: itemView, action: #selector(itemView.showImageDetail))
         showDetailButton.bezelStyle = .smallSquare
         iconView.addSubviewToRight(showDetailButton, leftView: showOnMapButton, insets: OSInsets.flatInsets)
@@ -61,7 +62,7 @@ class ImageGridItem: NSCollectionViewItem, ImageGridItemViewDelegate{
     
     override func mouseDown(with event: NSEvent) {
         if event.clickCount > 1{
-            delegate?.showImageFullSize(image)
+            delegate?.showImageFullSize(item)
         }
         else{
             super.mouseDown(with: event)
@@ -70,24 +71,24 @@ class ImageGridItem: NSCollectionViewItem, ImageGridItemViewDelegate{
     
     func select(_ flag: Bool){
         isSelected = flag
-        image.selected = flag
+        item.selected = flag
     }
     
     func showImageFullSize(){
-        delegate?.showImageFullSize(image)
+        delegate?.showImageFullSize(item)
     }
     
     func showImageOnMap(){
-        MainViewController.shared.showItemOnMap(image)
+        MainViewController.shared.showItemOnMap(item)
     }
     
     func showImageDetail(){
-        let detailView = ImageGridDetailViewController(image: image)
+        let detailView = ImageGridDetailViewController(image: item)
         detailView.popover.show(relativeTo: view.bounds, of: view, preferredEdge: .minY)
     }
     
     func deleteImage(){
-        delegate?.deleteImage(image)
+        delegate?.deleteImage(item)
     }
     
     func setHighlightState() {

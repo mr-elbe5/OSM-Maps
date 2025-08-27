@@ -139,7 +139,7 @@ class BackupView: NSView{
         let restoreBackupButton = NSButton().asTextButton("restoreBackup".localize(), target: self, action: #selector(restoreBackup))
         addSubviewCenteredBelow(restoreBackupButton, upperView: createBackupButton, insets: OSInsets.doubleInsets)
         
-        let restoreBackupFromMapsForOSMButton = NSButton().asTextButton("restoreBackupFromMapsForOSM".localize(), target: self, action: #selector(restoreBackupFromMapsForOSM))
+        let restoreBackupFromMapsForOSMButton = NSButton().asTextButton("restoreFromMapsForOSM".localize(), target: self, action: #selector(restoreBackupFromMapsForOSM))
         addSubviewCenteredBelow(restoreBackupFromMapsForOSMButton, upperView: restoreBackupButton, insets: OSInsets.doubleInsets)
             .connectToBottom(of: self)
     }

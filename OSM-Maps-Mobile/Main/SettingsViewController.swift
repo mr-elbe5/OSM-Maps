@@ -14,8 +14,6 @@ class SettingsViewController: ScrollViewController{
     // date filter
     
     var dateFilterView = DateFilterView()
-    var useFilterForListsCheckbox = Checkbox()
-    var useFilterForMapCheckbox = Checkbox()
     var sortAscendingCheckbox = Checkbox()
     
     // cloud
@@ -109,15 +107,9 @@ class SettingsViewController: ScrollViewController{
         dateFilterView.setupView(minLabelText: "minimumDate".localize(), maxLabelText: "maximumDate".localize(), minDate: ViewFilter.shared.dateFilterMinDate, maxDate: ViewFilter.shared.dateFilterMaxDate)
         dateFilterView.delegate = self
         contentView.addSubviewBelow(dateFilterView, upperView: header, insets: .zero)
-        useFilterForListsCheckbox.setup(title: "useFilterForLists".localize(), index: 0, isOn: ViewFilter.shared.useDateFilterForLists)
-        useFilterForListsCheckbox.delegate = self
-        contentView.addSubviewWithAnchors(useFilterForListsCheckbox, top: dateFilterView.bottomAnchor, leading: contentView.leadingAnchor, insets: .zero)
-        useFilterForMapCheckbox.setup(title: "useFilterForMap".localize(), index: 1, isOn: ViewFilter.shared.useDateFilterForMap)
-        useFilterForMapCheckbox.delegate = self
-        contentView.addSubviewWithAnchors(useFilterForMapCheckbox, top: useFilterForListsCheckbox.bottomAnchor, leading: contentView.leadingAnchor, insets: .zero)
         header = UILabel(header: "sorting".localize())
-        contentView.addSubviewBelow(header, upperView: useFilterForMapCheckbox)
-        sortAscendingCheckbox.setup(title: "sortAscending".localize(), index: 2, isOn: ViewFilter.shared.defaultSortAscending)
+        contentView.addSubviewBelow(header, upperView: dateFilterView)
+        sortAscendingCheckbox.setup(title: "sortAscending".localize(), index: 0, isOn: ViewFilter.shared.defaultSortAscending)
         sortAscendingCheckbox.delegate = self
         contentView.addSubviewWithAnchors(sortAscendingCheckbox, top: header.bottomAnchor, leading: contentView.leadingAnchor, insets: .zero)
         
@@ -817,13 +809,6 @@ extension SettingsViewController: CheckboxDelegate {
     func checkboxIsSelected(index: Int, value: String) {
         switch index {
         case 0:
-            ViewFilter.shared.useDateFilterForLists = useFilterForListsCheckbox.isOn
-            ViewFilter.shared.save()
-        case 1:
-            ViewFilter.shared.useDateFilterForMap = useFilterForMapCheckbox.isOn
-            ViewFilter.shared.save()
-            MainViewController.shared.updateItemLayer()
-        case 2:
             ViewFilter.shared.defaultSortAscending = sortAscendingCheckbox.isOn
             ViewFilter.shared.save()
         default:

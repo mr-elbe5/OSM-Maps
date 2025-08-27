@@ -14,7 +14,7 @@ class CrossMenuViewController: UIViewController{
     
     let locationLabel = UILabel(text: "")
     
-    var frameSize = CGSize(width: 300, height: 250)
+    var frameSize = CGSize(width: 300, height: 300)
     
     init(coordinate: CLLocationCoordinate2D, title: String){
         self.coordinate = coordinate
@@ -45,10 +45,15 @@ class CrossMenuViewController: UIViewController{
         let hint = UILabel(hint: "addAtCenterHint".localize(table: "Hints"))
         hint .textAlignment = .center
         view.addSubviewWithAnchors(hint, leading: view.leadingAnchor, trailing: view.trailingAnchor, bottom: view.bottomAnchor)
+        let addVideosButton = TextButton(text: "addVideo".localize())
+        addVideosButton.menu = getVideosMenu()
+        addVideosButton.showsMenuAsPrimaryAction = true
+        view.addSubviewWithAnchors(addVideosButton, bottom: hint.topAnchor)
+            .centerX(view.centerXAnchor)
         let addImagesButton = TextButton(text: "addImages".localize())
         addImagesButton.menu = getImagesMenu()
         addImagesButton.showsMenuAsPrimaryAction = true
-        view.addSubviewWithAnchors(addImagesButton, bottom: hint.topAnchor)
+        view.addSubviewWithAnchors(addImagesButton, bottom: addVideosButton.topAnchor)
             .centerX(view.centerXAnchor)
         let addNoteButton = TextButton(text: "addNote".localize())
         addNoteButton.addAction(UIAction(){ action in
@@ -90,98 +95,45 @@ class CrossMenuViewController: UIViewController{
         return UIMenu(title: "", children: actions)
     }
     
+    func getVideosMenu() -> UIMenu {
+        var actions = Array<UIAction>()
+        actions.append(UIAction(title: "fromPhotoLibrary".localize(), image: UIImage(systemName: "photo.stack")){ action in
+            self.importVideosFromPhotoLibrary()
+        })
+        actions.append(UIAction(title: "fromFiles".localize(), image: UIImage(systemName: "folder")){ action in
+            self.importVideosFromFiles()
+        })
+        return UIMenu(title: "", children: actions)
+    }
+    
     func importImagesFromPhotoLibrary() {
-        PHPhotoLibrary.checkAuthorization() { success in
-            DispatchQueue.main.async {
-                var configuration = PHPickerConfiguration(photoLibrary: .shared())
-                configuration.filter = PHPickerFilter.any(of: [.images])
-                configuration.preferredAssetRepresentationMode = .automatic
-                configuration.selection = .ordered
-                configuration.selectionLimit = 0
-                let picker = PHPickerViewController(configuration: configuration)
-                picker.delegate = self
-                self.present(picker, animated: true)
-            }
+        ImagePicker.shared = ImagePicker(controller: self)
+        ImagePicker.shared?.addImagesFromPhotos(atCenter: true){
+            MainViewController.shared.updateItemLayer()
         }
     }
     
     func importImagesFromFiles() {
-        let documentPickerController = UIDocumentPickerViewController(forOpeningContentTypes: [UTType.image])
-        documentPickerController.delegate = self
-        self.present(documentPickerController, animated: true, completion: nil)
+        ImagePicker.shared = ImagePicker(controller: self)
+        ImagePicker.shared?.addImagesFromFiles(atCenter: true)
+        {
+            MainViewController.shared.updateItemLayer()
+        }
     }
     
-}
-
-extension CrossMenuViewController: PHPickerViewControllerDelegate{
-    
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        for result in results{
-            var creationDate : Date? = nil
-            if let ident = result.assetIdentifier{
-                if let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [ident], options: nil).firstObject{
-                    creationDate = fetchResult.creationDate
-                    if fetchResult.mediaType != .image{
-                        continue
-                    }
-                }
-            }
-            let itemProvider = result.itemProvider
-            itemProvider.loadFileRepresentation(forTypeIdentifier: "public.image") { (url, error) in
-                if error != nil {
-                   print("error \(error!)");
-                } else {
-                    if let url = url, let data = FileManager.default.readFile(url: url) {
-                        let image = ImageItem(coordinate: self.coordinate)
-                        image.creationDate = creationDate ?? Date()
-                        image.updateLocation()
-                        image.originalFileName = url.lastPathComponent
-                        image.generateFileName()
-                        image.loadMetaData(from: data)
-                        image.metaData!.latitude = self.coordinate.latitude
-                        image.metaData!.longitude = self.coordinate.longitude
-                        if let newData = image.updateData(data), image.saveImageAndCreatePreview(data: newData){
-                            AppData.shared.addItem(image)
-                            AppData.shared.sortItemsByDate(ascending: ViewFilter.shared.defaultSortAscending)
-                            DispatchQueue.main.async {
-                                MainViewController.shared.updateItemLayer()
-                            }
-                        }
-                    }
-                }
-            }
+    func importVideosFromPhotoLibrary() {
+        VideoPicker.shared = VideoPicker(controller: self)
+        VideoPicker.shared?.addVideosFromPhotos(atCenter: true){
+            MainViewController.shared.updateItemLayer()
         }
-        picker.dismiss(animated: false)
-        self.dismiss(animated: false)
     }
     
-}
-
-extension CrossMenuViewController : UIDocumentPickerDelegate{
-    
-    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        if let url = urls.first{
-            if url.startAccessingSecurityScopedResource(){
-                if let data = FileManager.default.readFile(url: url){
-                    let image = ImageItem(coordinate: coordinate)
-                    image.originalFileName = url.lastPathComponent
-                    image.generateFileName()
-                    image.loadMetaData(from: data)
-                    image.creationDate = image.metaData!.dateTime ?? Date()
-                    image.metaData!.latitude = coordinate.latitude
-                    image.metaData!.longitude = coordinate.longitude
-                    if let newData = image.updateData(data), image.saveImageAndCreatePreview(data: newData){
-                        AppData.shared.addItem(image)
-                        AppData.shared.sortItemsByDate(ascending: ViewFilter.shared.defaultSortAscending)
-                        DispatchQueue.main.async {
-                            MainViewController.shared.updateItemLayer()
-                        }
-                    }
-                }
-                url.stopAccessingSecurityScopedResource()
-            }
+    func importVideosFromFiles() {
+        VideoPicker.shared = VideoPicker(controller: self)
+        VideoPicker.shared?.addVideosFromFiles(atCenter: true)
+        {
+            MainViewController.shared.updateItemLayer()
         }
-        self.dismiss(animated: false)
     }
     
 }

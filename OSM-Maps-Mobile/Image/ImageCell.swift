@@ -8,7 +8,7 @@ import UIKit
 
 import CoreLocation
 
-protocol ImageCellDelegate: EditImageDelegate {
+protocol ImageCellDelegate: MapItemCellDelegate, EditImageDelegate {
 }
 
 class ImageCell: MapItemCell{
@@ -31,6 +31,7 @@ class ImageCell: MapItemCell{
             selectedButton.addAction(UIAction(){ action in
                 image.selected = !image.selected
                 selectedButton.setImage(UIImage(systemName: image.selected ? "checkmark.square" : "square"), for: .normal)
+                self.delegate?.selectionChanged()
             }, for: .touchDown)
             iconView.addSubviewToLeft(selectedButton, insets: iconInsets)
             let showOnMapButton = UIButton().asDarkIconButton("map")

@@ -6,7 +6,7 @@
 
 import UIKit
 
-protocol AudioCellDelegate {
+protocol AudioCellDelegate: MapItemCellDelegate {
     func audioChanged(_ item: AudioItem)
 }
 
@@ -40,6 +40,7 @@ class AudioCell: MapItemCell{
             selectedButton.addAction(UIAction(){ action in
                 audio.selected = !audio.selected
                 selectedButton.setImage(UIImage(systemName: audio.selected ? "checkmark.square" : "square"), for: .normal)
+                self.delegate?.selectionChanged()
             }, for: .touchDown)
             iconView.addSubviewToLeft(selectedButton, insets: iconInsets)
             let editButton = UIButton().asDarkIconButton("pencil")

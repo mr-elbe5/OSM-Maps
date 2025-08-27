@@ -21,22 +21,25 @@ class AVMediaListViewController: ItemListViewController{
     
     override func getTrailingBarButtos() -> Array<UIBarButtonItem>{
         var items = Array<UIBarButtonItem>()
-        items.append(UIBarButtonItem(title: "importImages".localize(), image: UIImage(systemName: "square.and.arrow.down"), primaryAction: UIAction(){ action in
-            self.importImages()
-        }))
+        items.append(UIBarButtonItem(title: "importVideos".localize(), image: UIImage(systemName: "square.and.arrow.down"), menu: getImportMenu()))
         items.append(UIBarButtonItem(title: "sort".localize(), image: UIImage(systemName: "arrow.up.arrow.down"), primaryAction: UIAction(){ action in
             self.toggleSorting()
         }))
         items.append(UIBarButtonItem(title: "selectAll".localize(), image: UIImage(systemName: "checkmark.square"), primaryAction: UIAction(){ action in
             self.toggleSelectAll()
         }))
-        items.append(UIBarButtonItem(title: "exportSelected".localize(), image: UIImage(systemName: "square.and.arrow.up"), primaryAction: UIAction(){ action in
-            self.exportSelected()
-        }))
-        items.append(UIBarButtonItem(title: "deleteSelected".localize(), image: UIImage(systemName: "trash.square")?.withTintColor(.systemRed, renderingMode: .alwaysOriginal), primaryAction: UIAction(){ action in
-            self.deleteSelected()
-        }))
         return items
+    }
+    
+    func getImportMenu() -> UIMenu {
+        var actions = Array<UIAction>()
+        actions.append(UIAction(title: "fromPhotoLibrary".localize(), image: UIImage(systemName: "photo.stack")){ action in
+            self.importVideosFromPhotoLibrary()
+        })
+        actions.append(UIAction(title: "fromFiles".localize(), image: UIImage(systemName: "folder")){ action in
+            self.importVideosFromFiles()
+        })
+        return UIMenu(title: "", children: actions)
     }
     
     func loadItems(){
@@ -50,7 +53,7 @@ class AVMediaListViewController: ItemListViewController{
         self.tableView.reloadData()
     }
     
-    func exportSelected(){
+    override func exportSelected(){
         var exportList = [URL]()
         for i in 0..<items.count{
             let item = items[i]
@@ -74,69 +77,21 @@ class AVMediaListViewController: ItemListViewController{
         present(picker, animated: true)
     }
     
-    func importImages() {
-        PHPhotoLibrary.checkAuthorization() { success in
-            DispatchQueue.main.async {
-                var configuration = PHPickerConfiguration(photoLibrary: .shared())
-                configuration.filter = PHPickerFilter.any(of: [.images])
-                configuration.preferredAssetRepresentationMode = .automatic
-                configuration.selection = .ordered
-                configuration.selectionLimit = 0
-                let picker = PHPickerViewController(configuration: configuration)
-                picker.delegate = self
-                self.present(picker, animated: true)
-            }
+    func importVideosFromPhotoLibrary() {
+        VideoPicker.shared = VideoPicker(controller: self)
+        VideoPicker.shared?.addVideosFromPhotos(atCenter: false){
+            self.loadItems()
+        }
+    }
+    
+    func importVideosFromFiles() {
+        VideoPicker.shared = VideoPicker(controller: self)
+        VideoPicker.shared?.addVideosFromFiles(atCenter: false){
+            self.loadItems()
         }
     }
     
 }
 
-extension AVMediaListViewController: PHPickerViewControllerDelegate{
-    
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        for result in results{
-            var location: CLLocation? = nil
-            var creationDate : Date? = nil
-            if let ident = result.assetIdentifier{
-                if let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [ident], options: nil).firstObject{
-                    location = fetchResult.location
-                    creationDate = fetchResult.creationDate
-                    if fetchResult.mediaType != .image{
-                        continue
-                    }
-                }
-            }
-            let itemProvider = result.itemProvider
-            itemProvider.loadFileRepresentation(forTypeIdentifier: "public.image") { (url, error) in
-                if error != nil {
-                   print("error \(error!)");
-                } else {
-                    if let url = url, let img = OSImage(contentsOfFile: url.path) {
-                        let image = ImageItem(coordinate: location?.coordinate ?? .zero)
-                        image.creationDate = creationDate ?? Date()
-                        if image.hasValidCoordinate{
-                            image.updateLocation()
-                        }
-                        image.originalFileName = url.lastPathComponent
-                        image.generateFileName()
-                        if image.copyImageAndCreatePreview(from: url, original: img){
-                            AppData.shared.addItem(image)
-                            AppData.shared.sortItemsByDate(ascending: ViewFilter.shared.defaultSortAscending)
-                            DispatchQueue.main.async {
-                                MainViewController.shared.updateItemLayer()
-                                self.loadItems()
-                            }
-                        }
-                    }
-                    else{
-                        Log.error("invalid image, not imported")
-                    }
-                }
-            }
-        }
-        picker.dismiss(animated: false)
-    }
-    
-}
     
     

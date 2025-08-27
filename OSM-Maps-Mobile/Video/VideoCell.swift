@@ -6,7 +6,7 @@
 
 import UIKit
 
-protocol VideoCellDelegate {
+protocol VideoCellDelegate: MapItemCellDelegate {
     func videoChanged(_ item: VideoItem)
 }
 
@@ -30,6 +30,7 @@ class VideoCell: MapItemCell{
             selectedButton.addAction(UIAction(){ action in
                 video.selected = !video.selected
                 selectedButton.setImage(UIImage(systemName: video.selected ? "checkmark.square" : "square"), for: .normal)
+                self.delegate?.selectionChanged()
             }, for: .touchDown)
             iconView.addSubviewToLeft(selectedButton, insets: iconInsets)
             let editButton = UIButton().asDarkIconButton("pencil")
