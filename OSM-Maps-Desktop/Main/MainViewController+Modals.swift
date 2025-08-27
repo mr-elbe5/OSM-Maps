@@ -12,7 +12,7 @@ import PhotosUI
 extension MainViewController {
     
     func openHelp() {
-        let controller = HelpViewController()
+        let controller = MapHelpViewController()
         ModalWindow.run(title: "help".localize(), viewController: controller, outerWindow: self.view.window!, minSize: CGSize(width: 300, height: 200))
     }
     

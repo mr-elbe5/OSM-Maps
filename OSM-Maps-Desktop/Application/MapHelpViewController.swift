@@ -7,7 +7,7 @@
 import AppKit
 
 
-class HelpViewController: NSTabViewController, ModalResponder {
+class MapHelpViewController: NSTabViewController, ModalResponder {
     
     var generalViewController = GeneralHelpViewController()
     var mapViewController = MapHelpViewController()

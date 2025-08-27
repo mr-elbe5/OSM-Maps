@@ -82,11 +82,7 @@ class MainViewController: UIViewController {
             let controller = SettingsViewController()
             self.navigationController?.pushViewController(controller, animated: true)
         }))
-        items.append(UIBarButtonItem(title: "iconHelp".localize(), image: UIImage(systemName: "questionmark.diamond"), primaryAction: UIAction(){ action in
-            let controller = IconHelpViewController()
-            self.navigationController?.pushViewController(controller, animated: true)
-        }))
-        items.append(UIBarButtonItem(title: "help".localize(), image: UIImage(systemName: "questionmark.text.page"), primaryAction: UIAction(){ action in
+        items.append(UIBarButtonItem(title: "help".localize(), image: UIImage(systemName: "questionmark.circle"), primaryAction: UIAction(){ action in
             let controller = HelpViewController()
             self.navigationController?.pushViewController(controller, animated: true)
         }))

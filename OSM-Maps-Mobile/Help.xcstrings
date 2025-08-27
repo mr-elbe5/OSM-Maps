@@ -52,6 +52,23 @@
         }
       }
     },
+    "avMediaList" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AV-Medienliste"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AV Media List"
+          }
+        }
+      }
+    },
     "centerCross" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -150,6 +167,34 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Help"
+          }
+        }
+      }
+    },
+    "helpAVMedia" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AV Medien"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AV Media"
+          }
+        }
+      }
+    },
+    "helpAVMediaText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "todo"
           }
         }
       }
@@ -592,6 +637,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mixed Group Marker"
+          }
+        }
+      }
+    },
+    "more" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mehr…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "more…"
           }
         }
       }

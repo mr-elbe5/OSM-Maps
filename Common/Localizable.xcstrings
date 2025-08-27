@@ -2568,6 +2568,23 @@
         }
       }
     },
+    "more" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mehr…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "more…"
+          }
+        }
+      }
+    },
     "moveToScreenCenter" : {
       "extractionState" : "manual",
       "localizations" : {
