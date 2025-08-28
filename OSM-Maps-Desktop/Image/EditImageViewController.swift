@@ -37,6 +37,7 @@ class EditImageViewController: ModalViewController {
         imageView.compressable()
         imageView.setAspectRatioConstraint()
         view.addSubviewBelow(imageView, upperView: header)
+            .minWidth(300).minHeight(300)
         header = NSTextField(labelWithString: "coordinate".localize()).asHeadline()
         view.addSubviewBelow(header, upperView: imageView)
         coordinateLabel.stringValue = item.coordinate.asShortString

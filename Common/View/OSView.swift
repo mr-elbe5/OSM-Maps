@@ -157,6 +157,16 @@ public extension OSView {
     }
     
     @discardableResult
+    func minWidth(_ anchor: Int, priority: Float = defaultPriority) -> OSView{
+        let constraint = widthAnchor.constraint(greaterThanOrEqualToConstant: CGFloat(anchor))
+        if priority != OSView.defaultPriority{
+            constraint.priority = OSLayoutPriority(priority)
+        }
+        constraint.isActive = true
+        return self
+    }
+    
+    @discardableResult
     func width(_ anchor: NSLayoutDimension, percentage: CGFloat, inset: CGFloat = 0, priority: Float = defaultPriority) -> OSView{
         let constraint = widthAnchor.constraint(equalTo: anchor, multiplier: percentage, constant: inset)
         if priority != OSView.defaultPriority{
@@ -169,6 +179,16 @@ public extension OSView {
     @discardableResult
     func height(_ height: CGFloat, priority: Float = defaultPriority) -> OSView{
         let constraint = heightAnchor.constraint(equalToConstant: height)
+        if priority != OSView.defaultPriority{
+            constraint.priority = OSLayoutPriority(priority)
+        }
+        constraint.isActive = true
+        return self
+    }
+    
+    @discardableResult
+    func minHeight(_ anchor: Int, priority: Float = defaultPriority) -> OSView{
+        let constraint = heightAnchor.constraint(greaterThanOrEqualToConstant: CGFloat(anchor))
         if priority != OSView.defaultPriority{
             constraint.priority = OSLayoutPriority(priority)
         }

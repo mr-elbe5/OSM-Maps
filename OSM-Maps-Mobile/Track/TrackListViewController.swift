@@ -33,12 +33,6 @@ class TrackListViewController: ItemListViewController{
         items.append(UIBarButtonItem(title: "selectAll".localize(), image: UIImage(systemName: "checkmark.square"), primaryAction: UIAction(){ action in
             self.toggleSelectAll()
         }))
-        items.append(UIBarButtonItem(title: "exportSelected".localize(), image: UIImage(systemName: "square.and.arrow.up"), primaryAction: UIAction(){ action in
-            self.exportSelected()
-        }))
-        items.append(UIBarButtonItem(title: "deleteSelected".localize(), image: UIImage(systemName: "trash.square")?.withTintColor(.systemRed, renderingMode: .alwaysOriginal), primaryAction: UIAction(){ action in
-            self.deleteSelected()
-        }))
         return items
     }
     

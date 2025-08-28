@@ -44,7 +44,7 @@ class ImageCellView : MapItemCellView{
             let imageView = NSImageView(image: image)
             imageView.compressable()
             imageView.setAspectRatioConstraint()
-            addSubviewWithAnchors(imageView, top: lastView.bottomAnchor, leading: leadingAnchor, trailing: trailingAnchor)
+            addSubviewBelow(imageView, upperView: lastView)
             lastView = imageView
         }
         lastView.bottom(bottomAnchor)
