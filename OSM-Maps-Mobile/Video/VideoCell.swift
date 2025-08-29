@@ -40,7 +40,7 @@ class VideoCell: MapItemCell{
                 MainViewController.shared.navigationController?.pushViewController(controller, animated: true)
             }, for: .touchDown)
             iconView.addSubviewToLeft(editButton, rightView: selectedButton, insets: iconInsets)
-            let viewButton = UIButton().asIconButton("magnifyingglass", color: .darkGray)
+            let viewButton = UIButton().asIconButton("play", color: .darkGray)
             viewButton.addAction(UIAction(){ action in
                 MainViewController.shared.showVideo(item: video)
             }, for: .touchDown)

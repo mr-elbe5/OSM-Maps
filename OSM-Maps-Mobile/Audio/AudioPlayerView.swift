@@ -39,7 +39,7 @@ class AudioPlayerView : UIView, AVAudioPlayerDelegate{
     override init(frame: CGRect) {
         self.player = AVPlayer()
         super.init(frame: frame)
-        backgroundColor = .white
+        backgroundColor = .tertiarySystemBackground
         setRoundedBorders()
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(playerItemDidReachEnd(notification:)),

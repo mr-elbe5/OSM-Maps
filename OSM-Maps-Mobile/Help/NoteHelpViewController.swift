@@ -20,9 +20,9 @@ class NoteHelpViewController: ScrollViewController{
     
     func loadScrollableSubviews() {
         
-        var iconText = HelpText(icon: "note.text", key: "notesList")
+        let iconText = HelpText(icon: "note.text", key: "notesList")
         contentView.addSubviewBelow(iconText)
-        var text = HelpText(key: "helpNotesText")
+        let text = HelpText(key: "helpNotesText")
         contentView.addSubviewBelow(text, upperView: iconText)
             .connectToBottom(of: contentView)
         

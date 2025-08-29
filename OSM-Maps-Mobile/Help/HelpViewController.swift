@@ -32,7 +32,7 @@ class HelpViewController: ScrollViewController{
         contentView.addSubviewBelow(header, upperView: lastView)
         lastView = header
         var iconText = HelpText(icon: "note.text", key: "notesList", moreAction: UIAction(){ action in
-            let controller = MapHelpViewController()
+            let controller = NoteHelpViewController()
             self.navigationController?.pushViewController(controller, animated: true)
         })
         contentView.addSubviewBelow(iconText, upperView: lastView)
@@ -107,10 +107,10 @@ class HelpViewController: ScrollViewController{
         iconText = HelpText(icon: "plus.circle", key: "centerCross", iconColor: .darkColor)
         contentView.addSubviewBelow(iconText, upperView: lastView)
         lastView = iconText
-        iconText = HelpText(icon: "record.circle", key: "centerMap", iconColor: .darkColor)
+        iconText = HelpText(icon: "record.circle", key: "centerIcon", iconColor: .darkColor)
         contentView.addSubviewBelow(iconText, upperView: lastView)
         lastView = iconText
-        iconText = HelpText(icon: "magnifyingglass", key: "search", iconColor: .darkColor)
+        iconText = HelpText(icon: "magnifyingglass", key: "searchIcon", iconColor: .darkColor)
         contentView.addSubviewBelow(iconText, upperView: lastView)
         lastView = iconText
         

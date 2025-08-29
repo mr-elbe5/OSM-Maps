@@ -69,6 +69,23 @@
         }
       }
     },
+    "bottomStatus" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status unten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bottom Status"
+          }
+        }
+      }
+    },
     "centerCross" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -191,10 +208,16 @@
     "helpAVMediaText" : {
       "extractionState" : "manual",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Liste zeigt alle Audios und Videos der App. Sie können dort selektiert, abgespielt, ihr Ort auf der Karte angezeigt, exportiert oder gelöscht werden.\n\nDas Menü oben von links:\n- Reihenfolge umkehren\n- Bilder importieren\n- alle auswählen/abwählen\n\nDas Detailmenü von links:\n- Kartenposition anzeigen\n- Position editieren\n- Auswahl umkehren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "todo"
+            "value" : "The list shows all audios and videos of this app.\nThere they can be selected, played, edited, shown their location on the map, exported or deleted.\n\nThe top menu from left:\n- toggle sorting\n- import videos\n- select/deselect all\n\nThe detail menu from left:\n- show position on map\n- edit media position\n- toggle selection"
           }
         }
       }
@@ -324,13 +347,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Liste zeigt alle Bilder der App. Sie können dort selektiert, in voller Größe angezeigt, ihr Ort auf der Karte angezeigt, exportiert oder gelöscht werden.\nDas Menü oben von links:\n- alle auswählen/abwählen\n- Bilder importieren\n- ausgewählte Bilder exportieren\n- ausgewählte Bilder löschen"
+            "value" : "Die Liste zeigt alle Bilder der App. Sie können dort selektiert, in voller Größe angezeigt, ihr Ort auf der Karte angezeigt, exportiert oder gelöscht werden.\n\nDas Menü oben von links:\n- Reihenfolge umkehren\n- Bilder importieren\n- alle auswählen/abwählen\n\nDas Detailmenü von links:\n- Kartenposition anzeigen\n- Position editieren\n- Auswahl umkehren\n"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The list shows all images of this app.\nThere they can be selected, displayed in full size, shown their location on the map, exported or deleteed.\nThe top menu from left:\n- select/deselect all\n- import photos\n- export selected images\n- delete selected photos"
+            "value" : "The list shows all images of this app.\nThere they can be selected, displayed in full size, shown their location on the map, exported or deleted.\n\nThe top menu from left:\n- toggle sorting\n- import photos\n- select/deselect all\n\nThe detail menu from left:\n- show position on map\n- edit photo position\n- toggle selection"
           }
         }
       }
@@ -358,13 +381,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Kartensicht zeigt Karten auf der Basis der ausgewählten Quelle (siehe Einstellungen) an.\nSie kann verschoben und gezoomt werden, sowohl mit der Maus als auch mit den Plus- und Minus-Zeichen.\nAuf der Karte werden Orte von Notizen, Bildern und Touren angezeigt, wobei die Farben auf die Inhalte hinweisen: grün für Notiz, rot für Bild, blau für Tour. Liegen mehrere Markierungen eng zusammen, wird diese Gruppe durch ein Icon mit drei Nadeln angezeigt (violett für Bilder und Touren). Die Gruppen kann man durch Hineinzoomen auflösen.\nAnklicken einer Markierung öffnet eine Listenansicht der Elemente.\nÜber die Detailansicht könnan Elemente auf der Karte angezeigt oder editiert werden\nWeiterhin kann über das Kreuz in der Kartenmitte eine eine Notiz oder ein Bild hinzugefügt werden. Wird ein Bild auf diese Weise hinzugefügt, werden dessen GPS-Daten auf diese Position geändert.\nDas Menü oben von links:\n- Kreuz in der Kartenmitte einblenden/ausblenden\n zu aktueller Position wechseln\n- Suche öffnen\nWenn auf der Karte ein Platzhalter erscheint (Zahnrad), dann wird dieser Teil der Karte noch geladen. Man kann das mit dem \"Neu laden\"-Knopf rechts überprüfen."
+            "value" : "Die Kartensicht zeigt Karten auf der Basis der ausgewählten Quelle (siehe Einstellungen) an.\nSie kann verschoben und gezoomt werden, sowohl mit der Maus als auch mit den Plus- und Minus-Zeichen.\nAuf der Karte werden Orte von Notizen, Bildern und Touren angezeigt, wobei die Farben auf die Inhalte hinweisen: grün für Notiz, rot für Bild, blau für Tour. Liegen mehrere Markierungen eng zusammen, wird diese Gruppe durch ein Icon mit drei Nadeln angezeigt (violett für Bilder und Touren). Die Gruppen kann man durch Hineinzoomen auflösen.\nAnklicken einer Markierung öffnet eine Listenansicht der Elemente.\nÜber die Detailansicht können Elemente auf der Karte angezeigt oder editiert werden\nWeiterhin kann über das Kreuz in der Kartenmitte eine eine Notiz oder ein Bild hinzugefügt werden. Wird ein Bild auf diese Weise hinzugefügt, werden dessen GPS-Daten auf diese Position geändert.\nWenn auf der Karte ein Platzhalter erscheint (Zahnrad), dann wird dieser Teil der Karte noch geladen. Man kann das mit dem \"Neu laden\"-Knopf rechts überprüfen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The map view shows maps on the basis of the selected source (see preferences).\nIt can be scrolled, zoomed, using the mouse or using the plus and minus icons on the right.\nOn the map items are shown with pin icons in several colors: green for note, red for photo , blue for track.\nIf several items are too close, this group is shown with a triple pin icon (purple for images and tracks). You can dissolve it by zooming in.\nClicking on a pin opens the list view of its elements.\nUsing the detail view you can show item on the map (map icon) or edit them.\nFurther, you can add notes and photos using the cross in the center of the map. If a photo is add this way, its GPS data is changed to this position.\nThe top menu from left:\n- show/hide the cross in the map center\n- jump to the current position\n- open search\nIf the map shows a placeholder (gear image), this part of the map is still loading. You may check this with the refresh button on the right."
+            "value" : "The map view shows maps on the basis of the selected source (see preferences).\nIt can be scrolled, zoomed, using the mouse or using the plus and minus icons on the right.\nOn the map items are shown with pin icons in several colors: green for default, red for places including media,, blue for track.\nIf several items are too close, this group is shown with a triple pin icon (purple for media and tracks). You can dissolve it by zooming in.\nClicking on a pin opens the list view of its elements.\nUsing the detail view you can show item on the map (map icon) or edit them.\nFurther, you can add notes, photos and videos using the cross in the center of the map. If a photo is add this way, its GPS data is changed to this position.\nIf the map shows a placeholder (gear image), this part of the map is still loading. You may check this with the refresh button on the right."
           }
         }
       }
@@ -392,13 +415,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Liste zeigt alle Notizen der App. Sie können dort auf der Karte angezeigt, editiert oder gelöscht werden.\n\nDas Menü oben von links:\n- Notiz editieren\n- Auswahl umkehren\n- ausgewählte löschen\n\nDas Notizmenü von links:\n- Kartenposition anzeigen\n- Notiz editieren\n- Auswahl umkehren\n"
+            "value" : "Die Liste zeigt alle Notizen der App. Sie können dort auf der Karte angezeigt, editiert oder gelöscht werden.\n\nDas Menü oben von links:\n- Reihenfolge umkehren\n- alle auswählen/abwählen\n\nDas Detailmenü von links:\n- Kartenposition anzeigen\n- Notiz editieren\n- Auswahl umkehren\n"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The note list shows all notes of this app.\nThere they can be shown on the map, edited or deleted.\n\nThe top menu from left:\n- toggle sorting\n- toggle selection\n- delete selected\n\nThe cell menu from left:\n- show position on map\n- edit note\n- toggle selection\n"
+            "value" : "The note list shows all notes of this app.\nThere they can be shown on the map, edited or deleted.\n\nThe top menu from left:\n- toggle sorting\n- toggle selection\n\nThe detail menu from left:\n- show position on map\n- edit note\n- toggle selection\n"
           }
         }
       }
@@ -477,13 +500,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Die Liste zeigt alle Touren der App. Sie können dort auf der Karte angezeigt, importiert, exportiert oder gelöscht werden.\nDas Menü oben von links:\n- Tour exportieren\n- alle auswählen/abwählen\n- ausgewählte löschen\n"
+            "value" : "Die Liste zeigt alle Touren der App. Sie können dort auf der Karte angezeigt, importiert, exportiert oder gelöscht werden.\n\nDas Menü oben von links:\n- Reihenfolge umkehren\n- Tour importieren\n- alle auswählen/abwählen\n\nDas Detailmenü von links:\n- Kartenposition anzeigen\n- Tour editieren\n- Auswahl umkehren"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The list shows all tracks of this app.\nThere they can be shown on the map, exported or deleted.\nThe top menu from left:\n- import track\n- select/deselect all\n- delete selected\n"
+            "value" : "The list shows all tracks of this app.\nThere they can be shown on the map, exported or deleted.\n\nThe top menu from left:\n- import track\n- select/deselect all\n- delete selected\n\nThe detail menu from left:\n- show position on map\n- edit track and its position\n- toggle selection"
           }
         }
       }
@@ -586,6 +609,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Photo List"
+          }
+        }
+      }
+    },
+    "leftMenu" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Linkes Menü"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Left Menu"
+          }
+        }
+      }
+    },
+    "mainMenu" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hauptmenü"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Main Menu"
           }
         }
       }
@@ -726,6 +783,40 @@
         }
       }
     },
+    "openAudio" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Audiorekorder öffnen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Audio Recorder"
+          }
+        }
+      }
+    },
+    "openCamera" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kamera öffnen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Camera"
+          }
+        }
+      }
+    },
     "pauseIcon" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -743,7 +834,7 @@
         }
       }
     },
-    "refreshIcon" : {
+    "refresh" : {
       "extractionState" : "manual",
       "localizations" : {
         "de" : {
@@ -756,6 +847,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Refresh Map (and hide track)"
+          }
+        }
+      }
+    },
+    "rightMenu" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rechtes Menü"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Right Menu"
           }
         }
       }
@@ -851,7 +959,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hauptmenü"
+            "value" : "Oberes Menü"
           }
         },
         "en" : {
@@ -930,7 +1038,7 @@
         }
       }
     },
-    "zoomInIcon" : {
+    "zoomIn" : {
       "extractionState" : "manual",
       "localizations" : {
         "de" : {
@@ -947,7 +1055,7 @@
         }
       }
     },
-    "zoomOutIcon" : {
+    "zoomOut" : {
       "extractionState" : "manual",
       "localizations" : {
         "de" : {

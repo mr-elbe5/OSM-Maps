@@ -58,14 +58,11 @@ class EditVideoViewController: ScrollViewController{
         datePicker.setupView(labelText: "imageDateTime".localize(), date: item.creationDate)
         datePicker.mode = .dateAndTime
         contentView.addSubviewBelow(datePicker, upperView: changeButton, insets: .zero)
-        let hint = UILabel(hint: "exifChangeHint".localize(table: "Hints"))
-        hint .textAlignment = .center
-        view.addSubviewBelow(hint, upperView: datePicker)
         let saveButton = TextButton(text: "save".localize())
         saveButton.addAction(UIAction(){ action in
             self.save()
         }, for: .touchDown)
-        contentView.addSubviewCenteredBelow(saveButton, upperView: hint)
+        contentView.addSubviewCenteredBelow(saveButton, upperView: datePicker)
             .connectToBottom(of: contentView)
     }
     

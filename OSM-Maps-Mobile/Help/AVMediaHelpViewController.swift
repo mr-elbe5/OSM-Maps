@@ -24,7 +24,7 @@ class AVMediaHelpViewController: ScrollViewController{
         let iconText = HelpText(icon: "video.badge.waveform", key: "avMediaList")
         contentView.addSubviewBelow(iconText)
         var text = HelpText(key: "helpAVMediaText")
-        contentView.addSubviewBelow(text)
+        contentView.addSubviewBelow(text, upperView: iconText)
             .connectToBottom(of: contentView)
         
     }

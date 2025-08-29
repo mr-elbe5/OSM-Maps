@@ -30,13 +30,13 @@ class AudioCell: MapItemCell{
         cellBody.addSubviewWithAnchors(dateTimeView, top: cellBody.topAnchor, leading: cellBody.leadingAnchor, insets: OSInsets.smallInsets)
         dateTimeView.addSubviewFilling(timeLabel, insets: OSInsets.smallInsets)
         cellBody.addSubviewWithAnchors(iconView, top: cellBody.topAnchor, trailing: cellBody.trailingAnchor, insets: OSInsets.smallInsets)
-        cellBody.addSubviewWithAnchors(itemView, top: iconView.bottomAnchor, leading: cellBody.leadingAnchor, trailing: cellBody.trailingAnchor, bottom: cellBody.bottomAnchor, insets: .zero)
+        cellBody.addSubviewWithAnchors(itemView, top: iconView.bottomAnchor, leading: cellBody.leadingAnchor, trailing: cellBody.trailingAnchor, bottom: cellBody.bottomAnchor, insets: .smallInsets)
     }
     
     override func updateIconView(){
         iconView.removeAllSubviews()
         if let audio = item{
-            let selectedButton = UIButton().asIconButton(audio.selected ? "checkmark.square" : "square", color: .label)
+            let selectedButton = UIButton().asDarkIconButton(audio.selected ? "checkmark.square" : "square")
             selectedButton.addAction(UIAction(){ action in
                 audio.selected = !audio.selected
                 selectedButton.setImage(UIImage(systemName: audio.selected ? "checkmark.square" : "square"), for: .normal)

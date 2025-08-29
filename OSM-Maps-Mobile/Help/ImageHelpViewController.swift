@@ -21,13 +21,9 @@ class ImageHelpViewController: ScrollViewController{
     
     func loadScrollableSubviews() {
         
-        var text = HelpText(key: "helpImages")
-        contentView.addSubviewBelow(text)
-            .connectToBottom(of: contentView)
-        
         let iconText = HelpText(icon: "photo", key: "imagesList")
         contentView.addSubviewBelow(iconText)
-        text = HelpText(key: "helpImagesText")
+        let text = HelpText(key: "helpImagesText")
         contentView.addSubviewBelow(text, upperView: iconText)
             .connectToBottom(of: contentView)
         
