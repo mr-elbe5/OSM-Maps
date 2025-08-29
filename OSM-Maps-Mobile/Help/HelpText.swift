@@ -49,6 +49,21 @@ class HelpText : UIView{
             .connectToRight(of: self)
     }
     
+    init(icon: String, key: String, iconColor : UIColor = .label, moreAction: UIAction){
+        super.init(frame: .zero)
+        let linkButton = UIButton(name: "more".localize(table: "Help"), action: moreAction)
+        addSubviewToLeft(linkButton, insets: .flatInsets)
+        let iconView = UIImageView(image: UIImage(systemName: icon))
+        iconView.tintColor = iconColor
+        let iconText = UILabel(text: key.localize(table: "Help"))
+        iconText.numberOfLines = 0
+        iconText.textColor = .label
+        addSubviewWithAnchors(iconView, leading: leadingAnchor, insets: .zero)
+            .centerY(linkButton.centerYAnchor)
+        addSubviewWithAnchors(iconText, leading: iconView.trailingAnchor, trailing: linkButton.leadingAnchor)
+            .centerY(linkButton.centerYAnchor)
+    }
+    
     init(icon: String, headerKey: String, iconColor : UIColor = .label){
         super.init(frame: .zero)
         let iconView = UIImageView(image: UIImage(systemName: icon))

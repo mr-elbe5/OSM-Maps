@@ -24,32 +24,41 @@ class HelpViewController: ScrollViewController{
         var header = HelpText(headerKey: "helpGeneral")
         contentView.addSubviewBelow(header)
         var lastView: UIView = header
-        var text = HelpText(key: "helpGeneralText")
+        let text = HelpText(key: "helpGeneralText")
         contentView.addSubviewBelow(text, upperView: lastView)
         lastView = text
         
-        header = HelpText(headerKey: "topMenu")
+        header = HelpText(headerKey: "mainMenu")
         contentView.addSubviewBelow(header, upperView: lastView)
         lastView = header
-        var iconText = HelpText(icon: "note.text", key: "notesList")
-        contentView.addSubviewBelow(iconText, upperView: lastView)
-        lastView = iconText
-        var linkButton = UIButton(name: "more".localize(table: "Help"), action: UIAction(){ action in
-            let controller = NoteHelpViewController()
+        var iconText = HelpText(icon: "note.text", key: "notesList", moreAction: UIAction(){ action in
+            let controller = MapHelpViewController()
             self.navigationController?.pushViewController(controller, animated: true)
         })
-        contentView.addSubviewBelow(linkButton, upperView: lastView)
-        lastView = linkButton
-        iconText = HelpText(icon: "photo", key: "imagesList")
         contentView.addSubviewBelow(iconText, upperView: lastView)
         lastView = iconText
-        iconText = HelpText(icon: "video.badge.waveform", key: "avMediaList")
+        iconText = HelpText(icon: "photo", key: "imagesList", moreAction: UIAction(){ action in
+            let controller = ImageHelpViewController()
+            self.navigationController?.pushViewController(controller, animated: true)
+        })
         contentView.addSubviewBelow(iconText, upperView: lastView)
         lastView = iconText
-        iconText = HelpText(icon: "figure.walk", key: "tracksList")
+        iconText = HelpText(icon: "video.badge.waveform", key: "avMediaList", moreAction: UIAction(){ action in
+            let controller = AVMediaHelpViewController()
+            self.navigationController?.pushViewController(controller, animated: true)
+        })
         contentView.addSubviewBelow(iconText, upperView: lastView)
         lastView = iconText
-        iconText = HelpText(icon: "gearshape", key: "settings")
+        iconText = HelpText(icon: "figure.walk", key: "tracksList", moreAction: UIAction(){ action in
+            let controller = TrackHelpViewController()
+            self.navigationController?.pushViewController(controller, animated: true)
+        })
+        contentView.addSubviewBelow(iconText, upperView: lastView)
+        lastView = iconText
+        iconText = HelpText(icon: "gearshape", key: "settings", moreAction: UIAction(){ action in
+            let controller = SettingsHelpViewController()
+            self.navigationController?.pushViewController(controller, animated: true)
+        })
         contentView.addSubviewBelow(iconText, upperView: lastView)
         lastView = iconText
         iconText = HelpText(icon: "questionmark.circle", key: "thisHelp")
@@ -84,14 +93,28 @@ class HelpViewController: ScrollViewController{
         contentView.addSubviewBelow(iconText, upperView: lastView)
         lastView = iconText
         
-        linkButton = UIButton(name: "more".localize(table: "Help"), action: UIAction(){ action in
+        var linkButton = UIButton(name: "more".localize(table: "Help"), action: UIAction(){ action in
             let controller = MapHelpViewController()
             self.navigationController?.pushViewController(controller, animated: true)
         })
         contentView.addSubviewBelow(linkButton, upperView: lastView)
         lastView = linkButton
         
-        header = HelpText(headerKey: "tracking")
+        header = HelpText(headerKey: "topMenu")
+        contentView.addSubviewBelow(header, upperView: lastView)
+        lastView = header
+        
+        iconText = HelpText(icon: "plus.circle", key: "centerCross", iconColor: .darkColor)
+        contentView.addSubviewBelow(iconText, upperView: lastView)
+        lastView = iconText
+        iconText = HelpText(icon: "record.circle", key: "centerMap", iconColor: .darkColor)
+        contentView.addSubviewBelow(iconText, upperView: lastView)
+        lastView = iconText
+        iconText = HelpText(icon: "magnifyingglass", key: "search", iconColor: .darkColor)
+        contentView.addSubviewBelow(iconText, upperView: lastView)
+        lastView = iconText
+        
+        header = HelpText(headerKey: "leftMenu")
         contentView.addSubviewBelow(header, upperView: lastView)
         lastView = header
         iconText = HelpText(icon: "figure.walk.departure", key: "startTrackIcon")
@@ -103,6 +126,30 @@ class HelpViewController: ScrollViewController{
         iconText = HelpText(icon: "stop.circle", key: "stopIcon")
         contentView.addSubviewBelow(iconText, upperView: lastView)
         lastView = iconText
+        iconText = HelpText(icon: "camera", key: "openCamera")
+        contentView.addSubviewBelow(iconText, upperView: lastView)
+        lastView = iconText
+        iconText = HelpText(icon: "microphone", key: "openAudio")
+        contentView.addSubviewBelow(iconText, upperView: lastView)
+        lastView = iconText
+        
+        header = HelpText(headerKey: "rightMenu")
+        contentView.addSubviewBelow(header, upperView: lastView)
+        lastView = header
+        iconText = HelpText(icon: "plus", key: "zoomIn")
+        contentView.addSubviewBelow(iconText, upperView: lastView)
+        lastView = iconText
+        iconText = HelpText(icon: "minus", key: "zoomOut")
+        contentView.addSubviewBelow(iconText, upperView: lastView)
+        lastView = iconText
+        iconText = HelpText(icon: "arrow.clockwise", key: "refresh")
+        contentView.addSubviewBelow(iconText, upperView: lastView)
+        lastView = iconText
+        
+        header = HelpText(headerKey: "bottomStatus")
+        contentView.addSubviewBelow(header, upperView: lastView)
+        lastView = header
+        
         iconText = HelpText(icon: "safari", key: "compassIcon")
         contentView.addSubviewBelow(iconText, upperView: lastView)
         lastView = iconText
@@ -121,13 +168,6 @@ class HelpViewController: ScrollViewController{
         iconText = HelpText(icon: "stopwatch", key: "clockIcon")
         contentView.addSubviewBelow(iconText, upperView: lastView)
         lastView = iconText
-        
-        linkButton = UIButton(name: "more".localize(table: "Help"), action: UIAction(){ action in
-            let controller = TrackHelpViewController()
-            self.navigationController?.pushViewController(controller, animated: true)
-        })
-        contentView.addSubviewBelow(linkButton, upperView: lastView)
-        lastView = linkButton
         
         lastView.connectToBottom(of: contentView)
         
