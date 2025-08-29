@@ -9,11 +9,6 @@ import AVFoundation
 import CoreLocation
 import Photos
 
-protocol CameraDelegate{
-    func photoCaptured(data: Data, location: CLLocation?)
-    func videoCaptured(data: Data, cllocation: CLLocation?)
-}
-
 class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelegate, AVCapturePhotoOutputReadinessCoordinatorDelegate {
     
     static var discoverableDeviceTypes : [AVCaptureDevice.DeviceType] = [.builtInWideAngleCamera, .builtInUltraWideCamera,.builtInTelephotoCamera]
@@ -93,8 +88,6 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
     
     var keyValueObservations = [NSKeyValueObservation]()
     var systemPreferredCameraContext = 0
-    
-    var delegate: CameraDelegate? = nil
     
     override func loadView() {
         super.loadView()

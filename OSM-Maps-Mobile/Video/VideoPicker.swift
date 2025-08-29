@@ -107,7 +107,7 @@ extension VideoPicker : UIDocumentPickerDelegate{
     func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         if let url = urls.first{
             if url.startAccessingSecurityScopedResource(){
-                if let data = FileManager.default.readFile(url: url){
+                if FileManager.default.fileExists(url: url){
                     let video = VideoItem()
                     if atCenter{
                         video.coordinate = MapStatus.shared.centerCoordinate

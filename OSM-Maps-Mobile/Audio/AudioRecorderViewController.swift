@@ -43,7 +43,8 @@ class AudioRecorderViewController : ScrollViewController, AVAudioRecorderDelegat
     }
     
     func save(){
-        let audioItem = AudioItem(coordinate: MapStatus.shared.centerCoordinate)
+        let audioItem = AudioItem(coordinate: LocationStatus.shared.location.coordinate)
+        audioItem.altitude = LocationStatus.shared.location.altitude
         audioItem.time = (audioRecorder.currentTime*100).rounded() / 100
         //Log.debug("AudioRecorderViewController saving url \(audioFile.fileURL)")
         if FileManager.default.copyFile(fromURL: audioRecorder.tmpFileURL, toURL: audioItem.url){

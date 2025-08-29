@@ -6,6 +6,7 @@
 
 import UIKit
 import CoreLocation
+import AVKit
 
 class MainViewController: UIViewController {
     
@@ -283,9 +284,50 @@ class MainViewController: UIViewController {
     
     // camera
     
-    func openCamera(){
-        let controller = CameraViewController()
-        self.navigationController?.pushViewController(controller, animated: true)
+    func openCamera() {
+        AVCaptureDevice.askCameraAuthorization(){ result in
+            switch result{
+            case .success(()):
+                DispatchQueue.main.async {
+                    let controller = CameraViewController()
+                    controller.modalPresentationStyle = .fullScreen
+                    self.navigationController?.pushViewController(controller, animated: true)
+                }
+                return
+            case .failure:
+                DispatchQueue.main.async {
+                    self.showAlert(title: "error".localize(), text: "cameraNotAuthorized".localize())
+                }
+                return
+            }
+        }
+    }
+    
+    func photoCaptured(data: Data) {
+        let imageItem = ImageItem(coordinate: LocationStatus.shared.location.coordinate)
+        imageItem.altitude = LocationStatus.shared.location.altitude
+        imageItem.generateFileName()
+        var imageData = data
+        if let dataWithCoordinates = data.setImageProperties(altitude: imageItem.altitude, latitude: imageItem.coordinate.latitude, longitude: imageItem.coordinate.longitude, utType: imageItem.url.utType!){
+            imageData = dataWithCoordinates
+        }
+        imageItem.saveImageAndCreatePreview(data: imageData)
+        Log.info("photo saved locally as \(imageItem.fileName)")
+        AppData.shared.addItem(imageItem)
+        AppData.shared.sortItemsByDate(ascending: ViewFilter.shared.defaultSortAscending)
+        AppData.shared.save()
+        mapView.updateItemLayer()
+    }
+    
+    func videoCaptured(data: Data) {
+        let video = VideoItem(coordinate: LocationStatus.shared.location.coordinate)
+        video.altitude = LocationStatus.shared.location.altitude
+        if video.saveVideoAndCreatePreview(data: data){
+            AppData.shared.addItem(video)
+            AppData.shared.sortItemsByDate(ascending: ViewFilter.shared.defaultSortAscending)
+            AppData.shared.save()
+            mapView.updateItemLayer()
+        }
     }
     
     // audio
@@ -372,10 +414,20 @@ extension MainViewController: TrackRecorderDelegate {
     }
     
     func saveTrack(_ track: Track, result: @escaping (Bool) -> Void){
-        let item = TrackItem()
-        item.track = track
-        AppData.shared.addItem(item)
-        result(true)
+        if let tp = track.trackpoints.first{
+            let item = TrackItem()
+            item.track = track
+            item.track.updateFromTrackpoints()
+            item.coordinate = tp.coordinate
+            item.altitude = tp.altitude
+            AppData.shared.addItem(item)
+            TrackImageCreator.createPreview(item: item)
+            result(true)
+        }
+        else{
+            result(false)
+        }
+        
     }
     
 }

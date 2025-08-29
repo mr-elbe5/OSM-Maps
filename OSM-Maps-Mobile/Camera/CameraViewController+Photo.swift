@@ -35,8 +35,6 @@ extension CameraViewController{
                     self.inProgressPhotoCaptureDelegates[photoCaptureProcessor.requestedPhotoSettings.uniqueID] = nil
                 }
             })
-            photoCaptureProcessor.delegate = self.delegate
-            photoCaptureProcessor.location = self.locationManager.location
             self.inProgressPhotoCaptureDelegates[photoCaptureProcessor.requestedPhotoSettings.uniqueID] = photoCaptureProcessor
             self.photoOutput.capturePhoto(with: photoSettings, delegate: photoCaptureProcessor)
             return true
@@ -54,9 +52,6 @@ class PhotoCaptureProcessor: NSObject {
     private let completionHandler: (PhotoCaptureProcessor) -> Void
     private var photoData: Data?
     
-    var delegate: CameraDelegate? = nil
-    var location: CLLocation?
-
     init(with requestedPhotoSettings: AVCapturePhotoSettings, completionHandler: @escaping (PhotoCaptureProcessor) -> Void) {
         self.requestedPhotoSettings = requestedPhotoSettings
         self.completionHandler = completionHandler
@@ -85,12 +80,10 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
             completionHandler(self)
             return
         }
-        if let delegate = delegate{
-            DispatchQueue.main.async{
-                delegate.photoCaptured(data: self.photoData!, location: self.location)
-            }
+        DispatchQueue.main.async{
+            MainViewController.shared.photoCaptured(data: self.photoData!)
         }
-        PhotoLibrary.savePhoto(photoData: self.photoData!, fileType: self.requestedPhotoSettings.processedFileType, location: self.location, resultHandler: { s in
+        PhotoLibrary.savePhoto(photoData: self.photoData!, fileType: self.requestedPhotoSettings.processedFileType, location: LocationStatus.shared.location, resultHandler: { s in
             self.completionHandler(self)
         })
     }

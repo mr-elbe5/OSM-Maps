@@ -103,6 +103,21 @@ class VideoItem : MapItem{
     }
     
     @discardableResult
+    func saveVideoAndCreatePreview(data: Data) -> Bool{
+        if saveVideo(data: data), createPreviewFile(){
+            Log.debug("save video and preview")
+            return true
+        }
+        Log.error("did not save video and preview")
+        return false
+    }
+    
+    @discardableResult
+    func saveVideo(data: Data) -> Bool{
+        return FileManager.default.saveFile(data: data, url: url)
+    }
+    
+    @discardableResult
     func copyFile(from: URL) -> Bool{
         Log.info("save video file: \(fileName)")
         return FileManager.default.copyFile(fromURL: from, toURL: url, replace: true)
