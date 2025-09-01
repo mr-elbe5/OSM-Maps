@@ -42,32 +42,28 @@ class ItemListView: NSView{
         contentView.removeAllSubviews()
         var lastView: NSView? = nil
         for item in items{
-            var itemView: MapItemCellView? = nil
+            var itemView: MapItemCell? = nil
             switch item.itemType{
             case ImageItem.itemType:
-                let view = ImageCellView(image: item as! ImageItem)
-                view.delegate = self
+                let view = ImageCell(image: item as! ImageItem)
                 itemView = view
             case AudioItem.itemType:
-                let view = AudioCellView(audio: item as! AudioItem)
-                view.delegate = self
+                let view = AudioCell(audio: item as! AudioItem)
                 itemView = view
             case VideoItem.itemType:
-                let view = VideoCellView(video: item as! VideoItem)
-                view.delegate = self
+                let view = VideoCell(video: item as! VideoItem)
                 itemView = view
             case NoteItem.itemType:
-                let view = NoteCellView(note: item as! NoteItem)
-                view.delegate = self
+                let view = NoteCell(note: item as! NoteItem)
                 itemView = view
             case TrackItem.itemType:
-                let view = TrackCellView(track: item as! TrackItem)
-                view.delegate = self
+                let view = TrackCell(track: item as! TrackItem)
                 itemView = view
             default:
                 break
             }
             if let itemView = itemView{
+                itemView.setupView()
                 contentView.addSubviewBelow(itemView, upperView: lastView, insets: OSInsets.smallInsets)
                 lastView = itemView
                 itemView.setupView()
@@ -89,8 +85,8 @@ class ItemListView: NSView{
             items.selectAll()
         }
         for vw in contentView.subviews{
-            if let vw = vw as? MapItemCellView{
-                vw.updateIconView()
+            if let vw = vw as? MapItemCell{
+                vw.setupIconView()
             }
         }
     }
@@ -115,40 +111,6 @@ class ItemListView: NSView{
             MainViewController.shared.updateItemLayer()
             self.setupContentView()
         }
-    }
-    
-}
-
-extension ItemListView: MapItemDelegate{
-    
-    func itemsChanged() {
-        MainViewController.shared.updateItemLayer()
-    }
-    
-    func editNote(_ note: NoteItem) {
-        MainViewController.shared.editNote(note){
-            self.setupContentView()
-        }
-    }
-    
-    func editImage(_ image: ImageItem) {
-        MainViewController.shared.editImage(image)
-    }
-    
-    func editAudio(_ audio: AudioItem) {
-        MainViewController.shared.editAudio(audio)
-    }
-    
-    func editVideo(_ video: VideoItem) {
-        MainViewController.shared.editVideo(video)
-    }
-    
-    func editTrack(_ track: TrackItem) {
-        MainViewController.shared.editTrack(track)
-    }
-    
-    func showTrackOnMap(_ track: TrackItem) {
-        MainViewController.shared.showTrackOnMap(track)
     }
     
 }

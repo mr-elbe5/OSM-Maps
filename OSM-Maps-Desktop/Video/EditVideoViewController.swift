@@ -8,6 +8,10 @@ import AppKit
 import CoreLocation
 import AVKit
 
+protocol EditVideoDelegate {
+    func videoChanged(item: VideoItem)
+}
+
 class EditVideoViewController: ModalViewController {
     
     var item: VideoItem

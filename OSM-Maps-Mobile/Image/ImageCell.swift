@@ -17,14 +17,14 @@ class ImageCell: MapItemCell{
     
     var item : ImageItem? = nil {
         didSet {
-            updateCell()
+            setupCell()
             setSelected(item?.selected ?? false, animated: false)
         }
     }
     
     var delegate: ImageCellDelegate?
     
-    override func updateIconView(){
+    override func setupIconView(){
         iconView.removeAllSubviews()
         if let image = item{
             let selectedButton = UIButton().asDarkIconButton(image.selected ? "checkmark.square" : "square")
@@ -59,11 +59,11 @@ class ImageCell: MapItemCell{
         }
     }
     
-    override func updateTimeLabel(){
+    override func setupTimeLabel(){
         timeLabel.text = item?.creationDate.dateTimeString()
     }
     
-    override func updateMapIcon() {
+    override func setupMapIcon() {
         if let item = item{
             mapIconView.image = UIImage(systemName: item.hasValidCoordinate ? "mappin" : "mappin.slash", withConfiguration: UIImage.SymbolConfiguration(pointSize: 24))?
                 .withTintColor(.systemRed).withRenderingMode(.alwaysOriginal)
@@ -71,7 +71,7 @@ class ImageCell: MapItemCell{
         }
     }
     
-    override func updateItemView(){
+    override func setupItemView(){
         itemView.removeAllSubviews()
         if let image = item{
             let imageView = UIImageView()

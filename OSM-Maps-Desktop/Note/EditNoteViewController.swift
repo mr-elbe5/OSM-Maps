@@ -6,7 +6,9 @@
 
 import AppKit
 
-
+protocol EditNoteDelegate {
+    func noteChanged(item: NoteItem)
+}
 
 class EditNoteViewController: ModalViewController {
     

@@ -66,5 +66,40 @@ extension NSButton{
         return self
     }
     
+    @discardableResult
+    func asLightIconButton(_ icon: String) -> NSButton{
+        return asIconButton(icon, color: .lightColor)
+    }
+    
+    @discardableResult
+    func asDarkIconButton(_ icon: String) -> NSButton{
+        return asIconButton(icon, color: .darkColor)
+    }
+    
+    @discardableResult
+    func asWarnIconButton(_ icon: String) -> NSButton{
+        return asIconButton(icon, color: .warnColor)
+    }
+    
+    @discardableResult
+    func asLightTextButton(_ text: String) -> NSButton{
+        return asTextButton(text, color: .lightColor)
+    }
+    
+    @discardableResult
+    func asDarkTextButton(_ text: String) -> NSButton{
+        return asTextButton(text, color: .lightColor)
+    }
+    
+    @discardableResult
+    func asBlueTextButton(_ text: String) -> NSButton{
+        return asTextButton(text, color: .blueColor)
+    }
+    
+    @discardableResult
+    func asWarnTextButton(_ text: String) -> NSButton{
+        return asTextButton(text, color: .warnColor)
+    }
+    
 }
 

@@ -204,7 +204,7 @@ extension ItemListViewController: UITableViewDelegate, UITableViewDataSource{
         case ImageItem.itemType:
             if let cell = tableView.dequeueReusableCell(withIdentifier: ImageCell.CELL_IDENT, for: indexPath) as? ImageCell, let image = item as? ImageItem{
                 cell.item = image
-                cell.updateCell()
+                cell.setupCell()
                 cell.delegate = self
                 return cell
             }
@@ -215,7 +215,7 @@ extension ItemListViewController: UITableViewDelegate, UITableViewDataSource{
         case AudioItem.itemType:
             if let cell = tableView.dequeueReusableCell(withIdentifier: AudioCell.CELL_IDENT, for: indexPath) as? AudioCell, let audio = item as? AudioItem{
                 cell.item = audio
-                cell.updateCell()
+                cell.setupCell()
                 cell.delegate = self
                 return cell
             }
@@ -226,7 +226,7 @@ extension ItemListViewController: UITableViewDelegate, UITableViewDataSource{
         case VideoItem.itemType:
             if let cell = tableView.dequeueReusableCell(withIdentifier: VideoCell.CELL_IDENT, for: indexPath) as? VideoCell, let video = item as? VideoItem{
                 cell.item = video
-                cell.updateCell()
+                cell.setupCell()
                 cell.delegate = self
                 return cell
             }
@@ -237,7 +237,7 @@ extension ItemListViewController: UITableViewDelegate, UITableViewDataSource{
         case TrackItem.itemType:
             if let cell = tableView.dequeueReusableCell(withIdentifier: TrackCell.CELL_IDENT, for: indexPath) as? TrackCell, let track = item as? TrackItem{
                 cell.item = track
-                cell.updateCell()
+                cell.setupCell()
                 cell.delegate = self
                 return cell
             }
@@ -248,7 +248,7 @@ extension ItemListViewController: UITableViewDelegate, UITableViewDataSource{
         case NoteItem.itemType:
             if let cell = tableView.dequeueReusableCell(withIdentifier: NoteCell.CELL_IDENT, for: indexPath) as? NoteCell, let note = item as? NoteItem{
                 cell.item = note
-                cell.updateCell()
+                cell.setupCell()
                 cell.delegate = self
                 return cell
             }

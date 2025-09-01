@@ -15,13 +15,13 @@ class NoteCell: MapItemCell{
     
     var item : NoteItem? = nil {
         didSet {
-            updateCell()
+            setupCell()
         }
     }
     
     var delegate: NoteCellDelegate?
     
-    override func updateIconView(){
+    override func setupIconView(){
         iconView.removeAllSubviews()
         if let note = item{
             let selectedButton = UIButton().asDarkIconButton(note.selected ? "checkmark.square" : "square")
@@ -48,11 +48,11 @@ class NoteCell: MapItemCell{
         }
     }
     
-    override func updateTimeLabel(){
+    override func setupTimeLabel(){
         timeLabel.text = item?.creationDate.dateTimeString()
     }
     
-    override func updateMapIcon() {
+    override func setupMapIcon() {
         if let item = item{
             mapIconView.image = UIImage(systemName: item.hasValidCoordinate ? "mappin" : "mappin.slash", withConfiguration: UIImage.SymbolConfiguration(pointSize: 24))?
                 .withTintColor(.systemGreen).withRenderingMode(.alwaysOriginal)
@@ -60,7 +60,7 @@ class NoteCell: MapItemCell{
         }
     }
     
-    override func updateItemView(){
+    override func setupItemView(){
         itemView.removeAllSubviews()
         if let note = item{
             let header = UILabel(header: "note".localize())

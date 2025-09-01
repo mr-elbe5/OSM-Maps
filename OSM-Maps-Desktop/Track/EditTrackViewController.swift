@@ -7,6 +7,10 @@
 import AppKit
 import CoreLocation
 
+protocol EditTrackDelegate {
+    func trackChanged(item: TrackItem)
+}
+
 class EditTrackViewController: ModalViewController {
     
     var startSize = CGSize(width: 1000, height: 800)

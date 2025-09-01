@@ -188,6 +188,40 @@
         }
       }
     },
+    "addVideosFromFileSystem" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Video(s) aus Dateien hinzufügen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add video(s) from files"
+          }
+        }
+      }
+    },
+    "addVideosFromPhotoLibrary" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Video(s) aus Fotos hinzufügen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add video(s) from photos"
+          }
+        }
+      }
+    },
     "allTilesForDownload" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4101,6 +4135,12 @@
     "synchronize" : {
       "extractionState" : "manual",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit iCloud synchronisieren"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",

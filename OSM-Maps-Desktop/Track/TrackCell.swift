@@ -6,47 +6,46 @@
 
 import AppKit
 
-protocol TrackCellDelegate{
-    func editTrack(_ track: TrackItem)
-    func showTrackOnMap(_ track: TrackItem)
-}
+import CoreLocation
 
-class TrackCellView : MapItemCellView{
+class TrackCell: MapItemCell{
     
-    var item: TrackItem
+    static var pinColor = NSColor(red: 0.25, green: 0.5, blue: 1.0, alpha: 1.0)
+    
+    var item : TrackItem
     
     var selectedButton: NSButton!
-    var itemView = NSView()
-    
-    var delegate: TrackCellDelegate? = nil
     
     init(track: TrackItem){
         self.item = track
-        super.init()
-        backgroundColor = .black
+        super.init(frame: .zero)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func setupView() {
-        removeAllSubviews()
-        let titleField = NSTextField(wrappingLabelWithString: "track".localize()).asHeadline()
-        addSubviewWithAnchors(titleField, top: topAnchor, leading: leadingAnchor, insets: OSInsets.defaultInsets)
-        let iconBar = IconBar()
-        addSubviewWithAnchors(iconBar, top: topAnchor, trailing: trailingAnchor, insets: OSInsets.smallInsets)
-        let showOnMapButton = NSButton(icon: "map", target: self, action: #selector(showTrackOnMap))
-        iconBar.addArrangedSubview(showOnMapButton)
-        let editButton = NSButton(icon: "pencil", target: self, action: #selector(editTrack))
-        iconBar.addArrangedSubview(editButton)
-        selectedButton = NSButton(icon: item.selected ? "checkmark.square" : "square", target: self, action: #selector(selectionChanged))
-        iconBar.addArrangedSubview(selectedButton)
-        addSubviewWithAnchors(itemView, top: iconBar.bottomAnchor, leading: leadingAnchor, trailing: trailingAnchor, bottom: bottomAnchor, insets: OSInsets.smallInsets)
-        setupItemView()
+    override func setupIconView(){
+        iconView.removeAllSubviews()
+        selectedButton = NSButton(icon: item.selected ? "checkmark.square" : "square", color: .lightColor, target: self, action: #selector(toggleSelection))
+        iconView.addSubviewToLeft(selectedButton, insets: iconInsets)
+        let editButton = NSButton(icon: "pencil", color: .lightColor, target: self, action: #selector(editTrack))
+        iconView.addSubviewToLeft(editButton, rightView: selectedButton, insets: iconInsets)
+        let showOnMapButton = NSButton(icon: "map", color: .lightColor, target: self, action: #selector(showTrackOnMap))
+        iconView.addSubviewToLeft(showOnMapButton, rightView: editButton, insets: iconInsets)
+            .connectToLeft(of: iconView)
+        showOnMapButton.isEnabled = item.hasValidCoordinate
     }
     
-    func setupItemView(){
+    override func setupTimeLabel(){
+        timeLabel.stringValue = item.creationDate.dateTimeString()
+    }
+    
+    override func setupMapIcon() {
+        mapIconView.image = NSImage(systemSymbolName: item.hasValidCoordinate ? "mappin" : "mappin.slash", accessibilityDescription: nil)!.withTintColor(Self.pinColor)
+    }
+    
+    override func setupItemView(){
         itemView.removeAllSubviews()
         let nameField = NSTextField(wrappingLabelWithString: item.track.name)
         itemView.addSubviewWithAnchors(nameField, top: itemView.topAnchor)
@@ -76,21 +75,22 @@ class TrackCellView : MapItemCellView{
         lastView.bottom(itemView.bottomAnchor)
     }
     
-    override func updateIconView() {
-        selectedButton.image = NSImage(systemSymbolName: item.selected ? "checkmark.square" : "square", accessibilityDescription: .none)
+    @objc func toggleSelection(){
+        item.selected = !item.selected
+        selectedButton.image = NSImage(systemSymbolName: item.selected ? "checkmark.square" : "square", accessibilityDescription: nil)
     }
     
     @objc func showTrackOnMap(){
-        delegate?.showTrackOnMap(item)
+        MainViewController.shared.showTrackOnMap(item)
     }
     
     @objc func editTrack(){
-        delegate?.editTrack(item)
+        MainViewController.shared.editTrack(item)
     }
     
     @objc func selectionChanged(){
         item.selected = !item.selected
-        updateIconView()
+        setupIconView()
     }
     
     @objc func loadPreview(){
@@ -99,3 +99,6 @@ class TrackCellView : MapItemCellView{
     }
     
 }
+
+
+

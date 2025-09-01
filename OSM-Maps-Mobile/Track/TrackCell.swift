@@ -17,7 +17,7 @@ class TrackCell: MapItemCell{
     
     var delegate : TrackCellDelegate? = nil
     
-    override func updateIconView(){
+    override func setupIconView(){
         iconView.removeAllSubviews()
         if let track = item{
             let selectedButton = UIButton().asDarkIconButton(track.selected ? "checkmark.square" : "square")
@@ -57,7 +57,7 @@ class TrackCell: MapItemCell{
         }
     }
     
-    override func updateItemView(){
+    override func setupItemView(){
         itemView.removeAllSubviews()
         if let item = item{
             let header = UILabel(header: "track".localize())
@@ -105,11 +105,11 @@ class TrackCell: MapItemCell{
         }
     }
     
-    override func updateTimeLabel(){
+    override func setupTimeLabel(){
         timeLabel.text = item?.creationDate.dateTimeString()
     }
     
-    override func updateMapIcon() {
+    override func setupMapIcon() {
         if let item = item{
             mapIconView.image = UIImage(systemName: item.hasValidCoordinate ? "mappin" : "mappin.slash", withConfiguration: UIImage.SymbolConfiguration(pointSize: 24))?
                 .withTintColor(.systemBlue).withRenderingMode(.alwaysOriginal)

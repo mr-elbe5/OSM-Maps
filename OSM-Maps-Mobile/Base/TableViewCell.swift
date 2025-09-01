@@ -37,7 +37,7 @@ class TableViewCell: UITableViewCell{
             .connectToBottom(of: cellBody)
     }
     
-    func updateCell(){
+    func setupCell(){
         updateItemView()
         updateIconView()
     }

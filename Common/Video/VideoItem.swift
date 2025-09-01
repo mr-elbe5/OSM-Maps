@@ -42,6 +42,9 @@ class VideoItem : MapItem{
         if let data = FileManager.default.readFile(url: previewUrl){
             return data
         }
+        if createPreviewFile(), let data = FileManager.default.readFile(url: previewUrl){
+            return data
+        }
         Log.error("preview file does not exist: \(previewUrl)")
         return nil
     }
