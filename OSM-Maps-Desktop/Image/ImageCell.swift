@@ -25,11 +25,11 @@ class ImageCell: MapItemCell{
     
     override func setupIconView(){
         iconView.removeAllSubviews()
-        selectedButton = NSButton(icon: item.selected ? "checkmark.square" : "square", color: .lightColor, target: self, action: #selector(toggleSelection))
+        selectedButton = NSButton(icon: item.selected ? "checkmark.square" : "square", color: .lightColor, backgroundColor: .darkColor, target: self, action: #selector(toggleSelection))
         iconView.addSubviewToLeft(selectedButton, insets: iconInsets)
-        let editButton = NSButton(icon: "pencil", color: .lightColor, target: self, action: #selector(editImage))
+        let editButton = NSButton(icon: "pencil", color: .lightColor, backgroundColor: .darkColor, target: self, action: #selector(editImage))
         iconView.addSubviewToLeft(editButton, rightView: selectedButton, insets: iconInsets)
-        let showButton = NSButton(icon: "magnifyingglass", color: .lightColor, target: self, action: #selector(showImage))
+        let showButton = NSButton(icon: "magnifyingglass", color: .lightColor, backgroundColor: .darkColor, target: self, action: #selector(showImage))
         iconView.addSubviewToLeft(showButton, rightView: editButton, insets: iconInsets)
             .connectToLeft(of: iconView)
     }

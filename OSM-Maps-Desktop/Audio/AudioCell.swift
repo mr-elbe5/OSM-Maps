@@ -25,9 +25,9 @@ class AudioCell: MapItemCell{
     
     override func setupIconView(){
         iconView.removeAllSubviews()
-        selectedButton = NSButton(icon: item.selected ? "checkmark.square" : "square", color: .lightColor, target: self, action: #selector(toggleSelection))
+        selectedButton = NSButton(icon: item.selected ? "checkmark.square" : "square", color: .lightColor, backgroundColor: .darkColor, target: self, action: #selector(toggleSelection))
         iconView.addSubviewToLeft(selectedButton, insets: iconInsets)
-        let editButton = NSButton(icon: "pencil", color: .lightColor, target: self, action: #selector(editAudio))
+        let editButton = NSButton(icon: "pencil", color: .lightColor, backgroundColor: .darkColor, target: self, action: #selector(editAudio))
         iconView.addSubviewToLeft(editButton, rightView: selectedButton, insets: iconInsets)
             .connectToLeft(of: iconView)
     }

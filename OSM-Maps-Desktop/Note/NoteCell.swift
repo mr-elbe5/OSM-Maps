@@ -25,9 +25,9 @@ class NoteCell: MapItemCell{
     
     override func setupIconView(){
         iconView.removeAllSubviews()
-        selectedButton = NSButton(icon: item.selected ? "checkmark.square" : "square", color: .lightColor, target: self, action: #selector(toggleSelection))
+        selectedButton = NSButton(icon: item.selected ? "checkmark.square" : "square", color: .lightColor, backgroundColor: .darkColor, target: self, action: #selector(toggleSelection))
         iconView.addSubviewToLeft(selectedButton, insets: iconInsets)
-        let editButton = NSButton(icon: "pencil", color: .lightColor, target: self, action: #selector(editNote))
+        let editButton = NSButton(icon: "pencil", color: .lightColor, backgroundColor: .darkColor, target: self, action: #selector(editNote))
         iconView.addSubviewToLeft(editButton, rightView: selectedButton, insets: iconInsets)
             .connectToLeft(of: iconView)
     }
@@ -37,12 +37,12 @@ class NoteCell: MapItemCell{
     }
     
     override func setupMapIcon() {
-        mapIconView.image = NSImage(systemSymbolName: item.hasValidCoordinate ? "mappin" : "mappin.slash", accessibilityDescription: nil)
+        mapIconView.image = NSImage(systemSymbolName: item.hasValidCoordinate ? "mappin" : "mappin.slash", accessibilityDescription: nil)?.withTintColor(.green)
     }
     
     override func setupItemView(){
         itemView.removeAllSubviews()
-        let nameField = NSTextField(wrappingLabelWithString: item.name)
+        let nameField = NSTextField(wrappingLabelWithString: item.name).asHeadline()
         itemView.addSubviewBelow(nameField)
         let noteField = NSTextField(wrappingLabelWithString: item.note)
         itemView.addSubviewBelow(noteField, upperView: nameField)

@@ -23,20 +23,26 @@ class MapItemCell: NSView{
     var useShortDate = false
     
     override func setupView() {
-        backgroundColor = .clear
-        cellBody.backgroundColor = .controlBackgroundColor
+        backgroundColor = .black
+        cellBody.setRoundedBorders()
+        cellBody.backgroundColor = .darkColor
         addSubviewFilling(cellBody, insets: OSInsets.smallInsets)
         setupCellBody()
     }
     
     func setupCellBody(){
+        dateTimeView.setBackground(.clear)
         cellBody.addSubviewWithAnchors(dateTimeView, top: cellBody.topAnchor, leading: cellBody.leadingAnchor, insets: OSInsets.smallInsets)
+        timeLabel.textColor = .lightColor
         dateTimeView.addSubviewFilling(timeLabel, insets: OSInsets.smallInsets)
+        mapIconView.setBackground(.clear)
         cellBody.addSubviewWithAnchors(mapIconView, leading: dateTimeView.trailingAnchor, insets: .zero)
             .centerY(dateTimeView.centerYAnchor)
+        iconView.setBackground(.clear)
         cellBody.addSubviewWithAnchors(iconView, top: cellBody.topAnchor, trailing: cellBody.trailingAnchor, insets: OSInsets.smallInsets)
         cellBody.addSubviewBelow(itemView, upperView: iconView, insets: .smallInsets)
             .connectToBottom(of: cellBody, inset: OSInsets.smallInset)
+        itemView.setBackground(.black).setRoundedBorders()
         setupItemView()
         setupTimeLabel()
         setupMapIcon()

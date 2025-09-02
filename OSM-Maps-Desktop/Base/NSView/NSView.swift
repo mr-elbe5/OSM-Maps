@@ -20,6 +20,12 @@ extension NSView{
         }
     }
     
+    @discardableResult
+    func setBackground(_ color:NSColor) -> NSView{
+        backgroundColor = color
+        return self
+    }
+    
     func setRoundedBorders(){
         if let layer = layer{
             layer.borderWidth = 0.5

@@ -58,6 +58,7 @@ extension MainViewController {
         let controller = EditNoteViewController(item: note)
         if ModalWindow.run(title: "editNote".localize(), viewController: controller, outerWindow: MainWindowController.instance.window!, minSize: CGSize(width: 300, height: 200)) == .OK{
             AppData.shared.addItem(note)
+            AppData.shared.save()
             mapView.updateItemLayer()
         }
     }
