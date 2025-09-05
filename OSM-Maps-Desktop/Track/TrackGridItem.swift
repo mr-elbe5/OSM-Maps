@@ -48,9 +48,12 @@ class TrackGridItem: NSCollectionViewItem, TrackGridItemViewDelegate{
         let showOnMapButton = NSButton(image: NSImage(systemSymbolName: "map", accessibilityDescription: nil)!, target: itemView, action: #selector(itemView.showTrackOnMap))
         showOnMapButton.bezelStyle = .smallSquare
         iconView.addSubviewWithAnchors(showOnMapButton, top: iconView.topAnchor, leading: iconView.leadingAnchor, bottom: iconView.bottomAnchor, insets: OSInsets.flatInsets)
+        let imagesButton = NSButton(icon: "photo.stack", color: .lightColor, backgroundColor: .darkColor, target: itemView, action: #selector(showTrackImages))
+        imagesButton.bezelStyle = .smallSquare
+        iconView.addSubviewWithAnchors(imagesButton, top: iconView.topAnchor, leading: showOnMapButton.trailingAnchor, bottom: iconView.bottomAnchor, insets: OSInsets.flatInsets)
         let editButton = NSButton(image: NSImage(systemSymbolName: "pencil", accessibilityDescription: nil)!, target: itemView, action: #selector(itemView.editTrack))
         editButton.bezelStyle = .smallSquare
-        iconView.addSubviewWithAnchors(editButton, top: iconView.topAnchor, leading: showOnMapButton.trailingAnchor, bottom: iconView.bottomAnchor, insets: OSInsets.flatInsets)
+        iconView.addSubviewWithAnchors(editButton, top: iconView.topAnchor, leading: imagesButton.trailingAnchor, bottom: iconView.bottomAnchor, insets: OSInsets.flatInsets)
         let exportButton = NSButton(image: NSImage(systemSymbolName: "square.and.arrow.up", accessibilityDescription: nil)!, target: itemView, action: #selector(itemView.exportTrack))
         exportButton.bezelStyle = .smallSquare
         iconView.addSubviewWithAnchors(exportButton, top: iconView.topAnchor, leading: editButton.trailingAnchor, bottom: iconView.bottomAnchor, insets: OSInsets.flatInsets)
@@ -67,6 +70,11 @@ class TrackGridItem: NSCollectionViewItem, TrackGridItemViewDelegate{
         delegate?.exportTrack(track)
     }
     
+    @objc func showTrackImages(){
+        let images = AppData.shared.getImagesOfTrack(item: track)
+        MainViewController.shared.showImages(images)
+    }
+    
     func showTrackOnMap() {
         MainViewController.shared.showTrackOnMap(track)
     }
@@ -79,6 +87,7 @@ class TrackGridItem: NSCollectionViewItem, TrackGridItemViewDelegate{
 
 fileprivate protocol TrackGridItemViewDelegate{
     func showTrackOnMap()
+    func showTrackImages()
     func exportTrack()
     func editTrack()
     func deleteTrack()
@@ -90,6 +99,10 @@ fileprivate class TrackGridItemView: NSView{
     
     @objc func showTrackOnMap(){
         delegate?.showTrackOnMap()
+    }
+    
+    @objc func showTrackImages(){
+        delegate?.showTrackImages()
     }
     
     @objc func exportTrack(){

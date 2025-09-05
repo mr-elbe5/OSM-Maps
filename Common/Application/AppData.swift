@@ -282,4 +282,34 @@ class AppData : Codable{
         }
     }
     
+    func getImagesOfTrack(item: TrackItem, maxDistance: Double = 20) -> ImageItemList{
+        var list = ImageItemList()
+        let track = item.track
+        for mapItem in mapItems{
+            if let image = mapItem as? ImageItem, mapItem.hasValidCoordinate{
+                if let result = track.findClosestTrackpoint(to: image.coordinate){
+                    let distance = result.1
+                    if distance < maxDistance{
+                        list.append(image)
+                    }
+                }
+            }
+        }
+        return list
+    }
+    
+    func getImagesOfTrackTime(item: TrackItem) -> ImageItemList{
+        var list = ImageItemList()
+        let startDate = item.track.startTime
+        let endDate = item.track.endTime
+        for item in mapItems{
+            if let image = item as? ImageItem{
+                if image.creationDate >= startDate && image.creationDate <= endDate{
+                    list.append(image)
+                }
+            }
+        }
+        return list
+    }
+    
 }

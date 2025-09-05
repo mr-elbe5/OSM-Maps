@@ -31,8 +31,10 @@ class TrackCell: MapItemCell{
         iconView.addSubviewToLeft(selectedButton, insets: iconInsets)
         let editButton = NSButton(icon: "pencil", color: .lightColor, backgroundColor: .darkColor, target: self, action: #selector(editTrack))
         iconView.addSubviewToLeft(editButton, rightView: selectedButton, insets: iconInsets)
+        let imagesButton = NSButton(icon: "photo.stack", color: .lightColor, backgroundColor: .darkColor, target: self, action: #selector(showTrackImages))
+        iconView.addSubviewToLeft(imagesButton, rightView: editButton, insets: iconInsets)
         let showOnMapButton = NSButton(icon: "map", color: .lightColor, backgroundColor: .darkColor, target: self, action: #selector(showTrackOnMap))
-        iconView.addSubviewToLeft(showOnMapButton, rightView: editButton, insets: iconInsets)
+        iconView.addSubviewToLeft(showOnMapButton, rightView: imagesButton, insets: iconInsets)
             .connectToLeft(of: iconView)
         showOnMapButton.isEnabled = item.hasValidCoordinate
     }
@@ -82,6 +84,11 @@ class TrackCell: MapItemCell{
     
     @objc func showTrackOnMap(){
         MainViewController.shared.showTrackOnMap(item)
+    }
+    
+    @objc func showTrackImages(){
+        let images = AppData.shared.getImagesOfTrack(item: item)
+        MainViewController.shared.showImages(images)
     }
     
     @objc func editTrack(){
