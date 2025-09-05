@@ -95,13 +95,13 @@ extension ImageGridView: NSCollectionViewDelegate{
 
 extension ImageGridView: ImageGridMenuDelegate{
     
-    func toggleSelectAll() {
-        if images.allSelected{
-            images.deselectAll()
-        }
-        else{
-            images.selectAll()
-        }
+    func selectAll() {
+        images.selectAll()
+        collectionView.reloadData()
+    }
+    
+    func deselectAll() {
+        images.deselectAll()
         collectionView.reloadData()
     }
     

@@ -8,7 +8,8 @@ import AppKit
 
 protocol ImageGridMenuDelegate: GridMenuDelegate{
     
-    func toggleSelectAll()
+    func selectAll()
+    func deselectAll()
     func showSelected()
     func importImagesFromPhotos()
     func importImagesFromFiles()
@@ -17,7 +18,7 @@ protocol ImageGridMenuDelegate: GridMenuDelegate{
 
 class ImageGridMenuView: NSView{
     
-    var selectAllButton: NSButton!
+    var selectButton: NSButton!
     var showPresenterButton: NSButton!
     var increaseSizeButton: NSButton!
     var decreaseSizeButton: NSButton!
@@ -25,14 +26,19 @@ class ImageGridMenuView: NSView{
     var importImagesFromFilesButton: NSButton!
     var deleteButton: NSButton!
     
+    var selectMenu: NSMenu!
+    
     var delegate: ImageGridMenuDelegate? = nil
     
     var insets = OSInsets(top: 10, left: 5, bottom: 10, right: 5)
     
     init(){
         super.init(frame: .zero)
-        selectAllButton = NSButton(icon: "checkmark.square", target: self, action: #selector(toggleSelectAll))
-        selectAllButton.toolTip = "selectAll".localize()
+        selectButton = NSButton(icon: "checkmark.square", target: self, action: #selector(openSelectMenu))
+        selectButton.toolTip = "selection".localize()
+        selectMenu = NSMenu(title: "selection".localize())
+        selectMenu.items.append(NSMenuItem(title: "selectAll".localize(), target: self, action: #selector(selectAllItems), keyEquivalent: ""))
+        selectMenu.items.append(NSMenuItem(title: "deselectAll".localize(), target: self, action: #selector(deselectAllItems), keyEquivalent: ""))
         showPresenterButton = NSButton(icon: "photo", target: self, action: #selector(showSelected))
         showPresenterButton.toolTip = "showSelectedImages".localize()
         increaseSizeButton = NSButton(icon: "plus", target: self, action: #selector(increasePreviewSize))
@@ -52,8 +58,8 @@ class ImageGridMenuView: NSView{
     }
     
     override func setupView(){
-        addSubviewBelow(selectAllButton, insets: insets)
-        addSubviewBelow(showPresenterButton, upperView: selectAllButton, insets: insets)
+        addSubviewBelow(selectButton, insets: insets)
+        addSubviewBelow(showPresenterButton, upperView: selectButton, insets: insets)
         addSubviewBelow(increaseSizeButton, upperView: showPresenterButton, insets: insets)
         addSubviewBelow(decreaseSizeButton, upperView: increaseSizeButton, insets: insets)
         addSubviewBelow(importImagesFromPhotosButton, upperView: decreaseSizeButton, insets: insets)
@@ -61,8 +67,17 @@ class ImageGridMenuView: NSView{
         addSubviewBelow(deleteButton, upperView: importImagesFromFilesButton, insets: insets)
     }
     
-    @objc func toggleSelectAll(){
-        delegate?.toggleSelectAll()
+    @objc func openSelectMenu(){
+        let location = NSPoint(x: selectButton.frame.width - 2, y: 10)
+        selectMenu.popUp(positioning: nil, at: location, in: selectButton)
+    }
+    
+    @objc func selectAllItems(){
+        delegate?.selectAll()
+    }
+    
+    @objc func deselectAllItems(){
+        delegate?.deselectAll()
     }
     
     @objc func showSelected(){
