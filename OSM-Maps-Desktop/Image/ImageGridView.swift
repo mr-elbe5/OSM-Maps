@@ -10,11 +10,15 @@ import UniformTypeIdentifiers
 
 class ImageGridView: GridView{
     
-    var images = Array<ImageItem>()
+    var items = Array<ImageItem>()
     
     var menuView = ImageGridMenuView()
     
     var hideUnselected: Bool = false
+    
+    deinit{
+        items.deselectAll()
+    }
     
     override func setupView() {
         addSubviewWithAnchors(menuView, top: topAnchor, leading: leadingAnchor, bottom: bottomAnchor, insets: .zero)
@@ -25,7 +29,7 @@ class ImageGridView: GridView{
         setupCollectionView()
         collectionView.delegate = self
         collectionView.dataSource = self
-        images.append(contentsOf: AppData.shared.images)
+        items.append(contentsOf: AppData.shared.images)
         collectionView.reloadData()
     }
     
@@ -35,15 +39,15 @@ class ImageGridView: GridView{
     }
     
     func updateData(){
-        images.removeAll()
-        images.append(contentsOf: hideUnselected ? AppData.shared.selectedImages : AppData.shared.images)
+        items.removeAll()
+        items.append(contentsOf: hideUnselected ? AppData.shared.selectedImages : AppData.shared.images)
         collectionView.reloadData()
     }
     
     func getSelectedImages() -> Array<ImageItem>{
         var arr = ImageItemList()
         for path in collectionView.selectionIndexPaths{
-            arr.append(images[path.item])
+            arr.append(items[path.item])
         }
         arr.sortByDate(ascending: true)
         return arr
@@ -54,11 +58,11 @@ class ImageGridView: GridView{
 extension ImageGridView: NSCollectionViewDataSource{
     
     func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
-        images.count
+        items.count
     }
     
     func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
-        let image = images[indexPath.item]
+        let image = items[indexPath.item]
         if image.selected{
             collectionView.selectionIndexPaths.insert(indexPath)
         }
@@ -98,12 +102,12 @@ extension ImageGridView: NSCollectionViewDelegate{
 extension ImageGridView: ImageGridMenuDelegate{
     
     func selectAll() {
-        images.selectAll()
+        items.selectAll()
         collectionView.reloadData()
     }
     
     func deselectAll() {
-        images.deselectAll()
+        items.deselectAll()
         collectionView.reloadData()
     }
     
@@ -144,7 +148,7 @@ extension ImageGridView: ImageGridMenuDelegate{
             if NSAlert.acceptWarning(message: "deleteItemsWarning".localize()){
                 AppData.shared.deleteItems(selected)
                 for image in selected{
-                    images.remove(obj: image)
+                    items.remove(obj: image)
                 }
                 collectionView.reloadData()
             }
@@ -160,7 +164,7 @@ extension ImageGridView: ImageGridItemDelegate{
     }
     
     func deleteImage(_ image: ImageItem) {
-        images.remove(obj: image)
+        items.remove(obj: image)
         AppData.shared.deleteItem(image)
         AppData.shared.save()
         collectionView.reloadData()

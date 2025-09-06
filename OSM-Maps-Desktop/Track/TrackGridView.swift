@@ -10,9 +10,13 @@ import UniformTypeIdentifiers
 
 class TrackGridView: GridView{
     
-    var tracks = Array<TrackItem>()
+    var items = Array<TrackItem>()
     
     var menuView = TrackGridMenuView()
+    
+    deinit{
+        items.deselectAll()
+    }
     
     override func setupView() {
         addSubviewWithAnchors(menuView, top: topAnchor, leading: leadingAnchor, bottom: bottomAnchor)
@@ -22,7 +26,7 @@ class TrackGridView: GridView{
         addSubviewWithAnchors(scrollView, top: topAnchor, leading: menuView.trailingAnchor, trailing: trailingAnchor, bottom: bottomAnchor)
         setupCollectionView()
         collectionView.dataSource = self
-        tracks.append(contentsOf: AppData.shared.tracks)
+        items.append(contentsOf: AppData.shared.tracks)
         collectionView.reloadData()
     }
     
@@ -32,15 +36,15 @@ class TrackGridView: GridView{
     }
     
     func updateData(){
-        tracks.removeAll()
-        tracks.append(contentsOf: AppData.shared.tracks)
+        items.removeAll()
+        items.append(contentsOf: AppData.shared.tracks)
         collectionView.reloadData()
     }
     
     func getSelectedTracks() -> TrackItemList{
         var arr = TrackItemList()
         for path in collectionView.selectionIndexPaths{
-            arr.append(tracks[path.item])
+            arr.append(items[path.item])
         }
         arr.sortByDate(ascending: true)
         return arr
@@ -51,11 +55,11 @@ class TrackGridView: GridView{
 extension TrackGridView: NSCollectionViewDataSource{
     
     func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
-        tracks.count
+        items.count
     }
     
     func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
-        let track = tracks[indexPath.item]
+        let track = items[indexPath.item]
         if track.selected{
             collectionView.selectionIndexPaths.insert(indexPath)
         }
@@ -77,7 +81,7 @@ extension TrackGridView: TrackGridItemDelegate{
     }
     
     func deleteTrack(_ track: TrackItem) {
-        tracks.remove(obj: track)
+        items.remove(obj: track)
         AppData.shared.deleteItem(track)
         AppData.shared.save()
         collectionView.reloadData()

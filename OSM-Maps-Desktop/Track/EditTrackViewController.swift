@@ -39,6 +39,10 @@ class EditTrackViewController: ModalViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit{
+        item.track.trackpoints.deselectAll()
+    }
+    
     override func loadView() {
         super.loadView()
         view.frame = CGRect(origin: .zero, size: startSize)

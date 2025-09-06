@@ -19,6 +19,10 @@ class ItemListView: NSView{
     
     var items: MapItemList = []
     
+    deinit{
+        items.deselectAll()
+    }
+    
     override func setupView(){
         backgroundColor = .black
         setupMenuView()

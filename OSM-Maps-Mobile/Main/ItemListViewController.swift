@@ -40,6 +40,10 @@ class ItemListViewController: UIViewController{
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit{
+        items.deselectAll()
+    }
+    
     override func loadView() {
         super.loadView()
         view.addSubviewWithAnchors(controlView, top: view.safeAreaLayoutGuide.topAnchor, leading: view.safeAreaLayoutGuide.leadingAnchor, trailing: view.safeAreaLayoutGuide.trailingAnchor, insets: .flatInsets)

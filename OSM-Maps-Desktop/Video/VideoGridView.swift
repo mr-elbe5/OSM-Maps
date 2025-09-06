@@ -14,6 +14,10 @@ class VideoGridView: GridView{
     
     var menuView = VideoGridMenuView()
     
+    deinit{
+        items.deselectAll()
+    }
+    
     override func setupView() {
         addSubviewWithAnchors(menuView, top: topAnchor, leading: leadingAnchor, bottom: bottomAnchor, insets: .zero)
             .width(40)

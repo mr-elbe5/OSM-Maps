@@ -35,6 +35,10 @@ class EditTrackViewController: ScrollViewController{
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit{
+        item.track.trackpoints.deselectAll()
+    }
+    
     override func loadView() {
         super.loadView()
         title = "track".localize()
