@@ -87,6 +87,19 @@ class AppData : Codable{
         }
     }
     
+    var selectedImages: ImageItemList{
+        get{
+            var imageItems = ImageItemList()
+            for item in _mapItems{
+                if item is ImageItem, item.selected{
+                    imageItems.append(item as! ImageItem)
+                }
+            }
+            imageItems.sortByDate(ascending: ViewFilter.shared.defaultSortAscending)
+            return imageItems
+        }
+    }
+    
     var tracks: TrackItemList{
         get{
             var trackItems = TrackItemList()

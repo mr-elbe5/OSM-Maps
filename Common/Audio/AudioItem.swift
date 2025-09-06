@@ -118,7 +118,7 @@ class AudioItem : MapItem{
     
 }
 
-typealias AudioItemList = SelectableList<AudioItem>
+typealias AudioItemList = LocationList<AudioItem>
 
 extension AudioItemList{
     

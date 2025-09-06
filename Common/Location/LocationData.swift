@@ -17,38 +17,59 @@ class LocationData: Codable{
         case city
     }
     
-    var latitude: Double
-    var longitude: Double
+    var coordinate: CLLocationCoordinate2D
     var altitude: Double
     var street: String
     var city: String
     
     var isUpdated: Bool = false
     
+    var selected: Bool = false
+    
     var hasValidCoordinate: Bool {
-        return latitude != 0 || longitude != 0
+        return coordinate != .zero
     }
     
     init(){
-        latitude = 0
-        longitude = 0
+        coordinate = .zero
         altitude = 0
         street = ""
         city = ""
     }
     
     init(coordinate: CLLocationCoordinate2D){
-        latitude = coordinate.latitude
-        longitude = coordinate.longitude
+        self.coordinate = coordinate
         altitude = 0
         street = ""
         city = ""
     }
     
+    init(coordinate: CLLocationCoordinate2D, altitude: Double){
+        self.coordinate = coordinate
+        self.altitude = altitude
+        street = ""
+        city = ""
+    }
+    
+    init(location: CLLocation){
+        self.coordinate = location.coordinate
+        self.altitude = location.altitude
+        street = ""
+        city = ""
+    }
+    
+    init(original: LocationData){
+        self.coordinate = original.coordinate
+        self.altitude = original.altitude
+        self.street = original.street
+        self.city = original.city
+    }
+    
     required init(from decoder: Decoder) throws {
         let values: KeyedDecodingContainer<CodingKeys> = try decoder.container(keyedBy: CodingKeys.self)
-        latitude = try values.decodeIfPresent(Double.self, forKey: .latitude) ?? 0
-        longitude = try values.decodeIfPresent(Double.self, forKey: .longitude) ?? 0
+        let latitude = try values.decodeIfPresent(Double.self, forKey: .latitude) ?? 0
+        let longitude = try values.decodeIfPresent(Double.self, forKey: .longitude) ?? 0
+        coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         altitude = try values.decodeIfPresent(Double.self, forKey: .altitude) ?? 0
         street = try values.decodeIfPresent(String.self, forKey: .street) ?? ""
         city = try values.decodeIfPresent(String.self, forKey: .city) ?? ""
@@ -56,21 +77,11 @@ class LocationData: Codable{
     
     func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(self.latitude, forKey: .latitude)
-        try container.encode(self.longitude, forKey: .longitude)
+        try container.encode(self.coordinate.latitude, forKey: .latitude)
+        try container.encode(self.coordinate.longitude, forKey: .longitude)
         try container.encode(self.altitude, forKey: .altitude)
         try container.encode(self.street, forKey: .street)
         try container.encode(self.city, forKey: .city)
-    }
-    
-    var coordinate: CLLocationCoordinate2D{
-        get{
-            CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        }
-        set{
-            latitude = newValue.latitude
-            longitude = newValue.longitude
-        }
     }
     
     var worldPoint: CGPoint{
@@ -106,5 +117,60 @@ class LocationData: Codable{
     }
 
 }
+
+typealias LocationList<T: LocationData> = Array<T>
+
+extension LocationList{
+    
+    var allSelected: Bool{
+        get{
+            allSatisfy({
+                $0.selected
+            })
+        }
+    }
+    
+    var allUnselected: Bool{
+        get{
+            allSatisfy({
+                !$0.selected
+            })
+        }
+    }
+    
+    var anySelected: Bool{
+        get{
+            !allUnselected
+        }
+    }
+    
+    mutating func selectAll(){
+        for item in self{
+            item.selected = true
+        }
+    }
+    
+    mutating func deselectAll(){
+        for item in self{
+            item.selected = false
+        }
+    }
+    
+    mutating func toggleSelection(){
+        var selected = false
+        for item in self{
+            if item.selected{
+                selected = true
+                break
+            }
+        }
+        for item in self{
+            item.selected = !selected
+        }
+    }
+    
+}
+
+
 
 

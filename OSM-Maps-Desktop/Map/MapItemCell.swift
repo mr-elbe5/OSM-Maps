@@ -43,10 +43,10 @@ class MapItemCell: NSView{
         cellBody.addSubviewBelow(itemView, upperView: iconView, insets: .smallInsets)
             .connectToBottom(of: cellBody, inset: OSInsets.smallInset)
         itemView.setBackground(.black).setRoundedBorders()
-        setupItemView()
         setupTimeLabel()
         setupMapIcon()
-        setupIconView()
+        updateIconView()
+        updateItemView()
     }
     
     func setupTimeLabel(){
@@ -55,10 +55,10 @@ class MapItemCell: NSView{
     func setupMapIcon(){
     }
     
-    func setupIconView(){
+    func updateIconView(){
     }
     
-    func setupItemView(){
+    func updateItemView(){
     }
     
 }

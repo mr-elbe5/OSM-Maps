@@ -185,6 +185,11 @@ class MainViewController: ViewController {
         imagePresenterView.isHidden = false
     }
     
+    func showFilteredImageGrid(selectedImages: [ImageItem]){
+        //AppData.shared.select
+        
+    }
+    
     //videos
     
     func showVideo(_ video: VideoItem){

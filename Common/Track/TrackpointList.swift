@@ -6,7 +6,7 @@
 
 import CoreLocation
 
-typealias TrackpointList = SelectableList<Trackpoint>
+typealias TrackpointList = LocationList<Trackpoint>
 
 extension TrackpointList{
     

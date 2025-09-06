@@ -134,7 +134,7 @@ extension TrackItem: Transferable {
     }
 }
 
-typealias TrackItemList = SelectableList<TrackItem>
+typealias TrackItemList = LocationList<TrackItem>
 
 extension TrackItemList{
     

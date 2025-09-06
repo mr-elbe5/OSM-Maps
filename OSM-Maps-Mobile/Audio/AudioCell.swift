@@ -33,7 +33,7 @@ class AudioCell: MapItemCell{
         cellBody.addSubviewWithAnchors(itemView, top: iconView.bottomAnchor, leading: cellBody.leadingAnchor, trailing: cellBody.trailingAnchor, bottom: cellBody.bottomAnchor, insets: .smallInsets)
     }
     
-    override func setupIconView(){
+    override func updateIconView(){
         iconView.removeAllSubviews()
         if let audio = item{
             let selectedButton = UIButton().asDarkIconButton(audio.selected ? "checkmark.square" : "square")
@@ -58,7 +58,7 @@ class AudioCell: MapItemCell{
         timeLabel.text = item?.creationDate.dateTimeString()
     }
     
-    override func setupItemView(){
+    override func updateItemView(){
         itemView.removeAllSubviews()
         if let audio = item{
             let audioView = AudioPlayerView()

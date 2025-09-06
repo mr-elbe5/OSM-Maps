@@ -68,7 +68,7 @@ class NoteItem: MapItem {
     
 }
 
-typealias NoteItemList = SelectableList<NoteItem>
+typealias NoteItemList = LocationList<NoteItem>
 
 extension NoteItemList{
     

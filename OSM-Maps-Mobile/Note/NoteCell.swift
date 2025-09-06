@@ -21,7 +21,7 @@ class NoteCell: MapItemCell{
     
     var delegate: NoteCellDelegate?
     
-    override func setupIconView(){
+    override func updateIconView(){
         iconView.removeAllSubviews()
         if let note = item{
             let selectedButton = UIButton().asDarkIconButton(note.selected ? "checkmark.square" : "square")
@@ -60,7 +60,7 @@ class NoteCell: MapItemCell{
         }
     }
     
-    override func setupItemView(){
+    override func updateItemView(){
         itemView.removeAllSubviews()
         if let note = item{
             let header = UILabel(header: "note".localize())

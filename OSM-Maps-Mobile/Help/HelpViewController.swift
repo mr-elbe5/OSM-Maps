@@ -93,7 +93,7 @@ class HelpViewController: ScrollViewController{
         contentView.addSubviewBelow(iconText, upperView: lastView)
         lastView = iconText
         
-        var linkButton = UIButton(name: "more".localize(table: "Help"), action: UIAction(){ action in
+        let linkButton = UIButton(name: "more".localize(table: "Help"), action: UIAction(){ action in
             let controller = MapHelpViewController()
             self.navigationController?.pushViewController(controller, animated: true)
         })

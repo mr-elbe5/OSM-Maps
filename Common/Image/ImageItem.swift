@@ -249,7 +249,7 @@ class ImageItem: MapItem{
     
 }
 
-typealias ImageItemList = SelectableList<ImageItem>
+typealias ImageItemList = LocationList<ImageItem>
 
 extension ImageItemList{
     

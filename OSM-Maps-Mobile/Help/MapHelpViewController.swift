@@ -21,7 +21,7 @@ class MapHelpViewController: ScrollViewController{
     
     func loadScrollableSubviews() {
         
-        var text = HelpText(key: "helpMapText")
+        let text = HelpText(key: "helpMapText")
         contentView.addSubviewBelow(text)
             .connectToBottom(of: contentView)
         

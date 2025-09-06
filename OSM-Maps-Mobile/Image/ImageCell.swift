@@ -24,7 +24,7 @@ class ImageCell: MapItemCell{
     
     var delegate: ImageCellDelegate?
     
-    override func setupIconView(){
+    override func updateIconView(){
         iconView.removeAllSubviews()
         if let image = item{
             let selectedButton = UIButton().asDarkIconButton(image.selected ? "checkmark.square" : "square")
@@ -71,7 +71,7 @@ class ImageCell: MapItemCell{
         }
     }
     
-    override func setupItemView(){
+    override func updateItemView(){
         itemView.removeAllSubviews()
         if let image = item{
             let imageView = UIImageView()

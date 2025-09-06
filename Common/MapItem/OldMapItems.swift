@@ -68,8 +68,7 @@ class OldMapItems{
                 else if let oldItem = oldItem as? OldTrackItem{
                     let item = TrackItem()
                     item.id = oldItem.id
-                    item.latitude = location.coordinate.latitude
-                    item.longitude = location.coordinate.longitude
+                    item.coordinate = location.coordinate
                     item.track.name = oldItem.name
                     item.track.trackpoints = oldItem.trackpoints
                     item.track.updateFromTrackpoints()

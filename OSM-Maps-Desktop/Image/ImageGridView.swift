@@ -14,6 +14,8 @@ class ImageGridView: GridView{
     
     var menuView = ImageGridMenuView()
     
+    var hideUnselected: Bool = false
+    
     override func setupView() {
         addSubviewWithAnchors(menuView, top: topAnchor, leading: leadingAnchor, bottom: bottomAnchor, insets: .zero)
             .width(40)
@@ -34,7 +36,7 @@ class ImageGridView: GridView{
     
     func updateData(){
         images.removeAll()
-        images.append(contentsOf: AppData.shared.images)
+        images.append(contentsOf: hideUnselected ? AppData.shared.selectedImages : AppData.shared.images)
         collectionView.reloadData()
     }
     
@@ -103,6 +105,16 @@ extension ImageGridView: ImageGridMenuDelegate{
     func deselectAll() {
         images.deselectAll()
         collectionView.reloadData()
+    }
+    
+    func showAllItems() {
+        hideUnselected = false
+        updateData()
+    }
+    
+    func hideUnselectedItems() {
+        hideUnselected = true
+        updateData()
     }
     
     func showSelected() {

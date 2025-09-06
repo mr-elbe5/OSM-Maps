@@ -17,7 +17,7 @@ class TrackCell: MapItemCell{
     
     var delegate : TrackCellDelegate? = nil
     
-    override func setupIconView(){
+    override func updateIconView(){
         iconView.removeAllSubviews()
         if let track = item{
             let selectedButton = UIButton().asDarkIconButton(track.selected ? "checkmark.square" : "square")
@@ -57,7 +57,7 @@ class TrackCell: MapItemCell{
         }
     }
     
-    override func setupItemView(){
+    override func updateItemView(){
         itemView.removeAllSubviews()
         if let item = item{
             let header = UILabel(header: "track".localize())

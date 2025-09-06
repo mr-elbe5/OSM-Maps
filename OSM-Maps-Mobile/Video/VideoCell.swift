@@ -23,7 +23,7 @@ class VideoCell: MapItemCell{
     
     var delegate : VideoCellDelegate?
     
-    override func setupIconView(){
+    override func updateIconView(){
         iconView.removeAllSubviews()
         if let video = item{
             let selectedButton = UIButton().asIconButton(video.selected ? "checkmark.square" : "square", color: .darkGray)
@@ -53,7 +53,7 @@ class VideoCell: MapItemCell{
         timeLabel.text = item?.creationDate.dateTimeString()
     }
     
-    override func setupItemView(){
+    override func updateItemView(){
         itemView.removeAllSubviews()
         if let video = item{
             let imageView = UIImageView()

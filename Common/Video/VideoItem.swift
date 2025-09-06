@@ -187,7 +187,7 @@ class VideoItem : MapItem{
     
 }
 
-typealias VideoItemList = SelectableList<VideoItem>
+typealias VideoItemList = LocationList<VideoItem>
 
 extension VideoItemList{
     

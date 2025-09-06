@@ -8,7 +8,7 @@ import Foundation
 import CoreLocation
 import CloudKit
 
-class MapItem: LocationData, Identifiable, Equatable, Hashable, Selectable {
+class MapItem: LocationData, Identifiable, Equatable, Hashable {
     
     static var recordType: CKRecord.RecordType = "item"
     
@@ -29,8 +29,6 @@ class MapItem: LocationData, Identifiable, Equatable, Hashable, Selectable {
     var creationDate: Date
     var changeDate: Date
     var cloudVersion: Int = 0
-    
-    var selected = false
     
     var recordID: CKRecord.ID{
         CKRecord.ID(recordName: id.uuidString, zoneID: CKContainer.zoneID)
@@ -96,8 +94,7 @@ class MapItem: LocationData, Identifiable, Equatable, Hashable, Selectable {
     }
     
     func update(from item: MapItem){
-        latitude = item.latitude
-        longitude = item.longitude
+        coordinate = item.coordinate
         altitude = item.altitude
         street = item.street
         city = item.city
@@ -114,7 +111,7 @@ class MapItem: LocationData, Identifiable, Equatable, Hashable, Selectable {
     
 }
 
-typealias MapItemList = SelectableList<MapItem>
+typealias MapItemList = LocationList<MapItem>
 
 extension MapItemList{
     
