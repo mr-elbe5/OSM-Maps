@@ -83,8 +83,8 @@ class ImageGridItem: NSCollectionViewItem, ImageGridItemViewDelegate{
     }
     
     func showImageDetail(){
-        let detailView = ImageGridDetailViewController(image: item)
-        detailView.popover.show(relativeTo: view.bounds, of: view, preferredEdge: .minY)
+        let controller = ImageGridDetailViewController(image: item)
+        controller.popover.show(relativeTo: view.bounds, of: view, preferredEdge: .minY)
     }
     
     func deleteImage(){

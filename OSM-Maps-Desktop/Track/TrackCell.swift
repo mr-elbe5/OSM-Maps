@@ -25,7 +25,7 @@ class TrackCell: MapItemCell{
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func setupIconView(){
+    override func updateIconView(){
         iconView.removeAllSubviews()
         selectedButton = NSButton(icon: item.selected ? "checkmark.square" : "square", color: .lightColor, backgroundColor: .darkColor, target: self, action: #selector(toggleSelection))
         iconView.addSubviewToLeft(selectedButton, insets: iconInsets)
@@ -47,7 +47,7 @@ class TrackCell: MapItemCell{
         mapIconView.image = NSImage(systemSymbolName: item.hasValidCoordinate ? "mappin" : "mappin.slash", accessibilityDescription: nil)!.withTintColor(Self.pinColor)
     }
     
-    override func setupItemView(){
+    override func updateItemView(){
         itemView.removeAllSubviews()
         let nameField = NSTextField(wrappingLabelWithString: item.track.name)
         itemView.addSubviewWithAnchors(nameField, top: itemView.topAnchor)
@@ -97,12 +97,12 @@ class TrackCell: MapItemCell{
     
     @objc func selectionChanged(){
         item.selected = !item.selected
-        setupIconView()
+        updateIconView()
     }
     
     @objc func loadPreview(){
         _ = item.getPreview()
-        setupItemView()
+        updateItemView()
     }
     
 }

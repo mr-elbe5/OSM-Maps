@@ -68,7 +68,7 @@ class MapView: NSView {
     }
     
     @objc func showCrossLocationMenu(){
-        let menu = CrossButtonMenu(mapView: self)
+        let menu = CrossButtonMenu()
         menu.popover.show(relativeTo: self.crossLocationView.frame, of: self, preferredEdge: .maxY)
     }
     

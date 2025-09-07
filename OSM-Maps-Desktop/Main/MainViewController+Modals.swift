@@ -11,33 +11,31 @@ import PhotosUI
 
 extension MainViewController {
     
-    func openHelp() {
+    func openHelp(at button: NSButton) {
         let controller = MapHelpViewController()
         ModalWindow.run(title: "help".localize(), viewController: controller, outerWindow: self.view.window!, minSize: CGSize(width: 300, height: 200))
     }
     
-    func openViewSettings() {
+    func openViewSettings(at button: NSButton) {
         let controller = ViewSettingsViewController()
         if ModalWindow.run(title: "viewSettings".localize(), viewController: controller, outerWindow: MainWindowController.instance.window!, minSize: CGSize(width: 300, height: 200)) == .OK{
             
         }
     }
     
-    func openICloud() {
+    func openICloud(at button: NSButton) {
         let controller = ICloudViewController()
         if ModalWindow.run(title: "iCloud".localize(), viewController: controller, outerWindow: MainWindowController.instance.window!, minSize: CGSize(width: 300, height: 200)) == .OK{
             
         }
     }
     
-    func openPreferences() {
+    func openPreferences(at button: NSButton) {
         let controller = PreferencesViewController()
-        if ModalWindow.run(title: "preferences".localize(), viewController: controller, outerWindow: MainWindowController.instance.window!, minSize: CGSize(width: 300, height: 100)) == .OK{
-            
-        }
+        controller.popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
     }
     
-    func openBackup() {
+    func openBackup(at button: NSButton) {
         let controller = BackupViewController()
         if ModalWindow.run(title: "backup".localize(), viewController: controller, outerWindow: MainWindowController.instance.window!, minSize: CGSize(width: 300, height: 200)) == .OK{
             

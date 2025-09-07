@@ -30,7 +30,7 @@ class VideoCell: MapItemCell{
         videoPlayerView.player = nil
     }
     
-    override func setupIconView(){
+    override func updateIconView(){
         iconView.removeAllSubviews()
         selectedButton = NSButton(icon: item.selected ? "checkmark.square" : "square", color: .lightColor, backgroundColor: .darkColor, target: self, action: #selector(toggleSelection))
         iconView.addSubviewToLeft(selectedButton, insets: iconInsets)
@@ -49,7 +49,7 @@ class VideoCell: MapItemCell{
         mapIconView.image = NSImage(systemSymbolName: item.hasValidCoordinate ? "mappin" : "mappin.slash", accessibilityDescription: nil)!.withTintColor(.red)
     }
     
-    override func setupItemView(){
+    override func updateItemView(){
         itemView.removeAllSubviews()
         let imageView = NSImageView()
         imageView.setRoundedBorders()
@@ -74,7 +74,7 @@ class VideoCell: MapItemCell{
     
     @objc func selectionChanged(){
         item.selected = !item.selected
-        setupIconView()
+        updateIconView()
     }
     
 }

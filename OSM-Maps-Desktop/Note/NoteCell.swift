@@ -23,7 +23,7 @@ class NoteCell: MapItemCell{
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func setupIconView(){
+    override func updateIconView(){
         iconView.removeAllSubviews()
         selectedButton = NSButton(icon: item.selected ? "checkmark.square" : "square", color: .lightColor, backgroundColor: .darkColor, target: self, action: #selector(toggleSelection))
         iconView.addSubviewToLeft(selectedButton, insets: iconInsets)
@@ -40,7 +40,7 @@ class NoteCell: MapItemCell{
         mapIconView.image = NSImage(systemSymbolName: item.hasValidCoordinate ? "mappin" : "mappin.slash", accessibilityDescription: nil)?.withTintColor(.green)
     }
     
-    override func setupItemView(){
+    override func updateItemView(){
         itemView.removeAllSubviews()
         let nameField = NSTextField(wrappingLabelWithString: item.name).asHeadline()
         itemView.addSubviewBelow(nameField)
@@ -60,7 +60,7 @@ class NoteCell: MapItemCell{
     
     @objc func editNote(){
         MainViewController.shared.editNote(item){
-            self.setupItemView()
+            self.updateItemView()
         }
     }
     

@@ -14,8 +14,6 @@ class PopoverViewController: ViewController {
     
     var popover = NSPopover()
     
-    var contentView: NSView? = nil
-    
     override init(){
         super.init()
         popover.contentViewController = self
@@ -27,15 +25,30 @@ class PopoverViewController: ViewController {
     }
     
     override func loadView() {
-        super.loadView()
-        if let contentView = contentView{
-            view.addSubviewFilling(contentView, insets: .smallInsets)
-            contentView.setupView()
-        }
+        view = PopoverView(controller: self)
     }
     
     func close(){
         popover.performClose(nil)
+    }
+    
+}
+
+class PopoverView: NSView{
+    
+    var controller: PopoverViewController
+    
+    init(controller: PopoverViewController){
+        self.controller = controller
+        super.init(frame: .zero)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc func close(){
+        controller.close()
     }
     
 }

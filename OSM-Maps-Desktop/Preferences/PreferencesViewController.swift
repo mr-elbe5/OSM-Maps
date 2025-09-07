@@ -7,19 +7,11 @@
 import AppKit
 import CoreLocation
 
-protocol PreferencesDelegate{
-    func clearTiles()
-}
-
-class PreferencesViewController: ModalViewController, PreferencesDelegate {
-    
-    var contentView = PreferencesView()
+class PreferencesViewController: PopoverViewController {
     
     override func loadView() {
-        super.loadView()
-        view.addSubviewFilling(contentView)
-        contentView.setupView()
-        contentView.delegate = self
+        view = NSView()
+        view.addSubviewFilling(PreferencesView(controller: self))
     }
     
     func clearTiles(){
@@ -31,22 +23,14 @@ class PreferencesViewController: ModalViewController, PreferencesDelegate {
     
     class PreferencesView: NSView{
         
+        var controller: PreferencesViewController
+        
         var mapSourceControl: NSSegmentedControl!
         
-        var delegate: PreferencesDelegate? = nil
-        
-        init() {
+        init(controller: PreferencesViewController) {
+            self.controller = controller
             super.init(frame: .zero)
             mapSourceControl = NSSegmentedControl(labels: ["osm".localize(), "elbe5".localize(), "elbe5topo".localize()], trackingMode: .selectOne, target: self, action: #selector(mapSourceChanged))
-            
-        }
-        
-        required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-        
-        override func setupView() {
-            
             let header = NSTextField(labelWithString: "map".localize())
             addSubviewCenteredBelow(header)
         
@@ -59,6 +43,10 @@ class PreferencesViewController: ModalViewController, PreferencesDelegate {
             let clearTileCacheButton = NSButton(title: "clearMapCache".localize(), target: self, action: #selector(clearTiles))
             addSubviewBelow(clearTileCacheButton, upperView: hint)
                 .connectToBottom(of: self)
+        }
+        
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
         }
         
         @objc func mapSourceChanged(){
@@ -76,7 +64,7 @@ class PreferencesViewController: ModalViewController, PreferencesDelegate {
         }
         
         @objc func clearTiles(){
-            delegate?.clearTiles()
+            controller.clearTiles()
         }
         
     }

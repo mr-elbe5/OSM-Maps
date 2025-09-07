@@ -23,7 +23,7 @@ class ImageCell: MapItemCell{
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func setupIconView(){
+    override func updateIconView(){
         iconView.removeAllSubviews()
         selectedButton = NSButton(icon: item.selected ? "checkmark.square" : "square", color: .lightColor, backgroundColor: .darkColor, target: self, action: #selector(toggleSelection))
         iconView.addSubviewToLeft(selectedButton, insets: iconInsets)
@@ -42,7 +42,7 @@ class ImageCell: MapItemCell{
         mapIconView.image = NSImage(systemSymbolName: item.hasValidCoordinate ? "mappin" : "mappin.slash", accessibilityDescription: nil)!.withTintColor(.red)
     }
     
-    override func setupItemView(){
+    override func updateItemView(){
         itemView.removeAllSubviews()
         let imageView = NSImageView()
         imageView.setRoundedBorders()

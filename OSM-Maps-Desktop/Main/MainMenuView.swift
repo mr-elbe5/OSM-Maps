@@ -72,23 +72,23 @@ class MainMenuView: NSView{
     }
     
     @objc func openViewSettings(){
-        MainViewController.shared.openViewSettings()
+        MainViewController.shared.openViewSettings(at: openViewSettingsButton)
     }
     
     @objc func openICloud(){
-        MainViewController.shared.openICloud()
+        MainViewController.shared.openICloud(at: openICloudButton)
     }
     
     @objc func openBackup(){
-        MainViewController.shared.openBackup()
+        MainViewController.shared.openBackup(at: openBackupButton)
     }
     
     @objc func openPreferences(){
-        MainViewController.shared.openPreferences()
+        MainViewController.shared.openPreferences(at: openPreferencesButton)
     }
     
     @objc func openHelp(){
-        MainViewController.shared.openHelp()
+        MainViewController.shared.openHelp(at: openHelpButton)
     }
     
 }

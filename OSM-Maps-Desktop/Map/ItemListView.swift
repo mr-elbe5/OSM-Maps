@@ -90,7 +90,7 @@ class ItemListView: NSView{
         }
         for vw in contentView.subviews{
             if let vw = vw as? MapItemCell{
-                vw.setupIconView()
+                vw.updateIconView()
             }
         }
     }
