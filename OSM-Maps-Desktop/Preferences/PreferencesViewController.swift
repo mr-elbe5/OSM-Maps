@@ -10,8 +10,8 @@ import CoreLocation
 class PreferencesViewController: PopoverViewController {
     
     override func loadView() {
-        view = NSView()
-        view.addSubviewFilling(PreferencesView(controller: self))
+        view = PreferencesView(controller: self)
+        view.setupView()
     }
     
     func clearTiles(){
@@ -21,19 +21,15 @@ class PreferencesViewController: PopoverViewController {
         }
     }
     
-    class PreferencesView: NSView{
-        
-        var controller: PreferencesViewController
+    class PreferencesView: PopoverView{
         
         var mapSourceControl: NSSegmentedControl!
         
-        init(controller: PreferencesViewController) {
-            self.controller = controller
-            super.init(frame: .zero)
+        override func setupView(){
             mapSourceControl = NSSegmentedControl(labels: ["osm".localize(), "elbe5".localize(), "elbe5topo".localize()], trackingMode: .selectOne, target: self, action: #selector(mapSourceChanged))
             let header = NSTextField(labelWithString: "map".localize())
             addSubviewCenteredBelow(header)
-        
+            
             mapSourceControl.selectedSegment = MapSourceList.shared.indexOf(source: Preferences.shared.mapSource)
             addSubviewBelow(mapSourceControl, upperView: header)
             
@@ -45,17 +41,13 @@ class PreferencesViewController: PopoverViewController {
                 .connectToBottom(of: self)
         }
         
-        required init?(coder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-        
         @objc func mapSourceChanged(){
             switch mapSourceControl.indexOfSelectedItem {
             case 0:
                 Preferences.shared.mapSource = .osm
             case 1:
                 Preferences.shared.mapSource = .elbe5
-                case 2:
+            case 2:
                 Preferences.shared.mapSource = .elbe5Topo
             default:
                 break
@@ -64,9 +56,8 @@ class PreferencesViewController: PopoverViewController {
         }
         
         @objc func clearTiles(){
-            controller.clearTiles()
+            (controller as! PreferencesViewController).clearTiles()
         }
         
     }
-    
 }
