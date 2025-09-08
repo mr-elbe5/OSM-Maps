@@ -12,8 +12,8 @@ import PhotosUI
 extension MainViewController {
     
     func openHelp(at button: NSButton) {
-        let controller = MapHelpViewController()
-        ModalWindow.run(title: "help".localize(), viewController: controller, outerWindow: self.view.window!, minSize: CGSize(width: 300, height: 200))
+        let controller = HelpViewController()
+        controller.popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
     }
     
     func openViewSettings(at button: NSButton) {
