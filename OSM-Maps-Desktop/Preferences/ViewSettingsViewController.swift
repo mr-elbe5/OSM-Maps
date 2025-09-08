@@ -7,20 +7,21 @@
 import AppKit
 import UniformTypeIdentifiers
 
-class ViewSettingsViewController: ModalViewController{
+class ViewSettingsViewController: PopoverViewController{
     
-    var contentView = ViewSettingsView()
+    var contentView: ViewSettingsView{
+        view as! ViewSettingsView
+    }
     
     override func loadView() {
-        super.loadView()
+        view = ViewSettingsView(controller: self)
         view.frame = CGRect(origin: .zero, size: CGSize(width: 400, height: 0))
-        view.addSubviewFilling(contentView)
-        contentView.setupView()
+        view.setupView()
     }
     
 }
 
-class ViewSettingsView: NSView{
+class ViewSettingsView: PopoverView{
     
     var dateFilterView = DateFilterView().withColor(.white)
     var sortAscendingCheckbox = Checkbox().withColor(.white)

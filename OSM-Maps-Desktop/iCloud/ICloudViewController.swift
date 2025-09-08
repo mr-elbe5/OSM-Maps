@@ -8,28 +8,21 @@ import AppKit
 import CoreLocation
 import CloudKit
 
-protocol CloudViewDelegate{
-    func synchronizeFromICloud()
-    func synchronizeToICloud()
-    func synchronizeNow()
-    func clearICloud()
-}
-
-class ICloudViewController: ModalViewController, CloudViewDelegate {
+class ICloudViewController: PopoverViewController {
     
-    var contentView = ICloudView()
+    var contentView: ICloudView{
+        view as! ICloudView
+    }
     
     override func loadView() {
-        super.loadView()
+        view = ICloudView(controller: self)
         view.frame = CGRect(origin: .zero, size: CGSize(width: 350, height: 0))
-        view.addSubviewFilling(contentView)
-        contentView.setupView()
-        contentView.delegate = self
+        view.setupView()
     }
     
     func synchronizeFromICloud(){
         let synchronizer = CloudSynchronizer(syncType: .fromCloud)
-        synchronizer.delegate = self
+        synchronizer.delegate = contentView
         Task{
             synchronizer.synchronize()
         }
@@ -37,7 +30,7 @@ class ICloudViewController: ModalViewController, CloudViewDelegate {
     
     func synchronizeToICloud(){
         let synchronizer = CloudSynchronizer(syncType: .toCloud)
-        synchronizer.delegate = self
+        synchronizer.delegate = contentView
         Task{
             synchronizer.synchronize()
         }
@@ -45,7 +38,7 @@ class ICloudViewController: ModalViewController, CloudViewDelegate {
     
     func synchronizeNow(){
         let synchronizer = CloudSynchronizer(syncType: .full)
-        synchronizer.delegate = self
+        synchronizer.delegate = contentView
         Task{
             synchronizer.synchronize()
         }
@@ -53,15 +46,11 @@ class ICloudViewController: ModalViewController, CloudViewDelegate {
     
     func clearICloud() {
         let synchronizer = CloudSynchronizer()
-        synchronizer.delegate = self
+        synchronizer.delegate = contentView
         Task{
             synchronizer.clear()
         }
     }
-    
-}
-
-extension ICloudViewController : CloudSynchronizerDelegate{
     
     func setSynchronizationSteps(_ value: Int) {
         contentView.setSynchronizationSteps(value)
@@ -92,7 +81,7 @@ extension ICloudViewController : CloudSynchronizerDelegate{
     
 }
 
-class ICloudView: NSView {
+class ICloudView: PopoverView, CloudSynchronizerDelegate {
     
     var synchronizeFromICloudButton = NSButton()
     var synchronizeToICloudButton = NSButton()
@@ -103,7 +92,9 @@ class ICloudView: NSView {
     var currentSyncStep: Int = 0
     var maxSyncSteps: Int = 1
     
-    var delegate: CloudViewDelegate? = nil
+    var contentController: ICloudViewController{
+        controller as! ICloudViewController
+    }
     
     override func setupView() {
         
@@ -147,20 +138,28 @@ class ICloudView: NSView {
     }
     
     @objc func synchronizeFromICloud(){
-        delegate?.synchronizeFromICloud()
+        contentController.synchronizeFromICloud()
     }
     
     @objc func synchronizeToICloud(){
-        delegate?.synchronizeToICloud()
+        contentController.synchronizeToICloud()
     }
     
     @objc func synchronizeNow(){
-        delegate?.synchronizeNow()
+        contentController.synchronizeNow()
     }
     
     @objc func clearICloud(){
-        delegate?.clearICloud()
+        (controller as! ICloudViewController).clearICloud()
         
+    }
+    
+    func synchronizationDone() {
+        (controller as! ICloudViewController).synchronizationDone()
+    }
+    
+    func clearDone() {
+        (controller as! ICloudViewController).clearDone()
     }
     
     func updateButtonStates(){

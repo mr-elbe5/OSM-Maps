@@ -9,22 +9,16 @@ import CoreLocation
 import UniformTypeIdentifiers
 import PhotosUI
 
-protocol BackupDelegate{
-    func createBackup()
-    func restoreBackup()
-    func restoreBackupFromMapsForOSM()
-}
-
-class BackupViewController: ModalViewController, BackupDelegate {
+class BackupViewController: PopoverViewController {
     
-    var contentView = BackupView()
+    var contentView: BackupView{
+        view as! BackupView
+    }
     
     override func loadView() {
-        super.loadView()
-        view.frame = CGRect(origin: .zero, size: CGSize(width: 200, height: 0))
-        contentView.delegate = self
-        view.addSubviewFilling(contentView)
-        contentView.setupView()
+        view = BackupView(controller: self)
+        view.frame = CGRect(origin: .zero, size: CGSize(width: 300, height: 0))
+        view.setupView()
     }
     
     func createBackup(){
@@ -127,9 +121,11 @@ class BackupViewController: ModalViewController, BackupDelegate {
     
 }
 
-class BackupView: NSView{
+class BackupView: PopoverView{
     
-    var delegate: BackupDelegate? = nil
+    var contentController: BackupViewController{
+        controller as! BackupViewController
+    }
     
     override func setupView() {
         
@@ -145,15 +141,15 @@ class BackupView: NSView{
     }
     
     @objc func createBackup(){
-        delegate?.createBackup()
+        contentController.createBackup()
     }
     
     @objc func restoreBackup(){
-        delegate?.restoreBackup()
+        contentController.restoreBackup()
     }
     
     @objc func restoreBackupFromMapsForOSM(){
-        delegate?.restoreBackupFromMapsForOSM()
+        contentController.restoreBackupFromMapsForOSM()
     }
     
 }

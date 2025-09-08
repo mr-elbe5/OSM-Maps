@@ -18,16 +18,12 @@ extension MainViewController {
     
     func openViewSettings(at button: NSButton) {
         let controller = ViewSettingsViewController()
-        if ModalWindow.run(title: "viewSettings".localize(), viewController: controller, outerWindow: MainWindowController.instance.window!, minSize: CGSize(width: 300, height: 200)) == .OK{
-            
-        }
+        controller.popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
     }
     
     func openICloud(at button: NSButton) {
         let controller = ICloudViewController()
-        if ModalWindow.run(title: "iCloud".localize(), viewController: controller, outerWindow: MainWindowController.instance.window!, minSize: CGSize(width: 300, height: 200)) == .OK{
-            
-        }
+        controller.popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
     }
     
     func openPreferences(at button: NSButton) {
@@ -37,9 +33,7 @@ extension MainViewController {
     
     func openBackup(at button: NSButton) {
         let controller = BackupViewController()
-        if ModalWindow.run(title: "backup".localize(), viewController: controller, outerWindow: MainWindowController.instance.window!, minSize: CGSize(width: 300, height: 200)) == .OK{
-            
-        }
+        controller.popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
     }
     
     func openSearch(){
