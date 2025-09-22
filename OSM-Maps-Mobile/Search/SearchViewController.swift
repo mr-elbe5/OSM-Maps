@@ -15,6 +15,7 @@ class SearchViewController: UIViewController{
     var regionControl = UISegmentedControl()
     var radiusSlider = RadiusSlider()
     let searchButton = UIButton()
+    let clearButton = IconButton(icon: "x.circle", tintColor: .gray)
     
     var target: SearchQuery.SearchTarget = SearchStatus.shared.searchTarget
     var region: SearchQuery.SearchRegion = SearchStatus.shared.searchRegion
@@ -45,6 +46,12 @@ class SearchViewController: UIViewController{
         searchField.text = SearchStatus.shared.searchString
         searchField.autocorrectionType = .no
         searchField.autocapitalizationType = .none
+        searchField.addTarget(self, action: #selector(search), for: .editingDidEndOnExit)
+        clearButton.addAction(UIAction(){ _ in
+            self.searchField.text = ""
+            SearchStatus.shared.searchString = ""
+            SearchStatus.shared.save()
+        }, for: .touchDown)
         targetControl.insertSegment(action: UIAction(){_ in
             self.target = .any
         }, at: 0, animated: false)
@@ -90,7 +97,9 @@ class SearchViewController: UIViewController{
     
     func updateTopView(){
         topView.removeAllSubviews()
-        topView.addSubviewBelow(searchField)
+        topView.addSubviewWithAnchors(searchField, top: topView.topAnchor, leading: topView.leadingAnchor)
+        topView.addSubviewWithAnchors(clearButton, leading: searchField.trailingAnchor, trailing: topView.trailingAnchor)
+            .centerY(searchField.centerYAnchor)
         topView.addSubviewBelow(targetControl, upperView: searchField)
         topView.addSubviewBelow(regionControl, upperView: targetControl)
         var lastView: UIView = regionControl
@@ -102,7 +111,7 @@ class SearchViewController: UIViewController{
             .connectToBottom(of: topView)
     }
     
-    func search(){
+    @objc func search(){
         if let text = searchField.text, !text.isEmpty{
             SearchStatus.shared.searchString = text
             SearchStatus.shared.searchTarget = SearchQuery.SearchTarget(rawValue: targetControl.selectedSegmentIndex)!

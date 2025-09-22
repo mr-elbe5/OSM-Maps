@@ -48,6 +48,14 @@ class MapView: UIView {
         }, for: .touchDown)
         addSubviewCentered(crossButton, centerX: centerXAnchor, centerY: centerYAnchor)
         crossButton.isHidden = !Preferences.shared.showCenterButton
+        let doubleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap))
+        doubleTap.numberOfTapsRequired = 2
+        self.addGestureRecognizer(doubleTap)
+    }
+    
+    @objc func handleDoubleTap() {
+        MapStatus.shared.zoomIn()
+        zoomToCurrentZoom()
     }
     
     func setStartLocation(){

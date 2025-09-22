@@ -41,11 +41,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func sceneDidBecomeActive(_ scene: UIScene) {
         Log.debug("Scene did become active")
-        if !LocationService.shared.running{
-            LocationService.shared.start()
-        }
-        //Log.debug("center = \(MapStatus.shared.getCenterCoordinate()), zoom = \(MapStatus.shared.getZoom())")
-        
+        assertLocationService()
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
@@ -53,20 +49,34 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         Preferences.shared.save()
         MapStatus.shared.save()
         AppData.shared.save()
+        pauseLocationServiceIfNotRecording()
+    }
+
+    func sceneWillEnterForeground(_ scene: UIScene) {
+        Log.debug("SceneDelegate entering foreground")
+        assertLocationService()
+    }
+
+    func sceneDidEnterBackground(_ scene: UIScene) {
+        Log.debug("SceneDelegate entering background")
+        pauseLocationServiceIfNotRecording()
+    }
+
+    private func assertLocationService(){
+        if !LocationService.shared.running{
+            LocationService.shared.start()
+        }
+    }
+    
+    private func pauseLocationServiceIfNotRecording(){
         if TrackRecorder.shared.isRecording{
             if !LocationService.shared.authorizedForTracking{
                 LocationService.shared.requestAlwaysAuthorization()
             }
         }
+        else{
+            LocationService.shared.stop()
+        }
     }
-
-    func sceneWillEnterForeground(_ scene: UIScene) {
-        Log.debug("SceneDelegate entering foreground")
-    }
-
-    func sceneDidEnterBackground(_ scene: UIScene) {
-        Log.debug("SceneDelegate entering background")
-    }
-
 
 }
