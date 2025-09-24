@@ -11,6 +11,8 @@ struct WatchTrackView: View {
     @State var trackStatus = TrackStatus.shared
     @State var preferences = Preferences.shared
     
+    @State private var showDeleteAlert = false
+    
     var body: some View {
             VStack(){
                 Text("recordTrack".localize()).font(Font.headline)
@@ -43,9 +45,17 @@ struct WatchTrackView: View {
                                 })
                                 .tint(.green)
                                 Button("delete".localize(), action: {
-                                    TrackRecorder.shared.cancelTracking()
+                                    showDeleteAlert = true
+                                    
                                 })
                                 .tint(.red)
+                                .alert("reallyDeleteTrack".localize(), isPresented: $showDeleteAlert) {
+                                    Button("yes".localize()) {
+                                        TrackRecorder.shared.cancelTracking()
+                                    }
+                                    Button("no".localize()) {
+                                    }
+                                }
                             }
                         }
                         

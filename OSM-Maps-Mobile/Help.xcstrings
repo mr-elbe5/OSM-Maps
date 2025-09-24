@@ -279,7 +279,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diese App zeigt OSM Karten aus wählbaren Quellen (OSM oder Elbe5). Dazu kann man Notizen erstellen, Bilder und Touren im GPX-Format hinzufügen und editieren sowie eigene Touren aufzeichnen.\nSie hat eine Listenansichten für alle hinzugefügten Elemente.\nSie kann all dies über die iCloud oder Backup-Dateien mit der Desktop-App synchronisieren."
+            "value" : "Diese App zeigt OSM Karten aus wählbaren Quellen (OSM oder Elbe5). Dazu kann man Notizen erstellen, Bilder und Touren im GPX-Format hinzufügen und editieren sowie eigene Touren aufzeichnen.\nSie hat Listenansichten für alle hinzugefügten Elemente.\nSie kann all dies über die iCloud oder Backup-Dateien mit der Desktop-App synchronisieren."
           }
         },
         "en" : {

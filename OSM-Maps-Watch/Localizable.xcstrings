@@ -20,7 +20,8 @@
             "value" : "%1$@: %2$lld"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "%@: %lld m" : {
       "localizations" : {
@@ -30,22 +31,40 @@
             "value" : "%1$@: %2$lld m"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "%@m" : {
-
+      "shouldTranslate" : false
     },
     "%@s" : {
-
+      "shouldTranslate" : false
     },
     "%lld" : {
-
+      "shouldTranslate" : false
     },
     "%lld m" : {
-
+      "shouldTranslate" : false
     },
     "❤️" : {
-
+      "shouldTranslate" : false
+    },
+    "cancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbrechen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
     },
     "clearMapTiles" : {
       "extractionState" : "manual",
@@ -285,6 +304,23 @@
         }
       }
     },
+    "no" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nein"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No"
+          }
+        }
+      }
+    },
     "noConnection" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -298,6 +334,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No connection"
+          }
+        }
+      }
+    },
+    "ok" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ok"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ok"
           }
         }
       }
@@ -332,6 +385,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Preferences"
+          }
+        }
+      }
+    },
+    "reallyDeleteTrack" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wollen Sie die Tour endgültig löschen?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do you want to delete this track?"
           }
         }
       }
@@ -519,6 +589,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Trackpoints"
+          }
+        }
+      }
+    },
+    "yes" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ja"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yes"
           }
         }
       }

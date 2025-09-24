@@ -652,6 +652,11 @@ extension SettingsViewController{
         cancelPreloadButton.isEnabled = !flag
     }
     
+    func downloadFinished(){
+        startPreloadButton.isEnabled = true
+        cancelPreloadButton.isEnabled = false
+    }
+    
     // watch
     
     func updateWatchValueViews(){
@@ -762,6 +767,7 @@ extension SettingsViewController: DownloadDelegate{
             enableUpload(existingTiles == allPreloadTiles)
             tileDownloadQueue?.cancelAllOperations()
             tileDownloadQueue = nil
+            downloadFinished()
         }
     }
     
