@@ -50,6 +50,7 @@ class MapScrollView: UIScrollView {
         isPagingEnabled = false
         showsVerticalScrollIndicator = false
         showsHorizontalScrollIndicator = false
+        scrollsToTop = false
         bounces = false
         bouncesZoom = false
         maximumZoomScale = 1.0

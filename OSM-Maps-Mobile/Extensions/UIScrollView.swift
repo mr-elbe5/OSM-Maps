@@ -10,6 +10,7 @@ extension UIScrollView{
     
     func setupVertical(){
         self.isScrollEnabled = true
+        scrollsToTop = false
         let scflg = self.contentLayoutGuide
         let svflg = self.frameLayoutGuide
         scflg.widthAnchor.constraint(equalTo: svflg.widthAnchor).isActive = true

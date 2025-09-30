@@ -12,6 +12,7 @@ class ScrollViewController: UIViewController{
     var contentView = UIView()
     
     func setupScrollView() {
+        scrollView.scrollsToTop = false
         scrollView.addSubviewWithAnchors(contentView, top: scrollView.topAnchor, leading: scrollView.leadingAnchor, bottom: scrollView.bottomAnchor)
             .width(scrollView.widthAnchor)
     }

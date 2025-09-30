@@ -40,6 +40,11 @@ class SearchViewController: UIViewController{
         tableView.register(SearchResultCell.self, forCellReuseIdentifier: SearchResultCell.CELL_IDENT)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        searchField.becomeFirstResponder()
+    }
+    
     func setupTopView(){
         searchField.placeholder = "searchPlaceholder".localize()
         searchField.borderStyle = .roundedRect
