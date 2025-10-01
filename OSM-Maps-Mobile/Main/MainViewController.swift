@@ -268,9 +268,12 @@ class MainViewController: UIViewController {
     func showTrackOnMap(item: TrackItem){
         VisibleTrack.shared.setTrack(item.track)
         Preferences.shared.followLocation = false
+        if item.track.coordinateRegion == nil{
+            item.track.updateCoordinateRegion()
+        }
         if let worldRect = item.track.worldRect{
             let zoom = World.getZoomToFit(worldRect: worldRect, scaledSize: mapView.bounds.size)
-            mapView.zoomAndScrollTo(zoom, item.coordinate)
+            mapView.zoomAndScrollTo(zoom, item.track.centerCoordinate ?? item.coordinate)
         }
         else{
             mapView.scrollTo(item.coordinate)

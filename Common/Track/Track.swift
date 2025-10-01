@@ -118,7 +118,7 @@ class Track: Codable{
                 centerCoordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
             }
         }
-        if coordinateRegion == .zero{
+        if coordinateRegion == nil{
             updateCoordinateRegion()
         }
     }

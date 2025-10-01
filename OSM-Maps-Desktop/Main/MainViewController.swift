@@ -209,6 +209,9 @@ class MainViewController: ViewController {
         if let item = item{
             VisibleTrack.shared.setTrack(item.track)
             mapView.scrollView.showTrack(true)
+            if item.track.coordinateRegion == nil{
+                item.track.updateCoordinateRegion()
+            }
             if let coordinateRegion = item.coordinateRegion{
                 mapView.showMapRectOnMap(worldRect: coordinateRegion.worldRect)
             }
