@@ -142,7 +142,7 @@ class OldImageItem : LocatedItem{
     var metaData: ImageMetaData? = nil
     
     var tempURL : URL{
-        BasePaths.tempURL.appendingPathComponent("media").appendingPathComponent(fileName)
+        URL.temporaryDirectory.appendingPathComponent("media").appendingPathComponent(fileName)
     }
     
     required init(from decoder: Decoder) throws {
@@ -172,7 +172,7 @@ class OldAudioItem : LocatedItem{
     var time: Double
     
     var tempURL : URL{
-        BasePaths.tempURL.appendingPathComponent("media").appendingPathComponent(fileName)
+        URL.temporaryDirectory.appendingPathComponent("media").appendingPathComponent(fileName)
     }
     
     required init(from decoder: Decoder) throws {
@@ -201,7 +201,7 @@ class OldVideoItem : LocatedItem{
     var time: Double
     
     var tempURL : URL{
-        BasePaths.tempURL.appendingPathComponent("media").appendingPathComponent(fileName)
+        URL.temporaryDirectory.appendingPathComponent("media").appendingPathComponent(fileName)
     }
     
     required init(from decoder: Decoder) throws {

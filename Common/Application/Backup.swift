@@ -47,8 +47,8 @@ class Backup{
             if count > 0{
                 Log.debug("\(count) temporary file(s) deleted before restore")
             }
-            try FileManager.default.createDirectory(at: BasePaths.tempURL, withIntermediateDirectories: true)
-            try Zip.unzipFile(zipFileURL, destination: BasePaths.tempURL, overwrite: true, password: nil, progress: { (progress) -> () in
+            try FileManager.default.createDirectory(at: URL.temporaryDirectory, withIntermediateDirectories: true)
+            try Zip.unzipFile(zipFileURL, destination: URL.temporaryDirectory, overwrite: true, password: nil, progress: { (progress) -> () in
                 //Log.debug(progress)
             })
             return true
@@ -60,7 +60,7 @@ class Backup{
     }
     
     static func restoreBackupFile() -> Bool{
-        if !FileManager.default.fileExists(url: BasePaths.tempURL.appendingPathComponent("images")){
+        if !FileManager.default.fileExists(url: URL.temporaryDirectory.appendingPathComponent("images")){
             Log.error("wrong zip file")
             FileManager.default.deleteTemporaryFiles()
             return false
@@ -69,31 +69,31 @@ class Backup{
         if count > 0{
             Log.debug("\(count) image file(s) deleted before restore")
         }
-        var fileNames = FileManager.default.listAllFiles(dirPath: BasePaths.tempURL.appendingPathComponent("images").path)
+        var fileNames = FileManager.default.listAllFiles(dirPath: URL.temporaryDirectory.appendingPathComponent("images").path)
         for name in fileNames{
-            FileManager.default.copyFile(fromURL: BasePaths.tempURL.appendingPathComponent("images").appendingPathComponent(name), toURL: BasePaths.imageDirURL.appendingPathComponent(name), replace: true)
+            FileManager.default.copyFile(fromURL: URL.temporaryDirectory.appendingPathComponent("images").appendingPathComponent(name), toURL: BasePaths.imageDirURL.appendingPathComponent(name), replace: true)
         }
         count = FileManager.default.deleteAllFiles(dirURL: BasePaths.previewDirURL)
         if count > 0{
             Log.debug("\(count) preview file(s) deleted before restore")
         }
-        fileNames = FileManager.default.listAllFiles(dirPath: BasePaths.tempURL.appendingPathComponent("previews").path)
+        fileNames = FileManager.default.listAllFiles(dirPath: URL.temporaryDirectory.appendingPathComponent("previews").path)
         for name in fileNames{
-            FileManager.default.copyFile(fromURL: BasePaths.tempURL.appendingPathComponent("previews").appendingPathComponent(name), toURL: BasePaths.previewDirURL.appendingPathComponent(name), replace: true)
+            FileManager.default.copyFile(fromURL: URL.temporaryDirectory.appendingPathComponent("previews").appendingPathComponent(name), toURL: BasePaths.previewDirURL.appendingPathComponent(name), replace: true)
         }
-        fileNames = FileManager.default.listAllFiles(dirPath: BasePaths.tempURL.appendingPathComponent("audios").path)
+        fileNames = FileManager.default.listAllFiles(dirPath: URL.temporaryDirectory.appendingPathComponent("audios").path)
         for name in fileNames{
-            FileManager.default.copyFile(fromURL: BasePaths.tempURL.appendingPathComponent("audios").appendingPathComponent(name), toURL: BasePaths.audioDirURL.appendingPathComponent(name), replace: true)
+            FileManager.default.copyFile(fromURL: URL.temporaryDirectory.appendingPathComponent("audios").appendingPathComponent(name), toURL: BasePaths.audioDirURL.appendingPathComponent(name), replace: true)
         }
-        fileNames = FileManager.default.listAllFiles(dirPath: BasePaths.tempURL.appendingPathComponent("videos").path)
+        fileNames = FileManager.default.listAllFiles(dirPath: URL.temporaryDirectory.appendingPathComponent("videos").path)
         for name in fileNames{
-            FileManager.default.copyFile(fromURL: BasePaths.tempURL.appendingPathComponent("videos").appendingPathComponent(name), toURL: BasePaths.videoDirURL.appendingPathComponent(name), replace: true)
+            FileManager.default.copyFile(fromURL: URL.temporaryDirectory.appendingPathComponent("videos").appendingPathComponent(name), toURL: BasePaths.videoDirURL.appendingPathComponent(name), replace: true)
         }
-        fileNames = FileManager.default.listAllFiles(dirPath: BasePaths.tempURL.appendingPathComponent("videoPreviews").path)
+        fileNames = FileManager.default.listAllFiles(dirPath: URL.temporaryDirectory.appendingPathComponent("videoPreviews").path)
         for name in fileNames{
-            FileManager.default.copyFile(fromURL: BasePaths.tempURL.appendingPathComponent("videoPreviews").appendingPathComponent(name), toURL: BasePaths.previewDirURL.appendingPathComponent(name), replace: true)
+            FileManager.default.copyFile(fromURL: URL.temporaryDirectory.appendingPathComponent("videoPreviews").appendingPathComponent(name), toURL: BasePaths.previewDirURL.appendingPathComponent(name), replace: true)
         }
-        let url = BasePaths.tempURL.appendingPathComponent(AppData.storeKey + ".json")
+        let url = URL.temporaryDirectory.appendingPathComponent(AppData.storeKey + ".json")
         AppData.shared.loadFromFile(url: url)
         AppData.shared.removeAllDeletedIds()
         AppData.shared.save()
@@ -110,7 +110,7 @@ class Backup{
     }
     
     static func importfromMapsForOSMFile() -> Bool{
-        if !FileManager.default.fileExists(url: BasePaths.tempURL.appendingPathComponent("media")){
+        if !FileManager.default.fileExists(url: URL.temporaryDirectory.appendingPathComponent("media")){
             Log.error("wrong zip file")
             FileManager.default.deleteTemporaryFiles()
             return false
@@ -135,7 +135,7 @@ class Backup{
         if count > 0{
             Log.debug("\(count) video preview file(s) deleted before restore")
         }
-        let url = BasePaths.tempURL.appendingPathComponent("locations.json")
+        let url = URL.temporaryDirectory.appendingPathComponent("locations.json")
         let oldMapItems = OldMapItems()
         let locationList = oldMapItems.loadFromFile(url: url)
         Log.debug(locationList.count)

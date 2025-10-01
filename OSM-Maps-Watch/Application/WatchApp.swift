@@ -11,6 +11,8 @@ class WatchAppDelegate: NSObject, WKApplicationDelegate {
     
     override init(){
         BasePaths.initializeDirs()
+        AppStatus.load()
+        AppStatus.shared.updateVersion()
         World.scrollWidthFactor = 1.0
         MapDefaults.startZoom = 14
         Preferences.shared.followLocation = true

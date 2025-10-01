@@ -15,6 +15,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         Log.debug("Scene will connect")
         BasePaths.initializeDirs()
+        AppStatus.load()
+        AppStatus.shared.updateVersion()
         MapDefaults.startZoom = 14
         Preferences.load()
         ViewFilter.load()

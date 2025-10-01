@@ -10,12 +10,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         BasePaths.initializeDirs()
+        AppStatus.load()
+        AppStatus.shared.updateVersion()
         World.setMaxZoom(18)
         World.scrollWidthFactor = 1
         MapDefaults.startZoom = 8
         Preferences.load()
         ViewFilter.load()
-        AppStatus.load()
         MapStatus.load()
         AppData.load()
         MapDefaults.startZoom = 14

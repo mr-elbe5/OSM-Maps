@@ -175,7 +175,7 @@ class AppData : Codable{
     
     func saveAsFile() -> URL?{
         let value = self.toJSON()
-        let url = BasePaths.tempURL.appendingPathComponent(Self.storeKey + ".json")
+        let url = URL.temporaryDirectory.appendingPathComponent(Self.storeKey + ".json")
         if FileManager.default.saveFile(text: value, url: url){
             return url
         }
