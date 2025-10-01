@@ -79,6 +79,11 @@ class ImageItem: MapItem{
     }
     
     var previewData: Data?{
+        if !FileManager.default.fileExists(atPath: previewUrl.path), let image = image{
+            if !createPreviewFile(original: image){
+                return nil
+            }
+        }
         if let data = FileManager.default.readFile(url: previewUrl){
             return data
         }
