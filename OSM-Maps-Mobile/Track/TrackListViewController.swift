@@ -88,24 +88,27 @@ extension TrackListViewController : UIDocumentPickerDelegate{
     }
     
     private func importGPXFile(url: URL){
-        if let gpxData = GPXParser.parseFile(url: url), !gpxData.isEmpty{
-            let track = Track(gpx: gpxData)
-            if track.name.isEmpty{
-                let ext = url.pathExtension
-                var name = url.lastPathComponent
-                name = String(name[name.startIndex...name.index(name.endIndex, offsetBy: -ext.count)])
-                Log.debug(name)
-                track.name = name
+        if url.startAccessingSecurityScopedResource(){
+            if let gpxData = GPXParser.parseFile(url: url), !gpxData.isEmpty{
+                let track = Track(gpx: gpxData)
+                if track.name.isEmpty{
+                    let ext = url.pathExtension
+                    var name = url.lastPathComponent
+                    name = String(name[name.startIndex...name.index(name.endIndex, offsetBy: -ext.count)])
+                    Log.debug(name)
+                    track.name = name
+                }
+                let item = TrackItem()
+                item.track = track
+                AppData.shared.addItem(item)
+                AppData.shared.save()
+                DispatchQueue.main.async {
+                    MainViewController.shared.updateItemLayer()
+                    self.loadItems()
+                    
+                }
             }
-            let item = TrackItem()
-            item.track = track
-            AppData.shared.addItem(item)
-            AppData.shared.save()
-            DispatchQueue.main.async {
-                MainViewController.shared.updateItemLayer()
-                self.loadItems()
-                
-            }
+            url.stopAccessingSecurityScopedResource()
         }
     }
     
