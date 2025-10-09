@@ -14,8 +14,6 @@ class CrossMenuViewController: UIViewController{
     
     let locationLabel = UILabel(text: "")
     
-    var frameSize = CGSize(width: 300, height: 300)
-    
     init(coordinate: CLLocationCoordinate2D, title: String){
         self.coordinate = coordinate
         super.init(nibName: nil, bundle: nil)
@@ -27,34 +25,40 @@ class CrossMenuViewController: UIViewController{
     }
     
     override func loadView() {
-        super.loadView()
-        view.setRoundedBorders(radius: 10)
-        view.backgroundColor = .systemBackground
+        view = UIView()
+        view.backgroundColor = .clear
+        let contentView = UIView()
+        contentView.backgroundColor = .systemBackground
+        view.addSubviewCentered(contentView, centerX: view.centerXAnchor, centerY: view.centerYAnchor)
+            .width(300)
+            .height(350)
+        contentView.setRoundedBorders(radius: 10)
+        
         let label = UILabel(header: title!)
-        view.addSubviewCenteredBelow(label)
+        contentView.addSubviewCenteredBelow(label)
         let closeButton = IconButton(icon: "xmark", tintColor: .label)
-        view.addSubviewWithAnchors(closeButton, top: view.topAnchor, trailing: view.trailingAnchor)
+        contentView.addSubviewWithAnchors(closeButton, top: contentView.topAnchor, trailing: contentView.trailingAnchor)
         closeButton.addAction(UIAction(){ action in
             self.dismiss(animated: true)
         }, for: .touchDown)
         locationLabel.textAlignment = .center
-        view.addSubviewCenteredBelow(locationLabel, upperView: label)
+        contentView.addSubviewCenteredBelow(locationLabel, upperView: label)
         let coordinateLabel = UILabel(text: coordinate.asString)
-        view.addSubviewCenteredBelow(coordinateLabel, upperView: locationLabel)
+        contentView.addSubviewCenteredBelow(coordinateLabel, upperView: locationLabel)
         
         let hint = UILabel(hint: "addAtCenterHint".localize(table: "Hints"))
         hint .textAlignment = .center
-        view.addSubviewWithAnchors(hint, leading: view.leadingAnchor, trailing: view.trailingAnchor, bottom: view.bottomAnchor)
+        contentView.addSubviewWithAnchors(hint, leading: contentView.leadingAnchor, trailing: contentView.trailingAnchor, bottom: contentView.bottomAnchor)
         let addVideosButton = TextButton(text: "addVideo".localize())
         addVideosButton.menu = getVideosMenu()
         addVideosButton.showsMenuAsPrimaryAction = true
-        view.addSubviewWithAnchors(addVideosButton, bottom: hint.topAnchor)
-            .centerX(view.centerXAnchor)
+        contentView.addSubviewWithAnchors(addVideosButton, bottom: hint.topAnchor)
+            .centerX(contentView.centerXAnchor)
         let addImagesButton = TextButton(text: "addImages".localize())
         addImagesButton.menu = getImagesMenu()
         addImagesButton.showsMenuAsPrimaryAction = true
-        view.addSubviewWithAnchors(addImagesButton, bottom: addVideosButton.topAnchor)
-            .centerX(view.centerXAnchor)
+        contentView.addSubviewWithAnchors(addImagesButton, bottom: addVideosButton.topAnchor)
+            .centerX(contentView.centerXAnchor)
         let addNoteButton = TextButton(text: "addNote".localize())
         addNoteButton.addAction(UIAction(){ action in
             self.dismiss(animated: false)
@@ -63,8 +67,8 @@ class CrossMenuViewController: UIViewController{
             controller.delegate = self
             MainViewController.shared.navigationController?.pushViewController(controller, animated: true)
         }, for: .touchDown)
-        view.addSubviewWithAnchors(addNoteButton, bottom: addImagesButton.topAnchor)
-            .centerX(view.centerXAnchor)
+        contentView.addSubviewWithAnchors(addNoteButton, bottom: addImagesButton.topAnchor)
+            .centerX(contentView.centerXAnchor)
     }
     
     override func viewDidLoad() {
@@ -80,17 +84,17 @@ class CrossMenuViewController: UIViewController{
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        view.frame = CGRect(origin: CGPoint(x: view.frame.width/2 - frameSize.width/2, y: view.frame.height/2 - frameSize.height/2), size: frameSize)
-    }
-    
     func getImagesMenu() -> UIMenu {
         var actions = Array<UIAction>()
         actions.append(UIAction(title: "fromPhotoLibrary".localize(), image: UIImage(systemName: "photo.stack")){ action in
-            self.importImagesFromPhotoLibrary()
+            self.importImagesFromPhotoLibrary(){
+                self.dismiss(animated: false)
+            }
         })
         actions.append(UIAction(title: "fromFiles".localize(), image: UIImage(systemName: "folder")){ action in
-            self.importImagesFromFiles()
+            self.importImagesFromFiles(){
+                self.dismiss(animated: false)
+            }
         })
         return UIMenu(title: "", children: actions)
     }
@@ -98,41 +102,49 @@ class CrossMenuViewController: UIViewController{
     func getVideosMenu() -> UIMenu {
         var actions = Array<UIAction>()
         actions.append(UIAction(title: "fromPhotoLibrary".localize(), image: UIImage(systemName: "photo.stack")){ action in
-            self.importVideosFromPhotoLibrary()
+            self.importVideosFromPhotoLibrary(){
+                self.dismiss(animated: false)
+            }
         })
         actions.append(UIAction(title: "fromFiles".localize(), image: UIImage(systemName: "folder")){ action in
-            self.importVideosFromFiles()
+            self.importVideosFromFiles(){
+                self.dismiss(animated: false)
+            }
         })
         return UIMenu(title: "", children: actions)
     }
     
-    func importImagesFromPhotoLibrary() {
+    func importImagesFromPhotoLibrary(onCompletion: (() -> Void)? = nil) {
         ImagePicker.shared = ImagePicker(controller: self)
         ImagePicker.shared?.addImagesFromPhotos(atCenter: true){
             MainViewController.shared.updateItemLayer()
+            onCompletion?()
         }
     }
     
-    func importImagesFromFiles() {
+    func importImagesFromFiles(onCompletion: (() -> Void)? = nil) {
         ImagePicker.shared = ImagePicker(controller: self)
         ImagePicker.shared?.addImagesFromFiles(atCenter: true)
         {
             MainViewController.shared.updateItemLayer()
+            onCompletion?()
         }
     }
     
-    func importVideosFromPhotoLibrary() {
+    func importVideosFromPhotoLibrary(onCompletion: (() -> Void)? = nil) {
         VideoPicker.shared = VideoPicker(controller: self)
         VideoPicker.shared?.addVideosFromPhotos(atCenter: true){
             MainViewController.shared.updateItemLayer()
+            onCompletion?()
         }
     }
     
-    func importVideosFromFiles() {
+    func importVideosFromFiles(onCompletion: (() -> Void)? = nil) {
         VideoPicker.shared = VideoPicker(controller: self)
         VideoPicker.shared?.addVideosFromFiles(atCenter: true)
         {
             MainViewController.shared.updateItemLayer()
+            onCompletion?()
         }
     }
     

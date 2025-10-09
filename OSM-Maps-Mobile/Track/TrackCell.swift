@@ -52,7 +52,6 @@ class TrackCell: MapItemCell{
                 MainViewController.shared.navigationController?.popViewController(animated: true)
             }, for: .touchDown)
             iconView.addSubviewToLeft(mapButton, rightView: editButton, insets: iconInsets)
-            
                 .connectToLeft(of: iconView)
         }
     }

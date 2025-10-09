@@ -43,8 +43,8 @@ class MapView: UIView {
         crossButton.addAction(UIAction(){ action in
             let coordinate = self.scrollView.screenCenterCoordinate
             let controller = CrossMenuViewController(coordinate: coordinate, title: "crossLocation".localize())
-            controller.modalPresentationStyle = .automatic
-            MainViewController.shared.present(controller, animated: true)
+            controller.modalPresentationStyle = .overCurrentContext
+            MainViewController.shared.present(controller, animated: false)
         }, for: .touchDown)
         addSubviewCentered(crossButton, centerX: centerXAnchor, centerY: centerYAnchor)
         crossButton.isHidden = !Preferences.shared.showCenterButton

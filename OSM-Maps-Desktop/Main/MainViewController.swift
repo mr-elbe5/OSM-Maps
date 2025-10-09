@@ -173,6 +173,14 @@ class MainViewController: ViewController {
         mapView.updateTrackLayer()
     }
     
+    func itemsChanged(){
+        updateItemLayer()
+        updateTrackLayer()
+        updateImageGrid()
+        updateVideoGrid()
+        updateTrackGrid()
+    }
+    
     // images
     
     func showImage(_ image: ImageItem){
@@ -190,6 +198,10 @@ class MainViewController: ViewController {
         
     }
     
+    func updateImageGrid(){
+        imageGridView.updateData()
+    }
+    
     //videos
     
     func showVideo(_ video: VideoItem){
@@ -200,6 +212,10 @@ class MainViewController: ViewController {
     func showVideos(_ videos: [VideoItem]){
         videoPresenterView.setVideos(videos)
         videoPresenterView.isHidden = false
+    }
+    
+    func updateVideoGrid(){
+        videoGridView.updateData()
     }
     
     // tracks
@@ -223,6 +239,10 @@ class MainViewController: ViewController {
             VisibleTrack.shared.reset()
             mapView.scrollView.showTrack(false)
         }
+    }
+    
+    func updateTrackGrid(){
+        trackGridView.updateData()
     }
     
     // presenter

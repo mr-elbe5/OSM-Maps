@@ -146,7 +146,7 @@ extension ImagePicker: PHPickerViewControllerDelegate{
                                     AppData.shared.sortItemsByDate(ascending: ViewFilter.shared.defaultSortAscending)
                                     AppData.shared.save()
                                     DispatchQueue.main.async {
-                                        MainViewController.shared.updateItemLayer()
+                                        self.completionHandler?()
                                     }
                                 }
                             }

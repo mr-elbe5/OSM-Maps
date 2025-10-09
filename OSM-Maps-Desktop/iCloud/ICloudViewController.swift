@@ -24,6 +24,7 @@ class ICloudViewController: PopoverViewController {
         let synchronizer = CloudSynchronizer(syncType: .fromCloud)
         synchronizer.delegate = contentView
         Task{
+            AppData.shared.resetDeletedIds()
             synchronizer.synchronize()
         }
     }
@@ -62,11 +63,8 @@ class ICloudViewController: PopoverViewController {
     
     func synchronizationDone() {
         DispatchQueue.main.async{
-            MainViewController.shared.updateItemLayer()
-            DispatchQueue.main.async{
-                self.showSuccess(title: "success".localize(), text: "synchronized".localize())
-                MainViewController.shared.updateItemLayer()
-            }
+            self.showSuccess(title: "success".localize(), text: "synchronized".localize())
+            MainViewController.shared.itemsChanged()
         }
     }
     
@@ -172,14 +170,16 @@ class ICloudView: PopoverView, CloudSynchronizerDelegate {
     }
     
     func setSynchronizationSteps(_ value: Int) {
-        maxSyncSteps = value
-        currentSyncStep = 0
-        progressView.doubleValue = 0
+        DispatchQueue.main.async {
+            self.setupProgressView(max: value)
+        }
     }
     
     func nextSynchronizationStep() {
-        currentSyncStep += 1
-        progressView.doubleValue = Double(currentSyncStep) / Double(maxSyncSteps)
+        DispatchQueue.main.async {
+            self.currentSyncStep += 1
+            self.progressView.doubleValue = Double(self.currentSyncStep) / Double(self.maxSyncSteps)
+        }
     }
     
 }

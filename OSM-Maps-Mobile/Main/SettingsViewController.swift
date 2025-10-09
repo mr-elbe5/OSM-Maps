@@ -166,9 +166,10 @@ class SettingsViewController: ScrollViewController{
         contentView.addSubviewCenteredBelow(clearCloudButton, upperView: hint)
         hint = UILabel(hint: "clearCloudHint".localize(table: "Hints"))
         contentView.addSubviewBelow(hint, upperView: clearCloudButton, insets: OSInsets.flatInsets)
-        
+        let cloudProgressLabel = UILabel(hint: "progress".localizeWithColon())
+        contentView.addSubviewBelow(cloudProgressLabel, upperView: hint)
         setSynchronizationSteps(1)
-        contentView.addSubviewBelow(syncProgressView, upperView: hint)
+        contentView.addSubviewBelow(syncProgressView, upperView: cloudProgressLabel)
         
         header = UILabel(header: "backup".localize())
         contentView.addSubviewBelow(header, upperView: syncProgressView)
@@ -339,8 +340,10 @@ class SettingsViewController: ScrollViewController{
         }, for: .touchDown)
         contentView.addSubviewWithAnchors(cancelPreloadButton, top: tilesToLoadLabel.bottomAnchor, leading: contentView.centerXAnchor, trailing: contentView.trailingAnchor)
         
+        let preloadProgressLabel = UILabel(hint: "progress".localizeWithColon())
+        contentView.addSubviewBelow(preloadProgressLabel, upperView: startPreloadButton)
         preloadProgressView.progress = 0
-        contentView.addSubviewWithAnchors(preloadProgressView, top: startPreloadButton.bottomAnchor, leading: contentView.leadingAnchor, trailing: contentView.trailingAnchor, insets: OSInsets.doubleInsets)
+        contentView.addSubviewWithAnchors(preloadProgressView, top: preloadProgressLabel.bottomAnchor, leading: contentView.leadingAnchor, trailing: contentView.trailingAnchor, insets: OSInsets.doubleInsets)
         
         var errorsInfo = UILabel()
         errorsInfo.text = "unloadedTiles".localize()
@@ -377,8 +380,10 @@ class SettingsViewController: ScrollViewController{
         }, for: .touchDown)
         contentView.addSubviewCenteredBelow(cancelWatchUploadButton, upperView: startWatchUploadButton)
         
+        let watchProgressLabel = UILabel(hint: "progress".localizeWithColon())
+        contentView.addSubviewBelow(watchProgressLabel, upperView: cancelWatchUploadButton)
         watchProgressView.progress = 0
-        contentView.addSubviewBelow(watchProgressView, upperView: cancelWatchUploadButton)
+        contentView.addSubviewBelow(watchProgressView, upperView: watchProgressLabel)
         
         errorsInfo = UILabel()
         errorsInfo.text = "unloadedTiles".localize()

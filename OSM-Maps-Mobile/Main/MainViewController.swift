@@ -278,6 +278,7 @@ class MainViewController: UIViewController {
         else{
             mapView.scrollTo(item.coordinate)
         }
+        mapView.trackLayerView.setNeedsDisplay()
     }
     
     func hideTrackOnMap(){

@@ -45,7 +45,12 @@ struct BasePaths {
             var count = 0
             for url in urls {
                 let newURL = tileDirURL.appendingPathComponent(url.lastPathComponent)
-                try! FileManager.default.moveItem(at: url, to: newURL)
+                if !FileManager.default.fileExists(atPath: newURL.path) {
+                    try? FileManager.default.moveItem(at: url, to: newURL)
+                }
+                else{
+                    Log.info("file already exists at new path: \(newURL.path)")
+                }
                 count += 1
             }
             Log.info("moved \(count) tiles to new location: \(tileDirURL.path)")
@@ -57,7 +62,12 @@ struct BasePaths {
             var count = 0
             for url in urls {
                 let newURL = imageDirURL.appendingPathComponent(url.lastPathComponent)
-                try! FileManager.default.moveItem(at: url, to: newURL)
+                if !FileManager.default.fileExists(atPath: newURL.path) {
+                    try? FileManager.default.moveItem(at: url, to: newURL)
+                }
+                else{
+                    Log.info("file already exists at new path: \(newURL.path)")
+                }
                 count += 1
             }
             Log.info("moved \(count) images to new location: \(imageDirURL.path)")
@@ -69,7 +79,12 @@ struct BasePaths {
             var count = 0
             for url in urls {
                 let newURL = audioDirURL.appendingPathComponent(url.lastPathComponent)
-                try! FileManager.default.moveItem(at: url, to: newURL)
+                if !FileManager.default.fileExists(atPath: newURL.path) {
+                    try? FileManager.default.moveItem(at: url, to: newURL)
+                }
+                else{
+                    Log.info("file already exists at new path: \(newURL.path)")
+                }
                 count += 1
             }
             Log.info("moved \(count) audios to new location: \(audioDirURL.path)")
@@ -81,7 +96,12 @@ struct BasePaths {
             var count = 0
             for url in urls {
                 let newURL = videoDirURL.appendingPathComponent(url.lastPathComponent)
-                try! FileManager.default.moveItem(at: url, to: newURL)
+                if !FileManager.default.fileExists(atPath: newURL.path) {
+                    try? FileManager.default.moveItem(at: url, to: newURL)
+                }
+                else{
+                    Log.info("file already exists at new path: \(newURL.path)")
+                }
                 count += 1
             }
             Log.info("moved \(count) videos to new location: \(videoDirURL.path)")
@@ -93,7 +113,12 @@ struct BasePaths {
             var count = 0
             for url in urls {
                 let newURL = previewDirURL.appendingPathComponent(url.lastPathComponent)
-                try! FileManager.default.moveItem(at: url, to: newURL)
+                if !FileManager.default.fileExists(atPath: newURL.path) {
+                    try? FileManager.default.moveItem(at: url, to: newURL)
+                }
+                else{
+                    Log.info("file already exists at new path: \(newURL.path)")
+                }
                 count += 1
             }
             Log.info("moved \(count) previews to new location: \(previewDirURL.path)")
@@ -105,7 +130,12 @@ struct BasePaths {
             var count = 0
             for url in urls {
                 let newURL = videoPreviewDirURL.appendingPathComponent(url.lastPathComponent)
-                try! FileManager.default.moveItem(at: url, to: newURL)
+                if !FileManager.default.fileExists(atPath: newURL.path) {
+                    try? FileManager.default.moveItem(at: url, to: newURL)
+                }
+                else{
+                    Log.info("file already exists at new path: \(newURL.path)")
+                }
                 count += 1
             }
             Log.info("moved \(count) previews to new location: \(videoPreviewDirURL.path)")

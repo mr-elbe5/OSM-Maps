@@ -13,7 +13,7 @@ class AppStatus: Identifiable, Codable{
     
     static var shared = AppStatus()
     
-    static var latestVersion: Int = 15
+    static var latestVersion: Int = 16
     
     static func load(){
         if let status : AppStatus = StatusManager.shared.getCodable(key: AppStatus.storeKey){

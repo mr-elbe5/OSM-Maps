@@ -232,6 +232,10 @@ class AppData : Codable{
         return deletedCount
     }
     
+    func resetDeletedIds(){
+        _deletedIds.removeAll()
+    }
+    
     func deleteAllData(){
         _mapItems.removeAll()
         FileManager.default.deleteAllFiles(dirURL: BasePaths.imageDirURL)
