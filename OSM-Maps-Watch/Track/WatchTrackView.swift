@@ -12,6 +12,7 @@ struct WatchTrackView: View {
     @State var preferences = Preferences.shared
     
     @State private var showDeleteAlert = false
+    @State private var showSaveAlert = false
     
     var body: some View {
             VStack(){
@@ -41,9 +42,17 @@ struct WatchTrackView: View {
                             }
                             HStack{
                                 Button("save".localize(), action: {
-                                    TrackRecorder.shared.saveTrack()
+                                    TrackRecorder.shared.saveTrack(){ success in
+                                        if !success{
+                                            showSaveAlert = true
+                                        }
+                                    }
                                 })
                                 .tint(.green)
+                                .alert("couldNotSaveTrack".localize(), isPresented: $showSaveAlert) {
+                                    Button("ok".localize()) {
+                                    }
+                                }
                                 Button("delete".localize(), action: {
                                     showDeleteAlert = true
                                     

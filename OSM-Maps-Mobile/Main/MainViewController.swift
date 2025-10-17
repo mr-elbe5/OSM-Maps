@@ -241,9 +241,9 @@ class MainViewController: UIViewController {
         }
     }
     
-    func saveTrack() {
+    func saveTrack(result: @escaping (Bool) -> Void) {
         if TrackRecorder.shared.isTracking{
-            TrackRecorder.shared.saveTrack()
+            TrackRecorder.shared.saveTrack(result: result)
             trackStatusView.stopTrackInfo()
         }
     }
@@ -404,7 +404,6 @@ extension MainViewController: LocationServiceDelegate {
 }
 
 extension MainViewController: TrackRecorderDelegate {
-    
     func trackStarted() {
         VisibleTrack.shared.reset()
     }

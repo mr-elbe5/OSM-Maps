@@ -34,6 +34,10 @@ extension TrackStatus: TrackRecorderDelegate{
         trackpointCount = TrackRecorder.shared.trackpointCount
     }
     
+    func savingTrackFailed() {
+        
+    }
+    
     func addTrackpoint(_ trackpoint: Trackpoint) {
     }
     
@@ -44,11 +48,15 @@ extension TrackStatus: TrackRecorderDelegate{
         if let data = try? encoder.encode(track){
             if let json = String(data:data, encoding: .utf8){
                 PhoneConnector.shared.saveTrack(json: json){ success in
+                    if success{
+                        self.trackRecordingChanged()
+                    }
                     result(success)
-                    self.trackRecordingChanged()
+                    return
                 }
             }
         }
+        result(false)
     }
     
 }

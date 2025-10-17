@@ -61,14 +61,17 @@ class TrackRecorder: NSObject{
         delegate?.trackStarted()
     }
     
-    func saveTrack(){
+    func saveTrack(result: @escaping (Bool) -> Void){
         stopRecording()
         if let track = track{
             delegate?.saveTrack(track){success in
-                self.track = nil
+                if success{
+                    self.track = nil
+                }
+                result(success)
             }
+            delegate?.trackRecordingChanged()
         }
-        delegate?.trackRecordingChanged()
     }
     
     func locationChanged(to location: CLLocation){

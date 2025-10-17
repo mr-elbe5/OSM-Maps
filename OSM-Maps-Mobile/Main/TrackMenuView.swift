@@ -74,8 +74,11 @@ class TrackMenuView: UIView {
     func getEndTrackingMenu() -> UIMenu{
         var actions = Array<UIAction>()
         actions.append(UIAction(title: "saveTrack".localize(), image: UIImage(systemName: "figure.walk.arrival")){ action in
-            MainViewController.shared.saveTrack()
-            self.setupForIdle()
+            MainViewController.shared.saveTrack(){ result in
+                if result{
+                    self.setupForIdle()
+                }
+            }
         })
         actions.append(UIAction(title: "cancelTrack".localize(), image: UIImage(systemName: "trash")?.withTintColor(.systemRed, renderingMode: .alwaysOriginal)){ action in
             MainViewController.shared.cancelTrack()
