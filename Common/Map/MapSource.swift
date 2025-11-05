@@ -16,9 +16,9 @@ enum MapSource: String, CaseIterable, Identifiable{
         case .osm:
             return "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
         case .elbe5:
-            return "https://maps.elbe5.de/carto/{z}/{x}/{y}.png"
+            return "https://tiles.elbe5.de/carto/{z}/{x}/{y}.png"
         case .elbe5Topo:
-            return "https://maps.elbe5.de/topo/{z}/{x}/{y}.png"
+            return "https://tiles.elbe5.de/topo/{z}/{x}/{y}.png"
         }
     }
     
