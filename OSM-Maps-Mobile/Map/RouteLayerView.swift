@@ -12,31 +12,48 @@ class RouteLayerView: UIView {
     var offset : CGPoint? = nil
     var scale : CGFloat = 0.0
     
+    let startMarkerView = RouteMarkerView(image: MapDefaults.routeStartIcon)
+    let endMarkerView = RouteMarkerView(image: MapDefaults.routeEndIcon)
+    
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         return false
+    }
+    
+    func setupView(){
+        addSubview(startMarkerView)
+        addSubview(endMarkerView)
+        startMarkerView.isHidden = true
+        endMarkerView.isHidden = true
     }
     
     func updatePosition(offset: CGPoint, scale: CGFloat){
         self.offset = offset
         self.scale = scale
+        let mapOffset = CGPoint(x: offset.x/scale, y: offset.y/scale).normalizedPoint
+        if let coordinate = VisibleRoute.shared.startCoordinate, coordinate != .zero{
+            let mapPoint = CGPoint(coordinate)
+            startMarkerView.updatePosition(to: CGPoint(x: (mapPoint.x - mapOffset.x)*scale , y: (mapPoint.y - mapOffset.y)*scale))
+            startMarkerView.isHidden = false
+        }
+        else{
+            startMarkerView.isHidden = true
+        }
+        if let coordinate = VisibleRoute.shared.endCoordinate, coordinate != .zero{
+            let mapPoint = CGPoint(coordinate)
+            endMarkerView.updatePosition(to: CGPoint(x: (mapPoint.x - mapOffset.x)*scale , y: (mapPoint.y - mapOffset.y)*scale))
+            endMarkerView.isHidden = false
+        }
+        else{
+            endMarkerView.isHidden = true
+        }
         setNeedsDisplay()
     }
     
     override func draw(_ rect: CGRect) {
-        if VisibleRoute.shared.isPresent{
-            var startPoint = CGPoint.zero
-            var endPoint = CGPoint.zero
+        if VisibleRoute.shared.isComplete{
             var drawPoints = Array<CGPoint>()
             if let offset = offset{
                 let mapOffset = CGPoint(x: offset.x/scale, y: offset.y/scale).normalizedPoint
-                if let coordinate = VisibleRoute.shared.startCoordinate{
-                    let mapPoint = CGPoint(coordinate)
-                    startPoint = CGPoint(x: (mapPoint.x - mapOffset.x)*scale , y: (mapPoint.y - mapOffset.y)*scale)
-                }
-                if let coordinate = VisibleRoute.shared.endCoordinate{
-                    let mapPoint = CGPoint(coordinate)
-                    endPoint = CGPoint(x: (mapPoint.x - mapOffset.x)*scale , y: (mapPoint.y - mapOffset.y)*scale)
-                }
                 for idx in 0..<VisibleRoute.shared.coordinates.count{
                     let coordinate = VisibleRoute.shared.coordinates[idx]
                     let mapPoint = CGPoint(coordinate)
@@ -45,12 +62,6 @@ class RouteLayerView: UIView {
                 }
             }
             let ctx = UIGraphicsGetCurrentContext()!
-            if startPoint != .zero{
-                ctx.draw(MapDefaults.routeStartIcon.cgImage!, in: CGRect(x: startPoint.x, y: startPoint.y, width: 16, height: 16))
-            }
-            if endPoint != .zero{
-                ctx.draw(MapDefaults.routeEndIcon.cgImage!, in: CGRect(x: endPoint.x, y: endPoint.y, width: 16, height: 16))
-            }
             if !drawPoints.isEmpty{
                 ctx.beginPath()
                 ctx.move(to: drawPoints[0])

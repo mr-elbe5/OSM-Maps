@@ -72,16 +72,17 @@ class CrossMenuViewController: UIViewController{
         let setRouteEndButton = TextButton(text: "setRouteEnd".localize())
         setRouteEndButton.addAction(UIAction(){ action in
             self.dismiss(animated: false)
-            VisibleRoute.shared.startCoordinate = self.coordinate
-            self.updateRouteView()
+            VisibleRoute.shared.endCoordinate = self.coordinate
+            MainViewController.shared.updateRouteLayer()
         }, for: .touchDown)
+        setRouteEndButton.isEnabled = VisibleRoute.shared.startCoordinate != nil
         contentView.addSubviewWithAnchors(setRouteEndButton, bottom: addNoteButton.topAnchor)
             .centerX(contentView.centerXAnchor)
         let setRouteStartButton = TextButton(text: "setRouteStart".localize())
         setRouteStartButton.addAction(UIAction(){ action in
             self.dismiss(animated: false)
-            VisibleRoute.shared.endCoordinate = self.coordinate
-            self.updateRouteView()
+            VisibleRoute.shared.startCoordinate = self.coordinate
+            MainViewController.shared.updateRouteLayer()
         }, for: .touchDown)
         contentView.addSubviewWithAnchors(setRouteStartButton, bottom: setRouteEndButton.topAnchor)
             .centerX(contentView.centerXAnchor)
@@ -163,10 +164,6 @@ class CrossMenuViewController: UIViewController{
             MainViewController.shared.updateItemLayer()
             onCompletion?()
         }
-    }
-    
-    func updateRouteView(){
-        MainViewController.shared.updateRouteLayer()
     }
     
 }

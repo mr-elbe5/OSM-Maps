@@ -39,6 +39,7 @@ class MapView: UIView {
         addSubviewFilling(trackLayerView, insets: .zero)
         routeLayerView.backgroundColor = .clear
         addSubviewFilling(routeLayerView, insets: .zero)
+        routeLayerView.setupView()
         currentLocationView.backgroundColor = .clear
         addSubview(currentLocationView)
         addSubviewFilling(itemLayerView, insets: .zero)
@@ -111,12 +112,8 @@ class MapView: UIView {
     }
     
     func updateRouteLayer(){
-        if VisibleRoute.shared.isPresent{
-            routeLayerView.updatePosition(offset: contentOffset, scale: scrollView.zoomScale)
-        }
-        else{
-            routeLayerView.setNeedsDisplay()
-        }
+        routeLayerView.isHidden = !VisibleRoute.shared.shouldShow
+        routeLayerView.updatePosition(offset: contentOffset, scale: scrollView.zoomScale)
     }
     
     func refresh(){

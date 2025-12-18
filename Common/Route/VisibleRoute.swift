@@ -20,7 +20,7 @@ class VisibleRoute: NSObject{
     var points = [CGPoint]()
     var boundingRect: CGRect = .zero
     
-    var isPresent: Bool{
+    var shouldShow: Bool{
         startCoordinate != nil
     }
     
@@ -57,6 +57,8 @@ class VisibleRoute: NSObject{
     }
     
     func reset(){
+        startCoordinate = nil
+        endCoordinate = nil
         coordinates.removeAll()
         startMapPoint = nil
         points.removeAll()

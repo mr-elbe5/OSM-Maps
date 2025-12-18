@@ -295,6 +295,7 @@ class MainViewController: UIViewController {
     
     func showRoute(){
         Log.info("show route")
+        VisibleRoute.shared.requestRoute()
     }
     
     func updateRouteLayer(){

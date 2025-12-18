@@ -8,6 +8,10 @@
 import Foundation
 import CoreLocation
 
+/*
+ {"code":"Ok","routes":[{"legs":[{"steps":[{"intersections":[{"out":0,"entry":[true],"bearings":[130],"location":[51.365239,10.394297]}],"driving_side":"right","geometry":{"coordinates":[[51.365239,10.394297],[51.365239,10.394297]],"type":"LineString"},"maneuver":{"bearing_after":130,"bearing_before":0,"location":[51.365239,10.394297],"type":"depart"},"name":"","mode":"driving","weight":0,"duration":0,"distance":0},{"intersections":[{"in":0,"entry":[true],"bearings":[310],"location":[51.365239,10.394297]}],"driving_side":"right","geometry":{"coordinates":[[51.365239,10.394297],[51.365239,10.394297]],"type":"LineString"},"maneuver":{"bearing_after":0,"bearing_before":130,"location":[51.365239,10.394297],"type":"arrive"},"name":"","mode":"driving","weight":0,"duration":0,"distance":0}],"weight":0,"summary":"","duration":0,"distance":0}],"weight_name":"routability","geometry":{"coordinates":[[51.365239,10.394297],[51.365239,10.394297]],"type":"LineString"},"weight":0,"duration":0,"distance":0}],"waypoints":[{"distance":245890.1741,"name":"","location":[51.365239,10.394297]},{"distance":247548.9449,"name":"","location":[51.365239,10.394297]}]}
+ */
+
 public struct OSRMRouteData: Codable, Identifiable, Sendable {
     public let id = UUID()
     
