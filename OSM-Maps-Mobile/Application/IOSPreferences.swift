@@ -27,6 +27,7 @@ class IOSPreferences: Identifiable, Codable{
         case showCenterButton
         case followLocation
         case showDirection
+        case showMapPins
         case distanceFilter
         case trackpointInterval
         case minHorizontalTrackpointDistance
@@ -37,7 +38,7 @@ class IOSPreferences: Identifiable, Codable{
     var showCenterButton: Bool = false
     var followLocation : Bool = false
     var showDirection : Bool = true
-    var showTrackpoints : Bool = false
+    var showMapPins : Bool = false
     
     var distanceFilter: LocationDistance = MapDefaults.defaultDistanceFilter{
         didSet{
@@ -61,6 +62,7 @@ class IOSPreferences: Identifiable, Codable{
             distanceFilter = LocationDistance(rawValue: dist) ?? .tight
         }
         showDirection = try values.decodeIfPresent(Bool.self, forKey: .showDirection) ?? true
+        showMapPins = try values.decodeIfPresent(Bool.self, forKey: .showMapPins) ?? true
         if let interval = try values.decodeIfPresent(String.self, forKey: .trackpointInterval){
             trackpointInterval = TrackpointInterval(rawValue: interval) ?? .short
         }
@@ -73,6 +75,7 @@ class IOSPreferences: Identifiable, Codable{
         try container.encode(showCenterButton, forKey: .showCenterButton)
         try container.encode(followLocation, forKey: .followLocation)
         try container.encode(showDirection, forKey: .showDirection)
+        try container.encode(showMapPins, forKey: .showMapPins)
         try container.encode(distanceFilter.rawValue, forKey: .distanceFilter)
         try container.encode(maxSearchResults, forKey: .maxSearchResults)
     }

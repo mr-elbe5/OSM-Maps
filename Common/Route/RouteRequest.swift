@@ -9,7 +9,6 @@ import CoreLocation
 
 class RouteRequest {
     
-    
     static func getRouteData(from fromCoordinate: CLLocationCoordinate2D, to toCoordinate: CLLocationCoordinate2D, type: RouteType, completion: @escaping (_ result: OSRMRouteData?) -> Void) -> Void {
         if let url = URL(string: "https://routing.openstreetmap.de/routed-\(type.rawValue)/route/v1/driving/\(fromCoordinate.latitude),\(fromCoordinate.longitude);\(toCoordinate.latitude),\(toCoordinate.longitude)?overview=false&alternatives=false&generate_hints=false&steps=true"){
             let session = URLSession.shared

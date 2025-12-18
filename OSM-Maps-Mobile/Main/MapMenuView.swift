@@ -27,9 +27,18 @@ class MapMenuView: UIView {
         zoomOutButton.addAction(UIAction(){ action in
             MainViewController.shared.zoomOut()
         }, for: .touchDown)
-        
+        let togglePinsButton = UIButton().asIconButton("mappin.slash", color: .darkText)
+        addSubviewBelow(togglePinsButton, upperView: zoomOutButton, insets: insets)
+        togglePinsButton.addAction(UIAction(){ action in
+            MainViewController.shared.toggleMapPins()
+        }, for: .touchDown)
+        let showRouteButton = UIButton().asIconButton("point.topright.arrow.triangle.backward.to.point.bottomleft.scurvepath", color: .darkText)
+        addSubviewBelow(showRouteButton, upperView: togglePinsButton, insets: insets)
+        showRouteButton.addAction(UIAction(){ action in
+            MainViewController.shared.showRoute()
+        }, for: .touchDown)
         let refreshButton = UIButton().asIconButton("arrow.clockwise", color: .darkText)
-        addSubviewBelow(refreshButton, upperView: zoomOutButton, insets: insets)
+        addSubviewBelow(refreshButton, upperView: showRouteButton, insets: insets)
             .connectToBottom(of: self, inset: 20)
         refreshButton.addAction(UIAction(){ action in
             MainViewController.shared.refreshMap()

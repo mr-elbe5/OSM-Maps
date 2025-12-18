@@ -218,6 +218,11 @@ class MainViewController: UIViewController {
         }
     }
     
+    func toggleMapPins() {
+        Preferences.shared.showMapPins = !Preferences.shared.showMapPins
+        mapView.itemLayerView.isHidden = !Preferences.shared.showMapPins
+    }
+    
     // map items
     
     func showItemOnMap(item: MapItem){
@@ -284,6 +289,16 @@ class MainViewController: UIViewController {
     func hideTrackOnMap(){
         VisibleTrack.shared.reset()
         mapView.updateTrackLayer()
+    }
+    
+    // route
+    
+    func showRoute(){
+        Log.info("show route")
+    }
+    
+    func updateRouteLayer(){
+        mapView.updateRouteLayer()
     }
     
     // camera

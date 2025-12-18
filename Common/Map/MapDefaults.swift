@@ -22,6 +22,9 @@ class MapDefaults{
     static var mapTrackGroupIcon = OSImage(named: "mappin.group.blue")!
     static var mapMixedGroupIcon = OSImage(named: "mappin.group.purple")!
     
+    static var routeStartIcon = OSImage(named: "marker-green")!
+    static var routeEndIcon = OSImage(named: "marker-red")!
+    
     static var mapItemImageOffset: CGFloat = 16
     
     static var defaultTrackpointMinInterval: TrackpointInterval = .short

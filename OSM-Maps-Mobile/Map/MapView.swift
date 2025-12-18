@@ -11,6 +11,7 @@ class MapView: UIView {
     
     var scrollView = MapScrollView()
     var trackLayerView = TrackLayerView()
+    var routeLayerView = RouteLayerView()
     var itemLayerView = MapItemLayerView()
     var currentLocationView = CurrentLocationView(frame: CurrentLocationView.frameRect)
     var crossButton = UIButton().asIconButton("plus.circle", color: .darkText)
@@ -36,6 +37,8 @@ class MapView: UIView {
         addSubviewFilling(scrollView, insets: .zero)
         trackLayerView.backgroundColor = .clear
         addSubviewFilling(trackLayerView, insets: .zero)
+        routeLayerView.backgroundColor = .clear
+        addSubviewFilling(routeLayerView, insets: .zero)
         currentLocationView.backgroundColor = .clear
         addSubview(currentLocationView)
         addSubviewFilling(itemLayerView, insets: .zero)
@@ -80,6 +83,10 @@ class MapView: UIView {
         trackLayerView.updatePosition(offset: contentOffset, scale: scrollView.zoomScale)
     }
     
+    func updateRoutePosition(){
+        routeLayerView.updatePosition(offset: contentOffset, scale: scrollView.zoomScale)
+    }
+    
     func zoomToCurrentZoom(){
         Log.info("zooming to \(MapStatus.shared.zoom)")
         scrollView.zoomTo(MapStatus.shared.zoom)
@@ -100,6 +107,15 @@ class MapView: UIView {
         }
         else{
             trackLayerView.setNeedsDisplay()
+        }
+    }
+    
+    func updateRouteLayer(){
+        if VisibleRoute.shared.isPresent{
+            routeLayerView.updatePosition(offset: contentOffset, scale: scrollView.zoomScale)
+        }
+        else{
+            routeLayerView.setNeedsDisplay()
         }
     }
     
@@ -150,6 +166,7 @@ extension MapView: MapScrollViewDelegate{
         updateMapStatus()
         updateItemLayer()
         updateTrackLayer()
+        updateRouteLayer()
         updateCurrentLocationView()
     }
     
@@ -157,6 +174,7 @@ extension MapView: MapScrollViewDelegate{
         updateItemLayer()
         updateCurrentLocationView()
         updateTrackLayer()
+        updateRouteLayer()
     }
     
 }

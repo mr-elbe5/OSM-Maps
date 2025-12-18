@@ -31,7 +31,7 @@ class CrossMenuViewController: UIViewController{
         contentView.backgroundColor = .systemBackground
         view.addSubviewCentered(contentView, centerX: view.centerXAnchor, centerY: view.centerYAnchor)
             .width(300)
-            .height(350)
+            .height(420)
         contentView.setRoundedBorders(radius: 10)
         
         let label = UILabel(header: title!)
@@ -69,6 +69,23 @@ class CrossMenuViewController: UIViewController{
         }, for: .touchDown)
         contentView.addSubviewWithAnchors(addNoteButton, bottom: addImagesButton.topAnchor)
             .centerX(contentView.centerXAnchor)
+        let setRouteEndButton = TextButton(text: "setRouteEnd".localize())
+        setRouteEndButton.addAction(UIAction(){ action in
+            self.dismiss(animated: false)
+            VisibleRoute.shared.startCoordinate = self.coordinate
+            self.updateRouteView()
+        }, for: .touchDown)
+        contentView.addSubviewWithAnchors(setRouteEndButton, bottom: addNoteButton.topAnchor)
+            .centerX(contentView.centerXAnchor)
+        let setRouteStartButton = TextButton(text: "setRouteStart".localize())
+        setRouteStartButton.addAction(UIAction(){ action in
+            self.dismiss(animated: false)
+            VisibleRoute.shared.endCoordinate = self.coordinate
+            self.updateRouteView()
+        }, for: .touchDown)
+        contentView.addSubviewWithAnchors(setRouteStartButton, bottom: setRouteEndButton.topAnchor)
+            .centerX(contentView.centerXAnchor)
+        
     }
     
     override func viewDidLoad() {
@@ -146,6 +163,10 @@ class CrossMenuViewController: UIViewController{
             MainViewController.shared.updateItemLayer()
             onCompletion?()
         }
+    }
+    
+    func updateRouteView(){
+        MainViewController.shared.updateRouteLayer()
     }
     
 }

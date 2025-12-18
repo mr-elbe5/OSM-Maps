@@ -25,6 +25,7 @@ class MapScrollView : PlainMapScrollView{
     }
     
     var trackLayerView = TrackLayerView()
+    var routeLayerView = RouteLayerView()
     var itemLayerView = ItemLayerView()
     
     override func setupView(){
@@ -38,7 +39,9 @@ class MapScrollView : PlainMapScrollView{
         documentView = mapWorldView
         mapWorldView.addSubviewFilling(tileLayerView, insets: .zero)
         mapWorldView.addSubviewFilling(trackLayerView, insets: .zero)
+        mapWorldView.addSubviewFilling(routeLayerView, insets: .zero)
         trackLayerView.isHidden = true
+        routeLayerView.isHidden = true
         mapWorldView.addSubviewFilling(itemLayerView, insets: .zero)
         itemLayerView.dragDelegate = self
         updateItemLayer()
@@ -63,6 +66,20 @@ class MapScrollView : PlainMapScrollView{
         }
     }
     
+    func updateRouteLayer(){
+        routeLayerView.update(scale: zoomScale)
+    }
+    
+    func showRoute(_ show: Bool){
+        if show{
+            routeLayerView.isHidden = false
+            routeLayerView.update(scale: zoomScale)
+        }
+        else{
+            routeLayerView.isHidden = true
+        }
+    }
+    
     override func scrollWheel(with event: NSEvent) {
         if !event.modifierFlags.contains(.option){
             super.scrollWheel(with: event)
@@ -82,12 +99,16 @@ class MapScrollView : PlainMapScrollView{
             if VisibleTrack.shared.isPresent{
                 updateTrackLayer()
             }
+            /*if VisibleRoute.shared.isPresent{
+                updateRouteLayer()
+            }*/
         }
     }
     
     @objc override func scrollViewDidScroll(){
         MapStatus.shared.centerCoordinate = screenCenterCoordinate
         trackLayerView.update(scale: zoomScale)
+        routeLayerView.update(scale: zoomScale)
         mapDelegate?.didScroll(to: screenCenterCoordinate)
     }
     
