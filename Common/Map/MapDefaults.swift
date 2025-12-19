@@ -24,6 +24,8 @@ class MapDefaults{
     
     static var routeStartIcon = OSImage(named: "marker-green")!
     static var routeEndIcon = OSImage(named: "marker-red")!
+    static var routeMarkerIcon = OSImage(systemName: "mappin")!
+    static var routeCloseIcon = OSImage(named: "marker-cross")!
     
     static var mapItemImageOffset: CGFloat = 16
     

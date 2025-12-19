@@ -44,6 +44,7 @@ class MapView: UIView {
         addSubview(currentLocationView)
         addSubviewFilling(itemLayerView, insets: .zero)
         updateItemLayer()
+        itemLayerView.isHidden = !Preferences.shared.showMapPins
         crossButton.addAction(UIAction(){ action in
             let coordinate = self.scrollView.screenCenterCoordinate
             let controller = CrossMenuViewController(coordinate: coordinate, title: "crossLocation".localize())
@@ -109,6 +110,10 @@ class MapView: UIView {
         else{
             trackLayerView.setNeedsDisplay()
         }
+    }
+    
+    func setupRouteLayer(){
+        routeLayerView.setRoute()
     }
     
     func updateRouteLayer(){

@@ -101,19 +101,18 @@ class OSRMLeg: Decodable {
 
 class OSRMStep: Decodable {
     
-    let geometry: OSRMGeometry
-    let maneuver: OSRMManeuver
-    let name: String
-    let mode: String
-    let duration : Double
-    let distance: Double
+    var geometry: OSRMGeometry
+    var maneuver: OSRMManeuver?
+    var name: String
+    var duration : Double
+    var distance: Double
     
     enum CodingKeys: String, CodingKey {
         case intersections
         case geometry
         case maneuver
         case name
-        case mode
+        case ref
         case duration
         case distance
     }
@@ -121,9 +120,11 @@ class OSRMStep: Decodable {
     required init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.geometry = try container.decodeIfPresent(OSRMGeometry.self, forKey: .geometry) ?? OSRMGeometry()
-        self.maneuver = try container.decodeIfPresent(OSRMManeuver.self, forKey: .maneuver) ?? OSRMManeuver()
+        self.maneuver = try container.decodeIfPresent(OSRMManeuver.self, forKey: .maneuver)
         self.name = try container.decodeIfPresent(String.self, forKey: .name) ?? ""
-        self.mode = try container.decodeIfPresent(String.self, forKey: .mode) ?? ""
+        if self.name.isEmpty{
+            self.name = try container.decodeIfPresent(String.self, forKey: .ref) ?? ""
+        }
         self.duration = try container.decodeIfPresent(Double.self, forKey: .duration) ?? 0.0
         self.distance = try container.decodeIfPresent(Double.self, forKey: .distance) ?? 0.0
     }

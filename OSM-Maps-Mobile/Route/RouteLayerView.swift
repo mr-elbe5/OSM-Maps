@@ -12,8 +12,9 @@ class RouteLayerView: UIView {
     var offset : CGPoint? = nil
     var scale : CGFloat = 0.0
     
-    let startMarkerView = RouteMarkerView(image: MapDefaults.routeStartIcon)
-    let endMarkerView = RouteMarkerView(image: MapDefaults.routeEndIcon)
+    let startMarkerView = RouteMarkerView(coordinate: .zero, image: MapDefaults.routeStartIcon)
+    let endMarkerView = RouteMarkerView(coordinate: .zero, image: MapDefaults.routeEndIcon)
+    var markerViews = Array<RouteMarkerView>()
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         return false
@@ -26,25 +27,40 @@ class RouteLayerView: UIView {
         endMarkerView.isHidden = true
     }
     
+    func setRoute(){
+        for mv in markerViews{
+            mv.removeFromSuperview()
+        }
+        markerViews.removeAll()
+        for waypoint in Route.shared.waypoints{
+            let markerView = RouteMarkerView(coordinate: waypoint.coordinate, image: MapDefaults.routeMarkerIcon)
+            addSubview(markerView)
+            markerViews.append(markerView)
+        }
+    }
+    
     func updatePosition(offset: CGPoint, scale: CGFloat){
         self.offset = offset
         self.scale = scale
         let mapOffset = CGPoint(x: offset.x/scale, y: offset.y/scale).normalizedPoint
         if let coordinate = Route.shared.startCoordinate, coordinate != .zero{
-            let mapPoint = CGPoint(coordinate)
-            startMarkerView.updatePosition(to: CGPoint(x: (mapPoint.x - mapOffset.x)*scale , y: (mapPoint.y - mapOffset.y)*scale))
+            startMarkerView.coordinate = coordinate
+            startMarkerView.updatePosition(mapOffset: mapOffset, scale: scale)
             startMarkerView.isHidden = false
         }
         else{
             startMarkerView.isHidden = true
         }
         if let coordinate = Route.shared.endCoordinate, coordinate != .zero{
-            let mapPoint = CGPoint(coordinate)
-            endMarkerView.updatePosition(to: CGPoint(x: (mapPoint.x - mapOffset.x)*scale , y: (mapPoint.y - mapOffset.y)*scale))
+            endMarkerView.coordinate = coordinate
+            endMarkerView.updatePosition(mapOffset: mapOffset, scale: scale)
             endMarkerView.isHidden = false
         }
         else{
             endMarkerView.isHidden = true
+        }
+        for markerView in markerViews {
+            markerView.updatePosition(mapOffset: mapOffset, scale: scale)
         }
         setNeedsDisplay()
     }
@@ -54,9 +70,9 @@ class RouteLayerView: UIView {
             var drawPoints = Array<CGPoint>()
             if let offset = offset{
                 let mapOffset = CGPoint(x: offset.x/scale, y: offset.y/scale).normalizedPoint
-                for idx in 0..<Route.shared.waypoints.count{
-                    let coordinate = Route.shared.waypoints[idx].coordinate
-                    let mapPoint = CGPoint(coordinate)
+                for idx in 0..<Route.shared.points.count{
+                    let point = Route.shared.points[idx]
+                    let mapPoint = CGPoint(point.coordinate)
                     let drawPoint = CGPoint(x: (mapPoint.x - mapOffset.x)*scale , y: (mapPoint.y - mapOffset.y)*scale)
                     drawPoints.append(drawPoint)
                 }

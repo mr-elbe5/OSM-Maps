@@ -73,6 +73,10 @@ class MainViewController: UIViewController {
             controller.loadItems()
             self.navigationController?.pushViewController(controller, animated: true)
         }))
+        items.append(UIBarButtonItem(title: "route".localize(), image: UIImage(systemName: "point.topright.arrow.triangle.backward.to.point.bottomleft.scurvepath"), primaryAction: UIAction(){ action in
+            let controller = RouteViewController(route: Route.shared)
+            self.navigationController?.pushViewController(controller, animated: true)
+        }))
         groups.append(UIBarButtonItemGroup.fixedGroup(items: items))
         navigationItem.leadingItemGroups = groups
         
@@ -298,14 +302,17 @@ class MainViewController: UIViewController {
         Route.shared.requestRoute(){ success in
             if success{
                 DispatchQueue.main.async {
-                    self.updateRouteLayer()
+                    self.mapView.setupRouteLayer()
+                    self.mapView.updateRouteLayer()
                 }
             }
         }
     }
     
-    func updateRouteLayer(){
-        mapView.updateRouteLayer()
+    func hideRoute(){
+        Route.shared.reset()
+        self.mapView.setupRouteLayer()
+        self.mapView.updateRouteLayer()
     }
     
     // camera
