@@ -112,12 +112,7 @@ class MapView: UIView {
         }
     }
     
-    func setupRouteLayer(){
-        routeLayerView.setRoute()
-    }
-    
     func updateRouteLayer(){
-        routeLayerView.isHidden = !Route.shared.shouldShow
         routeLayerView.updatePosition(offset: contentOffset, scale: scrollView.zoomScale)
     }
     

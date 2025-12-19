@@ -74,7 +74,8 @@ class MainViewController: UIViewController {
             self.navigationController?.pushViewController(controller, animated: true)
         }))
         items.append(UIBarButtonItem(title: "route".localize(), image: UIImage(systemName: "point.topright.arrow.triangle.backward.to.point.bottomleft.scurvepath"), primaryAction: UIAction(){ action in
-            let controller = RouteViewController(route: Route.shared)
+            if VisibleRoute.shared.route == nil { return }
+            let controller = RouteViewController(route: VisibleRoute.shared.route!)
             self.navigationController?.pushViewController(controller, animated: true)
         }))
         groups.append(UIBarButtonItemGroup.fixedGroup(items: items))
@@ -297,21 +298,26 @@ class MainViewController: UIViewController {
     
     // route
     
-    func showRoute(){
-        Log.info("show route")
-        Route.shared.requestRoute(){ success in
-            if success{
-                DispatchQueue.main.async {
-                    self.mapView.setupRouteLayer()
-                    self.mapView.updateRouteLayer()
-                }
-            }
+    func setRouteStart(coordinate: CLLocationCoordinate2D){
+        VisibleRoute.shared.setStartCoordinate(coordinate){
+            self.updateRouteLayer()
         }
     }
     
-    func hideRoute(){
-        Route.shared.reset()
-        self.mapView.setupRouteLayer()
+    func setRouteEnd(coordinate: CLLocationCoordinate2D){
+        VisibleRoute.shared.setEndCoordinate(coordinate){
+            self.updateRouteLayer()
+        }
+    }
+    
+    func updateRouteLayer(){
+        DispatchQueue.main.async {
+            self.mapView.updateRouteLayer()
+        }
+    }
+    
+    func cancelRoute(){
+        VisibleRoute.shared.reset()
         self.mapView.updateRouteLayer()
     }
     

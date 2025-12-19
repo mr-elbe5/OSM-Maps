@@ -35,7 +35,7 @@ class MapMenuView: UIView {
         let hideRouteButton = UIButton().asImageButton("marker-gray")
         addSubviewBelow(hideRouteButton, upperView: togglePinsButton, insets: insets)
         hideRouteButton.addAction(UIAction(){ action in
-            MainViewController.shared.hideRoute()
+            MainViewController.shared.cancelRoute()
         }, for: .touchDown)
         let refreshButton = UIButton().asIconButton("arrow.clockwise", color: .darkText)
         addSubviewBelow(refreshButton, upperView: hideRouteButton, insets: insets)

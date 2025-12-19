@@ -53,7 +53,6 @@ class RouteViewController: ScrollViewController{
     
     func loadScrollableSubviews() {
         contentView.removeAllSubviews()
-        if route.isComplete {
             var header = UILabel(header: "startLocation".localize())
             contentView.addSubviewWithAnchors(header, top: contentView.topAnchor, leading: contentView.leadingAnchor)
             
@@ -66,14 +65,11 @@ class RouteViewController: ScrollViewController{
             contentView.addSubviewWithAnchors(header, top: nameEditField.bottomAnchor, leading: contentView.leadingAnchor)
             contentView.addSubviewWithAnchors(distanceLabel, top: header.bottomAnchor, leading: contentView.leadingAnchor,insets: OSInsets.flatInsets)
             contentView.addSubviewWithAnchors(upDistanceLabel, top: distanceLabel.bottomAnchor, leading: contentView.leadingAnchor,insets: OSInsets.flatInsets)
-            contentView.addSubviewWithAnchors(downDistanceLabel, top: upDistanceLabel.bottomAnchor, leading: contentView.leadingAnchor,insets: OSInsets.flatInsets)
-            contentView.addSubviewWithAnchors(durationLabel, top: downDistanceLabel.bottomAnchor, leading: contentView.leadingAnchor, insets: OSInsets.flatInsets)
-            contentView.addSubviewWithAnchors(trackpointsLabel, top: durationLabel.bottomAnchor, leading: contentView.leadingAnchor, insets: OSInsets.flatInsets)
-            
-            
-                .bottom(contentView.bottomAnchor)
-                
-        }
+        contentView.addSubviewWithAnchors(downDistanceLabel, top: upDistanceLabel.bottomAnchor, leading: contentView.leadingAnchor,insets: OSInsets.flatInsets)
+        contentView.addSubviewWithAnchors(durationLabel, top: downDistanceLabel.bottomAnchor, leading: contentView.leadingAnchor, insets: OSInsets.flatInsets)
+        contentView.addSubviewWithAnchors(trackpointsLabel, top: durationLabel.bottomAnchor, leading: contentView.leadingAnchor, insets: OSInsets.flatInsets)
+        
+            .bottom(contentView.bottomAnchor)
         
     }
     
