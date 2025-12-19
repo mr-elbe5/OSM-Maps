@@ -30,7 +30,7 @@ class RouteLayerView: UIView {
         self.offset = offset
         self.scale = scale
         let mapOffset = CGPoint(x: offset.x/scale, y: offset.y/scale).normalizedPoint
-        if let coordinate = VisibleRoute.shared.startCoordinate, coordinate != .zero{
+        if let coordinate = Route.shared.startCoordinate, coordinate != .zero{
             let mapPoint = CGPoint(coordinate)
             startMarkerView.updatePosition(to: CGPoint(x: (mapPoint.x - mapOffset.x)*scale , y: (mapPoint.y - mapOffset.y)*scale))
             startMarkerView.isHidden = false
@@ -38,7 +38,7 @@ class RouteLayerView: UIView {
         else{
             startMarkerView.isHidden = true
         }
-        if let coordinate = VisibleRoute.shared.endCoordinate, coordinate != .zero{
+        if let coordinate = Route.shared.endCoordinate, coordinate != .zero{
             let mapPoint = CGPoint(coordinate)
             endMarkerView.updatePosition(to: CGPoint(x: (mapPoint.x - mapOffset.x)*scale , y: (mapPoint.y - mapOffset.y)*scale))
             endMarkerView.isHidden = false
@@ -50,12 +50,12 @@ class RouteLayerView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-        if VisibleRoute.shared.isComplete{
+        if Route.shared.isComplete{
             var drawPoints = Array<CGPoint>()
             if let offset = offset{
                 let mapOffset = CGPoint(x: offset.x/scale, y: offset.y/scale).normalizedPoint
-                for idx in 0..<VisibleRoute.shared.coordinates.count{
-                    let coordinate = VisibleRoute.shared.coordinates[idx]
+                for idx in 0..<Route.shared.waypoints.count{
+                    let coordinate = Route.shared.waypoints[idx].coordinate
                     let mapPoint = CGPoint(coordinate)
                     let drawPoint = CGPoint(x: (mapPoint.x - mapOffset.x)*scale , y: (mapPoint.y - mapOffset.y)*scale)
                     drawPoints.append(drawPoint)

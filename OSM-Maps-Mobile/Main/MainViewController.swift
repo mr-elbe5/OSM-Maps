@@ -295,7 +295,13 @@ class MainViewController: UIViewController {
     
     func showRoute(){
         Log.info("show route")
-        VisibleRoute.shared.requestRoute()
+        Route.shared.requestRoute(){ success in
+            if success{
+                DispatchQueue.main.async {
+                    self.updateRouteLayer()
+                }
+            }
+        }
     }
     
     func updateRouteLayer(){
