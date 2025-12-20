@@ -8,7 +8,9 @@ import Foundation
 import CoreLocation
 
 enum RouteType: String, CaseIterable {
-    case foot, bike, car
+    case car
+    case bike
+    case foot
     
     static func getRouteType(idx: Int) -> RouteType {
         RouteType.allCases[idx]

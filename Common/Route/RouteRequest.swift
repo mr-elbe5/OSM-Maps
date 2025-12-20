@@ -11,7 +11,7 @@ class RouteRequest {
     
     static func getRoute(from fromCoordinate: CLLocationCoordinate2D, to toCoordinate: CLLocationCoordinate2D, type: RouteType, completion: @escaping (_ result: Route?) -> Void) -> Void {
         if let url = URL(string: "https://routing.openstreetmap.de/routed-\(type.rawValue)/route/v1/driving/\(fromCoordinate.longitude),\(fromCoordinate.latitude);\(toCoordinate.longitude),\(toCoordinate.latitude)?geometries=geojson&alternatives=false&generate_hints=false&steps=true"){
-            //Log.info(url.absoluteString)
+            Log.info(url.absoluteString)
             let session = URLSession.shared
             session.dataTask(with: url, completionHandler: { data, response, err -> Void in
                 if let err = err {

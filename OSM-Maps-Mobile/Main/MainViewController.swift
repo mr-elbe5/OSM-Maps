@@ -349,6 +349,7 @@ class MainViewController: UIViewController {
         if routeControlView.isHidden{
             routeControlView.showRoutePanel()
         }
+        routeControlView.setupStatusPanel()
     }
     
     func cancelRoute(){

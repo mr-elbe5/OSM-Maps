@@ -12,16 +12,15 @@ class RouteControlView : UIView{
     var controlPanel = UIView()
     var routeTypeSelector = UISegmentedControl()
     
+    var statusScrollView = UIScrollView()
     var statusPanel = UIView()
-    var distanceLabel = UILabel(text: "0 m")
-    var durationLabel = UILabel(text: "00:00")
     
     func setup(){
         layer.cornerRadius = 10
         layer.masksToBounds = true
         
-        controlPanel.backgroundColor = .systemBackground
-        addSubviewBelow(controlPanel)
+        controlPanel.backgroundColor = .transparentColor
+        addSubviewBelow(controlPanel, insets: .zero)
         
         routeTypeSelector.insertSegment(with: UIImage(systemName: "car"), at: 0, animated: false)
         routeTypeSelector.insertSegment(with: UIImage(systemName: "bicycle"), at: 1, animated: false)
@@ -31,22 +30,44 @@ class RouteControlView : UIView{
         controlPanel.addSubviewToRight(routeTypeSelector, insets: OSInsets.smallInsets)
         
         let cancelButton = UIButton(type: .system)
-        cancelButton.setImage(UIImage(systemName: "xmark.circle"), for: .normal)
+        cancelButton.setImage(UIImage(systemName: "xmark.circle")?.withTintColor(.darkText), for: .normal)
         cancelButton.addTarget(self, action: #selector(cancelRoute), for: .touchDown)
         controlPanel.addSubviewToRight(cancelButton, leftView: routeTypeSelector)
         
-        statusPanel.backgroundColor = .systemBackground
-        addSubviewBelow(statusPanel, upperView: controlPanel)
+        statusScrollView.scrollsToTop = false
+        addSubviewBelow(statusScrollView, upperView: controlPanel, insets: .zero)
+            .height(200)
             .connectToBottom(of: self)
-        
-        var linePanel = UIView()
-        let distanceIcon = UIImageView(image: UIImage(systemName: "arrow.right"))
-        distanceIcon.tintColor = .darkText
-        linePanel.addSubviewToRight(distanceIcon, insets: OSInsets.smallInsets)
-        distanceLabel.textColor = .darkText
-        linePanel.addSubviewToRight(distanceLabel, leftView: distanceIcon, insets: OSInsets.smallInsets)
-        statusPanel.addSubviewBelow(linePanel)
-            .connectToBottom(of: statusPanel)
+        statusPanel.backgroundColor = .transparentColor
+        statusScrollView.addSubviewWithAnchors(statusPanel, top: statusScrollView.topAnchor, leading: statusScrollView.leadingAnchor, bottom: statusScrollView.bottomAnchor, insets: .zero)
+            .width(statusScrollView.widthAnchor, inset: 0)
+    }
+    
+    func setupStatusPanel(){
+        statusPanel.removeAllSubviews()
+        if let route = VisibleRoute.shared.route {
+            var linePanel = UIView()
+            var icon = UIImageView(image: UIImage(systemName: "arrow.right"))
+            icon.tintColor = .darkText
+            linePanel.addSubviewToRight(icon, insets: OSInsets.smallInsets)
+            var label = UILabel()
+            label.textColor = .darkText
+            label.text = "\(route.distance)m"
+            linePanel.addSubviewToRight(label, leftView: icon, insets: OSInsets.smallInsets)
+            statusPanel.addSubviewBelow(linePanel)
+            var lastLine = linePanel
+            linePanel = UIView()
+            icon = UIImageView(image: UIImage(systemName: "stopwatch"))
+            icon.tintColor = .darkText
+            linePanel.addSubviewToRight(icon, insets: OSInsets.smallInsets)
+            label = UILabel()
+            label.textColor = .darkText
+            label.text = "\(route.duration)s"
+            linePanel.addSubviewToRight(label, leftView: icon, insets: OSInsets.smallInsets)
+            statusPanel.addSubviewBelow(linePanel, upperView: lastLine)
+            lastLine = linePanel
+            lastLine.connectToBottom(of: statusPanel)
+        }
     }
     
     func showRoutePanel(){
@@ -59,7 +80,11 @@ class RouteControlView : UIView{
     }
     
     @objc func routeTypeChanged(){
-        MainViewController.shared.setRouteType(RouteType.getRouteType(idx: self.routeTypeSelector.selectedSegmentIndex))
+        let idx = self.routeTypeSelector.selectedSegmentIndex
+        Log.info(" idx \(idx)")
+        let type = RouteType.getRouteType(idx: idx)
+        Log.info(" type \(type.rawValue)")
+        MainViewController.shared.setRouteType(type)
     }
     
     @objc func cancelRoute(){

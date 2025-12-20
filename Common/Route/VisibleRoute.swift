@@ -13,7 +13,7 @@ class VisibleRoute{
     
     private var startCoordinate: CLLocationCoordinate2D?
     private var endCoordinate: CLLocationCoordinate2D?
-    private var routeType: RouteType = .car
+    private var routeType: RouteType = Preferences.shared.routeType
     
     var route: Route? = nil
     
