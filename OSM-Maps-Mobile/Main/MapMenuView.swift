@@ -32,13 +32,8 @@ class MapMenuView: UIView {
         togglePinsButton.addAction(UIAction(){ action in
             MainViewController.shared.toggleMapPins()
         }, for: .touchDown)
-        let hideRouteButton = UIButton().asImageButton("marker-gray")
-        addSubviewBelow(hideRouteButton, upperView: togglePinsButton, insets: insets)
-        hideRouteButton.addAction(UIAction(){ action in
-            MainViewController.shared.cancelRoute()
-        }, for: .touchDown)
         let refreshButton = UIButton().asIconButton("arrow.clockwise", color: .darkText)
-        addSubviewBelow(refreshButton, upperView: hideRouteButton, insets: insets)
+        addSubviewBelow(refreshButton, upperView: togglePinsButton, insets: insets)
             .connectToBottom(of: self, inset: 20)
         refreshButton.addAction(UIAction(){ action in
             MainViewController.shared.refreshMap()

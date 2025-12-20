@@ -13,7 +13,7 @@ class VisibleRoute{
     
     private var startCoordinate: CLLocationCoordinate2D?
     private var endCoordinate: CLLocationCoordinate2D?
-    private var type: RouteType = .car
+    private var routeType: RouteType = .car
     
     var route: Route? = nil
     
@@ -21,27 +21,39 @@ class VisibleRoute{
         startCoordinate != nil || endCoordinate != nil
     }
     
-    func setStartCoordinate(_ coordinate: CLLocationCoordinate2D, completion: @escaping () -> Void) {
+    func setStartCoordinate(_ coordinate: CLLocationCoordinate2D, completion: @escaping (Bool) -> Void) {
         startCoordinate = coordinate
         if endCoordinate != nil{
             requestRoute(){ success in
-                completion()
+                completion(success)
             }
         }
         else{
-            completion()
+            completion(false)
         }
     }
     
-    func setEndCoordinate(_ coordinate: CLLocationCoordinate2D, completion: @escaping () -> Void) {
+    func setEndCoordinate(_ coordinate: CLLocationCoordinate2D, completion: @escaping (Bool) -> Void) {
         endCoordinate = coordinate
         if startCoordinate != nil{
             requestRoute(){ success in
-                completion()
+                completion(success)
             }
         }
         else{
-            completion()
+            completion(false)
+        }
+    }
+    
+    func setRouteType(_ type: RouteType, completion: @escaping (Bool) -> Void) {
+        self.routeType = type
+        if startCoordinate != nil && endCoordinate != nil{
+            requestRoute(){ success in
+                completion(success)
+            }
+        }
+        else{
+            completion(false)
         }
     }
     
@@ -53,7 +65,7 @@ class VisibleRoute{
     
     func requestRoute(completion: @escaping (_ result: Bool) -> Void) {
         if let startCoordinate = startCoordinate, let endCoordinate = endCoordinate {
-            RouteRequest.getRoute(from: startCoordinate, to: endCoordinate, type: type){ route in
+            RouteRequest.getRoute(from: startCoordinate, to: endCoordinate, type: routeType){ route in
                 if let route = route{
                     self.route = route
                     completion(true)

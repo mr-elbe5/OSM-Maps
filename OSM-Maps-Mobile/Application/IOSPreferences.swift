@@ -28,6 +28,7 @@ class IOSPreferences: Identifiable, Codable{
         case followLocation
         case showDirection
         case showMapPins
+        case routeType
         case distanceFilter
         case trackpointInterval
         case minHorizontalTrackpointDistance
@@ -39,6 +40,7 @@ class IOSPreferences: Identifiable, Codable{
     var followLocation : Bool = false
     var showDirection : Bool = true
     var showMapPins : Bool = false
+    var routeType : RouteType = .car
     
     var distanceFilter: LocationDistance = MapDefaults.defaultDistanceFilter{
         didSet{
@@ -63,6 +65,9 @@ class IOSPreferences: Identifiable, Codable{
         }
         showDirection = try values.decodeIfPresent(Bool.self, forKey: .showDirection) ?? true
         showMapPins = try values.decodeIfPresent(Bool.self, forKey: .showMapPins) ?? true
+        if let type = try values.decodeIfPresent(String.self, forKey: .routeType){
+            routeType = RouteType(rawValue: type) ?? .car
+        }
         if let interval = try values.decodeIfPresent(String.self, forKey: .trackpointInterval){
             trackpointInterval = TrackpointInterval(rawValue: interval) ?? .short
         }
@@ -76,6 +81,7 @@ class IOSPreferences: Identifiable, Codable{
         try container.encode(followLocation, forKey: .followLocation)
         try container.encode(showDirection, forKey: .showDirection)
         try container.encode(showMapPins, forKey: .showMapPins)
+        try container.encode(routeType.rawValue, forKey: .routeType)
         try container.encode(distanceFilter.rawValue, forKey: .distanceFilter)
         try container.encode(maxSearchResults, forKey: .maxSearchResults)
     }

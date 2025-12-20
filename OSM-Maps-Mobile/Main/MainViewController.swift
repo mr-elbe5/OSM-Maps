@@ -19,6 +19,7 @@ class MainViewController: UIViewController {
     var mapMenuView = MapMenuView()
     var trackStatusView = TrackStatusView()
     var statusView = LocationStatusView()
+    var routeControlView = RouteControlView()
     var licenseView = UIView()
     
     var cancelAlert: UIAlertController? = nil
@@ -45,6 +46,7 @@ class MainViewController: UIViewController {
         setupLicenseView(guide: guide)
         setupStatusView(guide: guide)
         setupTrackStatusView(guide: guide)
+        setupRouteControlView(guide: guide)
         TrackRecorder.shared.delegate = self
     }
     
@@ -185,6 +187,13 @@ class MainViewController: UIViewController {
         trackStatusView.isHidden = true
     }
     
+    func setupRouteControlView(guide: UILayoutGuide){
+        routeControlView.setBackground(.transparentColor)
+        routeControlView.setup()
+        view.addSubviewWithAnchors(routeControlView, leading: guide.leadingAnchor, trailing: guide.trailingAnchor, bottom: guide.bottomAnchor, insets: OSInsets.defaultInsets)
+        routeControlView.isHidden = true
+    }
+    
     //data
     
     func updateItemLayer(){
@@ -226,6 +235,7 @@ class MainViewController: UIViewController {
     func toggleMapPins() {
         Preferences.shared.showMapPins = !Preferences.shared.showMapPins
         mapView.itemLayerView.isHidden = !Preferences.shared.showMapPins
+        Preferences.shared.save()
     }
     
     // map items
@@ -299,26 +309,51 @@ class MainViewController: UIViewController {
     // route
     
     func setRouteStart(coordinate: CLLocationCoordinate2D){
-        VisibleRoute.shared.setStartCoordinate(coordinate){
-            self.updateRouteLayer()
+        VisibleRoute.shared.setStartCoordinate(coordinate){ isComplete in
+            DispatchQueue.main.async {
+                self.mapView.routeLayerView.setStartMarker(coordinate: coordinate)
+                if isComplete, let route = VisibleRoute.shared.route{
+                    self.mapView.routeLayerView.setRoute(route: route)
+                }
+                self.mapView.updateRouteLayer()
+                self.showRouteControlPanel()
+            }
         }
     }
     
     func setRouteEnd(coordinate: CLLocationCoordinate2D){
-        VisibleRoute.shared.setEndCoordinate(coordinate){
-            self.updateRouteLayer()
+        VisibleRoute.shared.setEndCoordinate(coordinate){ isComplete in
+            DispatchQueue.main.async {
+                self.mapView.routeLayerView.setEndMarker(coordinate: coordinate)
+                if isComplete, let route = VisibleRoute.shared.route{
+                    self.mapView.routeLayerView.setRoute(route: route)
+                }
+                self.mapView.updateRouteLayer()
+                self.showRouteControlPanel()
+            }
         }
     }
     
-    func updateRouteLayer(){
-        DispatchQueue.main.async {
-            self.mapView.updateRouteLayer()
+    func setRouteType(_ routeType: RouteType){
+        Preferences.shared.routeType = routeType
+        Preferences.shared.save()
+        VisibleRoute.shared.setRouteType(routeType){ isComplete in
+            DispatchQueue.main.async {
+                self.mapView.updateRouteLayer()
+                self.showRouteControlPanel()
+            }
+        }
+    }
+    
+    func showRouteControlPanel(){
+        if routeControlView.isHidden{
+            routeControlView.showRoutePanel()
         }
     }
     
     func cancelRoute(){
         VisibleRoute.shared.reset()
-        self.mapView.updateRouteLayer()
+        self.mapView.routeLayerView.reset()
     }
     
     // camera

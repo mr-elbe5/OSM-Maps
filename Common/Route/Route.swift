@@ -9,6 +9,10 @@ import CoreLocation
 
 enum RouteType: String, CaseIterable {
     case foot, bike, car
+    
+    static func getRouteType(idx: Int) -> RouteType {
+        RouteType.allCases[idx]
+    }
 }
 
 class Route: NSObject, Codable{

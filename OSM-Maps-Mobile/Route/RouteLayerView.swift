@@ -52,6 +52,19 @@ class RouteLayerView: UIView {
         }
     }
     
+    func reset(){
+        startMarkerView.coordinate = .zero
+        startMarkerView.isHidden = true
+        endMarkerView.coordinate = .zero
+        endMarkerView.isHidden = true
+        for mv in markerViews{
+            self.removeSubview(mv)
+        }
+        markerViews.removeAll()
+        route = nil
+        setNeedsDisplay()
+    }
+    
     func updatePosition(offset: CGPoint, scale: CGFloat){
         self.offset = offset
         self.scale = scale

@@ -74,7 +74,6 @@ class CrossMenuViewController: UIViewController{
             self.dismiss(animated: false)
             MainViewController.shared.setRouteEnd(coordinate: self.coordinate)
         }, for: .touchDown)
-        setRouteEndButton.isEnabled = VisibleRoute.shared.route != nil
         contentView.addSubviewWithAnchors(setRouteEndButton, bottom: addNoteButton.topAnchor)
             .centerX(contentView.centerXAnchor)
         let setRouteStartButton = TextButton(text: "setRouteStart".localize())
