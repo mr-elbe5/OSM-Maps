@@ -339,6 +339,9 @@ class MainViewController: UIViewController {
         Preferences.shared.save()
         VisibleRoute.shared.setRouteType(routeType){ isComplete in
             DispatchQueue.main.async {
+                if isComplete, let route = VisibleRoute.shared.route{
+                    self.mapView.routeLayerView.setRoute(route: route)
+                }
                 self.mapView.updateRouteLayer()
                 self.showRouteControlPanel()
             }

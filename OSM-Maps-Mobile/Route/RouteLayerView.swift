@@ -45,7 +45,8 @@ class RouteLayerView: UIView {
             mv.removeFromSuperview()
         }
         markerViews.removeAll()
-        for waypoint in route.waypoints{
+        for i in 1..<route.waypoints.count - 1{
+            let waypoint = route.waypoints[i]
             let markerView = RouteMarkerView(coordinate: waypoint.coordinate, image: MapDefaults.routeMarkerIcon)
             addSubview(markerView)
             markerViews.append(markerView)
