@@ -51,8 +51,8 @@ class RouteRequest {
                     if let maneuver = step.maneuver, let coordinate = maneuver.coordinates2D{
                         let waypoint = Waypoint(coordinate: coordinate)
                         waypoint.name = step.name
-                        waypoint.distance = step.distance
-                        waypoint.duration = step.duration
+                        waypoint.distance = Int(step.distance)
+                        waypoint.duration = Int(step.duration)
                         waypoint.type = maneuver.type
                         waypoint.direction = maneuver.modifier
                         route.waypoints.append(waypoint)

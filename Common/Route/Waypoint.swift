@@ -20,8 +20,8 @@ class Waypoint: MapPoint{
     var name: String = ""
     var type: String = ""
     var direction: String = ""
-    var distance: Double = 0
-    var duration: Double = 0
+    var distance: Int = 0
+    var duration: Int = 0
     
     override init(coordinate: CLLocationCoordinate2D) {
         super.init(coordinate: coordinate)
@@ -32,8 +32,8 @@ class Waypoint: MapPoint{
         name = try values.decodeIfPresent(String.self, forKey: .name) ?? ""
         type = try values.decodeIfPresent(String.self, forKey: .type) ?? ""
         direction = try values.decodeIfPresent(String.self, forKey: .direction) ?? ""
-        distance = try values.decodeIfPresent(Double.self, forKey: .distance) ?? 0
-        duration = try values.decodeIfPresent(Double.self, forKey: .duration) ?? 0
+        distance = try values.decodeIfPresent(Int.self, forKey: .distance) ?? 0
+        duration = try values.decodeIfPresent(Int.self, forKey: .duration) ?? 0
         try super.init(from: decoder)
     }
     

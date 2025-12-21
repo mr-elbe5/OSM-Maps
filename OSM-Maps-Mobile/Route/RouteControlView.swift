@@ -30,7 +30,7 @@ class RouteControlView : UIView{
         controlPanel.addSubviewToRight(routeTypeSelector, insets: OSInsets.smallInsets)
         
         let cancelButton = UIButton(type: .system)
-        cancelButton.setImage(UIImage(systemName: "xmark.circle")?.withTintColor(.darkText), for: .normal)
+        cancelButton.setImage(UIImage(systemName: "xmark.circle")?.withTintColor(.darkText, renderingMode: .alwaysOriginal), for: .normal)
         cancelButton.addTarget(self, action: #selector(cancelRoute), for: .touchDown)
         controlPanel.addSubviewToRight(cancelButton, leftView: routeTypeSelector)
         
@@ -46,28 +46,65 @@ class RouteControlView : UIView{
     func setupStatusPanel(){
         statusPanel.removeAllSubviews()
         if let route = VisibleRoute.shared.route {
-            var linePanel = UIView()
-            var icon = UIImageView(image: UIImage(systemName: "arrow.right"))
-            icon.tintColor = .darkText
-            linePanel.addSubviewToRight(icon, insets: OSInsets.smallInsets)
-            var label = UILabel()
-            label.textColor = .darkText
-            label.text = "\(route.distance)m"
-            linePanel.addSubviewToRight(label, leftView: icon, insets: OSInsets.smallInsets)
-            statusPanel.addSubviewBelow(linePanel)
+            var linePanel = newLine(iconName: "arrow.right", text: "\(route.distance)m")
+            statusPanel.addSubviewBelow(linePanel, insets: .zero)
             var lastLine = linePanel
-            linePanel = UIView()
-            icon = UIImageView(image: UIImage(systemName: "stopwatch"))
-            icon.tintColor = .darkText
-            linePanel.addSubviewToRight(icon, insets: OSInsets.smallInsets)
-            label = UILabel()
-            label.textColor = .darkText
-            label.text = "\(route.duration)s"
-            linePanel.addSubviewToRight(label, leftView: icon, insets: OSInsets.smallInsets)
-            statusPanel.addSubviewBelow(linePanel, upperView: lastLine)
+            linePanel = newLine(iconName: "stopwatch", text: "\(route.duration)s")
+            statusPanel.addSubviewBelow(linePanel, upperView: lastLine, insets: .zero)
             lastLine = linePanel
+            var lastDistance = 0
+            for i in 0..<route.waypoints.count {
+                let waypoint = route.waypoints[i]
+                if lastDistance > 0 {
+                    linePanel = newLine(text: "nach \(lastDistance)m:")
+                    statusPanel.addSubviewBelow(linePanel, upperView: lastLine, insets: .zero)
+                    lastLine = linePanel
+                }
+                lastDistance = waypoint.distance
+                var iconName: String = ""
+                var str = ""
+                switch waypoint.direction {
+                case "left", "slight left", "sharp left":
+                    iconName = "arrow.left"
+                    str = "nach links "
+                    break
+                case "right", "slight right", "sharp right":
+                    iconName = "arrow.right"
+                    str = "nach rechts "
+                    break
+                default:
+                    iconName = "arrow.up"
+                    str = "weiter "
+                    break
+                }
+                if !waypoint.name.isEmpty {
+                    str += "auf \(waypoint.name)"
+                }
+                linePanel = newLine(iconName: iconName, text: str)
+                statusPanel.addSubviewBelow(linePanel, upperView: lastLine, insets: .zero)
+                lastLine = linePanel
+            }
             lastLine.connectToBottom(of: statusPanel)
         }
+    }
+    
+    func newLine(iconName: String, text: String) -> UIView {
+        let linePanel = UIView()
+        let icon = UIImageView(image: UIImage(systemName: iconName))
+        icon.tintColor = .darkText
+        linePanel.addSubviewToRight(icon, insets: OSInsets.smallInsets)
+        let label = UILabel()
+        label.text = text
+        linePanel.addSubviewToRight(label, leftView: icon, insets: OSInsets.smallInsets)
+        return linePanel
+    }
+    
+    func newLine(text: String) -> UIView {
+        let linePanel = UIView()
+        let label = UILabel()
+        label.text = text
+        linePanel.addSubviewToRight(label, insets: OSInsets.smallInsets)
+        return linePanel
     }
     
     func showRoutePanel(){
