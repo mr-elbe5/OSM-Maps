@@ -16,6 +16,7 @@ class MainViewController: UIViewController {
     var gpsStatusView = GPSStatusView()
     var topMenuView = TopMenuView()
     var trackMenuView = TrackMenuView()
+    var routeMenuView = RouteMenuView()
     var mapMenuView = MapMenuView()
     var trackStatusView = TrackStatusView()
     var statusView = LocationStatusView()
@@ -42,6 +43,7 @@ class MainViewController: UIViewController {
         setupGpsStatusView(guide: guide)
         setupTopMenuView(guide: guide)
         setupTrackMenuView(guide: guide)
+        setupRouteMenuView(guide: guide)
         setupMapMenuView(guide: guide)
         setupLicenseView(guide: guide)
         setupStatusView(guide: guide)
@@ -141,6 +143,11 @@ class MainViewController: UIViewController {
     func setupTrackMenuView(guide: UILayoutGuide){
         view.addSubviewWithAnchors(trackMenuView, top: guide.topAnchor, leading: guide.leadingAnchor, insets: UIEdgeInsets(top: 40, left: 10, bottom: 0, right: 0))
         trackMenuView.setup()
+    }
+    
+    func setupRouteMenuView(guide: UILayoutGuide){
+        view.addSubviewWithAnchors(routeMenuView, top: trackMenuView.bottomAnchor, leading: guide.leadingAnchor, insets: UIEdgeInsets(top: 40, left: 10, bottom: 0, right: 0))
+        routeMenuView.setup()
     }
     
     func setupMapMenuView(guide: UILayoutGuide){
@@ -308,6 +315,32 @@ class MainViewController: UIViewController {
     
     // route
     
+    func enableRouteStart(){
+        if mapView.routeLayerView.state == .setStart{
+            mapView.routeLayerView.state = .idle
+        }
+        else{
+            mapView.routeLayerView.state = .setStart
+        }
+        routeMenuView.updateState(mapView.routeLayerView.state)
+    }
+    
+    func enableRouteEnd(){
+        if mapView.routeLayerView.state == .setEnd{
+            mapView.routeLayerView.state = .idle
+        }
+        else{
+            mapView.routeLayerView.state = .setEnd
+        }
+        routeMenuView.updateState(mapView.routeLayerView.state)
+    }
+    
+    func setRouteStart(screenPoint: CGPoint){
+        let mapPoint = mapView.scrollView.worldPoint(screenPoint: screenPoint)
+        let coordinate = mapPoint.coordinate
+        setRouteStart(coordinate: coordinate)
+    }
+    
     func setRouteStart(coordinate: CLLocationCoordinate2D){
         VisibleRoute.shared.setStartCoordinate(coordinate){ isComplete in
             DispatchQueue.main.async {
@@ -319,6 +352,12 @@ class MainViewController: UIViewController {
                 self.showRouteControlPanel()
             }
         }
+    }
+    
+    func setRouteEnd(screenPoint: CGPoint){
+        let mapPoint = mapView.scrollView.worldPoint(screenPoint: screenPoint)
+        let coordinate = mapPoint.coordinate
+        setRouteEnd(coordinate: coordinate)
     }
     
     func setRouteEnd(coordinate: CLLocationCoordinate2D){
@@ -358,6 +397,8 @@ class MainViewController: UIViewController {
     func cancelRoute(){
         VisibleRoute.shared.reset()
         self.mapView.routeLayerView.reset()
+        routeControlView.isHidden = true
+        routeMenuView.updateState(.idle)
     }
     
     // camera

@@ -69,20 +69,6 @@ class CrossMenuViewController: UIViewController{
         }, for: .touchDown)
         contentView.addSubviewWithAnchors(addNoteButton, bottom: addImagesButton.topAnchor)
             .centerX(contentView.centerXAnchor)
-        let setRouteEndButton = TextButton(text: "setRouteEnd".localize())
-        setRouteEndButton.addAction(UIAction(){ action in
-            self.dismiss(animated: false)
-            MainViewController.shared.setRouteEnd(coordinate: self.coordinate)
-        }, for: .touchDown)
-        contentView.addSubviewWithAnchors(setRouteEndButton, bottom: addNoteButton.topAnchor)
-            .centerX(contentView.centerXAnchor)
-        let setRouteStartButton = TextButton(text: "setRouteStart".localize())
-        setRouteStartButton.addAction(UIAction(){ action in
-            self.dismiss(animated: false)
-            MainViewController.shared.setRouteStart(coordinate: self.coordinate)
-        }, for: .touchDown)
-        contentView.addSubviewWithAnchors(setRouteStartButton, bottom: setRouteEndButton.topAnchor)
-            .centerX(contentView.centerXAnchor)
         
     }
     

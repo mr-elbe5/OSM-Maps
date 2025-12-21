@@ -7,6 +7,12 @@
 import UIKit
 import CoreLocation
 
+enum RouteMenuState{
+    case idle
+    case setStart
+    case setEnd
+}
+
 class RouteLayerView: UIView {
     
     var route: Route? = nil
@@ -14,19 +20,24 @@ class RouteLayerView: UIView {
     var offset : CGPoint? = nil
     var scale : CGFloat = 0.0
     
+    var state: RouteMenuState = .idle
+    
     let startMarkerView = RouteMarkerView(coordinate: .zero, image: MapDefaults.routeStartIcon)
     let endMarkerView = RouteMarkerView(coordinate: .zero, image: MapDefaults.routeEndIcon)
     var markerViews = Array<RouteMarkerView>()
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        return false
+        return state != .idle
     }
     
     func setupView(){
+        startMarkerView.baseFrame = RouteMarkerView.upperBaseFrame
         addSubview(startMarkerView)
+        endMarkerView.baseFrame = RouteMarkerView.upperBaseFrame
         addSubview(endMarkerView)
         startMarkerView.isHidden = true
         endMarkerView.isHidden = true
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapped)))
     }
     
     func setStartMarker(coordinate: CLLocationCoordinate2D){
@@ -54,6 +65,7 @@ class RouteLayerView: UIView {
     }
     
     func reset(){
+        state = .idle
         startMarkerView.coordinate = .zero
         startMarkerView.isHidden = true
         endMarkerView.coordinate = .zero
@@ -106,6 +118,20 @@ class RouteLayerView: UIView {
                 ctx.drawPath(using: .stroke)
                 ctx.setFillColor(UIColor.black.cgColor)
             }
+        }
+    }
+    
+    @objc func tapped(sender: UITapGestureRecognizer){
+        let location = sender.location(in: self)
+        switch (state){
+        case .setStart:
+            MainViewController.shared.setRouteStart(screenPoint: location)
+            break
+        case .setEnd:
+            MainViewController.shared.setRouteEnd(screenPoint: location)
+            break
+        default:
+            break
         }
     }
     

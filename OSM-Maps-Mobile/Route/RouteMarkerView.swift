@@ -9,9 +9,11 @@ import CoreLocation
 
 class RouteMarkerView : UIImageView{
     
-    static var baseFrame = CGRect(x: -12,y: -12, width: 24, height: 24)
+    static var centerBaseFrame = CGRect(x: -12,y: -12, width: 24, height: 24)
+    static var upperBaseFrame = CGRect(x: -12,y: -24, width: 24, height: 24)
     
     var coordinate: CLLocationCoordinate2D
+    var baseFrame: CGRect = RouteMarkerView.centerBaseFrame
     
     init(coordinate: CLLocationCoordinate2D, image: UIImage?) {
         self.coordinate = coordinate
@@ -24,7 +26,7 @@ class RouteMarkerView : UIImageView{
     
     func updatePosition(mapOffset: CGPoint, scale: Double){
         let mapPoint = CGPoint(coordinate)
-        frame = RouteMarkerView.baseFrame.offsetBy(dx: (mapPoint.x - mapOffset.x)*scale, dy: (mapPoint.y - mapOffset.y)*scale)
+        frame = baseFrame.offsetBy(dx: (mapPoint.x - mapOffset.x)*scale, dy: (mapPoint.y - mapOffset.y)*scale)
         setNeedsDisplay()
     }
     

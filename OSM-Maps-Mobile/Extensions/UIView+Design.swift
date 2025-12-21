@@ -27,6 +27,14 @@ extension UIView{
     }
     
     @discardableResult
+    func unsetRoundedBorders() -> UIView{
+        layer.borderWidth = 0
+        layer.cornerRadius = 0
+        layer.masksToBounds = false
+        return self
+    }
+    
+    @discardableResult
     func setGrayRoundedBorders(radius: CGFloat = 5) -> UIView{
         layer.borderColor = UIColor.systemGray.cgColor
         layer.borderWidth = 0.5

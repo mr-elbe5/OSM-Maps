@@ -29,11 +29,6 @@ class RouteControlView : UIView{
         routeTypeSelector.addTarget(self, action: #selector(routeTypeChanged), for: .valueChanged)
         controlPanel.addSubviewToRight(routeTypeSelector, insets: OSInsets.smallInsets)
         
-        let cancelButton = UIButton(type: .system)
-        cancelButton.setImage(UIImage(systemName: "xmark.circle")?.withTintColor(.darkText, renderingMode: .alwaysOriginal), for: .normal)
-        cancelButton.addTarget(self, action: #selector(cancelRoute), for: .touchDown)
-        controlPanel.addSubviewToRight(cancelButton, leftView: routeTypeSelector)
-        
         statusScrollView.scrollsToTop = false
         addSubviewBelow(statusScrollView, upperView: controlPanel, insets: .zero)
             .height(200)
@@ -49,7 +44,7 @@ class RouteControlView : UIView{
             var linePanel = newLine(iconName: "arrow.right", text: "\(route.distance)m")
             statusPanel.addSubviewBelow(linePanel, insets: .zero)
             var lastLine = linePanel
-            linePanel = newLine(iconName: "stopwatch", text: "\(route.duration)s")
+            linePanel = newLine(iconName: "stopwatch", text: route.duration.hmsString())
             statusPanel.addSubviewBelow(linePanel, upperView: lastLine, insets: .zero)
             lastLine = linePanel
             var lastDistance = 0
@@ -120,11 +115,6 @@ class RouteControlView : UIView{
     
     func showRoutePanel(){
         isHidden = false
-        updateRoutePanel()
-    }
-    
-    func updateRoutePanel(){
-        
     }
     
     @objc func routeTypeChanged(){
@@ -133,11 +123,6 @@ class RouteControlView : UIView{
         let type = RouteType.getRouteType(idx: idx)
         Log.info(" type \(type.rawValue)")
         MainViewController.shared.setRouteType(type)
-    }
-    
-    @objc func cancelRoute(){
-        MainViewController.shared.cancelRoute()
-        isHidden = true
     }
     
 }
