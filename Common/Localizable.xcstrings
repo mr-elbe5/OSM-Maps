@@ -290,6 +290,23 @@
         }
       }
     },
+    "arrived" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ziel erreicht"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "arrived"
+          }
+        }
+      }
+    },
     "audio" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2806,6 +2823,23 @@
         }
       }
     },
+    "on" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "auf"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "on"
+          }
+        }
+      }
+    },
     "openBackup" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4200,6 +4234,23 @@
         }
       }
     },
+    "startRoute" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "starten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "start"
+          }
+        }
+      }
+    },
     "startWatchUpload" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4213,6 +4264,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Upload loaded tiles to watch"
+          }
+        }
+      }
+    },
+    "straight" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "geradeaus"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "straight ahead"
           }
         }
       }
@@ -4672,6 +4740,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Track Settings"
+          }
+        }
+      }
+    },
+    "turnLeft" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nach links"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "turn left"
+          }
+        }
+      }
+    },
+    "turnRight" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nach rechts"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "turn right"
           }
         }
       }

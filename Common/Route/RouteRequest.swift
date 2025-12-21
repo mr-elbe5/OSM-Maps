@@ -41,8 +41,8 @@ class RouteRequest {
         Log.info("found routes: \(osrmRouteData.routes.count)")
         let route = Route()
         if let osmroute = osrmRouteData.routes.first {
-            route.distance = osmroute.distance
-            route.duration = osmroute.duration
+            route.distance = Int(osmroute.distance)
+            route.duration = Int(osmroute.duration)
             for leg in osmroute.legs {
                 for step in leg.steps {
                     for coordinate in step.geometry.coordinates2D {

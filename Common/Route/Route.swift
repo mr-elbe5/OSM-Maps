@@ -28,8 +28,8 @@ class Route: NSObject, Codable{
     }
     
     var type: RouteType = .car
-    var distance: Double = 0.0
-    var duration: Double = 0.0
+    var distance: Int = 0
+    var duration: Int = 0
     var points: Array<MapPoint> = []
     var waypoints: Array<Waypoint> = []
     
@@ -51,8 +51,8 @@ class Route: NSObject, Codable{
         if let s, let type = RouteType(rawValue: s) {
             self.type = type
         }
-        distance = try container.decodeIfPresent(Double.self, forKey: .distance) ?? 0.0
-        duration = try container.decodeIfPresent(Double.self, forKey: .duration) ?? 0.0
+        distance = try container.decodeIfPresent(Int.self, forKey: .distance) ?? 0
+        duration = try container.decodeIfPresent(Int.self, forKey: .duration) ?? 0
         points = try container.decodeIfPresent(Array<MapPoint>.self, forKey: .points) ?? []
         waypoints = try container.decodeIfPresent(Array<Waypoint>.self, forKey: .waypoints) ?? []
     }
@@ -68,8 +68,8 @@ class Route: NSObject, Codable{
     
     func reset(){
         type = .car
-        distance = 0.0
-        duration = 0.0
+        distance = 0
+        duration = 0
         points.removeAll()
         waypoints.removeAll()
     }

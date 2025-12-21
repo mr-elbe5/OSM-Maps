@@ -63,22 +63,33 @@ class RouteControlView : UIView{
                 lastDistance = waypoint.distance
                 var iconName: String = ""
                 var str = ""
-                switch waypoint.direction {
-                case "left", "slight left", "sharp left":
-                    iconName = "arrow.left"
-                    str = "nach links "
-                    break
-                case "right", "slight right", "sharp right":
-                    iconName = "arrow.right"
-                    str = "nach rechts "
-                    break
+                switch waypoint.type {
+                case "depart":
+                    iconName = "flag"
+                    str = "start".localize() + " "
+                case "arrive":
+                    iconName = "flag.pattern.checkered"
+                    str = "arrived".localize() + " "
+                case "turn":
+                    switch waypoint.direction {
+                    case "left", "slight left", "sharp left":
+                        iconName = "arrow.left"
+                        str = "turnLeft".localize() + " "
+                        break
+                    case "right", "slight right", "sharp right":
+                        iconName = "arrow.right"
+                        str = "turnRight".localize() + " "
+                        break
+                    default:
+                        iconName = "arrow.up"
+                        str = "straight".localize() + " "
+                        break
+                }
                 default:
-                    iconName = "arrow.up"
-                    str = "weiter "
                     break
                 }
                 if !waypoint.name.isEmpty {
-                    str += "auf \(waypoint.name)"
+                    str += "\("on".localize()) \(waypoint.name)"
                 }
                 linePanel = newLine(iconName: iconName, text: str)
                 statusPanel.addSubviewBelow(linePanel, upperView: lastLine, insets: .zero)
