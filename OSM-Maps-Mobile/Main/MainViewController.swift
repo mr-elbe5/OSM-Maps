@@ -348,6 +348,8 @@ class MainViewController: UIViewController {
                 if isComplete, let route = VisibleRoute.shared.route{
                     self.mapView.routeLayerView.setRoute(route: route)
                 }
+                self.mapView.routeLayerView.state = .idle
+                self.routeMenuView.updateState(.idle)
                 self.mapView.updateRouteLayer()
                 self.showRouteControlPanel()
             }
@@ -367,6 +369,8 @@ class MainViewController: UIViewController {
                 if isComplete, let route = VisibleRoute.shared.route{
                     self.mapView.routeLayerView.setRoute(route: route)
                 }
+                self.mapView.routeLayerView.state = .idle
+                self.routeMenuView.updateState(.idle)
                 self.mapView.updateRouteLayer()
                 self.showRouteControlPanel()
             }
