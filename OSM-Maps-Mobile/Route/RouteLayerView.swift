@@ -7,12 +7,6 @@
 import UIKit
 import CoreLocation
 
-enum RouteMenuState{
-    case idle
-    case setStart
-    case setEnd
-}
-
 class RouteLayerView: UIView {
     
     var route: Route? = nil
@@ -20,60 +14,77 @@ class RouteLayerView: UIView {
     var offset : CGPoint? = nil
     var scale : CGFloat = 0.0
     
-    var state: RouteMenuState = .idle
-    
-    let startMarkerView = RouteMarkerView(coordinate: .zero, image: MapDefaults.routeStartIcon)
-    let endMarkerView = RouteMarkerView(coordinate: .zero, image: MapDefaults.routeEndIcon)
-    var markerViews = Array<RouteMarkerView>()
+    var routeMarkerViews = Array<RouteMarkerView>()
+    private var waypointMarkerViews = Array<RouteMarkerView>()
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        return state != .idle
+        return VisibleRoute.shared.selectedIndex != -1
     }
     
     func setupView(){
-        startMarkerView.baseFrame = RouteMarkerView.upperBaseFrame
-        addSubview(startMarkerView)
-        endMarkerView.baseFrame = RouteMarkerView.upperBaseFrame
-        addSubview(endMarkerView)
-        startMarkerView.isHidden = true
-        endMarkerView.isHidden = true
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapped)))
+        updateRouteMarkerViews()
     }
     
-    func setStartMarker(coordinate: CLLocationCoordinate2D){
-        startMarkerView.coordinate = coordinate
-        startMarkerView.isHidden = false
+    func removeRouteMarkerViews(){
+        for mv in routeMarkerViews{
+            removeSubview(mv)
+        }
+        routeMarkerViews.removeAll()
     }
     
-    func setEndMarker(coordinate: CLLocationCoordinate2D){
-        endMarkerView.coordinate = coordinate
-        endMarkerView.isHidden = false
+    func updateRouteMarkerViews(){
+        removeRouteMarkerViews()
+        for idx in 0..<VisibleRoute.shared.coordinates.count{
+            let coord = VisibleRoute.shared.coordinates[idx]
+            var col = ""
+            switch idx{
+            case 0:
+                col = "marker-green"
+                break;
+            case VisibleRoute.shared.coordinates.count - 1:
+                col = "marker-red"
+                break;
+            default:
+                col = "marker-yellow"
+            }
+            let markerView = RouteMarkerView(coordinate: coord ?? .zero, image: UIImage(named: col))
+            addSubview(markerView)
+            markerView.baseFrame = RouteMarkerView.upperBaseFrame
+            markerView.isHidden = coord == nil
+            routeMarkerViews.append(markerView)
+        }
+    }
+    
+    func setMarker(idx: Int, coordinate: CLLocationCoordinate2D){
+        if idx < routeMarkerViews.count{
+            let mv = routeMarkerViews[idx]
+            mv.coordinate = coordinate
+            mv.isHidden = false
+        }
+    }
+    
+    func removeWaypointMarkerViews(){
+        for mv in waypointMarkerViews{
+            removeSubview(mv)
+        }
+        waypointMarkerViews.removeAll()
     }
     
     func setRoute(route: Route){
         self.route = route
-        for mv in markerViews{
-            mv.removeFromSuperview()
-        }
-        markerViews.removeAll()
+        removeWaypointMarkerViews()
         for i in 1..<route.waypoints.count - 1{
             let waypoint = route.waypoints[i]
             let markerView = RouteMarkerView(coordinate: waypoint.coordinate, image: MapDefaults.routeMarkerIcon)
             addSubview(markerView)
-            markerViews.append(markerView)
+            waypointMarkerViews.append(markerView)
         }
     }
     
     func reset(){
-        state = .idle
-        startMarkerView.coordinate = .zero
-        startMarkerView.isHidden = true
-        endMarkerView.coordinate = .zero
-        endMarkerView.isHidden = true
-        for mv in markerViews{
-            self.removeSubview(mv)
-        }
-        markerViews.removeAll()
+        removeRouteMarkerViews()
+        removeWaypointMarkerViews()
         route = nil
         setNeedsDisplay()
     }
@@ -82,14 +93,11 @@ class RouteLayerView: UIView {
         self.offset = offset
         self.scale = scale
         let mapOffset = CGPoint(x: offset.x/scale, y: offset.y/scale).normalizedPoint
-        if !startMarkerView.isHidden{
-            startMarkerView.updatePosition(mapOffset: mapOffset, scale: scale)
+        for mv in routeMarkerViews {
+            mv.updatePosition(mapOffset: mapOffset, scale: scale)
         }
-        if !endMarkerView.isHidden{
-            endMarkerView.updatePosition(mapOffset: mapOffset, scale: scale)
-        }
-        for markerView in markerViews {
-            markerView.updatePosition(mapOffset: mapOffset, scale: scale)
+        for mv in waypointMarkerViews {
+            mv.updatePosition(mapOffset: mapOffset, scale: scale)
         }
         setNeedsDisplay()
     }
@@ -123,15 +131,9 @@ class RouteLayerView: UIView {
     
     @objc func tapped(sender: UITapGestureRecognizer){
         let location = sender.location(in: self)
-        switch (state){
-        case .setStart:
-            MainViewController.shared.setRouteStart(screenPoint: location)
-            break
-        case .setEnd:
-            MainViewController.shared.setRouteEnd(screenPoint: location)
-            break
-        default:
-            break
+        let idx = VisibleRoute.shared.selectedIndex
+        if idx != -1, idx < VisibleRoute.shared.coordinates.count{
+            MainViewController.shared.setCoordinate(idx: idx, screenPoint: location)
         }
     }
     

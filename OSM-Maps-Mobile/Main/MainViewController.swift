@@ -315,62 +315,35 @@ class MainViewController: UIViewController {
     
     // route
     
-    func enableRouteStart(){
-        if mapView.routeLayerView.state == .setStart{
-            mapView.routeLayerView.state = .idle
-        }
-        else{
-            mapView.routeLayerView.state = .setStart
-        }
-        routeMenuView.updateState(mapView.routeLayerView.state)
+    func toggleMarker(_ idx: Int){
+        Log.info("toggle index \(idx)")
+        VisibleRoute.shared.setIndex(idx)
+        routeMenuView.updateState()
     }
     
-    func enableRouteEnd(){
-        if mapView.routeLayerView.state == .setEnd{
-            mapView.routeLayerView.state = .idle
-        }
-        else{
-            mapView.routeLayerView.state = .setEnd
-        }
-        routeMenuView.updateState(mapView.routeLayerView.state)
+    func addRoutePoint(){
+        VisibleRoute.shared.addCoordinate()
+        routeMenuView.updateButtons()
+        mapView.routeLayerView.updateRouteMarkerViews()
     }
     
-    func setRouteStart(screenPoint: CGPoint){
+    func removeRoutePoint(){
+        VisibleRoute.shared.removeCoordinate()
+        routeMenuView.updateButtons()
+        mapView.routeLayerView.updateRouteMarkerViews()
+    }
+    
+    func setCoordinate(idx: Int, screenPoint: CGPoint){
         let mapPoint = mapView.scrollView.worldPoint(screenPoint: screenPoint)
         let coordinate = mapPoint.coordinate
-        setRouteStart(coordinate: coordinate)
-    }
-    
-    func setRouteStart(coordinate: CLLocationCoordinate2D){
-        VisibleRoute.shared.setStartCoordinate(coordinate){ isComplete in
+        VisibleRoute.shared.setCoordinate(idx, coordinate){ isComplete in
             DispatchQueue.main.async {
-                self.mapView.routeLayerView.setStartMarker(coordinate: coordinate)
+                self.mapView.routeLayerView.setMarker(idx: idx, coordinate: coordinate)
                 if isComplete, let route = VisibleRoute.shared.route{
                     self.mapView.routeLayerView.setRoute(route: route)
                 }
-                self.mapView.routeLayerView.state = .idle
-                self.routeMenuView.updateState(.idle)
-                self.mapView.updateRouteLayer()
-                self.showRouteControlPanel()
-            }
-        }
-    }
-    
-    func setRouteEnd(screenPoint: CGPoint){
-        let mapPoint = mapView.scrollView.worldPoint(screenPoint: screenPoint)
-        let coordinate = mapPoint.coordinate
-        setRouteEnd(coordinate: coordinate)
-    }
-    
-    func setRouteEnd(coordinate: CLLocationCoordinate2D){
-        VisibleRoute.shared.setEndCoordinate(coordinate){ isComplete in
-            DispatchQueue.main.async {
-                self.mapView.routeLayerView.setEndMarker(coordinate: coordinate)
-                if isComplete, let route = VisibleRoute.shared.route{
-                    self.mapView.routeLayerView.setRoute(route: route)
-                }
-                self.mapView.routeLayerView.state = .idle
-                self.routeMenuView.updateState(.idle)
+                VisibleRoute.shared.selectedIndex = -1
+                self.routeMenuView.updateState()
                 self.mapView.updateRouteLayer()
                 self.showRouteControlPanel()
             }
@@ -402,7 +375,7 @@ class MainViewController: UIViewController {
         VisibleRoute.shared.reset()
         self.mapView.routeLayerView.reset()
         routeControlView.isHidden = true
-        routeMenuView.updateState(.idle)
+        routeMenuView.updateState()
     }
     
     // camera

@@ -11,61 +11,80 @@ class VisibleRoute{
     
     static var shared = VisibleRoute()
     
-    private var startCoordinate: CLLocationCoordinate2D?
-    private var endCoordinate: CLLocationCoordinate2D?
-    private var routeType: RouteType = Preferences.shared.routeType
+    var coordinates: [CLLocationCoordinate2D?] = []
+    var routeType: RouteType = Preferences.shared.routeType
     
     var route: Route? = nil
     
-    var shouldShow: Bool{
-        startCoordinate != nil || endCoordinate != nil
+    var selectedIndex: Int = -1
+    
+    var allCoordinatesValid: Bool{
+        coordinates.allSatisfy({
+            $0 != nil
+        })
     }
     
-    func setStartCoordinate(_ coordinate: CLLocationCoordinate2D, completion: @escaping (Bool) -> Void) {
-        startCoordinate = coordinate
-        if endCoordinate != nil{
-            requestRoute(){ success in
-                completion(success)
-            }
-        }
-        else{
-            completion(false)
+    var isValid: Bool{
+        coordinates.count > 1 && allCoordinatesValid
+    }
+    
+    init(){
+        coordinates.append(nil)
+        coordinates.append(nil)
+    }
+    
+    func addCoordinate(){
+        coordinates.append(nil)
+    }
+    
+    func removeCoordinate(){
+        if coordinates.count > 2{
+            coordinates.removeLast()
         }
     }
     
-    func setEndCoordinate(_ coordinate: CLLocationCoordinate2D, completion: @escaping (Bool) -> Void) {
-        endCoordinate = coordinate
-        if startCoordinate != nil{
-            requestRoute(){ success in
-                completion(success)
-            }
+    func setIndex(_ idx: Int){
+        if selectedIndex == idx{
+            selectedIndex = -1
         }
         else{
-            completion(false)
+            selectedIndex = idx
         }
+        Log.info("selected index = \(selectedIndex)")
+    }
+    
+    func setCoordinate(_ idx: Int,_ coordinate: CLLocationCoordinate2D, completion: @escaping (Bool) -> Void) {
+        if coordinates.count > idx {
+            coordinates[idx] = coordinate
+            if isValid{
+                requestRoute(){ success in
+                    completion(success)
+                }
+                return
+            }
+        }
+        completion(false)
     }
     
     func setRouteType(_ type: RouteType, completion: @escaping (Bool) -> Void) {
         self.routeType = type
-        if startCoordinate != nil && endCoordinate != nil{
+        if isValid{
             requestRoute(){ success in
                 completion(success)
             }
+            return
         }
-        else{
-            completion(false)
-        }
+        completion(false)
     }
     
     func reset() {
-        startCoordinate = nil
-        endCoordinate = nil
+        coordinates.removeAll()
         route = nil
     }
     
     func requestRoute(completion: @escaping (_ result: Bool) -> Void) {
-        if let startCoordinate = startCoordinate, let endCoordinate = endCoordinate {
-            RouteRequest.getRoute(from: startCoordinate, to: endCoordinate, type: routeType){ route in
+        if isValid {
+            RouteRequest.getRoute(coordinates: coordinates as! [CLLocationCoordinate2D], type: routeType){ route in
                 if let route = route{
                     self.route = route
                     completion(true)
