@@ -24,12 +24,12 @@ class RouteMenuView: UIView {
         removeAllSubviews()
         markerButtons.removeAll()
         var lastView: UIView? = nil
-        for i in 0..<VisibleRoute.shared.coordinates.count {
+        for i in 0..<VisibleRoute.shared.routePoints.count {
             var col = ""
             switch i {
             case 0:
                 col = "marker-green"
-            case VisibleRoute.shared.coordinates.count-1:
+            case VisibleRoute.shared.routePoints.count-1:
                 col = "marker-red"
             default:
                 col = "marker-yellow"
@@ -37,7 +37,7 @@ class RouteMenuView: UIView {
             let button = UIButton().asImageButton(col)
             addSubviewBelow(button, upperView: lastView, insets: insets)
             button.addAction(UIAction(){ action in
-                MainViewController.shared.toggleMarker(i)
+                MainViewController.shared.markerButtonPressed(i)
             }, for: .touchDown)
             markerButtons.append(button)
             lastView = button
@@ -47,7 +47,7 @@ class RouteMenuView: UIView {
         addPointButton.addAction(UIAction(){ action in
             MainViewController.shared.addRoutePoint()
         }, for: .touchDown)
-        let removePointButton = UIButton().asImageButton("minus.circle")
+        let removePointButton = UIButton().asIconButton("minus.circle")
         addSubviewBelow(removePointButton, upperView: addPointButton, insets: insets)
         removePointButton.addAction(UIAction(){ action in
             MainViewController.shared.removeRoutePoint()

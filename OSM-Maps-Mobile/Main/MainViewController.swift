@@ -31,6 +31,10 @@ class MainViewController: UIViewController {
         mapView.scrollView.tileRegion
     }
     
+    var routeLayerView: RouteLayerView{
+        mapView.routeLayerView
+    }
+    
     override func loadView() {
         super.loadView()
         navigationController?.navigationBar.barStyle = .black
@@ -134,26 +138,32 @@ class MainViewController: UIViewController {
         gpsStatusView.setup()
     }
     
+    //top
     func setupTopMenuView(guide: UILayoutGuide){
         view.addSubviewWithAnchors(topMenuView, top: guide.topAnchor)
             .centerX(guide.centerXAnchor)
         topMenuView.setup()
     }
     
+    //left top
     func setupTrackMenuView(guide: UILayoutGuide){
         view.addSubviewWithAnchors(trackMenuView, top: guide.topAnchor, leading: guide.leadingAnchor, insets: UIEdgeInsets(top: 40, left: 10, bottom: 0, right: 0))
         trackMenuView.setup()
     }
     
+    //left below
+    func setupMapMenuView(guide: UILayoutGuide){
+        view.addSubviewWithAnchors(mapMenuView, top: trackMenuView.bottomAnchor, leading: guide.leadingAnchor, insets: UIEdgeInsets(top: 20, left: 10, bottom: 0, right: 0))
+        mapMenuView.setup()
+    }
+    
+    //top right
     func setupRouteMenuView(guide: UILayoutGuide){
-        view.addSubviewWithAnchors(routeMenuView, top: trackMenuView.bottomAnchor, leading: guide.leadingAnchor, insets: UIEdgeInsets(top: 40, left: 10, bottom: 0, right: 0))
+        view.addSubviewWithAnchors(routeMenuView, top: guide.topAnchor, trailing: guide.trailingAnchor, insets: UIEdgeInsets(top: 40, left: 0, bottom: 0, right: 10))
         routeMenuView.setup()
     }
     
-    func setupMapMenuView(guide: UILayoutGuide){
-        view.addSubviewWithAnchors(mapMenuView, top: guide.topAnchor, trailing: guide.trailingAnchor, insets: UIEdgeInsets(top: 40, left: 0, bottom: 0, right: 10))
-        mapMenuView.setup()
-    }
+    
     
     func setupLicenseView(guide: UILayoutGuide){
         view.addSubviewWithAnchors(licenseView, trailing: guide.trailingAnchor, bottom: guide.bottomAnchor, insets: UIEdgeInsets(top: 0, left: 0, bottom: OSInsets.smallInset, right: OSInsets.defaultInset))
@@ -315,37 +325,42 @@ class MainViewController: UIViewController {
     
     // route
     
-    func toggleMarker(_ idx: Int){
-        Log.info("toggle index \(idx)")
+    func markerButtonPressed(_ idx: Int){
+        //Log.info("marker pressed \(idx)")
         VisibleRoute.shared.setIndex(idx)
         routeMenuView.updateState()
     }
     
     func addRoutePoint(){
-        VisibleRoute.shared.addCoordinate()
-        routeMenuView.updateButtons()
-        mapView.routeLayerView.updateRouteMarkerViews()
+        VisibleRoute.shared.addRoutePoint()
+        routePointsChanged()
     }
     
     func removeRoutePoint(){
-        VisibleRoute.shared.removeCoordinate()
-        routeMenuView.updateButtons()
-        mapView.routeLayerView.updateRouteMarkerViews()
+        VisibleRoute.shared.removeRoutePoint(){ isComplete in
+            DispatchQueue.main.async {
+                self.routeChanged()
+            }
+        }
+        routePointsChanged()
     }
     
-    func setCoordinate(idx: Int, screenPoint: CGPoint){
+    private func routePointsChanged(){
+        routeMenuView.updateButtons()
+        routeLayerView.setupRouteMarkerViews()
+        routeControlView.setupStatusPanel()
+    }
+    
+    func setRoutePoint(idx: Int, screenPoint: CGPoint){
+        //Log.info("set route point at \(idx)")
         let mapPoint = mapView.scrollView.worldPoint(screenPoint: screenPoint)
         let coordinate = mapPoint.coordinate
-        VisibleRoute.shared.setCoordinate(idx, coordinate){ isComplete in
+        mapView.routeLayerView.setMarkerCoordinate(idx: idx, coordinate: coordinate)
+        VisibleRoute.shared.selectedIndex = -1
+        routeMenuView.updateState()
+        VisibleRoute.shared.setCoordinateForRoutePoint(idx, coordinate){ isComplete in
             DispatchQueue.main.async {
-                self.mapView.routeLayerView.setMarker(idx: idx, coordinate: coordinate)
-                if isComplete, let route = VisibleRoute.shared.route{
-                    self.mapView.routeLayerView.setRoute(route: route)
-                }
-                VisibleRoute.shared.selectedIndex = -1
-                self.routeMenuView.updateState()
-                self.mapView.updateRouteLayer()
-                self.showRouteControlPanel()
+                self.routeChanged()
             }
         }
     }
@@ -355,25 +370,22 @@ class MainViewController: UIViewController {
         Preferences.shared.save()
         VisibleRoute.shared.setRouteType(routeType){ isComplete in
             DispatchQueue.main.async {
-                if isComplete, let route = VisibleRoute.shared.route{
-                    self.mapView.routeLayerView.setRoute(route: route)
-                }
-                self.mapView.updateRouteLayer()
-                self.showRouteControlPanel()
+                self.routeChanged()
             }
         }
     }
     
-    func showRouteControlPanel(){
-        if routeControlView.isHidden{
-            routeControlView.showRoutePanel()
-        }
+    private func routeChanged(){
+        routeLayerView.setRoute(route: VisibleRoute.shared.route)
+        mapView.updateRouteLayer()
+        routeControlView.isHidden = false
         routeControlView.setupStatusPanel()
     }
     
     func cancelRoute(){
         VisibleRoute.shared.reset()
-        self.mapView.routeLayerView.reset()
+        routeLayerView.reset()
+        routeControlView.setupStatusPanel()
         routeControlView.isHidden = true
         routeMenuView.updateState()
     }
@@ -408,7 +420,7 @@ class MainViewController: UIViewController {
             imageData = dataWithCoordinates
         }
         imageItem.saveImageAndCreatePreview(data: imageData)
-        Log.info("photo saved locally as \(imageItem.fileName)")
+        //Log.info("photo saved locally as \(imageItem.fileName)")
         AppData.shared.addItem(imageItem)
         AppData.shared.sortItemsByDate(ascending: ViewFilter.shared.defaultSortAscending)
         AppData.shared.save()

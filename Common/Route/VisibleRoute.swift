@@ -11,36 +11,46 @@ class VisibleRoute{
     
     static var shared = VisibleRoute()
     
-    var coordinates: [CLLocationCoordinate2D?] = []
+    var routePoints: [CLLocationCoordinate2D?] = []
     var routeType: RouteType = Preferences.shared.routeType
     
     var route: Route? = nil
     
     var selectedIndex: Int = -1
     
-    var allCoordinatesValid: Bool{
-        coordinates.allSatisfy({
+    var allRoutePointsSet: Bool{
+        routePoints.allSatisfy({
             $0 != nil
         })
     }
     
-    var isValid: Bool{
-        coordinates.count > 1 && allCoordinatesValid
+    var routeIsRequestable: Bool{
+        let valid = routePoints.count > 1 && allRoutePointsSet
+        //Log.info("isRequestable: \(valid)")
+        return valid
     }
     
     init(){
-        coordinates.append(nil)
-        coordinates.append(nil)
+        routePoints.append(nil)
+        routePoints.append(nil)
     }
     
-    func addCoordinate(){
-        coordinates.append(nil)
+    func addRoutePoint(){
+        routePoints.append(nil)
     }
     
-    func removeCoordinate(){
-        if coordinates.count > 2{
-            coordinates.removeLast()
+    func removeRoutePoint(completion: @escaping (Bool) -> Void){
+        if routePoints.count > 2{
+            routePoints.removeLast()
+            if routeIsRequestable{
+                //Log.info("requesting route")
+                requestRoute(){ success in
+                    completion(success)
+                }
+                return
+            }
         }
+        completion(false)
     }
     
     func setIndex(_ idx: Int){
@@ -50,13 +60,14 @@ class VisibleRoute{
         else{
             selectedIndex = idx
         }
-        Log.info("selected index = \(selectedIndex)")
+        //Log.info("selected index = \(selectedIndex)")
     }
     
-    func setCoordinate(_ idx: Int,_ coordinate: CLLocationCoordinate2D, completion: @escaping (Bool) -> Void) {
-        if coordinates.count > idx {
-            coordinates[idx] = coordinate
-            if isValid{
+    func setCoordinateForRoutePoint(_ idx: Int,_ coordinate: CLLocationCoordinate2D, completion: @escaping (Bool) -> Void) {
+        if routePoints.count > idx {
+            routePoints[idx] = coordinate
+            if routeIsRequestable{
+                //Log.info("requesting route")
                 requestRoute(){ success in
                     completion(success)
                 }
@@ -68,7 +79,7 @@ class VisibleRoute{
     
     func setRouteType(_ type: RouteType, completion: @escaping (Bool) -> Void) {
         self.routeType = type
-        if isValid{
+        if routeIsRequestable{
             requestRoute(){ success in
                 completion(success)
             }
@@ -78,13 +89,15 @@ class VisibleRoute{
     }
     
     func reset() {
-        coordinates.removeAll()
+        routePoints.removeAll()
+        routePoints.append(nil)
+        routePoints.append(nil)
         route = nil
     }
     
     func requestRoute(completion: @escaping (_ result: Bool) -> Void) {
-        if isValid {
-            RouteRequest.getRoute(coordinates: coordinates as! [CLLocationCoordinate2D], type: routeType){ route in
+        if routeIsRequestable {
+            RouteRequest.getRoute(coordinates: routePoints as! [CLLocationCoordinate2D], type: routeType){ route in
                 if let route = route{
                     self.route = route
                     completion(true)

@@ -113,10 +113,6 @@ class RouteControlView : UIView{
         return linePanel
     }
     
-    func showRoutePanel(){
-        isHidden = false
-    }
-    
     @objc func routeTypeChanged(){
         let idx = self.routeTypeSelector.selectedSegmentIndex
         Log.info(" idx \(idx)")

@@ -23,26 +23,26 @@ class RouteLayerView: UIView {
     
     func setupView(){
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapped)))
-        updateRouteMarkerViews()
+        setupRouteMarkerViews()
     }
     
-    func removeRouteMarkerViews(){
+    private func removeRouteMarkerViews(){
         for mv in routeMarkerViews{
             removeSubview(mv)
         }
         routeMarkerViews.removeAll()
     }
     
-    func updateRouteMarkerViews(){
+    func setupRouteMarkerViews(){
         removeRouteMarkerViews()
-        for idx in 0..<VisibleRoute.shared.coordinates.count{
-            let coord = VisibleRoute.shared.coordinates[idx]
+        for idx in 0..<VisibleRoute.shared.routePoints.count{
+            let coord = VisibleRoute.shared.routePoints[idx]
             var col = ""
             switch idx{
             case 0:
                 col = "marker-green"
                 break;
-            case VisibleRoute.shared.coordinates.count - 1:
+            case VisibleRoute.shared.routePoints.count - 1:
                 col = "marker-red"
                 break;
             default:
@@ -56,7 +56,7 @@ class RouteLayerView: UIView {
         }
     }
     
-    func setMarker(idx: Int, coordinate: CLLocationCoordinate2D){
+    func setMarkerCoordinate(idx: Int, coordinate: CLLocationCoordinate2D){
         if idx < routeMarkerViews.count{
             let mv = routeMarkerViews[idx]
             mv.coordinate = coordinate
@@ -64,22 +64,25 @@ class RouteLayerView: UIView {
         }
     }
     
-    func removeWaypointMarkerViews(){
+    private func removeWaypointMarkerViews(){
         for mv in waypointMarkerViews{
             removeSubview(mv)
         }
         waypointMarkerViews.removeAll()
     }
     
-    func setRoute(route: Route){
+    func setRoute(route: Route?){
         self.route = route
         removeWaypointMarkerViews()
-        for i in 1..<route.waypoints.count - 1{
-            let waypoint = route.waypoints[i]
-            let markerView = RouteMarkerView(coordinate: waypoint.coordinate, image: MapDefaults.routeMarkerIcon)
-            addSubview(markerView)
-            waypointMarkerViews.append(markerView)
+        if let route = route{
+            for i in 1..<route.waypoints.count - 1{
+                let waypoint = route.waypoints[i]
+                let markerView = RouteMarkerView(coordinate: waypoint.coordinate, image: MapDefaults.routeMarkerIcon)
+                addSubview(markerView)
+                waypointMarkerViews.append(markerView)
+            }
         }
+        setNeedsDisplay()
     }
     
     func reset(){
@@ -130,10 +133,11 @@ class RouteLayerView: UIView {
     }
     
     @objc func tapped(sender: UITapGestureRecognizer){
+        Log.info("tapped with idx \(VisibleRoute.shared.selectedIndex)")
         let location = sender.location(in: self)
         let idx = VisibleRoute.shared.selectedIndex
-        if idx != -1, idx < VisibleRoute.shared.coordinates.count{
-            MainViewController.shared.setCoordinate(idx: idx, screenPoint: location)
+        if idx != -1, idx < VisibleRoute.shared.routePoints.count{
+            MainViewController.shared.setRoutePoint(idx: idx, screenPoint: location)
         }
     }
     

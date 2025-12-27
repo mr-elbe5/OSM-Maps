@@ -16,7 +16,7 @@ class RouteRequest {
             if i > 0 {
                 string += ";"
             }
-            string += "\(coordinate.latitude),\(coordinate.longitude)"
+            string += "\(coordinate.longitude),\(coordinate.latitude)"
         }
         string += "?geometries=geojson&alternatives=false&generate_hints=false&steps=true"
         if let url = URL(string: string){
@@ -47,7 +47,7 @@ class RouteRequest {
     }
     
     private static func getRoute(from osrmRouteData: OSRMRouteData) -> Route? {
-        Log.info("found routes: \(osrmRouteData.routes.count)")
+        //Log.info("found routes: \(osrmRouteData.routes.count)")
         let route = Route()
         if let osmroute = osrmRouteData.routes.first {
             route.distance = Int(osmroute.distance)
