@@ -11,7 +11,9 @@ class VisibleRoute{
     
     static var shared = VisibleRoute()
     
-    var routePoints: [CLLocationCoordinate2D?] = []
+    static var MAX_ROUTE_POINTS: Int = 7
+    
+    var routePoints: [MapPoint?] = []
     var routeType: RouteType = Preferences.shared.routeType
     
     var route: Route? = nil
@@ -36,7 +38,9 @@ class VisibleRoute{
     }
     
     func addRoutePoint(){
-        routePoints.append(nil)
+        if routePoints.count < VisibleRoute.MAX_ROUTE_POINTS{
+            routePoints.append(nil)
+        }
     }
     
     func removeRoutePoint(completion: @escaping (Bool) -> Void){
@@ -65,7 +69,7 @@ class VisibleRoute{
     
     func setCoordinateForRoutePoint(_ idx: Int,_ coordinate: CLLocationCoordinate2D, completion: @escaping (Bool) -> Void) {
         if routePoints.count > idx {
-            routePoints[idx] = coordinate
+            routePoints[idx] = MapPoint(coordinate: coordinate)
             if routeIsRequestable{
                 //Log.info("requesting route")
                 requestRoute(){ success in
@@ -88,6 +92,24 @@ class VisibleRoute{
         completion(false)
     }
     
+    func saveRoute(){
+        if let route = route{
+            route.navigationPoints.removeAll()
+            for i in 0..<routePoints.count{
+                if let point = routePoints[i]{
+                    route.navigationPoints.append(MapPoint(coordinate: point.coordinate))
+                }
+            }
+            let item = RouteItem(route: route)
+            if let startPoint = route.routePoints.first {
+                item.coordinate = startPoint.coordinate
+                item.updateLocation(){
+                    AppData.shared.addItem(item)
+                }
+            }
+        }
+    }
+    
     func reset() {
         routePoints.removeAll()
         routePoints.append(nil)
@@ -97,7 +119,13 @@ class VisibleRoute{
     
     func requestRoute(completion: @escaping (_ result: Bool) -> Void) {
         if routeIsRequestable {
-            RouteRequest.getRoute(coordinates: routePoints as! [CLLocationCoordinate2D], type: routeType){ route in
+            var coordinates = [CLLocationCoordinate2D]()
+            for pnt in routePoints{
+                if let pnt = pnt{
+                    coordinates.append(pnt.coordinate)
+                }
+            }
+            RouteRequest.getRoute(coordinates: coordinates, type: routeType){ route in
                 if let route = route{
                     self.route = route
                     completion(true)

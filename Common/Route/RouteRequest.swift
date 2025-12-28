@@ -55,7 +55,7 @@ class RouteRequest {
             for leg in osmroute.legs {
                 for step in leg.steps {
                     for coordinate in step.geometry.coordinates2D {
-                        route.points.append(MapPoint(coordinate: coordinate))
+                        route.routePoints.append(MapPoint(coordinate: coordinate))
                     }
                     if let maneuver = step.maneuver, let coordinate = maneuver.coordinates2D{
                         let waypoint = Waypoint(coordinate: coordinate)

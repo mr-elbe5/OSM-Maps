@@ -36,7 +36,7 @@ class RouteLayerView: UIView {
     func setupRouteMarkerViews(){
         removeRouteMarkerViews()
         for idx in 0..<VisibleRoute.shared.routePoints.count{
-            let coord = VisibleRoute.shared.routePoints[idx]
+            let coord = VisibleRoute.shared.routePoints[idx]?.coordinate
             var col = ""
             switch idx{
             case 0:
@@ -110,8 +110,8 @@ class RouteLayerView: UIView {
             var drawPoints = Array<CGPoint>()
             if let offset = offset{
                 let mapOffset = CGPoint(x: offset.x/scale, y: offset.y/scale).normalizedPoint
-                for idx in 0..<route.points.count{
-                    let point = route.points[idx]
+                for idx in 0..<route.routePoints.count{
+                    let point = route.routePoints[idx]
                     let mapPoint = CGPoint(point.coordinate)
                     let drawPoint = CGPoint(x: (mapPoint.x - mapOffset.x)*scale , y: (mapPoint.y - mapOffset.y)*scale)
                     drawPoints.append(drawPoint)

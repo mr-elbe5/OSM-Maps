@@ -130,6 +130,12 @@ class Track: Codable{
         try container.encode(distance, forKey: .distance)
         try container.encode(upDistance, forKey: .upDistance)
         try container.encode(downDistance, forKey: .downDistance)
+        try container.encode(coordinateRegion, forKey: .coordinateRegion)
+        if let centerCoordinate = centerCoordinate{
+            try container.encode(centerCoordinate.latitude, forKey: .centerCoordinateLatitude)
+            try container.encode(centerCoordinate.longitude, forKey: .centerCoordinateLongitude)
+        }
+        
     }
     
     func update(from track: Track){

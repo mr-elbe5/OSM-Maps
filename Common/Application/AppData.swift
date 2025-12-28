@@ -155,6 +155,19 @@ class AppData : Codable{
         }
     }
     
+    var routes: RouteItemList{
+        get{
+            var routeItems = RouteItemList()
+            for item in _mapItems{
+                if item is RouteItem{
+                    routeItems.append(item as! RouteItem)
+                }
+            }
+            routeItems.sortByDate(ascending: ViewFilter.shared.defaultSortAscending)
+            return routeItems
+        }
+    }
+    
     init(){
         _mapItems = MapItemList()
     }
