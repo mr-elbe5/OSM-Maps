@@ -28,12 +28,14 @@ class Preferences: Identifiable, Codable{
         case maxSearchResults
         case sortAscending
         case gridSizeFactorIndex
+        case routeType
     }
     
     var mapSource : MapSource = .elbe5
     var showCenterButton: Bool = false
     var showTrackpoints : Bool = false
     var gridSizeFactorIndex: Int = 2
+    var routeType : RouteType = .car
     
     var maxSearchResults = MapDefaults.defaultMaxSearchResults
     
@@ -50,6 +52,9 @@ class Preferences: Identifiable, Codable{
         showCenterButton = try values.decodeIfPresent(Bool.self, forKey: .showCenterButton) ?? false
         sortAscending = try values.decodeIfPresent(Bool.self, forKey: .sortAscending) ?? true
         gridSizeFactorIndex = try values.decodeIfPresent(Int.self, forKey: .gridSizeFactorIndex) ?? 2
+        if let type = try values.decodeIfPresent(String.self, forKey: .routeType){
+            routeType = RouteType(rawValue: type) ?? .car
+        }
     }
     
     func encode(to encoder: Encoder) throws {
@@ -59,6 +64,7 @@ class Preferences: Identifiable, Codable{
         try container.encode(maxSearchResults, forKey: .maxSearchResults)
         try container.encode(sortAscending, forKey: .sortAscending)
         try container.encode(gridSizeFactorIndex, forKey: .gridSizeFactorIndex)
+        try container.encode(routeType.rawValue, forKey: .routeType)
     }
     
     func save(){

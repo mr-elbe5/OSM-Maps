@@ -51,6 +51,10 @@ class MapView: NSView {
         scrollView.updateTrackLayer()
     }
     
+    func updateRouteLayer(){
+        scrollView.updateRouteLayer()
+    }
+    
     func showLocationOnMap(coordinate: CLLocationCoordinate2D) {
         scrollView.scrollToScreenCenter(coordinate: coordinate)
         updateItemLayer()

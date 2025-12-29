@@ -67,13 +67,13 @@ class MapScrollView : PlainMapScrollView{
     }
     
     func updateRouteLayer(){
-        routeLayerView.update(scale: zoomScale)
+        //routeLayerView.update(scale: zoomScale)
     }
     
     func showRoute(_ show: Bool){
         if show{
             routeLayerView.isHidden = false
-            routeLayerView.update(scale: zoomScale)
+            //routeLayerView.update(scale: zoomScale)
         }
         else{
             routeLayerView.isHidden = true
@@ -108,7 +108,7 @@ class MapScrollView : PlainMapScrollView{
     @objc override func scrollViewDidScroll(){
         MapStatus.shared.centerCoordinate = screenCenterCoordinate
         trackLayerView.update(scale: zoomScale)
-        routeLayerView.update(scale: zoomScale)
+        //routeLayerView.update(scale: zoomScale)
         mapDelegate?.didScroll(to: screenCenterCoordinate)
     }
     

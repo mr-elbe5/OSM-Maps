@@ -245,6 +245,73 @@ class MainViewController: ViewController {
         trackGridView.updateData()
     }
     
+    //route
+    
+    func markerButtonPressed(_ idx: Int){
+        //Log.info("marker pressed \(idx)")
+        VisibleRoute.shared.setIndex(idx)
+        //routeMenuView.updateState()
+    }
+    
+    func addRoutePoint(){
+        VisibleRoute.shared.addRoutePoint()
+        routePointsChanged()
+    }
+    
+    func removeRoutePoint(){
+        VisibleRoute.shared.removeRoutePoint(){ isComplete in
+            DispatchQueue.main.async {
+                self.routeChanged()
+            }
+        }
+        routePointsChanged()
+    }
+    
+    private func routePointsChanged(){
+        //routeMenuView.updateButtons()
+        //routeLayerView.setupRouteMarkerViews()
+        //routeControlView.setupStatusPanel()
+    }
+    
+    func setRoutePoint(idx: Int, screenPoint: CGPoint){
+        //Log.info("set route point at \(idx)")
+        let mapPoint = mapView.scrollView.worldPoint(screenPoint: screenPoint)
+        let coordinate = mapPoint.coordinate
+        //mapView.routeLayerView.setMarkerCoordinate(idx: idx, coordinate: coordinate)
+        VisibleRoute.shared.selectedIndex = -1
+        //routeMenuView.updateState()
+        VisibleRoute.shared.setCoordinateForRoutePoint(idx, coordinate){ isComplete in
+            DispatchQueue.main.async {
+                self.routeChanged()
+            }
+        }
+    }
+    
+    func setRouteType(_ routeType: RouteType){
+        Preferences.shared.routeType = routeType
+        Preferences.shared.save()
+        VisibleRoute.shared.setRouteType(routeType){ isComplete in
+            DispatchQueue.main.async {
+                self.routeChanged()
+            }
+        }
+    }
+    
+    private func routeChanged(){
+        //routeLayerView.setRoute(route: VisibleRoute.shared.route)
+        //mapView.updateRouteLayer()
+        //routeControlView.isHidden = false
+        //routeControlView.setupStatusPanel()
+    }
+    
+    func cancelRoute(){
+        VisibleRoute.shared.reset()
+        //routeLayerView.reset()
+        //routeControlView.setupStatusPanel()
+        //routeControlView.isHidden = true
+        //routeMenuView.updateState()
+    }
+    
     // presenter
     
     func closeImagePresenter(){
