@@ -398,6 +398,10 @@ class MainViewController: UIViewController {
     
     func showRouteOnMap(item: RouteItem){
         VisibleRoute.shared.setRoute(item.route)
+        routeLayerView.setRoute(route: VisibleRoute.shared.route)
+        routeControlView.setupStatusPanel()
+        routeControlView.isHidden = false
+        routeMenuView.updateState()
         Preferences.shared.followLocation = false
         if item.route.coordinateRegion == nil{
             item.route.updateCoordinateRegion()
@@ -409,7 +413,7 @@ class MainViewController: UIViewController {
         else{
             mapView.scrollTo(item.coordinate)
         }
-        mapView.trackLayerView.setNeedsDisplay()
+        mapView.routeLayerView.setNeedsDisplay()
     }
     
     func hideRouteOnMap(){

@@ -44,6 +44,11 @@ class RouteCell: MapItemCell{
                 MainViewController.shared.navigationController?.popViewController(animated: true)
             }, for: .touchDown)
             iconView.addSubviewToLeft(mapButton, rightView: exportButton, insets: iconInsets)
+            let viewButton = UIButton().asDarkIconButton("magnifyingglass")
+            viewButton.addAction(UIAction(){ action in
+                MainViewController.shared.navigationController?.pushViewController(RouteViewController(route: route), animated: true)
+            }, for: .touchDown)
+            iconView.addSubviewToLeft(viewButton, rightView: mapButton, insets: iconInsets)
                 .connectToLeft(of: iconView)
         }
     }

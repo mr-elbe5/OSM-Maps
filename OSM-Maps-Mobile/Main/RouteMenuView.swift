@@ -12,11 +12,19 @@ class RouteMenuView: UIView {
     let insets = UIEdgeInsets(top: 20, left: 5, bottom: 20, right: 5)
     
     var markerButtons: [UIButton] = []
+    let addPointButton = UIButton().asIconButton("plus.circle")
+    let removePointButton = UIButton().asIconButton("minus.circle")
     
     func setup(){
         setBackground(.transparentColor)
         layer.cornerRadius = 10
         layer.masksToBounds = true
+        addPointButton.addAction(UIAction(){ action in
+            MainViewController.shared.addRoutePoint()
+        }, for: .touchDown)
+        removePointButton.addAction(UIAction(){ action in
+            MainViewController.shared.removeRoutePoint()
+        }, for: .touchDown)
         updateButtons()
     }
     
@@ -42,16 +50,8 @@ class RouteMenuView: UIView {
             markerButtons.append(button)
             lastView = button
         }
-        let addPointButton = UIButton().asIconButton("plus.circle")
         addSubviewBelow(addPointButton, upperView: lastView, insets: insets)
-        addPointButton.addAction(UIAction(){ action in
-            MainViewController.shared.addRoutePoint()
-        }, for: .touchDown)
-        let removePointButton = UIButton().asIconButton("minus.circle")
         addSubviewBelow(removePointButton, upperView: addPointButton, insets: insets)
-        removePointButton.addAction(UIAction(){ action in
-            MainViewController.shared.removeRoutePoint()
-        }, for: .touchDown)
         removePointButton.connectToBottom(of: self, inset: 20)
     }
     
@@ -65,6 +65,8 @@ class RouteMenuView: UIView {
                 btn.unsetRoundedBorders()
             }
         }
+        addPointButton.isEnabled = VisibleRoute.shared.routePoints.count < VisibleRoute.MAX_ROUTE_POINTS
+        removePointButton.isEnabled = VisibleRoute.shared.routePoints.count > 2
     }
     
 }

@@ -172,6 +172,7 @@ class ItemListViewController: UIViewController{
                 AppData.shared.deleteItem(withId: item.id)
                 self.items.remove(obj: item)
             }
+            AppData.shared.save()
             MainViewController.shared.updateItemLayer()
             self.setupData()
             self.tableView.reloadData()
@@ -258,7 +259,7 @@ extension ItemListViewController: UITableViewDelegate, UITableViewDataSource{
                 return cell
             }
             else{
-                Log.error("no valid item/cell for track")
+                Log.error("no valid item/cell for route")
                 return UITableViewCell()
             }
         case NoteItem.itemType:

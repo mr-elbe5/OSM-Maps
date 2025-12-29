@@ -10,19 +10,12 @@ import CoreLocation
 
 class RouteViewController: ScrollViewController{
     
-    var route: Route
+    var item: RouteItem
     
     var nameEditField = UITextField()
     
-    var timeLabel = UILabel(text: "")
-    var distanceLabel = UILabel(text: "\("distance".localize()): 0 m")
-    var upDistanceLabel = UILabel(text: "\("upDistance".localize()): 0 m")
-    var downDistanceLabel = UILabel(text: "\("downDistance".localize()): 0 m")
-    var durationLabel = UILabel(text: "\("duration".localize()): 00:00")
-    var trackpointsLabel = UILabel(text: "\("trackpoints".localize()): 0")
-    
-    init(route: Route){
-        self.route = route
+    init(route: RouteItem){
+        self.item = route
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -53,24 +46,13 @@ class RouteViewController: ScrollViewController{
     
     func loadScrollableSubviews() {
         contentView.removeAllSubviews()
-            var header = UILabel(header: "startLocation".localize())
-            contentView.addSubviewWithAnchors(header, top: contentView.topAnchor, leading: contentView.leadingAnchor)
-            
-            let coordinateLabel = UILabel(text: route.startCoordinate!.asString)
-            contentView.addSubviewWithAnchors(coordinateLabel, top: header.bottomAnchor, leading: contentView.leadingAnchor, trailing: contentView.trailingAnchor,insets: OSInsets.flatInsets)
-            
-            contentView.addSubviewWithAnchors(timeLabel, top: coordinateLabel.bottomAnchor, leading: contentView.leadingAnchor, trailing: contentView.trailingAnchor,insets: OSInsets.flatInsets)
-            
-            header = UILabel(header: "distances".localize())
-            contentView.addSubviewWithAnchors(header, top: nameEditField.bottomAnchor, leading: contentView.leadingAnchor)
-            contentView.addSubviewWithAnchors(distanceLabel, top: header.bottomAnchor, leading: contentView.leadingAnchor,insets: OSInsets.flatInsets)
-            contentView.addSubviewWithAnchors(upDistanceLabel, top: distanceLabel.bottomAnchor, leading: contentView.leadingAnchor,insets: OSInsets.flatInsets)
-        contentView.addSubviewWithAnchors(downDistanceLabel, top: upDistanceLabel.bottomAnchor, leading: contentView.leadingAnchor,insets: OSInsets.flatInsets)
-        contentView.addSubviewWithAnchors(durationLabel, top: downDistanceLabel.bottomAnchor, leading: contentView.leadingAnchor, insets: OSInsets.flatInsets)
-        contentView.addSubviewWithAnchors(trackpointsLabel, top: durationLabel.bottomAnchor, leading: contentView.leadingAnchor, insets: OSInsets.flatInsets)
-        
+        var header = UILabel(header: "startLocation".localize())
+        contentView.addSubviewWithAnchors(header, top: contentView.topAnchor, leading: contentView.leadingAnchor)
+        let startLabel = UILabel(text: item.address)
+        contentView.addSubviewWithAnchors(startLabel, top: header.bottomAnchor, leading: contentView.leadingAnchor, trailing: contentView.trailingAnchor,insets: OSInsets.flatInsets)
+        header = UILabel(header: "endLocation".localize())
+        contentView.addSubviewWithAnchors(header, top: startLabel.bottomAnchor, leading: contentView.leadingAnchor)
             .bottom(contentView.bottomAnchor)
-        
     }
     
     func exportRoute() {

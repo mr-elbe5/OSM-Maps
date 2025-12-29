@@ -12,6 +12,9 @@ class RouteControlView : UIView{
     var controlPanel = UIView()
     var routeTypeSelector = UISegmentedControl()
     
+    let cancelRouteButton = UIButton().asIconButton("xmark.circle", color: .darkText)
+    let saveRouteButton = UIButton().asIconButton("square.and.arrow.down", color: .darkText)
+    
     var statusScrollView = UIScrollView()
     var statusPanel = UIView()
     
@@ -21,20 +24,17 @@ class RouteControlView : UIView{
         
         controlPanel.backgroundColor = .transparentColor
         addSubviewBelow(controlPanel, insets: .zero)
-        
         routeTypeSelector.insertSegment(with: UIImage(systemName: "car"), at: 0, animated: false)
         routeTypeSelector.insertSegment(with: UIImage(systemName: "bicycle"), at: 1, animated: false)
         routeTypeSelector.insertSegment(with: UIImage(systemName: "figure.walk"), at: 2, animated: false)
         routeTypeSelector.selectedSegmentIndex = 0
         routeTypeSelector.addTarget(self, action: #selector(routeTypeChanged), for: .valueChanged)
         controlPanel.addSubviewToRight(routeTypeSelector, insets: OSInsets.smallInsets)
-        let cancelRouteButton = UIButton().asIconButton("xmark.circle", color: .darkText)
         controlPanel.addSubviewWithAnchors(cancelRouteButton, leading: routeTypeSelector.trailingAnchor, insets: .defaultInsets)
             .centerY(routeTypeSelector.centerYAnchor)
         cancelRouteButton.addAction(UIAction(){ action in
             MainViewController.shared.cancelRoute()
         }, for: .touchDown)
-        let saveRouteButton = UIButton().asIconButton("square.and.arrow.down", color: .darkText)
         controlPanel.addSubviewWithAnchors(saveRouteButton, leading: cancelRouteButton.trailingAnchor, insets: .defaultInsets)
             .centerY(routeTypeSelector.centerYAnchor)
         saveRouteButton.addAction(UIAction(){ action in
@@ -103,6 +103,10 @@ class RouteControlView : UIView{
                 lastLine = linePanel
             }
             lastLine.connectToBottom(of: statusPanel)
+            saveRouteButton.isEnabled = true
+        }
+        else{
+            saveRouteButton.isEnabled = false
         }
     }
     
