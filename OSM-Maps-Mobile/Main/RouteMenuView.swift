@@ -52,12 +52,7 @@ class RouteMenuView: UIView {
         removePointButton.addAction(UIAction(){ action in
             MainViewController.shared.removeRoutePoint()
         }, for: .touchDown)
-        let cancelRouteButton = UIButton().asIconButton("xmark.circle", color: .darkText)
-        addSubviewBelow(cancelRouteButton, upperView: removePointButton, insets: insets)
-        cancelRouteButton.addAction(UIAction(){ action in
-            MainViewController.shared.cancelRoute()
-        }, for: .touchDown)
-        cancelRouteButton.connectToBottom(of: self, inset: 20)
+        removePointButton.connectToBottom(of: self, inset: 20)
     }
     
     func updateState(){

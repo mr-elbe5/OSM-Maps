@@ -21,6 +21,7 @@ class AppData : Codable{
             Log.debug("got \(data.audios.count) local audios")
             Log.debug("got \(data.videos.count) local videos")
             Log.debug("got \(data.tracks.count) local tracks")
+            Log.debug("got \(data.routes.count) local routes")
             shared = data
         }
         else{
@@ -35,6 +36,7 @@ class AppData : Codable{
             Log.debug("saved \(audios.count) local audios")
             Log.debug("saved \(videos.count) local videos")
             Log.debug("saved \(tracks.count) local tracks")
+            Log.debug("saved \(routes.count) local routes")
         }
         else{
             Log.error("could not save map items data to StatusManager")

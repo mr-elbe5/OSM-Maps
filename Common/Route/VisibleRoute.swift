@@ -32,6 +32,10 @@ class VisibleRoute{
         return valid
     }
     
+    var isComplete: Bool{
+        allRoutePointsSet && routeIsRequestable && route != nil
+    }
+    
     init(){
         routePoints.append(nil)
         routePoints.append(nil)
@@ -92,19 +96,23 @@ class VisibleRoute{
         completion(false)
     }
     
+    func setRoute(_ route: Route){
+        self.route = route
+        self.routeType = route.type
+        self.routePoints = route.routepoints
+    }
+    
     func saveRoute(){
-        if let route = route{
-            route.navigationPoints.removeAll()
-            for i in 0..<routePoints.count{
-                if let point = routePoints[i]{
-                    route.navigationPoints.append(MapPoint(coordinate: point.coordinate))
-                }
-            }
-            let item = RouteItem(route: route)
-            if let startPoint = route.routePoints.first {
+        if isComplete{
+            let item = RouteItem(route: route!)
+            if let startPoint = route!.routepoints.first, let endPoint = route!.routepoints.last {
                 item.coordinate = startPoint.coordinate
+                item.endLocation = LocationData(coordinate: endPoint.coordinate)
                 item.updateLocation(){
-                    AppData.shared.addItem(item)
+                    item.endLocation!.updateLocation(){
+                        AppData.shared.addItem(item)
+                        AppData.shared.save()
+                    }
                 }
             }
         }

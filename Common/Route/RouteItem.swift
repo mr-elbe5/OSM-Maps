@@ -30,9 +30,11 @@ class RouteItem: MapItem{
     
     private enum CodingKeys: String, CodingKey {
         case route
+        case endLocation
     }
     
     var route : Route
+    var endLocation : LocationData?
     
     override var itemType: String{
         RouteItem.itemType
@@ -77,6 +79,7 @@ class RouteItem: MapItem{
     required init(from decoder: Decoder) throws {
         let values: KeyedDecodingContainer<CodingKeys> = try decoder.container(keyedBy: CodingKeys.self)
         route = try values.decodeIfPresent(Route.self, forKey: .route) ?? Route()
+        endLocation = try values.decodeIfPresent(LocationData.self, forKey: .endLocation)
         try super.init(from: decoder)
         coordinate = route.startCoordinate ?? .zero
     }
@@ -85,6 +88,7 @@ class RouteItem: MapItem{
         var container = encoder.container(keyedBy: CodingKeys.self)
         try super .encode(to: encoder)
         try container.encode(route, forKey: .route)
+        try container.encodeIfPresent(endLocation, forKey: .endLocation)
     }
     
     func getPreviewFile() -> Data?{

@@ -1,0 +1,109 @@
+/*
+ OSM Maps
+ Display and use of OSM maps
+ Copyright: Michael Rönnau mr@elbe5.de
+ */
+
+import UIKit
+
+protocol RouteCellDelegate: MapItemCellDelegate {
+}
+
+class RouteCell: MapItemCell{
+
+    static let CELL_IDENT = "routeCell"
+    
+    var item : RouteItem? = nil
+    
+    var delegate : RouteCellDelegate? = nil
+    
+    override func updateIconView(){
+        iconView.removeAllSubviews()
+        if let route = item{
+            let selectedButton = UIButton().asDarkIconButton(route.selected ? "checkmark.square" : "square")
+            selectedButton.addAction(UIAction(){ action in
+                route.selected = !route.selected
+                selectedButton.setImage(UIImage(systemName: route.selected ? "checkmark.square" : "square"), for: .normal)
+                self.delegate?.selectionChanged()
+            }, for: .touchDown)
+            iconView.addSubviewToLeft(selectedButton, insets: iconInsets)
+            
+            let exportButton = UIButton().asDarkIconButton("square.and.arrow.up")
+            exportButton.addAction(UIAction(){ action in
+                if let route = self.item?.route, let url = GPXCreator.createTemporaryFile(route: route){
+                    let controller = UIDocumentPickerViewController(forExporting: [url], asCopy: false)
+                    controller.delegate = nil
+                    MainViewController.shared.present(controller, animated: true)
+                }
+            }, for: .touchDown)
+            iconView.addSubviewToLeft(exportButton, rightView: selectedButton, insets: iconInsets)
+            
+            let mapButton = UIButton().asDarkIconButton("map")
+            mapButton.addAction(UIAction(){ action in
+                MainViewController.shared.showRouteOnMap(item: route)
+                MainViewController.shared.navigationController?.popViewController(animated: true)
+            }, for: .touchDown)
+            iconView.addSubviewToLeft(mapButton, rightView: exportButton, insets: iconInsets)
+                .connectToLeft(of: iconView)
+        }
+    }
+    
+    override func updateItemView(){
+        itemView.removeAllSubviews()
+        if let item = item{
+            let header = UILabel(header: "route".localize())
+            itemView.addSubviewCenteredBelow(header)
+            
+            let nameLabel = UILabel(text: item.route.name)
+            nameLabel.textAlignment = .center
+            itemView.addSubviewBelow(nameLabel, upperView: header)
+            
+            var rp = item.route.routepoints.isEmpty ? nil : item.route.routepoints.first
+            let startLabel = UILabel(text: "\("start".localize()): \(rp?.coordinate.asString ?? ""))")
+            itemView.addSubviewBelow(startLabel, upperView: nameLabel)
+            
+            rp = item.route.routepoints.isEmpty ? nil : item.route.routepoints.last
+            let endLabel = UILabel(text: "\("end".localize()): \(rp?.coordinate.asString ?? ""))")
+            itemView.addSubviewBelow(endLabel, upperView: startLabel, insets: OSInsets.flatInsets)
+            
+            let distanceLabel = UILabel(text: "\("distance".localize()): \(Int(item.route.distance)) m")
+            itemView.addSubviewBelow(distanceLabel, upperView: endLabel, insets: OSInsets.flatInsets)
+            
+            let durationLabel = UILabel(text: "\("duration".localize()): \(item.route.duration.hmsString())")
+            itemView.addSubviewBelow(durationLabel, upperView: distanceLabel, insets: OSInsets.flatInsets)
+            
+            if let image = item.getPreview(){
+                let imageView = UIImageView()
+                imageView.withDefaults()
+                imageView.setRoundedBorders()
+                imageView.image = image
+                imageView.setAspectRatioConstraint()
+                imageView.contentMode = .scaleAspectFit
+                itemView.addSubviewBelow(imageView, upperView: durationLabel)
+                    .connectToBottom(of: itemView)
+            }
+            else{
+                durationLabel.bottom(itemView.bottomAnchor)
+            }
+        }
+    }
+    
+    override func setupTimeLabel(){
+        timeLabel.text = item?.creationDate.dateTimeString()
+    }
+    
+    override func setupMapIcon() {
+        mapIconView.image = MapDefaults.routeStartIcon
+    }
+    
+}
+
+extension RouteCell: UITextFieldDelegate{
+    
+    func textFieldDidChange(_ textField: UITextView) {
+        if let item = item{
+            item.route.name = textField.text
+        }
+    }
+    
+}

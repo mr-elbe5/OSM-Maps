@@ -76,7 +76,7 @@ class TrackImageCreator{
                 ctx.addLine(to: drawPoints[idx])
             }
             ctx.setStrokeColor(NSColor.systemOrange.cgColor)
-            ctx.setLineWidth(2.0)
+            ctx.setLineWidth(3.0)
             ctx.drawPath(using: .stroke)
         }
     }
@@ -140,7 +140,7 @@ class TrackImageCreator{
                 ctx.addLine(to: drawPoints[idx])
             }
             ctx.setStrokeColor(UIColor.systemOrange.cgColor)
-            ctx.setLineWidth(2.0)
+            ctx.setLineWidth(3.0)
             ctx.drawPath(using: .stroke)
             if withPoints{
                 ctx.setFillColor(UIColor.systemBlue.cgColor)

@@ -20,33 +20,35 @@ enum RouteType: String, CaseIterable {
 class Route: Codable{
     
     private enum CodingKeys: String, CodingKey {
+        case name
         case navigationPoints
         case type
         case distance
         case duration
-        case routePoints
+        case routepoints
         case waypoints
         case coordinateRegion
         case centerCoordinateLatitude
         case centerCoordinateLongitude
     }
     
+    var name : String
     var navigationPoints: Array<MapPoint> = []
     var type: RouteType = .car
     var distance: Int = 0
     var duration: TimeInterval = 0.0
-    var routePoints: MapPointList = []
+    var routepoints: MapPointList = []
     var waypoints: Array<Waypoint> = []
     
     var coordinateRegion : CoordinateRegion? = nil
     var centerCoordinate : CLLocationCoordinate2D? = nil
     
     var startCoordinate: CLLocationCoordinate2D?{
-        routePoints.first?.coordinate
+        routepoints.first?.coordinate
     }
     
     var endCoordinate: CLLocationCoordinate2D?{
-        routePoints.last?.coordinate
+        routepoints.last?.coordinate
     }
     
     var worldRect: CGRect?{
@@ -54,10 +56,27 @@ class Route: Codable{
     }
     
     init(){
+        name = "Route"
+    }
+    
+    init(gpx: GPXData){
+        name = "Route"
+        routepoints = MapPointList()
+        distance = 0
+        duration = 0.0
+        for segment in gpx.segments{
+            for point in segment.points{
+                let routepoint = MapPoint(coordinate: point.coordinate)
+                routepoints.append(routepoint)
+                name = gpx.name
+            }
+        }
+        //updateFromRoutepoints()
     }
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        name = try container.decodeIfPresent(String.self, forKey: .name) ?? "Route"
         navigationPoints = try container.decodeIfPresent(Array<MapPoint>.self, forKey: .navigationPoints) ?? []
         let s = try container.decodeIfPresent(String.self, forKey: .type)
         if let s, let type = RouteType(rawValue: s) {
@@ -65,7 +84,7 @@ class Route: Codable{
         }
         distance = try container.decodeIfPresent(Int.self, forKey: .distance) ?? 0
         duration = try container.decodeIfPresent(TimeInterval.self, forKey: .duration) ?? 0.0
-        routePoints = try container.decodeIfPresent(MapPointList.self, forKey: .routePoints) ?? []
+        routepoints = try container.decodeIfPresent(MapPointList.self, forKey: .routepoints) ?? []
         waypoints = try container.decodeIfPresent(Array<Waypoint>.self, forKey: .waypoints) ?? []
         coordinateRegion = try container.decodeIfPresent(CoordinateRegion.self, forKey: .coordinateRegion)
         if let lat = try container.decodeIfPresent(CLLocationDegrees.self, forKey: .centerCoordinateLatitude), lat != 0,
@@ -81,37 +100,37 @@ class Route: Codable{
     
     func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(name, forKey: .name)
         try container.encode(navigationPoints, forKey: .navigationPoints)
         try container.encodeIfPresent(type.rawValue, forKey: .type)
         try container.encode(distance, forKey: .distance)
         try container.encode(duration, forKey: .duration)
-        try container.encode(routePoints, forKey: .routePoints)
+        try container.encode(routepoints, forKey: .routepoints)
         try container.encode(waypoints, forKey: .waypoints)
         try container.encode(coordinateRegion, forKey: .coordinateRegion)
-        if let centerCoordinate = centerCoordinate{
-            try container.encode(centerCoordinate.latitude, forKey: .centerCoordinateLatitude)
-            try container.encode(centerCoordinate.longitude, forKey: .centerCoordinateLongitude)
-        }
+        try container.encodeIfPresent(centerCoordinate?.latitude, forKey: .centerCoordinateLatitude)
+        try container.encodeIfPresent(centerCoordinate?.longitude, forKey: .centerCoordinateLongitude)
     }
     
     func reset(){
+        name = "Route"
         navigationPoints.removeAll()
         type = .car
         distance = 0
         duration = 0
-        routePoints.removeAll()
+        routepoints.removeAll()
         waypoints.removeAll()
     }
     
     func updateCoordinateRegion(){
         let cr = CoordinateRegion()
-        if let start = routePoints.first{
+        if let start = routepoints.first{
             cr.minLatitude = start.coordinate.latitude
             cr.maxLatitude = start.coordinate.latitude
             cr.minLongitude = start.coordinate.longitude
             cr.maxLongitude = start.coordinate.longitude
-            for i in 1..<self.routePoints.count{
-                let tp = routePoints[i]
+            for i in 1..<self.routepoints.count{
+                let tp = routepoints[i]
                 if tp.coordinate.latitude < cr.minLatitude{
                     cr.minLatitude = tp.coordinate.latitude
                 }

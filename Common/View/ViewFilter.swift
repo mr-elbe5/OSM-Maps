@@ -48,12 +48,8 @@ class ViewFilter: Identifiable, Codable{
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        if let dateFilterMinDate = dateFilterMinDate {
-            try container.encode(dateFilterMinDate, forKey: .dateFilterMinDate)
-        }
-        if let dateFilterMaxDate = dateFilterMaxDate {
-            try container.encode(dateFilterMaxDate, forKey: .dateFilterMaxDate)
-        }
+        try container.encodeIfPresent(dateFilterMinDate, forKey: .dateFilterMinDate)
+        try container.encodeIfPresent(dateFilterMaxDate, forKey: .dateFilterMaxDate)
         try container.encode(defaultSortAscending, forKey: .defaultSortAscending)
     }
     
@@ -104,6 +100,15 @@ class ViewFilter: Identifiable, Codable{
             return tracks
         }
         return tracks.filter(){ item in
+            return isInFilter(item: item)
+        }
+    }
+    
+    func filteredRoutes(routes: RouteItemList) -> RouteItemList{
+        if !isActive{
+            return routes
+        }
+        return routes.filter(){ item in
             return isInFilter(item: item)
         }
     }

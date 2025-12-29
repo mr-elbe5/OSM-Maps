@@ -110,8 +110,8 @@ class RouteLayerView: NSView {
             var drawPoints = Array<CGPoint>()
             if let offset = offset{
                 let mapOffset = CGPoint(x: offset.x/scale, y: offset.y/scale).normalizedPoint
-                for idx in 0..<route.routePoints.count{
-                    let point = route.routePoints[idx]
+                for idx in 0..<route.routepoints.count{
+                    let point = route.routepoints[idx]
                     let mapPoint = CGPoint(point.coordinate)
                     let drawPoint = CGPoint(x: (mapPoint.x - mapOffset.x)*scale , y: (mapPoint.y - mapOffset.y)*scale)
                     drawPoints.append(drawPoint)

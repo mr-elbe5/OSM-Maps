@@ -105,6 +105,7 @@ class LocationData: MapPoint{
                 ElevationProvider.shared.getElevation(for: self.coordinate){ result in
                     self.altitude = result
                     self.isUpdated = true
+                    onCompletion?()
                 }
             })
         }

@@ -82,8 +82,8 @@ class MainViewController: UIViewController {
             self.navigationController?.pushViewController(controller, animated: true)
         }))
         items.append(UIBarButtonItem(title: "route".localize(), image: UIImage(systemName: "point.topright.arrow.triangle.backward.to.point.bottomleft.scurvepath"), primaryAction: UIAction(){ action in
-            if VisibleRoute.shared.route == nil { return }
-            let controller = RouteViewController(route: VisibleRoute.shared.route!)
+            let controller = RouteListViewController()
+            controller.loadItems()
             self.navigationController?.pushViewController(controller, animated: true)
         }))
         groups.append(UIBarButtonItemGroup.fixedGroup(items: items))
@@ -388,6 +388,33 @@ class MainViewController: UIViewController {
         routeControlView.setupStatusPanel()
         routeControlView.isHidden = true
         routeMenuView.updateState()
+    }
+    
+    func saveRoute(){
+        if VisibleRoute.shared.isComplete{
+            VisibleRoute.shared.saveRoute()
+        }
+    }
+    
+    func showRouteOnMap(item: RouteItem){
+        VisibleRoute.shared.setRoute(item.route)
+        Preferences.shared.followLocation = false
+        if item.route.coordinateRegion == nil{
+            item.route.updateCoordinateRegion()
+        }
+        if let worldRect = item.route.worldRect{
+            let zoom = World.getZoomToFit(worldRect: worldRect, scaledSize: mapView.bounds.size)
+            mapView.zoomAndScrollTo(zoom, item.route.centerCoordinate ?? item.coordinate)
+        }
+        else{
+            mapView.scrollTo(item.coordinate)
+        }
+        mapView.trackLayerView.setNeedsDisplay()
+    }
+    
+    func hideRouteOnMap(){
+        VisibleRoute.shared.reset()
+        mapView.updateRouteLayer()
     }
     
     // camera

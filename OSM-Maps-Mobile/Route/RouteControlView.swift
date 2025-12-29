@@ -28,6 +28,18 @@ class RouteControlView : UIView{
         routeTypeSelector.selectedSegmentIndex = 0
         routeTypeSelector.addTarget(self, action: #selector(routeTypeChanged), for: .valueChanged)
         controlPanel.addSubviewToRight(routeTypeSelector, insets: OSInsets.smallInsets)
+        let cancelRouteButton = UIButton().asIconButton("xmark.circle", color: .darkText)
+        controlPanel.addSubviewWithAnchors(cancelRouteButton, leading: routeTypeSelector.trailingAnchor, insets: .defaultInsets)
+            .centerY(routeTypeSelector.centerYAnchor)
+        cancelRouteButton.addAction(UIAction(){ action in
+            MainViewController.shared.cancelRoute()
+        }, for: .touchDown)
+        let saveRouteButton = UIButton().asIconButton("square.and.arrow.down", color: .darkText)
+        controlPanel.addSubviewWithAnchors(saveRouteButton, leading: cancelRouteButton.trailingAnchor, insets: .defaultInsets)
+            .centerY(routeTypeSelector.centerYAnchor)
+        saveRouteButton.addAction(UIAction(){ action in
+            MainViewController.shared.saveRoute()
+        }, for: .touchDown)
         
         statusScrollView.scrollsToTop = false
         addSubviewBelow(statusScrollView, upperView: controlPanel, insets: .zero)

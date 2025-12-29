@@ -131,10 +131,8 @@ class Track: Codable{
         try container.encode(upDistance, forKey: .upDistance)
         try container.encode(downDistance, forKey: .downDistance)
         try container.encode(coordinateRegion, forKey: .coordinateRegion)
-        if let centerCoordinate = centerCoordinate{
-            try container.encode(centerCoordinate.latitude, forKey: .centerCoordinateLatitude)
-            try container.encode(centerCoordinate.longitude, forKey: .centerCoordinateLongitude)
-        }
+        try container.encodeIfPresent(centerCoordinate?.latitude, forKey: .centerCoordinateLatitude)
+        try container.encodeIfPresent(centerCoordinate?.longitude, forKey: .centerCoordinateLongitude)
         
     }
     

@@ -33,6 +33,8 @@ class MapItemMetaData : Codable{
             data = try values.decode(VideoItem.self, forKey: .data)
         case TrackItem.itemType:
             data = try values.decode(TrackItem.self, forKey: .data)
+        case RouteItem.itemType:
+            data = try values.decode(RouteItem.self, forKey: .data)
         case NoteItem.itemType:
             data = try values.decode(NoteItem.self, forKey: .data)
         default:
@@ -77,6 +79,10 @@ extension MapItemMetaDataList{
                 }
             case TrackItem.itemType:
                 if let item = metaData.data as? TrackItem{
+                    result.append(item)
+                }
+            case RouteItem.itemType:
+                if let item = metaData.data as? RouteItem{
                     result.append(item)
                 }
             case NoteItem.itemType:

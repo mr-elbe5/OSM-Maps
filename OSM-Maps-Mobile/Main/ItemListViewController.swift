@@ -60,6 +60,7 @@ class ItemListViewController: UIViewController{
         tableView.register(AudioCell.self, forCellReuseIdentifier: AudioCell.CELL_IDENT)
         tableView.register(VideoCell.self, forCellReuseIdentifier: VideoCell.CELL_IDENT)
         tableView.register(TrackCell.self, forCellReuseIdentifier: TrackCell.CELL_IDENT)
+        tableView.register(RouteCell.self, forCellReuseIdentifier: RouteCell.CELL_IDENT)
         tableView.register(NoteCell.self, forCellReuseIdentifier: NoteCell.CELL_IDENT)
     }
     
@@ -249,6 +250,17 @@ extension ItemListViewController: UITableViewDelegate, UITableViewDataSource{
                 Log.error("no valid item/cell for track")
                 return UITableViewCell()
             }
+        case RouteItem.itemType:
+            if let cell = tableView.dequeueReusableCell(withIdentifier: RouteCell.CELL_IDENT, for: indexPath) as? RouteCell, let route = item as? RouteItem{
+                cell.item = route
+                cell.setupCell()
+                cell.delegate = self
+                return cell
+            }
+            else{
+                Log.error("no valid item/cell for track")
+                return UITableViewCell()
+            }
         case NoteItem.itemType:
             if let cell = tableView.dequeueReusableCell(withIdentifier: NoteCell.CELL_IDENT, for: indexPath) as? NoteCell, let note = item as? NoteItem{
                 cell.item = note
@@ -328,5 +340,9 @@ extension ItemListViewController : TrackCellDelegate{
         setupData()
         tableView.reloadData()
     }
+    
+}
+
+extension ItemListViewController : RouteCellDelegate{
     
 }
