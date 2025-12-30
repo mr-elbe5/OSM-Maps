@@ -23,6 +23,48 @@ class Waypoint: MapPoint{
     var distance: Int = 0
     var duration: Int = 0
     
+    var iconName: String{
+        switch type {
+        case "depart":
+            return "flag"
+        case "arrive":
+            return "flag.pattern.checkered"
+        case "turn":
+            switch direction {
+            case "left", "slight left", "sharp left":
+                return "arrow.left"
+            case "right", "slight right", "sharp right":
+                return "arrow.right"
+            default:
+                return "arrow.up"
+        }
+        default:
+            break
+        }
+        return ""
+    }
+    
+    var directionString: String{
+        switch type {
+        case "depart":
+            return "start".localize() + " "
+        case "arrive":
+            return "arrived".localize() + " "
+        case "turn":
+            switch direction {
+            case "left", "slight left", "sharp left":
+                return "turnLeft".localize() + " "
+            case "right", "slight right", "sharp right":
+                return "turnRight".localize() + " "
+            default:
+                return "straight".localize() + " "
+        }
+        default:
+            break
+        }
+        return ""
+    }
+    
     override init(coordinate: CLLocationCoordinate2D) {
         super.init(coordinate: coordinate)
     }

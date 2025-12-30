@@ -12,8 +12,8 @@ class RouteControlView : UIView{
     var controlPanel = UIView()
     var routeTypeSelector = UISegmentedControl()
     
-    let cancelRouteButton = UIButton().asIconButton("xmark.circle", color: .darkText)
-    let saveRouteButton = UIButton().asIconButton("square.and.arrow.down", color: .darkText)
+    let cancelRouteButton = UIButton().asIconButton("xmark", color: .darkText)
+    let saveRouteButton = UIButton().asTextButton("save".localize(), color: .systemBlue)
     
     var statusScrollView = UIScrollView()
     var statusPanel = UIView()
@@ -30,17 +30,16 @@ class RouteControlView : UIView{
         routeTypeSelector.selectedSegmentIndex = 0
         routeTypeSelector.addTarget(self, action: #selector(routeTypeChanged), for: .valueChanged)
         controlPanel.addSubviewToRight(routeTypeSelector, insets: OSInsets.smallInsets)
-        controlPanel.addSubviewWithAnchors(cancelRouteButton, leading: routeTypeSelector.trailingAnchor, insets: .defaultInsets)
-            .centerY(routeTypeSelector.centerYAnchor)
-        cancelRouteButton.addAction(UIAction(){ action in
-            MainViewController.shared.cancelRoute()
-        }, for: .touchDown)
-        controlPanel.addSubviewWithAnchors(saveRouteButton, leading: cancelRouteButton.trailingAnchor, insets: .defaultInsets)
+        controlPanel.addSubviewWithAnchors(saveRouteButton, leading: routeTypeSelector.trailingAnchor, insets: .defaultInsets)
             .centerY(routeTypeSelector.centerYAnchor)
         saveRouteButton.addAction(UIAction(){ action in
             MainViewController.shared.saveRoute()
         }, for: .touchDown)
-        
+        controlPanel.addSubviewWithAnchors(cancelRouteButton, trailing: controlPanel.trailingAnchor, insets: .defaultInsets)
+            .centerY(routeTypeSelector.centerYAnchor)
+        cancelRouteButton.addAction(UIAction(){ action in
+            MainViewController.shared.cancelRoute()
+        }, for: .touchDown)
         statusScrollView.scrollsToTop = false
         addSubviewBelow(statusScrollView, upperView: controlPanel, insets: .zero)
             .height(200)
@@ -63,38 +62,13 @@ class RouteControlView : UIView{
             for i in 0..<route.waypoints.count {
                 let waypoint = route.waypoints[i]
                 if lastDistance > 0 {
-                    linePanel = newLine(text: "nach \(lastDistance)m:")
+                    linePanel = newLine(text: "\("after".localize()) \(lastDistance)m:")
                     statusPanel.addSubviewBelow(linePanel, upperView: lastLine, insets: .zero)
                     lastLine = linePanel
                 }
                 lastDistance = waypoint.distance
-                var iconName: String = ""
-                var str = ""
-                switch waypoint.type {
-                case "depart":
-                    iconName = "flag"
-                    str = "start".localize() + " "
-                case "arrive":
-                    iconName = "flag.pattern.checkered"
-                    str = "arrived".localize() + " "
-                case "turn":
-                    switch waypoint.direction {
-                    case "left", "slight left", "sharp left":
-                        iconName = "arrow.left"
-                        str = "turnLeft".localize() + " "
-                        break
-                    case "right", "slight right", "sharp right":
-                        iconName = "arrow.right"
-                        str = "turnRight".localize() + " "
-                        break
-                    default:
-                        iconName = "arrow.up"
-                        str = "straight".localize() + " "
-                        break
-                }
-                default:
-                    break
-                }
+                let iconName: String = waypoint.iconName
+                var str = waypoint.directionString
                 if !waypoint.name.isEmpty {
                     str += "\("on".localize()) \(waypoint.name)"
                 }

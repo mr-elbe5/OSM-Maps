@@ -222,6 +222,23 @@
         }
       }
     },
+    "after" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nach"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "after"
+          }
+        }
+      }
+    },
     "allTilesForDownload" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1442,6 +1459,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "End"
+          }
+        }
+      }
+    },
+    "endLocation" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zielort"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "End Location"
           }
         }
       }
@@ -5114,6 +5148,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Map Tiles for Apple Watch"
+          }
+        }
+      }
+    },
+    "waypoints" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wegpunkte"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Waypoints"
           }
         }
       }

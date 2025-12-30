@@ -47,12 +47,57 @@ class RouteViewController: ScrollViewController{
     func loadScrollableSubviews() {
         contentView.removeAllSubviews()
         var header = UILabel(header: "startLocation".localize())
-        contentView.addSubviewWithAnchors(header, top: contentView.topAnchor, leading: contentView.leadingAnchor)
-        let startLabel = UILabel(text: item.address)
-        contentView.addSubviewWithAnchors(startLabel, top: header.bottomAnchor, leading: contentView.leadingAnchor, trailing: contentView.trailingAnchor,insets: OSInsets.flatInsets)
+        var lastView: UIView = header
+        contentView.addSubviewBelow(header)
+        var text = UILabel(text: item.address)
+        contentView.addSubviewBelow(text, upperView: lastView,insets: .flatInsets)
+        lastView = text
         header = UILabel(header: "endLocation".localize())
-        contentView.addSubviewWithAnchors(header, top: startLabel.bottomAnchor, leading: contentView.leadingAnchor)
-            .bottom(contentView.bottomAnchor)
+        contentView.addSubviewBelow(header, upperView: lastView)
+        lastView=header
+        text = UILabel(text: item.endLocation?.address ?? "")
+        contentView.addSubviewBelow(text, upperView: lastView,insets: .flatInsets)
+        lastView = text
+        if let image = item.getPreview(){
+            let imageView = UIImageView()
+            imageView.withDefaults()
+            imageView.setRoundedBorders()
+            imageView.image = image
+            imageView.setAspectRatioConstraint()
+            imageView.contentMode = .scaleAspectFit
+            contentView.addSubviewBelow(imageView, upperView: lastView)
+            lastView = imageView
+        }
+        header = UILabel(header: "waypoints".localize())
+        contentView.addSubviewBelow(header, upperView: lastView)
+        lastView=header
+        var lastDistance = 0
+        for i in 0..<item.route.waypoints.count{
+            let waypoint = item.route.waypoints[i]
+            if i > 0 {
+                text = UILabel(text: "\("after".localize()) \(lastDistance)m:")
+                contentView.addSubviewBelow(text, upperView: lastView)
+                lastView = text
+            }
+            lastDistance = waypoint.distance
+            let iconName = waypoint.iconName
+            var str = waypoint.directionString
+            if !waypoint.name.isEmpty {
+                str += "\("on".localize()) \(waypoint.name)"
+            }
+            if iconName.isEmpty {
+                text = UILabel(text: str)
+                contentView.addSubviewBelow(text, upperView: lastView)
+                lastView = text
+            }
+            else{
+                let line = IconText()
+                line.setupView(icon: iconName, text: str)
+                contentView.addSubviewBelow(line, upperView: lastView)
+                lastView = line
+            }
+        }
+        lastView.connectToBottom(of: contentView)
     }
     
     func exportRoute() {
