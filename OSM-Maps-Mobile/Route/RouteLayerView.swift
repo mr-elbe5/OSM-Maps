@@ -18,7 +18,9 @@ class RouteLayerView: UIView {
     private var waypointMarkerViews = Array<RouteMarkerView>()
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        return VisibleRoute.shared.selectedIndex != -1
+        return VisibleRoute.shared.selectedIndex != -1 || subviews.contains(where: {
+            $0 is RouteMarkerView && $0.point(inside: self.convert(point, to: $0), with: event)
+        })
     }
     
     func setupView(){
@@ -48,7 +50,10 @@ class RouteLayerView: UIView {
             default:
                 col = "marker-yellow"
             }
-            let markerView = RouteMarkerView(coordinate: coord ?? .zero, image: UIImage(named: col))
+            let markerView = RouteMarkerView(idx: idx, coordinate: coord ?? .zero, image: UIImage(named: col))
+            markerView.addAction(UIAction{ action in
+                MainViewController.shared.activateWaypoint(idx)
+            }, for: .touchDown)
             addSubview(markerView)
             markerView.baseFrame = RouteMarkerView.upperBaseFrame
             markerView.isHidden = coord == nil
@@ -77,7 +82,10 @@ class RouteLayerView: UIView {
         if let route = route{
             for i in 1..<route.waypoints.count - 1{
                 let waypoint = route.waypoints[i]
-                let markerView = RouteMarkerView(coordinate: waypoint.coordinate, image: MapDefaults.routeMarkerIcon)
+                let markerView = RouteMarkerView(idx: i, coordinate: waypoint.coordinate, image: MapDefaults.routeMarkerIcon)
+                markerView.addAction(UIAction{ action in
+                    MainViewController.shared.activateWaypoint(i)
+                }, for: .touchDown)
                 addSubview(markerView)
                 waypointMarkerViews.append(markerView)
             }
@@ -89,6 +97,7 @@ class RouteLayerView: UIView {
         removeRouteMarkerViews()
         removeWaypointMarkerViews()
         route = nil
+        setupRouteMarkerViews()
         setNeedsDisplay()
     }
     

@@ -17,6 +17,7 @@ class RouteControlView : UIView{
     
     var statusScrollView = UIScrollView()
     var statusPanel = UIView()
+    var waypointLines = [WaypointLine]()
     
     func setup(){
         layer.cornerRadius = 10
@@ -51,6 +52,7 @@ class RouteControlView : UIView{
     
     func setupStatusPanel(){
         statusPanel.removeAllSubviews()
+        waypointLines.removeAll()
         if let route = VisibleRoute.shared.route {
             var linePanel = newLine(iconName: "arrow.right", text: "\(route.distance)m")
             statusPanel.addSubviewBelow(linePanel, insets: .zero)
@@ -59,6 +61,7 @@ class RouteControlView : UIView{
             statusPanel.addSubviewBelow(linePanel, upperView: lastLine, insets: .zero)
             lastLine = linePanel
             var lastDistance = 0
+            var waypointLine: WaypointLine!
             for i in 0..<route.waypoints.count {
                 let waypoint = route.waypoints[i]
                 if lastDistance > 0 {
@@ -72,9 +75,11 @@ class RouteControlView : UIView{
                 if !waypoint.name.isEmpty {
                     str += "\("on".localize()) \(waypoint.name)"
                 }
-                linePanel = newLine(iconName: iconName, text: str)
-                statusPanel.addSubviewBelow(linePanel, upperView: lastLine, insets: .zero)
-                lastLine = linePanel
+                waypointLine = WaypointLine(idx: i)
+                waypointLine.setupView(iconName: iconName, text: str)
+                statusPanel.addSubviewBelow(waypointLine, upperView: lastLine, insets: .zero)
+                lastLine = waypointLine
+                waypointLines.append(waypointLine)
             }
             lastLine.connectToBottom(of: statusPanel)
             saveRouteButton.isEnabled = true
@@ -111,4 +116,43 @@ class RouteControlView : UIView{
         MainViewController.shared.setRouteType(type)
     }
     
+    func activate(_ idx: Int){
+        for waypointLine in waypointLines {
+            waypointLine.activate(waypointLine.idx == idx)
+        }
+    }
+    
+    class WaypointLine : UIView {
+        
+        let idx: Int
+        
+        let label = UILabel()
+        
+        init(idx: Int) {
+            self.idx = idx
+            super.init(frame: .zero)
+        }
+        
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        func setupView(text: String) {
+            label.text = text
+            addSubviewFilling(label, insets: OSInsets.smallInsets)
+        }
+        
+        func setupView(iconName: String, text: String) {
+            let icon = UIImageView(image: UIImage(systemName: iconName))
+            icon.tintColor = .darkText
+            addSubviewToRight(icon, insets: OSInsets.smallInsets)
+            label.text = text
+            addSubviewToRight(label, leftView: icon, insets: OSInsets.smallInsets)
+        }
+        
+        func activate(_ flag: Bool){
+            label.font = flag ? UIFont.boldSystemFont(ofSize: label.font.pointSize) : UIFont.systemFont(ofSize: label.font.pointSize)
+        }
+        
+    }
 }

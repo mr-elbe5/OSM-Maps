@@ -421,6 +421,10 @@ class MainViewController: UIViewController {
         mapView.updateRouteLayer()
     }
     
+    func activateWaypoint(_ idx: Int){
+        routeControlView.activate(idx)
+    }
+    
     // camera
     
     func openCamera() {
