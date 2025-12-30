@@ -79,6 +79,23 @@ class RouteImageCreator{
             ctx.setLineWidth(2.0)
             ctx.drawPath(using: .stroke)
         }
+        for i in 0..<route.waypoints.count{
+            let waypoint = route.waypoints[i]
+            let mapPoint = CGPoint(waypoint.coordinate)
+            let drawPoint = CGPoint(x: (mapPoint.self.x - worldViewRect.self.minX)*downScale, y: (mapPoint.self.y - worldViewRect.self.minY)*downScale)
+            let drawRect = CGRect(x: drawPoint.x - 8, y: drawPoint.y - 16, width: 16, height: 16)
+            switch i {
+            case 0:
+                MapDefaults.routeStartIcon.draw(in: drawRect)
+                break
+            case route.waypoints.count-1:
+                MapDefaults.routeEndIcon.draw(in: drawRect)
+                break
+            default :
+                MapDefaults.routeMiddleIcon.draw(in: drawRect)
+                break
+            }
+        }
     }
     
 #elseif os(iOS)
@@ -149,6 +166,23 @@ class RouteImageCreator{
                     ctx.addEllipse(in: rect)
                 }
                 ctx.drawPath(using: .fill)
+            }
+        }
+        for i in 0..<route.waypoints.count{
+            let waypoint = route.waypoints[i]
+            let mapPoint = CGPoint(waypoint.coordinate)
+            let drawPoint = CGPoint(x: (mapPoint.self.x - worldViewRect.self.minX)*downScale, y: (mapPoint.self.y - worldViewRect.self.minY)*downScale)
+            let drawRect = CGRect(x: drawPoint.x - 8, y: drawPoint.y - 16, width: 16, height: 16)
+            switch i {
+            case 0:
+                MapDefaults.routeStartIcon.draw(in: drawRect)
+                break
+            case route.waypoints.count-1:
+                MapDefaults.routeEndIcon.draw(in: drawRect)
+                break
+            default :
+                MapDefaults.routeMiddleIcon.draw(in: drawRect)
+                break
             }
         }
     }

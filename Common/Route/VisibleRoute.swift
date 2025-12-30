@@ -114,6 +114,7 @@ class VisibleRoute{
                         AppData.shared.save()
                     }
                 }
+                _ = item.getPreview()
             }
         }
     }
