@@ -32,12 +32,27 @@ extension NSView{
             layer.cornerRadius = 5
         }
     }
+    
+    func unsetRoundedBorders(){
+        if let layer = layer{
+            layer.borderWidth = 0
+            layer.cornerRadius = 0
+        }
+    }
 
     func setGrayRoundedBorders(){
         if let layer = layer{
             layer.borderColor = NSColor.lightGray.cgColor
             layer.borderWidth = 0.5
             layer.cornerRadius = 10
+        }
+    }
+    
+    func setWhiteRoundedBorders(){
+        if let layer = layer{
+            layer.borderColor = NSColor.white.cgColor
+            layer.borderWidth = 1
+            layer.cornerRadius = 5
         }
     }
     

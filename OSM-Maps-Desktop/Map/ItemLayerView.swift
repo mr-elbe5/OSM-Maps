@@ -6,16 +6,29 @@
 
 import AppKit
 
+protocol ClickDelegate{
+    func clicked(with event: NSEvent)
+}
+
 protocol DragDelegate{
     func mouseDragged(dx: CGFloat, dy: CGFloat)
 }
 
 class ItemLayerView: NSView {
     
+    var clickDelegate: ClickDelegate? = nil
     var dragDelegate: DragDelegate? = nil
     
     override var isFlipped: Bool{
         return true
+    }
+    
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool{
+        return false
+    }
+    
+    override func mouseDown(with event: NSEvent) {
+        clickDelegate?.clicked(with: event)
     }
     
     override func mouseDragged(with event: NSEvent) {

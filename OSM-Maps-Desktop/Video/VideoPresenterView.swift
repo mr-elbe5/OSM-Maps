@@ -25,6 +25,8 @@ class VideoPresenterView: NSView {
     
     override func setupView(){
         backgroundColor = .black
+        //todo
+        videoPlayer.controlsStyle = .floating
         addSubviewFilling(videoPlayer)
         
         let config = NSImage.SymbolConfiguration(textStyle: .headline, scale: .large)

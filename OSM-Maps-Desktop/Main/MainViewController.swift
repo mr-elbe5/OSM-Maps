@@ -248,27 +248,31 @@ class MainViewController: ViewController {
     //route
     
     func markerButtonPressed(_ idx: Int){
-        //Log.info("marker pressed \(idx)")
+        Log.info("marker pressed \(idx)")
         VisibleRoute.shared.setIndex(idx)
-        //routeMenuView.updateState()
+        mapView.menuView.updateState()
     }
     
     func addRoutePoint(){
-        VisibleRoute.shared.addRoutePoint()
-        routePointsChanged()
+        if VisibleRoute.shared.routePoints.count < VisibleRoute.MAX_ROUTE_POINTS{
+            VisibleRoute.shared.addRoutePoint()
+            routePointsChanged()
+        }
     }
     
     func removeRoutePoint(){
-        VisibleRoute.shared.removeRoutePoint(){ isComplete in
-            DispatchQueue.main.async {
-                self.routeChanged()
+        if VisibleRoute.shared.routePoints.count > 2{
+            VisibleRoute.shared.removeRoutePoint(){ isComplete in
+                DispatchQueue.main.async {
+                    self.routeChanged()
+                }
             }
+            routePointsChanged()
         }
-        routePointsChanged()
     }
     
     private func routePointsChanged(){
-        //routeMenuView.updateButtons()
+        mapView.menuView.updateButtons()
         //routeLayerView.setupRouteMarkerViews()
         //routeControlView.setupStatusPanel()
     }

@@ -43,6 +43,7 @@ class MapScrollView : PlainMapScrollView{
         trackLayerView.isHidden = true
         routeLayerView.isHidden = true
         mapWorldView.addSubviewFilling(itemLayerView, insets: .zero)
+        itemLayerView.clickDelegate = self
         itemLayerView.dragDelegate = self
         updateItemLayer()
         addScrollNotifications()
@@ -110,6 +111,15 @@ class MapScrollView : PlainMapScrollView{
         trackLayerView.update(scale: zoomScale)
         //routeLayerView.update(scale: zoomScale)
         mapDelegate?.didScroll(to: screenCenterCoordinate)
+    }
+    
+}
+
+extension MapScrollView: ClickDelegate {
+    
+    public func clicked(with event: NSEvent) {
+        let pnt = convert(event.locationInWindow, from: nil)
+        routeLayerView.tapped(at: pnt)
     }
     
 }

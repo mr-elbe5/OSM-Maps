@@ -17,10 +17,6 @@ class RouteLayerView: NSView {
     var routeMarkerViews = Array<RouteMarkerView>()
     private var waypointMarkerViews = Array<RouteMarkerView>()
     
-    /*override func point(inside point: CGPoint, with event: NSEvent?) -> Bool {
-        return VisibleRoute.shared.selectedIndex != -1
-    }*/
-    
     override func setupView(){
         addGestureRecognizer(NSClickGestureRecognizer(target: self, action: #selector(tapped)))
         setupRouteMarkerViews()
@@ -132,13 +128,13 @@ class RouteLayerView: NSView {
         }
     }
     
-    @objc func tapped(sender: NSClickGestureRecognizer){
-        Log.info("tapped with idx \(VisibleRoute.shared.selectedIndex)")
-        let location = sender.location(in: self)
+    @objc func tapped(at pnt: NSPoint){
+        Log.info("tapped with idx \(VisibleRoute.shared.selectedIndex) at \(pnt)")
         let idx = VisibleRoute.shared.selectedIndex
         if idx != -1, idx < VisibleRoute.shared.routePoints.count{
-            MainViewController.shared.setRoutePoint(idx: idx, screenPoint: location)
+            MainViewController.shared.setRoutePoint(idx: idx, screenPoint: pnt)
         }
     }
     
 }
+

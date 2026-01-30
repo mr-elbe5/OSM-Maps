@@ -141,9 +141,9 @@ class RouteLayerView: UIView {
         }
     }
     
-    @objc func tapped(sender: UITapGestureRecognizer){
+    @objc func tapped(event: UITapGestureRecognizer){
         Log.info("tapped with idx \(VisibleRoute.shared.selectedIndex)")
-        let location = sender.location(in: self)
+        let location = event.location(in: self)
         let idx = VisibleRoute.shared.selectedIndex
         if idx != -1, idx < VisibleRoute.shared.routePoints.count{
             MainViewController.shared.setRoutePoint(idx: idx, screenPoint: location)

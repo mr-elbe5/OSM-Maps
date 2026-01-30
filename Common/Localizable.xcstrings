@@ -137,6 +137,23 @@
         }
       }
     },
+    "addPoint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Punkt hinzufügen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Point"
+          }
+        }
+      }
+    },
     "address" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3329,6 +3346,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reload"
+          }
+        }
+      }
+    },
+    "removePoint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Punkt entfernen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove Point"
           }
         }
       }
