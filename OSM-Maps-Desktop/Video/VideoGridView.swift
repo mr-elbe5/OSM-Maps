@@ -118,14 +118,14 @@ extension VideoGridView: VideoGridMenuDelegate{
     
     func importVideosFromPhotos() {
         MainViewController.shared.addVideosFromPhotos(){
-            MainViewController.shared.mapView.updateItemLayer()
+            MainViewController.shared.itemsChanged()
             self.updateData()
         }
     }
     
     func importVideosFromFiles() {
         MainViewController.shared.addVideosFromFiles(){
-            MainViewController.shared.mapView.updateItemLayer()
+            MainViewController.shared.itemsChanged()
             self.updateData()
         }
     }

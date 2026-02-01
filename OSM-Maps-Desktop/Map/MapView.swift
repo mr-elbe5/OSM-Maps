@@ -33,6 +33,7 @@ class MapView: NSView {
         crossLocationView.action = #selector(showCrossLocationMenu)
         addSubviewCentered(crossLocationView, centerX: scrollView.centerXAnchor, centerY: scrollView.centerYAnchor)
         crossLocationView.isHidden = !Preferences.shared.showCenterButton
+        
     }
     
     func setDefaultLocation(){
@@ -43,22 +44,9 @@ class MapView: NSView {
         scrollView.tileLayerView.refresh()
     }
     
-    func updateItemLayer(){
-        scrollView.updateItemLayer()
-    }
-    
-    func updateTrackLayer(){
-        scrollView.updateTrackLayer()
-    }
-    
-    func updateRouteLayer(){
-        scrollView.updateRouteLayer()
-    }
-    
     func showLocationOnMap(coordinate: CLLocationCoordinate2D) {
         scrollView.scrollToScreenCenter(coordinate: coordinate)
-        updateItemLayer()
-        updateTrackLayer()
+        scrollView.updateLayersScale()
     }
     
     func showMapRectOnMap(worldRect: CGRect) {
@@ -67,8 +55,7 @@ class MapView: NSView {
         scrollView.scrollToScreenCenter(coordinate: worldRect.centerCoordinate)
         Log.info("scrollZoom = \(MapStatus.shared.zoom)")
         Log.info("scrollScale = \(scrollView.zoomScale)")
-        updateItemLayer()
-        updateTrackLayer()
+        scrollView.updateLayersScale()
     }
     
     @objc func showCrossLocationMenu(){
@@ -93,11 +80,11 @@ class MapView: NSView {
     
     func refreshMap() {
         refresh()
-        updateItemLayer()
+        scrollView.updateLayersScale()
     }
     
     func importTrack() {
-        updateItemLayer()
+        scrollView.updateItemLayerContent()
     }
     
 }
@@ -107,15 +94,13 @@ extension MapView : MapScrollViewDelegate{
     func didScroll(to coordinate: CLLocationCoordinate2D) {
         MapStatus.shared.centerCoordinate = coordinate
         MapStatus.shared.save()
-        updateItemLayer()
-        updateTrackLayer()
+        
     }
     
     func didZoom(to zoom: Int) {
         MapStatus.shared.scale = World.downScale(to: zoom)
         MapStatus.shared.save()
-        updateItemLayer()
-        updateTrackLayer()
+        scrollView.updateLayersScale()
         statusView.setZoom(MapStatus.shared.zoom)
     }
     

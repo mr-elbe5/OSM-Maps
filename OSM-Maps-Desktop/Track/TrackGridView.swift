@@ -104,7 +104,7 @@ extension TrackGridView: TrackGridMenuDelegate{
                     if url.pathExtension == "gpx"{
                         importGPXFile(url: url)
                         DispatchQueue.main.async {
-                            MainViewController.shared.updateItemLayer()
+                            MainViewController.shared.itemsChanged()
                             self.updateData()
                         }
                     }
@@ -129,7 +129,7 @@ extension TrackGridView: TrackGridMenuDelegate{
             AppData.shared.addItem(item)
             AppData.shared.save()
             DispatchQueue.main.async {
-                MainViewController.shared.updateItemLayer()
+                MainViewController.shared.itemsChanged()
                 self.updateData()
             }
         }

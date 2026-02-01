@@ -49,6 +49,14 @@ class MainViewController: ViewController {
         }
     }
     
+    var mapScrollView: MapScrollView{
+        mapView.scrollView
+    }
+    
+    var mapMenuView: MapMenuView{
+        mapView.menuView
+    }
+    
     override func loadView(){
         view = NSView()
         view.backgroundColor = .black
@@ -87,7 +95,7 @@ class MainViewController: ViewController {
     override func viewWillAppear() {
         super.viewWillAppear()
         mapView.setDefaultLocation()
-        mapView.updateItemLayer()
+        mapScrollView.updateItemLayerContent()
     }
     
     func showItemDetails(item: MapItem){
@@ -129,27 +137,24 @@ class MainViewController: ViewController {
     
     func refreshMap() {
         showTrackOnMap(nil)
+        showRouteOnMap(nil)
         mapView.refreshMap()
     }
     
-    func updateItemLayer(){
-        mapView.updateItemLayer()
-    }
-    
-    func updateTrackLayer(){
-        mapView.updateTrackLayer()
+    func updateMapLayersScale(){
+        mapScrollView.updateItemLayerScale()
+        mapScrollView.updateTrackLayerScale()
+        mapScrollView.updateRouteLayerScale()
     }
     
     func zoomIn(){
         mapView.zoomIn()
-        updateItemLayer()
-        updateTrackLayer()
+        updateMapLayersScale()
     }
     
     func zoomOut(){
         mapView.zoomOut()
-        updateItemLayer()
-        updateTrackLayer()
+        updateMapLayersScale()
     }
     
     func toggleCross() {
@@ -164,18 +169,18 @@ class MainViewController: ViewController {
     func showSearchResult(coordinate: CLLocationCoordinate2D, worldRect: CGRect?){
         if let worldRect = worldRect{
             let zoom = World.getZoomToFit(worldRect: worldRect, scaledSize: mapView.bounds.size)
-            mapView.scrollView.zoomAndScrollTo(zoom, coordinate)
+            mapScrollView.zoomAndScrollTo(zoom, coordinate)
         }
         else{
-            mapView.scrollView.scrollToScreenCenter(coordinate: coordinate)
+            mapScrollView.scrollToScreenCenter(coordinate: coordinate)
         }
-        mapView.updateItemLayer()
-        mapView.updateTrackLayer()
+        updateMapLayersScale()
     }
     
     func itemsChanged(){
-        updateItemLayer()
-        updateTrackLayer()
+        mapScrollView.updateItemLayerContent()
+        mapScrollView.updateTrackLayerContent()
+        mapScrollView.updateRouteLayerContent()
         updateImageGrid()
         updateVideoGrid()
         updateTrackGrid()
@@ -224,7 +229,7 @@ class MainViewController: ViewController {
         setView(.map)
         if let item = item{
             VisibleTrack.shared.setTrack(item.track)
-            mapView.scrollView.showTrack(true)
+            mapScrollView.showTrackLayer(true)
             if item.track.coordinateRegion == nil{
                 item.track.updateCoordinateRegion()
             }
@@ -237,7 +242,7 @@ class MainViewController: ViewController {
         }
         else{
             VisibleTrack.shared.reset()
-            mapView.scrollView.showTrack(false)
+            mapScrollView.showTrackLayer(false)
         }
     }
     
@@ -247,10 +252,33 @@ class MainViewController: ViewController {
     
     //route
     
+    func showRouteOnMap(_ item: RouteItem?){
+        setView(.map)
+        if let item = item{
+            VisibleRoute.shared.setRoute(item.route)
+            mapScrollView.showRouteLayer(true)
+            if item.route.coordinateRegion == nil{
+                item.route.updateCoordinateRegion()
+            }
+            if let coordinateRegion = item.coordinateRegion{
+                mapView.showMapRectOnMap(worldRect: coordinateRegion.worldRect)
+            }
+            else{
+                mapView.showLocationOnMap(coordinate: item.coordinate)
+            }
+        }
+        else{
+            VisibleRoute.shared.reset()
+            mapScrollView.showRouteLayer(false)
+        }
+        mapMenuView.updateState()
+        //routeControlView.setupStatusPanel()
+    }
+    
     func markerButtonPressed(_ idx: Int){
         Log.info("marker pressed \(idx)")
         VisibleRoute.shared.setIndex(idx)
-        mapView.menuView.updateState()
+        mapMenuView.updateState()
     }
     
     func addRoutePoint(){
@@ -272,18 +300,17 @@ class MainViewController: ViewController {
     }
     
     private func routePointsChanged(){
-        mapView.menuView.updateButtons()
-        //routeLayerView.setupRouteMarkerViews()
+        mapMenuView.updateButtons()
+        mapScrollView.routeLayerView.setupRouteMarkerViews()
+        mapScrollView.updateRouteLayerContent()
         //routeControlView.setupStatusPanel()
     }
     
-    func setRoutePoint(idx: Int, screenPoint: CGPoint){
-        //Log.info("set route point at \(idx)")
-        let mapPoint = mapView.scrollView.worldPoint(screenPoint: screenPoint)
-        let coordinate = mapPoint.coordinate
-        //mapView.routeLayerView.setMarkerCoordinate(idx: idx, coordinate: coordinate)
+    func setRouteCoordinate(idx: Int, coordinate: CLLocationCoordinate2D){
+        Log.info("coordinate for \(idx) is \(coordinate)")
+        mapScrollView.routeLayerView.setMarkerCoordinate(idx: idx, coordinate: coordinate)
         VisibleRoute.shared.selectedIndex = -1
-        //routeMenuView.updateState()
+        mapMenuView.updateState()
         VisibleRoute.shared.setCoordinateForRoutePoint(idx, coordinate){ isComplete in
             DispatchQueue.main.async {
                 self.routeChanged()
@@ -302,18 +329,18 @@ class MainViewController: ViewController {
     }
     
     private func routeChanged(){
-        //routeLayerView.setRoute(route: VisibleRoute.shared.route)
-        //mapView.updateRouteLayer()
+        mapScrollView.routeLayerView.setRoute(route: VisibleRoute.shared.route)
+        mapScrollView.updateRouteLayerContent()
         //routeControlView.isHidden = false
         //routeControlView.setupStatusPanel()
     }
     
     func cancelRoute(){
         VisibleRoute.shared.reset()
-        //routeLayerView.reset()
+        mapScrollView.routeLayerView.reset()
         //routeControlView.setupStatusPanel()
         //routeControlView.isHidden = true
-        //routeMenuView.updateState()
+        mapView.menuView.updateState()
     }
     
     // presenter

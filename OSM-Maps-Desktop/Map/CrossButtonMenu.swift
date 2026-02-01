@@ -25,28 +25,28 @@ class CrossButtonMenu: PopoverViewController {
     func addImagesFromPhotos(){
         close()
         MainViewController.shared.addImagesFromPhotosAtCenter(){
-            MainViewController.shared.updateItemLayer()
+            MainViewController.shared.itemsChanged()
         }
     }
     
     func addImagesFromFiles(){
         close()
         MainViewController.shared.addImagesFromFilesAtCenter(){
-            MainViewController.shared.updateItemLayer()
+            MainViewController.shared.itemsChanged()
         }
     }
     
     func addVideosFromPhotos(){
         close()
         MainViewController.shared.addVideosFromPhotosAtCenter(){
-            MainViewController.shared.updateItemLayer()
+            MainViewController.shared.itemsChanged()
         }
     }
     
     func addVideosFromFiles(){
         close()
         MainViewController.shared.addVideosFromFilesAtCenter(){
-            MainViewController.shared.updateItemLayer()
+            MainViewController.shared.itemsChanged()
         }
     }
     

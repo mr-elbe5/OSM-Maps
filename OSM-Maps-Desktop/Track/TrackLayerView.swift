@@ -6,20 +6,7 @@
 
 import AppKit
 
-class TrackLayerView: NSView {
-    
-    var scale : CGFloat = 0.0
-    
-    override var isFlipped: Bool{
-        true
-    }
-    
-    func update(scale: CGFloat){
-        if VisibleTrack.shared.isPresent{
-            self.scale = scale
-            needsDisplay = true
-        }
-    }
+class TrackLayerView: LayerView {
     
     override func draw(_ dirtyRect: NSRect) {
         if VisibleTrack.shared.isPresent{

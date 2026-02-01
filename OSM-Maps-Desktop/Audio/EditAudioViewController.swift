@@ -63,7 +63,7 @@ class EditAudioViewController: ModalViewController {
         if newCoord != nil || newDate != nil{
             item.updateEditedMedia(coordinate: newCoordinate, creationDate: datePicker.date)
             AppData.shared.save()
-            MainViewController.shared.updateItemLayer()
+            MainViewController.shared.itemsChanged()
         }
         responseCode = .OK
         self.view.window?.close()

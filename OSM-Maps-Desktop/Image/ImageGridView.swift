@@ -130,14 +130,14 @@ extension ImageGridView: ImageGridMenuDelegate{
     
     func importImagesFromPhotos() {
         MainViewController.shared.addImagesFromPhotos(){
-            MainViewController.shared.mapView.updateItemLayer()
+            MainViewController.shared.itemsChanged()
             self.updateData()
         }
     }
     
     func importImagesFromFiles() {
         MainViewController.shared.addImagesFromFiles(){
-            MainViewController.shared.mapView.updateItemLayer()
+            MainViewController.shared.itemsChanged()
             self.updateData()
         }
     }

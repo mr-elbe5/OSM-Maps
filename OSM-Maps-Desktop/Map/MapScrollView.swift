@@ -37,47 +37,89 @@ class MapScrollView : PlainMapScrollView{
         clipView.drawsBackground = false
         mapWorldView.frame = World.scaledWorld(zoom: MapStatus.shared.zoom)
         documentView = mapWorldView
+        
+        tileLayerView.setupView()
         mapWorldView.addSubviewFilling(tileLayerView, insets: .zero)
-        mapWorldView.addSubviewFilling(trackLayerView, insets: .zero)
-        mapWorldView.addSubviewFilling(routeLayerView, insets: .zero)
+        
+        trackLayerView.setupView()
         trackLayerView.isHidden = true
+        mapWorldView.addSubviewFilling(trackLayerView, insets: .zero)
+        
+        routeLayerView.setupView()
         routeLayerView.isHidden = true
-        mapWorldView.addSubviewFilling(itemLayerView, insets: .zero)
+        mapWorldView.addSubviewFilling(routeLayerView, insets: .zero)
+        
+        itemLayerView.setupView()
         itemLayerView.clickDelegate = self
         itemLayerView.dragDelegate = self
-        updateItemLayer()
+        mapWorldView.addSubviewFilling(itemLayerView, insets: .zero)
+        
+        updateLayersScale()
         addScrollNotifications()
     }
     
-    func updateItemLayer(){
-        itemLayerView.setupMarkerViews(zoom: MapStatus.shared.zoom, scale: zoomScale)
+    func refreshItemLayer(){
+        itemLayerView.refresh()
     }
     
-    func updateTrackLayer(){
-        trackLayerView.update(scale: zoomScale)
+    func refreshTrackLayer(){
+        trackLayerView.refresh()
     }
     
-    func showTrack(_ show: Bool){
+    func refreshRouteLayer(){
+        routeLayerView.refresh()
+    }
+    
+    func updateItemLayerScale(){
+        itemLayerView.updateScale(zoomScale)
+    }
+    
+    func updateItemLayerContent(){
+        itemLayerView.updateContent(zoomScale)
+    }
+    
+    func updateTrackLayerScale(){
+        trackLayerView.updateScale(zoomScale)
+    }
+    
+    func updateTrackLayerContent(){
+        trackLayerView.updateContent(zoomScale)
+    }
+    
+    func updateRouteLayerScale(){
+        routeLayerView.updateScale(zoomScale)
+    }
+    
+    func updateRouteLayerContent(){
+        routeLayerView.updateContent(zoomScale)
+    }
+    
+    func updateLayersScale(){
+        updateItemLayerScale()
+        updateTrackLayerScale()
+        updateRouteLayerScale()
+    }
+    
+    func showItemLayer(_ show: Bool){
+        showLayer(itemLayerView, show)
+    }
+    
+    func showTrackLayer(_ show: Bool){
+        showLayer(trackLayerView, show)
+    }
+    
+    func showRouteLayer(_ show: Bool){
+        showLayer(routeLayerView, show)
+    }
+    
+    func showLayer(_ layer: LayerView, _ show: Bool){
         if show{
-            trackLayerView.isHidden = false
-            trackLayerView.update(scale: zoomScale)
+            layer.isHidden = false
+            layer.updateContent(zoomScale)
         }
         else{
-            trackLayerView.isHidden = true
-        }
-    }
-    
-    func updateRouteLayer(){
-        //routeLayerView.update(scale: zoomScale)
-    }
-    
-    func showRoute(_ show: Bool){
-        if show{
-            routeLayerView.isHidden = false
-            //routeLayerView.update(scale: zoomScale)
-        }
-        else{
-            routeLayerView.isHidden = true
+            layer.reset()
+            layer.isHidden = true
         }
     }
     
@@ -89,27 +131,16 @@ class MapScrollView : PlainMapScrollView{
         let dy = event.deltaY
         if dy > 0.0 {
             zoomIn()
-            updateItemLayer()
-            if VisibleTrack.shared.isPresent{
-                updateTrackLayer()
-            }
         }
         else if dy < 0.0{
             zoomOut()
-            updateItemLayer()
-            if VisibleTrack.shared.isPresent{
-                updateTrackLayer()
-            }
-            /*if VisibleRoute.shared.isPresent{
-                updateRouteLayer()
-            }*/
         }
+        updateLayersScale()
     }
     
     @objc override func scrollViewDidScroll(){
         MapStatus.shared.centerCoordinate = screenCenterCoordinate
-        trackLayerView.update(scale: zoomScale)
-        //routeLayerView.update(scale: zoomScale)
+        updateLayersScale()
         mapDelegate?.didScroll(to: screenCenterCoordinate)
     }
     
@@ -118,8 +149,13 @@ class MapScrollView : PlainMapScrollView{
 extension MapScrollView: ClickDelegate {
     
     public func clicked(with event: NSEvent) {
-        let pnt = convert(event.locationInWindow, from: nil)
-        routeLayerView.tapped(at: pnt)
+        var pnt = event.locationInWindow
+        pnt = convert(event.locationInWindow, from: nil)
+        let idx = VisibleRoute.shared.selectedIndex
+        if idx != -1, idx < VisibleRoute.shared.routePoints.count{
+            let coordinate = worldPoint(screenPoint: pnt).coordinate
+            MainViewController.shared.setRouteCoordinate(idx: idx, coordinate: coordinate)
+        }
     }
     
 }

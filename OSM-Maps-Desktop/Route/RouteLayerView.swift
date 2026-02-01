@@ -1,5 +1,5 @@
 /*
- OSM Maps
+ OSM Maps (Mac)
  Display and use of OSM maps
  Copyright: Michael Rönnau mr@elbe5.de
  */
@@ -7,30 +7,36 @@
 import AppKit
 import CoreLocation
 
-class RouteLayerView: NSView {
+class RouteLayerView: LayerView {
     
     var route: Route? = nil
-    
-    var offset : CGPoint? = nil
-    var scale : CGFloat = 0.0
     
     var routeMarkerViews = Array<RouteMarkerView>()
     private var waypointMarkerViews = Array<RouteMarkerView>()
     
     override func setupView(){
-        addGestureRecognizer(NSClickGestureRecognizer(target: self, action: #selector(tapped)))
         setupRouteMarkerViews()
     }
     
-    private func removeRouteMarkerViews(){
-        for mv in routeMarkerViews{
-            removeSubview(mv)
+    override func updateScale(_ scale: CGFloat){
+        self.scale = scale
+        for marker in routeMarkerViews{
+            marker.updatePosition(scale: scale)
         }
-        routeMarkerViews.removeAll()
+        for marker in waypointMarkerViews{
+            marker.updatePosition(scale: scale)
+        }
+        refresh()
+    }
+    
+    override func updateContent(_ scale: CGFloat){
+        self.scale = scale
+        setupRouteMarkerViews()
     }
     
     func setupRouteMarkerViews(){
         removeRouteMarkerViews()
+        isHidden = !VisibleRoute.shared.anyRoutePointsSet
         for idx in 0..<VisibleRoute.shared.routePoints.count{
             let coord = VisibleRoute.shared.routePoints[idx]?.coordinate
             var col = ""
@@ -44,25 +50,37 @@ class RouteLayerView: NSView {
             default:
                 col = "marker-yellow"
             }
-            let markerView = RouteMarkerView(coordinate: coord ?? .zero, image: NSImage(named: col)!)
-            addSubview(markerView)
-            markerView.baseFrame = RouteMarkerView.upperBaseFrame
-            markerView.isHidden = coord == nil
-            routeMarkerViews.append(markerView)
+            let marker = RouteMarkerView(coordinate: coord ?? .zero, image: NSImage(named: col)!)
+            marker.baseFrame = RouteMarkerView.upperBaseFrame
+            Log.info("coord \(marker.coordinate)")
+            addSubview(marker)
+            marker.isHidden = (coord == nil)
+            marker.updatePosition(scale: scale)
+            routeMarkerViews.append(marker)
         }
+        needsLayout = true
     }
     
     func setMarkerCoordinate(idx: Int, coordinate: CLLocationCoordinate2D){
+        //Log.info("setMarkerCoordinate")
         if idx < routeMarkerViews.count{
-            let mv = routeMarkerViews[idx]
-            mv.coordinate = coordinate
-            mv.isHidden = false
+            let marker = routeMarkerViews[idx]
+            marker.coordinate = coordinate
+            marker.isHidden = false
+            marker.updatePosition(scale: scale)
         }
+    }
+    
+    private func removeRouteMarkerViews(){
+        for mv in routeMarkerViews{
+            mv.removeFromSuperview()
+        }
+        routeMarkerViews.removeAll()
     }
     
     private func removeWaypointMarkerViews(){
         for mv in waypointMarkerViews{
-            removeSubview(mv)
+            mv.removeFromSuperview()
         }
         waypointMarkerViews.removeAll()
     }
@@ -73,45 +91,32 @@ class RouteLayerView: NSView {
         if let route = route{
             for i in 1..<route.waypoints.count - 1{
                 let waypoint = route.waypoints[i]
-                let markerView = RouteMarkerView(coordinate: waypoint.coordinate, image: MapDefaults.routeMarkerIcon)
-                addSubview(markerView)
-                waypointMarkerViews.append(markerView)
+                let marker = RouteMarkerView(coordinate: waypoint.coordinate, image: MapDefaults.routeMarkerIcon)
+                marker.frame = RouteMarkerView.centerBaseFrame
+                addSubview(marker)
+                marker.updatePosition(scale: scale)
+                waypointMarkerViews.append(marker)
             }
         }
         needsDisplay = true
     }
     
-    func reset(){
+    override func reset(){
         removeRouteMarkerViews()
         removeWaypointMarkerViews()
         route = nil
         needsDisplay = true
     }
     
-    func updatePosition(offset: CGPoint, scale: CGFloat){
-        self.offset = offset
-        self.scale = scale
-        let mapOffset = CGPoint(x: offset.x/scale, y: offset.y/scale).normalizedPoint
-        for mv in routeMarkerViews {
-            mv.updatePosition(mapOffset: mapOffset, scale: scale)
-        }
-        for mv in waypointMarkerViews {
-            mv.updatePosition(mapOffset: mapOffset, scale: scale)
-        }
-        needsDisplay = true
-    }
-    
     override func draw(_ rect: CGRect) {
+        super.draw(rect)
         if let route = route{
             var drawPoints = Array<CGPoint>()
-            if let offset = offset{
-                let mapOffset = CGPoint(x: offset.x/scale, y: offset.y/scale).normalizedPoint
-                for idx in 0..<route.routepoints.count{
-                    let point = route.routepoints[idx]
-                    let mapPoint = CGPoint(point.coordinate)
-                    let drawPoint = CGPoint(x: (mapPoint.x - mapOffset.x)*scale , y: (mapPoint.y - mapOffset.y)*scale)
-                    drawPoints.append(drawPoint)
-                }
+            for idx in 0..<route.routepoints.count{
+                let point = route.routepoints[idx]
+                let mapPoint = CGPoint(point.coordinate)
+                let drawPoint = CGPoint(x: mapPoint.x*scale , y: mapPoint.y*scale)
+                drawPoints.append(drawPoint)
             }
             let ctx = NSGraphicsContext.current!.cgContext
             if !drawPoints.isEmpty{
@@ -128,13 +133,8 @@ class RouteLayerView: NSView {
         }
     }
     
-    @objc func tapped(at pnt: NSPoint){
-        Log.info("tapped with idx \(VisibleRoute.shared.selectedIndex) at \(pnt)")
-        let idx = VisibleRoute.shared.selectedIndex
-        if idx != -1, idx < VisibleRoute.shared.routePoints.count{
-            MainViewController.shared.setRoutePoint(idx: idx, screenPoint: pnt)
-        }
-    }
-    
 }
+
+
+
 

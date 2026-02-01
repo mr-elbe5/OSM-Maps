@@ -54,7 +54,7 @@ class BackupViewController: PopoverViewController {
                                 if Backup.restoreBackupFile(){
                                     DispatchQueue.main.async {
                                         self.stopSpinner(spinner)
-                                        MainViewController.shared.updateItemLayer()
+                                        MainViewController.shared.itemsChanged()
                                         self.showSuccess(title: "success".localize(), text: "restoreDone".localize())
                                     }
                                 }
@@ -95,7 +95,7 @@ class BackupViewController: PopoverViewController {
                                 if Backup.importfromMapsForOSMFile(){
                                     DispatchQueue.main.async {
                                         self.stopSpinner(spinner)
-                                        MainViewController.shared.updateItemLayer()
+                                        MainViewController.shared.itemsChanged()
                                         self.showSuccess(title: "success".localize(), text: "restoreDone".localize())
                                     }
                                 }

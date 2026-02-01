@@ -48,7 +48,7 @@ extension ViewSettingsView: DateFilterDelegate{
         ViewFilter.shared.dateFilterMinDate = dateFilterView.minDate
         ViewFilter.shared.dateFilterMaxDate = dateFilterView.maxDate
         ViewFilter.shared.save()
-        MainViewController.shared.updateItemLayer()
+        MainViewController.shared.itemsChanged()
     }
     
 }

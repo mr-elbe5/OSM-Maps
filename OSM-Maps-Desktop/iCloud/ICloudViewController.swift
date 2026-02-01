@@ -72,7 +72,7 @@ class ICloudViewController: PopoverViewController {
         DispatchQueue.main.async{
             DispatchQueue.main.async{
                 self.showSuccess(title: "success".localize(), text: "cloudCleared".localize())
-                MainViewController.shared.updateItemLayer()
+                MainViewController.shared.itemsChanged()
             }
         }
     }

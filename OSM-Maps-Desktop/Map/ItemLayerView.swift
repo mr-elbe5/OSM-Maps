@@ -5,6 +5,7 @@
  */
 
 import AppKit
+import CoreLocation
 
 protocol ClickDelegate{
     func clicked(with event: NSEvent)
@@ -14,14 +15,10 @@ protocol DragDelegate{
     func mouseDragged(dx: CGFloat, dy: CGFloat)
 }
 
-class ItemLayerView: NSView {
+class ItemLayerView: LayerView {
     
     var clickDelegate: ClickDelegate? = nil
     var dragDelegate: DragDelegate? = nil
-    
-    override var isFlipped: Bool{
-        return true
-    }
     
     override func acceptsFirstMouse(for event: NSEvent?) -> Bool{
         return false
@@ -37,12 +34,27 @@ class ItemLayerView: NSView {
         }
     }
     
-    func setupMarkerViews(zoom: Int, scale: CGFloat){
-        //Log.debug("setupMarkers, zoom=\(zoom), scale=\(scale)")
+    override func updateScale(_ scale: CGFloat){
+        self.scale = scale
+        for subview in subviews{
+            if let marker = subview as? ItemMarkerView{
+                let mapPoint = marker.item.worldPoint
+                marker.updatePosition(to: CGPoint(x: mapPoint.x*scale , y: mapPoint.y*scale))
+            }
+            else if let groupMarker = subview as? GroupMarker, let mapPoint = groupMarker.group.centerWorldPoint{
+                groupMarker.updatePosition(to: CGPoint(x: mapPoint.x*scale , y: mapPoint.y*scale))
+            }
+        }
+        needsDisplay = true
+    }
+    
+    override func updateContent(_ scale: CGFloat){
+        //Log.debug("updateContent")
+        self.scale = scale
         for subview in subviews {
             subview.removeFromSuperview()
         }
-        let planetDist = World.upScale(from: zoom) * MarkerView.size/2.0 //have no markers overlap
+        let planetDist = 1.0/scale * MarkerView.size/2.0 //have no markers overlap
         var groups = [MapItemGroup]()
         for item in AppData.shared.mapItems{
             if !item.hasValidCoordinate{
@@ -73,7 +85,7 @@ class ItemLayerView: NSView {
                 addSubview(marker)
             }
         }
-        updatePosition(scale: scale)
+        updateScale(scale)
     }
     
     func getMarker(item: MapItem) -> MarkerView?{
@@ -86,18 +98,6 @@ class ItemLayerView: NSView {
             }
         }
         return nil
-    }
-    
-    func updatePosition(scale: CGFloat){
-        for subview in subviews{
-            if let marker = subview as? ItemMarkerView{
-                let mapPoint = marker.item.worldPoint
-                marker.updatePosition(to: CGPoint(x: (mapPoint.x)*scale , y: (mapPoint.y)*scale))
-            }
-            else if let groupMarker = subview as? GroupMarker, let mapPoint = groupMarker.group.centerWorldPoint{
-                groupMarker.updatePosition(to: CGPoint(x: (mapPoint.x)*scale , y: (mapPoint.y)*scale))
-            }
-        }
     }
     
     func updateItemStatus(_ item: MapItem){

@@ -112,7 +112,7 @@ class ItemListView: NSView{
                 AppData.shared.deleteItem(withId: item.id)
                 self.items.remove(obj: item)
             }
-            MainViewController.shared.updateItemLayer()
+            MainViewController.shared.itemsChanged()
             self.setupContentView()
         }
     }

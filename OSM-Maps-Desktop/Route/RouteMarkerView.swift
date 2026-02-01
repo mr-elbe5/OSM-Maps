@@ -15,19 +15,26 @@ class RouteMarkerView : NSImageView{
     var coordinate: CLLocationCoordinate2D
     var baseFrame: CGRect = RouteMarkerView.centerBaseFrame
     
+    var idx = 1
+    
+    var worldPoint: CGPoint{
+        CGPoint(coordinate)
+    }
+    
     init(coordinate: CLLocationCoordinate2D, image: NSImage) {
         self.coordinate = coordinate
         super.init(frame: .zero)
         self.image = image
+        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func updatePosition(mapOffset: CGPoint, scale: Double){
-        let mapPoint = CGPoint(coordinate)
-        frame = baseFrame.offsetBy(dx: (mapPoint.x - mapOffset.x)*scale, dy: (mapPoint.y - mapOffset.y)*scale)
+    func updatePosition(scale: Double){
+        let pnt = worldPoint
+        frame = RouteMarkerView.upperBaseFrame.offsetBy(dx: pnt.x*scale, dy: pnt.y*scale + 2)
         needsDisplay = true
     }
     
