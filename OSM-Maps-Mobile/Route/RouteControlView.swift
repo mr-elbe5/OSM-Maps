@@ -76,7 +76,12 @@ class RouteControlView : UIView{
                     str += "\("on".localize()) \(waypoint.name)"
                 }
                 waypointLine = WaypointLine(idx: i)
-                waypointLine.setupView(iconName: iconName, text: str)
+                if iconName.isEmpty {
+                    waypointLine.setupView(text: str)
+                }
+                else{
+                    waypointLine.setupView(iconName: iconName, text: str)
+                }
                 statusPanel.addSubviewBelow(waypointLine, upperView: lastLine, insets: .zero)
                 lastLine = waypointLine
                 waypointLines.append(waypointLine)

@@ -9,40 +9,35 @@ import CoreLocation
 
 class RouteControlView : NSView{
     
-    var controlPanel = NSView()
     var routeTypeSelector = NSSegmentedControl()
     
-    let cancelRouteButton = NSButton().asIconButton("xmark", color: .labelColor)
+    let cancelRouteButton = NSButton().asTextButton("cancel".localize(), color: .labelColor)
     let saveRouteButton = NSButton().asTextButton("save".localize(), color: .systemBlue)
     
-    var statusScrollView = NSScrollView()
+    var scrollView = NSScrollView()
     var statusPanel = NSView()
     var waypointLines = [WaypointLine]()
     
     func setup(){
-        controlPanel.backgroundColor = .transparentColor
-        addSubviewBelow(controlPanel, insets: .zero)
+        backgroundColor = .black
+        let label = NSTextField(labelWithString: "route".localize()).asHeadline()
+        addSubviewBelow(label)
+        routeTypeSelector.segmentCount = 3
         routeTypeSelector.setImage(NSImage(systemSymbolName: "car", accessibilityDescription: nil)!, forSegment: 0)
         routeTypeSelector.setImage(NSImage(systemSymbolName: "bicycle", accessibilityDescription: nil)!, forSegment: 1)
         routeTypeSelector.setImage(NSImage(systemSymbolName: "figure.walk", accessibilityDescription: nil)!, forSegment: 2)
         routeTypeSelector.selectedSegment = 0
         routeTypeSelector.target = self
         routeTypeSelector.action = #selector(routeTypeChanged)
-        controlPanel.addSubviewToRight(routeTypeSelector, insets: OSInsets.smallInsets)
-        controlPanel.addSubviewWithAnchors(saveRouteButton, leading: routeTypeSelector.trailingAnchor, insets: .defaultInsets)
-            .centerY(routeTypeSelector.centerYAnchor)
-        
-        saveRouteButton.target = self
-        saveRouteButton.action = #selector(saveRoute)
-        controlPanel.addSubviewWithAnchors(cancelRouteButton, trailing: controlPanel.trailingAnchor, insets: .defaultInsets)
-            .centerY(routeTypeSelector.centerYAnchor)
+        addSubviewBelow(routeTypeSelector, upperView: label)
+        scrollView.asVerticalScrollView(contentView: statusPanel)
+        addSubviewBelow(scrollView, upperView: routeTypeSelector, insets: NSEdgeInsets(top: 10, left: 0, bottom: 10, right: 0))
         cancelRouteButton.target = self
         cancelRouteButton.action = #selector(cancelRoute)
-        addSubviewBelow(statusScrollView, upperView: controlPanel, insets: .zero)
-            .connectToBottom(of: self)
-        statusPanel.backgroundColor = .transparentColor
-        statusScrollView.addSubviewWithAnchors(statusPanel, top: statusScrollView.topAnchor, leading: statusScrollView.leadingAnchor, bottom: statusScrollView.bottomAnchor, insets: .zero)
-            .width(statusScrollView.widthAnchor, inset: 0)
+        addSubviewWithAnchors(cancelRouteButton, top: scrollView.bottomAnchor, leading: leadingAnchor, trailing: centerXAnchor, bottom: bottomAnchor, insets: .defaultInsets)
+        saveRouteButton.target = self
+        saveRouteButton.action = #selector(saveRoute)
+        addSubviewWithAnchors(saveRouteButton, top: scrollView.bottomAnchor,  leading: centerXAnchor, trailing: trailingAnchor, bottom: bottomAnchor, insets: .defaultInsets)
     }
     
     @objc func saveRoute(){
@@ -58,11 +53,14 @@ class RouteControlView : NSView{
         waypointLines.removeAll()
         if let route = VisibleRoute.shared.route {
             var linePanel = newLine(iconName: "arrow.right", text: "\(route.distance)m")
-            statusPanel.addSubviewBelow(linePanel, insets: .zero)
-            var lastLine = linePanel
+            statusPanel.addSubviewBelow(linePanel, insets: NSEdgeInsets(top: 10, left: 0, bottom: 0, right: 0))
+            var lastLine: NSView = linePanel
             linePanel = newLine(iconName: "stopwatch", text: route.duration.hmsString())
-            statusPanel.addSubviewBelow(linePanel, upperView: lastLine, insets: .zero)
+            statusPanel.addSubviewBelow(linePanel, upperView: lastLine, insets: NSEdgeInsets(top: 0, left: 0, bottom: 10, right: 0))
             lastLine = linePanel
+            let label = NSTextField(labelWithString: "waypoints".localize()).asHeadline()
+            statusPanel.addSubviewBelow(label, upperView: lastLine, insets: .defaultInsets)
+            lastLine = label
             var lastDistance = 0
             var waypointLine: WaypointLine!
             for i in 0..<route.waypoints.count {
@@ -79,7 +77,12 @@ class RouteControlView : NSView{
                     str += "\("on".localize()) \(waypoint.name)"
                 }
                 waypointLine = WaypointLine(idx: i)
-                waypointLine.setupView(iconName: iconName, text: str)
+                if iconName.isEmpty {
+                    waypointLine.setupView(text: str)
+                }
+                else{
+                    waypointLine.setupView(iconName: iconName, text: str)
+                }
                 statusPanel.addSubviewBelow(waypointLine, upperView: lastLine, insets: .zero)
                 lastLine = waypointLine
                 waypointLines.append(waypointLine)
