@@ -34,7 +34,7 @@ class RouteMarkerView : NSImageView{
     
     func updatePosition(scale: Double){
         let pnt = worldPoint
-        frame = RouteMarkerView.upperBaseFrame.offsetBy(dx: pnt.x*scale, dy: pnt.y*scale + 2)
+        frame = baseFrame.offsetBy(dx: pnt.x*scale, dy: pnt.y*scale + 2)
         needsDisplay = true
     }
     

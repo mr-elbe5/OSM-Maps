@@ -74,8 +74,11 @@ class RouteCell: MapItemCell{
             let distanceLabel = UILabel(text: "\("distance".localize()): \(Int(item.route.distance)) m")
             itemView.addSubviewBelow(distanceLabel, upperView: endLabel, insets: OSInsets.flatInsets)
             
+            let typeLabel = UILabel(text: "\("routeType".localize()): \(("routeType_" + item.route.type.rawValue).localize())")
+            itemView.addSubviewBelow(typeLabel, upperView: distanceLabel)
+            
             let durationLabel = UILabel(text: "\("duration".localize()): \(item.route.duration.hmsString())")
-            itemView.addSubviewBelow(durationLabel, upperView: distanceLabel, insets: OSInsets.flatInsets)
+            itemView.addSubviewBelow(durationLabel, upperView: typeLabel, insets: OSInsets.flatInsets)
             
             if let image = item.getPreview(){
                 let imageView = UIImageView()

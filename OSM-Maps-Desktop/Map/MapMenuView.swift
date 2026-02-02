@@ -61,12 +61,12 @@ class MapMenuView: NSView{
         markerContainer.removeAllSubviews()
         markerButtons.removeAll()
         var lastView: NSView? = nil
-        for i in 0..<VisibleRoute.shared.routePoints.count {
+        for i in 0..<VisibleRoute.shared.navigationPoints.count {
             var col = ""
             switch i {
             case 0:
                 col = "marker-green"
-            case VisibleRoute.shared.routePoints.count-1:
+            case VisibleRoute.shared.navigationPoints.count-1:
                 col = "marker-red"
             default:
                 col = "marker-yellow"

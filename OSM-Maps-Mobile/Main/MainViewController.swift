@@ -347,7 +347,7 @@ class MainViewController: UIViewController {
     
     private func routePointsChanged(){
         routeMenuView.updateButtons()
-        routeLayerView.setupRouteMarkerViews()
+        routeLayerView.setupNavigationMarkers()
         routeControlView.setupStatusPanel()
     }
     

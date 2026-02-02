@@ -18,7 +18,7 @@ class MapDetailView: NSView{
         addSubviewFilling(itemListView, insets: .zero)
         routeControlView.setupView()
         addSubviewFilling(routeControlView, insets: .zero)
-        //routeControlView.isHidden = true
+        routeControlView.isHidden = true
     }
     
     

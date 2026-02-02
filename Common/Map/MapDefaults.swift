@@ -25,7 +25,7 @@ class MapDefaults{
     static var routeStartIcon = OSImage(named: "marker-green")!
     static var routeEndIcon = OSImage(named: "marker-red")!
     static var routeMiddleIcon = OSImage(named: "marker-yellow")!
-    static var routeMarkerIcon = OSImage(iconName: "info.circle")!.withTintColor(.darkGray)
+    static var waypointMarkerIcon = OSImage(iconName: "circle")!.withTintColor(.darkGray)
     
     static var mapItemImageOffset: CGFloat = 16
     

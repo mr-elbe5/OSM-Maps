@@ -265,7 +265,10 @@ class MainViewController: ViewController {
         setView(.map)
         if let item = item{
             VisibleRoute.shared.setRoute(item.route)
+            mapMenuView.updateButtons()
+            mapScrollView.routeLayerView.setRoute(route: item.route)
             mapScrollView.showRouteLayer(true)
+            routeControlView.isHidden = false
             if item.route.coordinateRegion == nil{
                 item.route.updateCoordinateRegion()
             }
@@ -278,6 +281,7 @@ class MainViewController: ViewController {
         }
         else{
             VisibleRoute.shared.reset()
+            routeControlView.isHidden = true
             mapScrollView.showRouteLayer(false)
         }
         mapMenuView.updateState()
@@ -291,14 +295,14 @@ class MainViewController: ViewController {
     }
     
     func addRoutePoint(){
-        if VisibleRoute.shared.routePoints.count < VisibleRoute.MAX_ROUTE_POINTS{
+        if VisibleRoute.shared.navigationPoints.count < VisibleRoute.MAX_NAVIGATION_POINTS{
             VisibleRoute.shared.addRoutePoint()
             routePointsChanged()
         }
     }
     
     func removeRoutePoint(){
-        if VisibleRoute.shared.routePoints.count > 2{
+        if VisibleRoute.shared.navigationPoints.count > 2{
             VisibleRoute.shared.removeRoutePoint(){ isComplete in
                 DispatchQueue.main.async {
                     self.routeChanged()
@@ -310,7 +314,7 @@ class MainViewController: ViewController {
     
     private func routePointsChanged(){
         mapMenuView.updateButtons()
-        mapScrollView.routeLayerView.setupRouteMarkerViews()
+        mapScrollView.routeLayerView.setupNavigationMarkers()
         mapScrollView.updateRouteLayerContent()
         routeControlView.setupStatusPanel()
     }

@@ -32,12 +32,12 @@ class RouteMenuView: UIView {
         removeAllSubviews()
         markerButtons.removeAll()
         var lastView: UIView? = nil
-        for i in 0..<VisibleRoute.shared.routePoints.count {
+        for i in 0..<VisibleRoute.shared.navigationPoints.count {
             var col = ""
             switch i {
             case 0:
                 col = "marker-green"
-            case VisibleRoute.shared.routePoints.count-1:
+            case VisibleRoute.shared.navigationPoints.count-1:
                 col = "marker-red"
             default:
                 col = "marker-yellow"
@@ -65,8 +65,8 @@ class RouteMenuView: UIView {
                 btn.unsetRoundedBorders()
             }
         }
-        addPointButton.isEnabled = VisibleRoute.shared.routePoints.count < VisibleRoute.MAX_ROUTE_POINTS
-        removePointButton.isEnabled = VisibleRoute.shared.routePoints.count > 2
+        addPointButton.isEnabled = VisibleRoute.shared.navigationPoints.count < VisibleRoute.MAX_NAVIGATION_POINTS
+        removePointButton.isEnabled = VisibleRoute.shared.navigationPoints.count > 2
     }
     
 }

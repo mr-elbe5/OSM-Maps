@@ -11,16 +11,16 @@ class RouteLayerView: LayerView {
     
     var route: Route? = nil
     
-    var routeMarkerViews = Array<RouteMarkerView>()
+    var navigationMarkerViews = Array<RouteMarkerView>()
     private var waypointMarkerViews = Array<RouteMarkerView>()
     
     override func setupView(){
-        setupRouteMarkerViews()
+        setupNavigationMarkers()
     }
     
     override func updateScale(_ scale: CGFloat){
         self.scale = scale
-        for marker in routeMarkerViews{
+        for marker in navigationMarkerViews{
             marker.updatePosition(scale: scale)
         }
         for marker in waypointMarkerViews{
@@ -31,20 +31,22 @@ class RouteLayerView: LayerView {
     
     override func updateContent(_ scale: CGFloat){
         self.scale = scale
-        setupRouteMarkerViews()
+        setupNavigationMarkers()
+        setupWaypointMarkers()
+        needsDisplay = true
     }
     
-    func setupRouteMarkerViews(){
-        removeRouteMarkerViews()
-        isHidden = !VisibleRoute.shared.anyRoutePointsSet
-        for idx in 0..<VisibleRoute.shared.routePoints.count{
-            let coord = VisibleRoute.shared.routePoints[idx]?.coordinate
+    func setupNavigationMarkers(){
+        removeNavigationMarkerViews()
+        isHidden = !VisibleRoute.shared.anyNavigationPointsSet
+        for idx in 0..<VisibleRoute.shared.navigationPoints.count{
+            let coord = VisibleRoute.shared.navigationPoints[idx]?.coordinate
             var col = ""
             switch idx{
             case 0:
                 col = "marker-green"
                 break;
-            case VisibleRoute.shared.routePoints.count - 1:
+            case VisibleRoute.shared.navigationPoints.count - 1:
                 col = "marker-red"
                 break;
             default:
@@ -56,26 +58,26 @@ class RouteLayerView: LayerView {
             addSubview(marker)
             marker.isHidden = (coord == nil)
             marker.updatePosition(scale: scale)
-            routeMarkerViews.append(marker)
+            navigationMarkerViews.append(marker)
         }
         needsLayout = true
     }
     
     func setMarkerCoordinate(idx: Int, coordinate: CLLocationCoordinate2D){
         //Log.info("setMarkerCoordinate")
-        if idx < routeMarkerViews.count{
-            let marker = routeMarkerViews[idx]
+        if idx < navigationMarkerViews.count{
+            let marker = navigationMarkerViews[idx]
             marker.coordinate = coordinate
             marker.isHidden = false
             marker.updatePosition(scale: scale)
         }
     }
     
-    private func removeRouteMarkerViews(){
-        for mv in routeMarkerViews{
+    private func removeNavigationMarkerViews(){
+        for mv in navigationMarkerViews{
             mv.removeFromSuperview()
         }
-        routeMarkerViews.removeAll()
+        navigationMarkerViews.removeAll()
     }
     
     private func removeWaypointMarkerViews(){
@@ -87,22 +89,26 @@ class RouteLayerView: LayerView {
     
     func setRoute(route: Route?){
         self.route = route
+        setupWaypointMarkers()
+        needsDisplay = true
+    }
+    
+    func setupWaypointMarkers(){
         removeWaypointMarkerViews()
         if let route = route{
             for i in 1..<route.waypoints.count - 1{
                 let waypoint = route.waypoints[i]
-                let marker = RouteMarkerView(coordinate: waypoint.coordinate, image: MapDefaults.routeMarkerIcon)
+                let marker = RouteMarkerView(coordinate: waypoint.coordinate, image: MapDefaults.waypointMarkerIcon)
                 marker.frame = RouteMarkerView.centerBaseFrame
                 addSubview(marker)
                 marker.updatePosition(scale: scale)
                 waypointMarkerViews.append(marker)
             }
         }
-        needsDisplay = true
     }
     
     override func reset(){
-        removeRouteMarkerViews()
+        removeNavigationMarkerViews()
         removeWaypointMarkerViews()
         route = nil
         needsDisplay = true

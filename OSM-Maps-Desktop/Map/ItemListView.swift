@@ -63,6 +63,9 @@ class ItemListView: NSView{
             case TrackItem.itemType:
                 let view = TrackCell(track: item as! TrackItem)
                 itemView = view
+            case RouteItem.itemType:
+                let view = RouteCell(route: item as! RouteItem)
+                itemView = view
             default:
                 break
             }

@@ -69,7 +69,6 @@ class MapView: UIView {
         scrollView.zoomTo(MapStatus.shared.zoom)
         Log.info("moving to \(MapStatus.shared.centerCoordinate.debugString)")
         scrollView.scrollTo(MapStatus.shared.centerCoordinate)
-        //updateLocationLayer()
         canUpdatePosition = true
     }
     

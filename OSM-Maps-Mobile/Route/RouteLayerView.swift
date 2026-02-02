@@ -14,7 +14,7 @@ class RouteLayerView: UIView {
     var offset : CGPoint? = nil
     var scale : CGFloat = 0.0
     
-    var routeMarkerViews = Array<RouteMarkerView>()
+    var navigationMarkerViews = Array<RouteMarkerView>()
     private var waypointMarkerViews = Array<RouteMarkerView>()
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
@@ -25,26 +25,26 @@ class RouteLayerView: UIView {
     
     func setupView(){
         addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapped)))
-        setupRouteMarkerViews()
+        setupNavigationMarkers()
     }
     
-    private func removeRouteMarkerViews(){
-        for mv in routeMarkerViews{
+    private func removeNavigationMarkerViews(){
+        for mv in navigationMarkerViews{
             removeSubview(mv)
         }
-        routeMarkerViews.removeAll()
+        navigationMarkerViews.removeAll()
     }
     
-    func setupRouteMarkerViews(){
-        removeRouteMarkerViews()
-        for idx in 0..<VisibleRoute.shared.routePoints.count{
-            let coord = VisibleRoute.shared.routePoints[idx]?.coordinate
+    func setupNavigationMarkers(){
+        removeNavigationMarkerViews()
+        for idx in 0..<VisibleRoute.shared.navigationPoints.count{
+            let coord = VisibleRoute.shared.navigationPoints[idx]?.coordinate
             var col = ""
             switch idx{
             case 0:
                 col = "marker-green"
                 break;
-            case VisibleRoute.shared.routePoints.count - 1:
+            case VisibleRoute.shared.navigationPoints.count - 1:
                 col = "marker-red"
                 break;
             default:
@@ -57,13 +57,13 @@ class RouteLayerView: UIView {
             addSubview(markerView)
             markerView.baseFrame = RouteMarkerView.upperBaseFrame
             markerView.isHidden = coord == nil
-            routeMarkerViews.append(markerView)
+            navigationMarkerViews.append(markerView)
         }
     }
     
     func setMarkerCoordinate(idx: Int, coordinate: CLLocationCoordinate2D){
-        if idx < routeMarkerViews.count{
-            let mv = routeMarkerViews[idx]
+        if idx < navigationMarkerViews.count{
+            let mv = navigationMarkerViews[idx]
             mv.coordinate = coordinate
             mv.isHidden = false
         }
@@ -82,7 +82,8 @@ class RouteLayerView: UIView {
         if let route = route{
             for i in 1..<route.waypoints.count - 1{
                 let waypoint = route.waypoints[i]
-                let markerView = RouteMarkerView(idx: i, coordinate: waypoint.coordinate, image: MapDefaults.routeMarkerIcon)
+                let markerView = RouteMarkerView(idx: i, coordinate: waypoint.coordinate, image: MapDefaults.waypointMarkerIcon)
+                markerView.baseFrame = RouteMarkerView.centerBaseFrame
                 markerView.addAction(UIAction{ action in
                     MainViewController.shared.activateWaypoint(i)
                 }, for: .touchDown)
@@ -94,10 +95,10 @@ class RouteLayerView: UIView {
     }
     
     func reset(){
-        removeRouteMarkerViews()
+        removeNavigationMarkerViews()
         removeWaypointMarkerViews()
         route = nil
-        setupRouteMarkerViews()
+        setupNavigationMarkers()
         setNeedsDisplay()
     }
     
@@ -105,7 +106,7 @@ class RouteLayerView: UIView {
         self.offset = offset
         self.scale = scale
         let mapOffset = CGPoint(x: offset.x/scale, y: offset.y/scale).normalizedPoint
-        for mv in routeMarkerViews {
+        for mv in navigationMarkerViews {
             mv.updatePosition(mapOffset: mapOffset, scale: scale)
         }
         for mv in waypointMarkerViews {
@@ -145,7 +146,7 @@ class RouteLayerView: UIView {
         Log.info("tapped with idx \(VisibleRoute.shared.selectedIndex)")
         let location = event.location(in: self)
         let idx = VisibleRoute.shared.selectedIndex
-        if idx != -1, idx < VisibleRoute.shared.routePoints.count{
+        if idx != -1, idx < VisibleRoute.shared.navigationPoints.count{
             MainViewController.shared.setRoutePoint(idx: idx, screenPoint: location)
         }
     }

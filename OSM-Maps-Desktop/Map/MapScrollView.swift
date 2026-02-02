@@ -152,7 +152,7 @@ extension MapScrollView: ClickDelegate {
         var pnt = event.locationInWindow
         pnt = convert(event.locationInWindow, from: nil)
         let idx = VisibleRoute.shared.selectedIndex
-        if idx != -1, idx < VisibleRoute.shared.routePoints.count{
+        if idx != -1, idx < VisibleRoute.shared.navigationPoints.count{
             let coordinate = worldPoint(screenPoint: pnt).coordinate
             MainViewController.shared.setRouteCoordinate(idx: idx, coordinate: coordinate)
         }
