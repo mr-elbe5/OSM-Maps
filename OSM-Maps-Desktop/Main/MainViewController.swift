@@ -345,7 +345,15 @@ class MainViewController: ViewController {
     }
     
     func saveRoute(){
-        
+        if VisibleRoute.shared.isComplete{
+            VisibleRoute.shared.saveRoute(){ success in
+                if success{
+                    DispatchQueue.main.async {
+                        NSAlert.showMessage(message: "routeSaved".localize())
+                    }
+                }
+            }
+        }
     }
     
     func cancelRoute(){

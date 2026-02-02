@@ -112,7 +112,7 @@ class VisibleRoute{
         self.routePoints = route.routepoints
     }
     
-    func saveRoute(){
+    func saveRoute(completion: ((Bool) -> Void)?){
         if isComplete{
             let item = RouteItem(route: route!)
             if let startPoint = route!.routepoints.first, let endPoint = route!.routepoints.last {
@@ -122,10 +122,17 @@ class VisibleRoute{
                     item.endLocation!.updateLocation(){
                         AppData.shared.addItem(item)
                         AppData.shared.save()
+                        completion?(true)
                     }
                 }
                 _ = item.getPreview()
             }
+            else{
+                completion?(false)
+            }
+        }
+        else{
+            completion?(false)
         }
     }
     
