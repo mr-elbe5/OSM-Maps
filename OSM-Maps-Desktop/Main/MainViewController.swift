@@ -26,7 +26,7 @@ class MainViewController: ViewController {
     var mainMenu = MainMenuView()
     var mapSplitView: SplitView!
     var mapView = MapView()
-    var mapDetailView = ItemListView()
+    var mapDetailView = MapDetailView()
     var imageGridView = ImageGridView()
     var videoGridView = VideoGridView()
     var trackGridView = TrackGridView()
@@ -57,6 +57,14 @@ class MainViewController: ViewController {
         mapView.menuView
     }
     
+    var itemListView: ItemListView{
+        mapDetailView.itemListView
+    }
+    
+    var routeControlView: RouteControlView{
+        mapDetailView.routeControlView
+    }
+    
     override func loadView(){
         view = NSView()
         view.backgroundColor = .black
@@ -72,6 +80,7 @@ class MainViewController: ViewController {
         mapSplitView.setupView()
         view.addSubviewBelow(mapSplitView, upperView: separator, insets: .zero)
             .connectToBottom(of: view, inset: .zero)
+        routeControlView.setup()
         imageGridView.setupView()
         view.addSubviewBelow(imageGridView, upperView: mainMenu, insets: .zero)
             .connectToBottom(of: view, inset: .zero)
@@ -99,11 +108,11 @@ class MainViewController: ViewController {
     }
     
     func showItemDetails(item: MapItem){
-        mapDetailView.setItems([item])
+        itemListView.setItems([item])
     }
     
     func showGroupDetails(group: MapItemGroup){
-        mapDetailView.setItems(group.items)
+        itemListView.setItems(group.items)
     }
     
     func setView(_ type: MainViewType){
@@ -272,7 +281,7 @@ class MainViewController: ViewController {
             mapScrollView.showRouteLayer(false)
         }
         mapMenuView.updateState()
-        //routeControlView.setupStatusPanel()
+        routeControlView.setupStatusPanel()
     }
     
     func markerButtonPressed(_ idx: Int){
@@ -303,7 +312,7 @@ class MainViewController: ViewController {
         mapMenuView.updateButtons()
         mapScrollView.routeLayerView.setupRouteMarkerViews()
         mapScrollView.updateRouteLayerContent()
-        //routeControlView.setupStatusPanel()
+        routeControlView.setupStatusPanel()
     }
     
     func setRouteCoordinate(idx: Int, coordinate: CLLocationCoordinate2D){
@@ -331,15 +340,19 @@ class MainViewController: ViewController {
     private func routeChanged(){
         mapScrollView.routeLayerView.setRoute(route: VisibleRoute.shared.route)
         mapScrollView.updateRouteLayerContent()
-        //routeControlView.isHidden = false
-        //routeControlView.setupStatusPanel()
+        routeControlView.isHidden = false
+        routeControlView.setupStatusPanel()
+    }
+    
+    func saveRoute(){
+        
     }
     
     func cancelRoute(){
         VisibleRoute.shared.reset()
         mapScrollView.routeLayerView.reset()
-        //routeControlView.setupStatusPanel()
-        //routeControlView.isHidden = true
+        routeControlView.setupStatusPanel()
+        routeControlView.isHidden = true
         mapView.menuView.updateState()
     }
     

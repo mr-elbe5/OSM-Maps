@@ -26,10 +26,20 @@ class VisibleRoute{
         })
     }
     
+    var anyRoutePointsSet: Bool{
+        !routePoints.allSatisfy({
+            $0 == nil
+        })
+    }
+    
     var routeIsRequestable: Bool{
         let valid = routePoints.count > 1 && allRoutePointsSet
         //Log.info("isRequestable: \(valid)")
         return valid
+    }
+    
+    var isPresent: Bool{
+        anyRoutePointsSet
     }
     
     var isComplete: Bool{
@@ -124,6 +134,7 @@ class VisibleRoute{
         routePoints.append(nil)
         routePoints.append(nil)
         route = nil
+        selectedIndex = -1
     }
     
     func requestRoute(completion: @escaping (_ result: Bool) -> Void) {
