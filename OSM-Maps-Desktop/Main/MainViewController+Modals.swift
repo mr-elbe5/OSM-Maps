@@ -132,13 +132,31 @@ extension MainViewController {
         if let url = GPXCreator.createTemporaryFile(track: item.track){
             let savePanel = NSSavePanel()
             savePanel.allowedContentTypes = UTType.types(tag: "gpx", tagClass: UTTagClass.filenameExtension, conformingTo: nil)
-            savePanel.nameFieldStringValue = "track_\(item.fileName)_\(item.track.startTime.fileDate()).gpx"
+            savePanel.nameFieldStringValue = "\(item.track.name)_\(item.track.startTime.fileDate()).gpx"
             savePanel.directoryURL = FileManager.default.homeDirectoryForCurrentUser
             if savePanel.runModal() == .OK{
                 let spinner = startSpinner()
                 DispatchQueue.main.async {
                     if let targetUrl = savePanel.url, FileManager.default.copyFile(fromURL: url, toURL: targetUrl){
                         self.showSuccess(title: "success".localize(), text: "trackExported".localize())
+                    }
+                    self.stopSpinner(spinner)
+                }
+            }
+        }
+    }
+    
+    func exportRoute(_ item: RouteItem) {
+        if let url = GPXCreator.createTemporaryFile(route: item.route){
+            let savePanel = NSSavePanel()
+            savePanel.allowedContentTypes = UTType.types(tag: "gpx", tagClass: UTTagClass.filenameExtension, conformingTo: nil)
+            savePanel.nameFieldStringValue = "\(item.route.name)_\(item.creationDate.fileDate()).gpx"
+            savePanel.directoryURL = FileManager.default.homeDirectoryForCurrentUser
+            if savePanel.runModal() == .OK{
+                let spinner = startSpinner()
+                DispatchQueue.main.async {
+                    if let targetUrl = savePanel.url, FileManager.default.copyFile(fromURL: url, toURL: targetUrl){
+                        self.showSuccess(title: "success".localize(), text: "routeExported".localize())
                     }
                     self.stopSpinner(spinner)
                 }

@@ -14,12 +14,16 @@ class GroupMarkerView : MarkerView{
         group.hasMedia
     }
     
+    override var hasNote : Bool{
+        group.hasNote
+    }
+    
     override var hasTrack : Bool{
         group.hasTrack
     }
     
-    override var hasNote : Bool{
-        group.hasNote
+    override var hasRoute : Bool{
+        group.hasRoute
     }
     
     init(itemGroup: MapItemGroup){
@@ -41,7 +45,7 @@ class GroupMarkerView : MarkerView{
                 setImage(MapDefaults.mapMediaGroupIcon, for: .normal)
             }
         }
-        else if hasTrack{
+        else if hasTrack || hasRoute{
             setImage(MapDefaults.mapTrackGroupIcon, for: .normal)
         }
         else{

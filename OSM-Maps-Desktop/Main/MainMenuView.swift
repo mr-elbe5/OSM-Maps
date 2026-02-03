@@ -26,11 +26,13 @@ class MainMenuView: NSView{
         centerImages.append(NSImage(systemSymbolName: "photo", accessibilityDescription: "images".localize())!)
         centerImages.append(NSImage(systemSymbolName: "video", accessibilityDescription: "videos".localize())!)
         centerImages.append(NSImage(systemSymbolName: "figure.walk", accessibilityDescription: "tracks".localize())!)
+        centerImages.append(NSImage(systemSymbolName: "point.topright.arrow.triangle.backward.to.point.bottomleft.scurvepath", accessibilityDescription: "routes".localize())!)
         centerMenu = NSSegmentedControl(images: centerImages, trackingMode: NSSegmentedControl.SwitchTracking.selectOne, target: self, action: #selector(centerMenuChanged))
         centerMenu.setLabel("map".localize(), forSegment: 0)
         centerMenu.setLabel("images".localize(), forSegment: 1)
         centerMenu.setLabel("videos".localize(), forSegment: 2)
         centerMenu.setLabel("tracks".localize(), forSegment: 3)
+        centerMenu.setLabel("routes".localize(), forSegment: 4)
         centerMenu.selectedSegment = 0
         
         openViewSettingsButton = NSButton(icon: "calendar", target: self, action: #selector(openViewSettings))
@@ -67,6 +69,7 @@ class MainMenuView: NSView{
         case 1: MainViewController.shared.setView(.imageGrid)
         case 2: MainViewController.shared.setView(.avGrid)
         case 3: MainViewController.shared.setView(.trackGrid)
+        case 4: MainViewController.shared.setView(.routeGrid)
         default: return
         }
     }

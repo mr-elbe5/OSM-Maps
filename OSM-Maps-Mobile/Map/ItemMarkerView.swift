@@ -22,6 +22,10 @@ class ItemMarkerView : MarkerView{
         item is TrackItem
     }
     
+    override var hasRoute : Bool{
+        item is RouteItem
+    }
+    
     init(item: MapItem){
         self.item = item
         super.init(frame: .zero)
@@ -36,7 +40,7 @@ class ItemMarkerView : MarkerView{
         if hasMedia{
             setImage(MapDefaults.mapMediaIcon, for: .normal)
         }
-        else if hasTrack{
+        else if hasTrack || hasRoute{
             setImage(MapDefaults.mapTrackIcon, for: .normal)
         }
         else{

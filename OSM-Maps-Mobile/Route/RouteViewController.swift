@@ -24,7 +24,7 @@ class RouteViewController: ScrollViewController{
     }
     
     override func loadView() {
-        title = "track".localize()
+        title = "route".localize()
         super.loadView()
         view.addSubviewFillingSafeArea(scrollView, insets: .zero)
         scrollView.backgroundColor = .systemBackground

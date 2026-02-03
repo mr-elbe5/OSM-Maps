@@ -13,6 +13,7 @@ enum MainViewType: Int{
     case imageGrid
     case avGrid
     case trackGrid
+    case routeGrid
 }
 
 class MainViewController: ViewController {
@@ -30,6 +31,7 @@ class MainViewController: ViewController {
     var imageGridView = ImageGridView()
     var videoGridView = VideoGridView()
     var trackGridView = TrackGridView()
+    var routeGridView = RouteGridView()
     
     var imagePresenterView = ImagePresenterView()
     var videoPresenterView = VideoPresenterView()
@@ -46,6 +48,8 @@ class MainViewController: ViewController {
             return videoGridView
         case.trackGrid:
             return trackGridView
+        case.routeGrid:
+            return routeGridView
         }
     }
     
@@ -93,6 +97,10 @@ class MainViewController: ViewController {
         view.addSubviewBelow(trackGridView, upperView: mainMenu, insets: .zero)
             .connectToBottom(of: view, inset: .zero)
         trackGridView.isHidden = true
+        routeGridView.setupView()
+        view.addSubviewBelow(routeGridView, upperView: mainMenu, insets: .zero)
+            .connectToBottom(of: view, inset: .zero)
+        routeGridView.isHidden = true
         view.addSubviewFilling(imagePresenterView, insets: .zero)
         view.addSubviewFilling(videoPresenterView, insets: .zero)
         imagePresenterView.setupView()
@@ -122,21 +130,31 @@ class MainViewController: ViewController {
             imageGridView.isHidden = true
             videoGridView.isHidden = true
             trackGridView.isHidden = true
+            routeGridView.isHidden = true
         case .imageGrid:
             mapSplitView.isHidden = true
             imageGridView.isHidden = false
             videoGridView.isHidden = true
             trackGridView.isHidden = true
+            routeGridView.isHidden = true
         case .avGrid:
             mapSplitView.isHidden = true
             imageGridView.isHidden = true
             videoGridView.isHidden = false
             trackGridView.isHidden = true
+            routeGridView.isHidden = true
         case .trackGrid:
             mapSplitView.isHidden = true
             imageGridView.isHidden = true
             videoGridView.isHidden = true
             trackGridView.isHidden = false
+            routeGridView.isHidden = true
+        case .routeGrid:
+            mapSplitView.isHidden = true
+            imageGridView.isHidden = true
+            videoGridView.isHidden = true
+            trackGridView.isHidden = true
+            routeGridView.isHidden = false
         }
         viewType = type
         mainMenu.centerMenu.selectedSegment = type.rawValue

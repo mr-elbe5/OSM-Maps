@@ -23,6 +23,10 @@ class MarkerView : NSButton{
         false
     }
     
+    var hasRoute : Bool{
+        false
+    }
+    
     func updatePosition(to pos: CGPoint){
         //Log.debug("marker positon: \(pos)")
         frame = MarkerView.baseFrame.offsetBy(dx: pos.x, dy: pos.y + 2)

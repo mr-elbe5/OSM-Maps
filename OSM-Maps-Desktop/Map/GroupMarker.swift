@@ -18,6 +18,10 @@ class GroupMarker : MarkerView{
         group.hasTrack
     }
     
+    override var hasRoute : Bool{
+        group.hasRoute
+    }
+    
     init(itemGroup: MapItemGroup, target: AnyObject?, action: Selector?){
         self.group = itemGroup
         super.init(frame: .zero)
@@ -46,7 +50,7 @@ class GroupMarker : MarkerView{
                 image = MapDefaults.mapMediaGroupIcon
             }
         }
-        else if hasTrack{
+        else if hasTrack || hasRoute{
             image = MapDefaults.mapTrackGroupIcon
         }
         else{

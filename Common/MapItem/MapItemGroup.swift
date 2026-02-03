@@ -40,6 +40,15 @@ class MapItemGroup {
         return false
     }
     
+    var hasNote: Bool{
+        for item in items{
+            if item is NoteItem{
+                return true
+            }
+        }
+        return false
+    }
+    
     var hasTrack: Bool{
         for item in items{
             if item is TrackItem{
@@ -49,9 +58,9 @@ class MapItemGroup {
         return false
     }
     
-    var hasNote: Bool{
+    var hasRoute: Bool{
         for item in items{
-            if item is NoteItem{
+            if item is RouteItem{
                 return true
             }
         }

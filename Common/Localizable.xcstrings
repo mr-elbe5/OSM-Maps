@@ -3469,6 +3469,23 @@
         }
       }
     },
+    "routeExported" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Route wurde exportiert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Route has been exported"
+          }
+        }
+      }
+    },
     "routes" : {
       "extractionState" : "manual",
       "localizations" : {
