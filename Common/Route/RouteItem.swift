@@ -30,10 +30,12 @@ class RouteItem: MapItem{
     
     private enum CodingKeys: String, CodingKey {
         case route
+        case startLocation
         case endLocation
     }
     
     var route : Route
+    var startLocation : LocationData?
     var endLocation : LocationData?
     
     override var itemType: String{
@@ -74,13 +76,17 @@ class RouteItem: MapItem{
     init(route: Route){
         self.route = route
         super.init()
+        updateLocations()
+        _ = getPreview()
     }
     
     required init(from decoder: Decoder) throws {
         let values: KeyedDecodingContainer<CodingKeys> = try decoder.container(keyedBy: CodingKeys.self)
         route = try values.decodeIfPresent(Route.self, forKey: .route) ?? Route()
+        startLocation = try values.decodeIfPresent(LocationData.self, forKey: .startLocation)
         endLocation = try values.decodeIfPresent(LocationData.self, forKey: .endLocation)
         try super.init(from: decoder)
+        updateLocations()
         coordinate = route.startCoordinate ?? .zero
     }
     
@@ -88,16 +94,40 @@ class RouteItem: MapItem{
         var container = encoder.container(keyedBy: CodingKeys.self)
         try super .encode(to: encoder)
         try container.encode(route, forKey: .route)
+        try container.encodeIfPresent(startLocation, forKey: .startLocation)
         try container.encodeIfPresent(endLocation, forKey: .endLocation)
+    }
+    
+    func updateLocations(onCompletion: (() -> Void)? = nil){
+        var startDone: Bool = false
+        var endDone: Bool = false
+        if let startLocation = startLocation, let endLocation = endLocation{
+            startLocation.updateLocation(){
+                startDone = true
+                if startDone && endDone{
+                    onCompletion?()
+                }
+            }
+            endLocation.updateLocation(){
+                endDone = true
+                if startDone && endDone{
+                    onCompletion?()
+                }
+            }
+        }
+        else{
+            onCompletion?()
+        }
     }
     
     func getPreviewFile() -> Data?{
         FileManager.default.readFile(url: previewURL)
     }
     
-    func routeChanged(){
+    func updatePreview(){
         if FileManager.default.fileExists(url: previewURL){
             FileManager.default.deleteFile(url: previewURL)
+            RouteImageCreator.createPreview(item: self)
         }
     }
     
@@ -105,7 +135,7 @@ class RouteItem: MapItem{
     func deleteFiles() -> Bool{
         if FileManager.default.fileExists(dirPath: BasePaths.previewDirURL.path, fileName: fileName){
             if !FileManager.default.deleteFile(url: BasePaths.previewDirURL.appendingPathComponent(fileName)){
-                Log.error("Track could not delete preview: \(fileName)")
+                Log.error("Route could not delete preview: \(fileName)")
                 return false
             }
         }

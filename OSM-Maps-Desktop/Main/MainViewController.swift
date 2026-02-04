@@ -112,7 +112,7 @@ class MainViewController: ViewController {
     override func viewWillAppear() {
         super.viewWillAppear()
         mapView.setDefaultLocation()
-        mapScrollView.updateItemLayerContent()
+        mapScrollView.updateItemLayer()
     }
     
     func showItemDetails(item: MapItem){
@@ -169,9 +169,9 @@ class MainViewController: ViewController {
     }
     
     func updateMapLayersScale(){
-        mapScrollView.updateItemLayerScale()
-        mapScrollView.updateTrackLayerScale()
-        mapScrollView.updateRouteLayerScale()
+        mapScrollView.updateItemPositions()
+        mapScrollView.updateTrackPosition()
+        mapScrollView.updateRoutePosition()
     }
     
     func zoomIn(){
@@ -205,9 +205,9 @@ class MainViewController: ViewController {
     }
     
     func itemsChanged(){
-        mapScrollView.updateItemLayerContent()
-        mapScrollView.updateTrackLayerContent()
-        mapScrollView.updateRouteLayerContent()
+        mapScrollView.updateItemLayer()
+        mapScrollView.updateTrackLayer()
+        mapScrollView.updateRouteLayer()
         updateImageGrid()
         updateVideoGrid()
         updateTrackGrid()
@@ -279,14 +279,23 @@ class MainViewController: ViewController {
     
     //route
     
+    func createRoute(){
+        VisibleRoute.shared.reset()
+        VisibleRoute.shared.routeItem = RouteItem()
+        mapScrollView.updateRouteLayer()
+        routeControlView.update()
+    }
+    
+    func updateRouteLayer(){
+        mapScrollView.updateRouteLayer()
+    }
+    
     func showRouteOnMap(_ item: RouteItem?){
         setView(.map)
         if let item = item{
-            VisibleRoute.shared.setRoute(item.route)
-            mapMenuView.updateButtons()
-            mapScrollView.routeLayerView.setRoute(route: item.route)
-            mapScrollView.showRouteLayer(true)
-            routeControlView.isHidden = false
+            VisibleRoute.shared.routeItem = item
+            mapScrollView.updateRouteLayer()
+            routeControlView.update()
             if item.route.coordinateRegion == nil{
                 item.route.updateCoordinateRegion()
             }
@@ -302,49 +311,48 @@ class MainViewController: ViewController {
             routeControlView.isHidden = true
             mapScrollView.showRouteLayer(false)
         }
-        mapMenuView.updateState()
-        routeControlView.setupStatusPanel()
+        routeControlView.updateStatusPanel()
     }
     
     func markerButtonPressed(_ idx: Int){
         Log.info("marker pressed \(idx)")
         VisibleRoute.shared.setIndex(idx)
-        mapMenuView.updateState()
+        routeControlView.update()
     }
     
     func addRoutePoint(){
-        if VisibleRoute.shared.navigationPoints.count < VisibleRoute.MAX_NAVIGATION_POINTS{
+        if let route = VisibleRoute.shared.route, route.navigationPoints.count < VisibleRoute.MAX_NAVIGATION_POINTS{
             VisibleRoute.shared.addRoutePoint()
-            routePointsChanged()
+            updateRouteViews()
         }
     }
     
     func removeRoutePoint(){
-        if VisibleRoute.shared.navigationPoints.count > 2{
-            VisibleRoute.shared.removeRoutePoint(){ isComplete in
-                DispatchQueue.main.async {
-                    self.routeChanged()
-                }
+        VisibleRoute.shared.removeRoutePoint(){
+            DispatchQueue.main.async {
+                self.updateRouteLayer()
+                self.routeControlView.update()
             }
-            routePointsChanged()
         }
+        updateRouteLayer()
+        routeControlView.update()
     }
     
-    private func routePointsChanged(){
-        mapMenuView.updateButtons()
-        mapScrollView.routeLayerView.setupNavigationMarkers()
-        mapScrollView.updateRouteLayerContent()
-        routeControlView.setupStatusPanel()
+    private func updateRouteViews(){
+        mapScrollView.updateRouteLayer()
+        routeControlView.update()
     }
     
     func setRouteCoordinate(idx: Int, coordinate: CLLocationCoordinate2D){
         Log.info("coordinate for \(idx) is \(coordinate)")
-        mapScrollView.routeLayerView.setMarkerCoordinate(idx: idx, coordinate: coordinate)
-        VisibleRoute.shared.selectedIndex = -1
-        mapMenuView.updateState()
-        VisibleRoute.shared.setCoordinateForRoutePoint(idx, coordinate){ isComplete in
-            DispatchQueue.main.async {
-                self.routeChanged()
+        if let route = VisibleRoute.shared.route{
+            route.navigationPoints[idx] = MapPoint(coordinate: coordinate)
+            mapScrollView.updateRouteLayer()
+            VisibleRoute.shared.selectedIndex = -1
+            VisibleRoute.shared.requestRoute{
+                DispatchQueue.main.async {
+                    self.routeChanged()
+                }
             }
         }
     }
@@ -352,27 +360,30 @@ class MainViewController: ViewController {
     func setRouteType(_ routeType: RouteType){
         Preferences.shared.routeType = routeType
         Preferences.shared.save()
-        VisibleRoute.shared.setRouteType(routeType){ isComplete in
-            DispatchQueue.main.async {
-                self.routeChanged()
+        if let route = VisibleRoute.shared.route{
+            route.type = routeType
+            if route.canBeRequested{
+                VisibleRoute.shared.requestRoute {
+                    self.routeChanged()
+                }
+            }
+            else{
+                mapScrollView.updateRouteLayer()
             }
         }
     }
     
     private func routeChanged(){
-        mapScrollView.routeLayerView.setRoute(route: VisibleRoute.shared.route)
-        mapScrollView.updateRouteLayerContent()
+        mapScrollView.updateRouteLayer()
         routeControlView.isHidden = false
-        routeControlView.setupStatusPanel()
+        routeControlView.updateStatusPanel()
     }
     
     func saveRoute(){
-        if VisibleRoute.shared.isComplete{
-            VisibleRoute.shared.saveRoute(){ success in
-                if success{
-                    DispatchQueue.main.async {
-                        NSAlert.showMessage(message: "routeSaved".localize())
-                    }
+        if let route = VisibleRoute.shared.route, route.isComplete{
+            VisibleRoute.shared.saveRoute(){
+                DispatchQueue.main.async {
+                    NSAlert.showMessage(message: "routeSaved".localize())
                 }
             }
         }
@@ -381,9 +392,8 @@ class MainViewController: ViewController {
     func cancelRoute(){
         VisibleRoute.shared.reset()
         mapScrollView.routeLayerView.reset()
-        routeControlView.setupStatusPanel()
+        routeControlView.updateStatusPanel()
         routeControlView.isHidden = true
-        mapView.menuView.updateState()
     }
     
     // presenter

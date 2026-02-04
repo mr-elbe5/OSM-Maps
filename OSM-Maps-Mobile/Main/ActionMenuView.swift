@@ -7,7 +7,7 @@
 import UIKit
 import CoreLocation
 
-class TrackMenuView: UIView {
+class ActionMenuView: UIView {
     
     var startTrackingButton = UIButton().asIconButton("figure.walk.departure", color: .darkText)
     var trackingIcon = UIImageView(image: UIImage(systemName: "figure.walk.motion"))
@@ -15,6 +15,7 @@ class TrackMenuView: UIView {
     var stopButton = UIButton().asIconButton("stop.circle", color: .darkText)
     var cameraButton = UIButton().asIconButton("camera", color: .darkText)
     var audioButton = UIButton().asIconButton("microphone", color: .darkText)
+    var routeButton = UIButton().asIconButton("point.topright.arrow.triangle.backward.to.point.bottomleft.scurvepath", color: .darkText)
     
     let insets = UIEdgeInsets(top: 20, left: 5, bottom: 20, right: 5)
     
@@ -40,6 +41,9 @@ class TrackMenuView: UIView {
         audioButton.addAction(UIAction(){ action in
             self.openAudioRecorder()
         }, for: .touchDown)
+        routeButton.addAction(UIAction(){ action in
+            self.createRoute()
+        }, for: .touchDown)
         setupForIdle()
     }
     
@@ -48,6 +52,7 @@ class TrackMenuView: UIView {
         addSubviewBelow(startTrackingButton, insets: insets)
         addSubviewBelow(cameraButton, upperView: startTrackingButton, insets: insets)
         addSubviewBelow(audioButton, upperView: cameraButton, insets: insets)
+        addSubviewBelow(routeButton, upperView: audioButton, insets: insets)
             .connectToBottom(of: self, inset: 20)
     }
     
@@ -58,6 +63,7 @@ class TrackMenuView: UIView {
         addSubviewBelow(stopButton, upperView: pauseResumeButton, insets: insets)
         addSubviewBelow(cameraButton, upperView: stopButton, insets: insets)
         addSubviewBelow(audioButton, upperView: cameraButton, insets: insets)
+        addSubviewBelow(routeButton, upperView: audioButton, insets: insets)
             .connectToBottom(of: self, inset: 20)
     }
     
@@ -93,6 +99,10 @@ class TrackMenuView: UIView {
     
     func openAudioRecorder(){
         MainViewController.shared.openAudioRecorder()
+    }
+    
+    func createRoute(){
+        MainViewController.shared.createRoute()
     }
     
 }

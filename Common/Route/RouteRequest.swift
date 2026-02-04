@@ -9,8 +9,16 @@ import CoreLocation
 
 class RouteRequest {
     
-    static func getRoute(coordinates: [CLLocationCoordinate2D], type: RouteType, completion: @escaping (_ result: Route?) -> Void) -> Void {
-        var string = "https://routing.openstreetmap.de/routed-\(type.rawValue)/route/v1/driving/"
+    static func requestRoute(route: Route, completion: @escaping (Bool) -> Void) -> Void {
+        var coordinates = [CLLocationCoordinate2D]()
+        var navPoints = MapPointList()
+        for pnt in route.navigationPoints{
+            if pnt != .zero{
+                coordinates.append(pnt.coordinate)
+                navPoints.append(pnt)
+            }
+        }
+        var string = "https://routing.openstreetmap.de/routed-\(route.type.rawValue)/route/v1/driving/"
         for i in 0..<coordinates.count {
             let coordinate = coordinates[i]
             if i > 0 {
@@ -25,31 +33,32 @@ class RouteRequest {
             session.dataTask(with: url, completionHandler: { data, response, err -> Void in
                 if let err = err {
                     Log.error("OSRM error: \(err)")
-                    completion(nil)
+                    completion(false)
                     return
                 }
                 if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200, let data = data {
                     do{
                         //Log.info(String(data: data, encoding: .utf8)!)
                         let response: OSRMRouteData = try JSONDecoder().decode(OSRMRouteData.self, from: data)
-                        let route = getRoute(from: response)
-                        completion(route)
+                        let success = updateRoute(route: route, from: response)
+                        completion(success)
                     }
                     catch (let err){
                         Log.error("OSRM decode error: \(err)")
-                        completion(nil)
+                        completion(false)
                     }
                 } else {
-                    completion(nil)
+                    completion(false)
                 }
             }).resume()
         }
     }
     
-    private static func getRoute(from osrmRouteData: OSRMRouteData) -> Route? {
+    private static func updateRoute(route: Route, from osrmRouteData: OSRMRouteData) -> Bool {
         //Log.info("found routes: \(osrmRouteData.routes.count)")
-        let route = Route()
         if let osmroute = osrmRouteData.routes.first {
+            route.routepoints.removeAll()
+            route.waypoints.removeAll()
             route.distance = Int(osmroute.distance)
             route.duration = osmroute.duration
             for leg in osmroute.legs {
@@ -68,9 +77,9 @@ class RouteRequest {
                     }
                 }
             }
-            return route
+            return true
         }
-        return nil
+        return false
     }
     
 }

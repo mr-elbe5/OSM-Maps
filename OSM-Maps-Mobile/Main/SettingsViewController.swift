@@ -565,7 +565,7 @@ extension SettingsViewController{
     
     func recalculateTiles(){
         if mapRegion == nil{
-            mapRegion = MainViewController.shared.visibleTileRegion
+            mapRegion = MainViewController.shared.mapView.scrollView.tileRegion
         }
         let spinner = startSpinner()
         regionTiles.removeAll()

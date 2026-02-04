@@ -10,7 +10,11 @@ import CoreLocation
 class RouteControlView : UIView{
     
     var controlPanel = UIView()
+    var pointPanel = UIView()
     var routeTypeSelector = UISegmentedControl()
+    var markerButtons: [UIButton] = []
+    let addPointButton = UIButton().asIconButton("plus.circle")
+    let removePointButton = UIButton().asIconButton("minus.circle")
     
     let cancelRouteButton = UIButton().asIconButton("xmark", color: .darkText)
     let saveRouteButton = UIButton().asTextButton("save".localize(), color: .systemBlue)
@@ -19,11 +23,13 @@ class RouteControlView : UIView{
     var statusPanel = UIView()
     var waypointLines = [WaypointLine]()
     
+    let insets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+    
     func setup(){
         layer.cornerRadius = 10
         layer.masksToBounds = true
         
-        controlPanel.backgroundColor = .transparentColor
+        backgroundColor = .secondarySystemBackground
         addSubviewBelow(controlPanel, insets: .zero)
         routeTypeSelector.insertSegment(with: UIImage(systemName: "car"), at: 0, animated: false)
         routeTypeSelector.insertSegment(with: UIImage(systemName: "bicycle"), at: 1, animated: false)
@@ -41,16 +47,88 @@ class RouteControlView : UIView{
         cancelRouteButton.addAction(UIAction(){ action in
             MainViewController.shared.cancelRoute()
         }, for: .touchDown)
+        
+        addSubviewWithAnchors(pointPanel, top: controlPanel.bottomAnchor, leading: leadingAnchor, insets: .zero)
+        addPointButton.addAction(UIAction(){ action in
+            MainViewController.shared.addRoutePoint()
+        }, for: .touchDown)
+        addSubviewWithAnchors(addPointButton, top: controlPanel.bottomAnchor, leading: pointPanel.trailingAnchor, insets: insets)
+        removePointButton.addAction(UIAction(){ action in
+            MainViewController.shared.removeRoutePoint()
+        }, for: .touchDown)
+        addSubviewWithAnchors(removePointButton, top: controlPanel.bottomAnchor, leading: addPointButton.trailingAnchor, trailing: trailingAnchor, insets: insets)
+        statusScrollView.backgroundColor = .tertiarySystemBackground
         statusScrollView.scrollsToTop = false
-        addSubviewBelow(statusScrollView, upperView: controlPanel, insets: .zero)
+        addSubviewBelow(statusScrollView, upperView: pointPanel, insets: .zero)
             .height(200)
             .connectToBottom(of: self)
-        statusPanel.backgroundColor = .transparentColor
         statusScrollView.addSubviewWithAnchors(statusPanel, top: statusScrollView.topAnchor, leading: statusScrollView.leadingAnchor, bottom: statusScrollView.bottomAnchor, insets: .zero)
             .width(statusScrollView.widthAnchor, inset: 0)
+        update()
     }
     
-    func setupStatusPanel(){
+    func update(){
+        updateButtons()
+        updateState()
+        updateStatusPanel()
+        isHidden = VisibleRoute.shared.routeItem == nil
+    }
+    
+    func updateButtons(){
+        pointPanel.removeAllSubviews()
+        markerButtons.removeAll()
+        if let route = VisibleRoute.shared.route {
+            var lastView: UIView? = nil
+            if route.isEditable{
+                for i in 0..<route.navigationPoints.count {
+                    var col = ""
+                    switch i {
+                    case 0:
+                        col = "marker-green"
+                    case route.navigationPoints.count-1:
+                        col = "marker-red"
+                    default:
+                        col = "marker-yellow"
+                    }
+                    let button = UIButton().asImageButton(col)
+                    pointPanel.addSubviewToRight(button, leftView: lastView, insets: insets)
+                    button.addAction(UIAction(){ action in
+                        MainViewController.shared.markerButtonPressed(i)
+                    }, for: .touchDown)
+                    markerButtons.append(button)
+                    lastView = button
+                }
+            }
+        }
+    }
+    
+    func updateState(){
+        if let route = VisibleRoute.shared.route, route.isEditable{
+            pointPanel.isHidden = false
+            for idx in 0..<markerButtons.count{
+                let btn = markerButtons[idx]
+                if idx == VisibleRoute.shared.selectedIndex{
+                    btn.setRoundedBorders()
+                }
+                else{
+                    btn.unsetRoundedBorders()
+                }
+            }
+            saveRouteButton.isHidden = !route.isComplete
+            addPointButton.isHidden = false
+            removePointButton.isHidden = false
+            addPointButton.isEnabled = route.navigationPoints.count < VisibleRoute.MAX_NAVIGATION_POINTS
+            removePointButton.isEnabled = route.navigationPoints.count > 2
+        }
+        else{
+            saveRouteButton.isHidden = true
+            pointPanel.isHidden = true
+            addPointButton.isHidden = true
+            removePointButton.isHidden = true
+        }
+    }
+    
+    func updateStatusPanel(){
         statusPanel.removeAllSubviews()
         waypointLines.removeAll()
         if let route = VisibleRoute.shared.route {
@@ -87,10 +165,6 @@ class RouteControlView : UIView{
                 waypointLines.append(waypointLine)
             }
             lastLine.connectToBottom(of: statusPanel)
-            saveRouteButton.isEnabled = true
-        }
-        else{
-            saveRouteButton.isEnabled = false
         }
     }
     
@@ -161,3 +235,5 @@ class RouteControlView : UIView{
         
     }
 }
+
+

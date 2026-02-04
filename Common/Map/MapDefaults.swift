@@ -25,9 +25,6 @@ class MapDefaults{
     static var routeStartIcon = OSImage(named: "marker-green")!
     static var routeEndIcon = OSImage(named: "marker-red")!
     static var routeMiddleIcon = OSImage(named: "marker-yellow")!
-    static var waypointMarkerIcon = OSImage(iconName: "circle")!.withTintColor(.darkGray)
-    
-    static var mapItemImageOffset: CGFloat = 16
     
     static var defaultTrackpointMinInterval: TrackpointInterval = .short
     static var defaultMaxHorizontalUncertainty: Double = 10.0

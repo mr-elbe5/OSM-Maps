@@ -19,12 +19,12 @@ class LayerView: NSView {
         needsDisplay = true
     }
     
-    func updateScale(_ scale: CGFloat){
+    func updatePosition(scale: CGFloat){
         self.scale = scale
         refresh()
     }
     
-    func updateContent(_ scale: CGFloat){
+    func updateContent(scale: CGFloat){
         self.scale = scale
     }
     

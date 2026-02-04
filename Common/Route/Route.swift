@@ -33,7 +33,7 @@ class Route: Codable{
     }
     
     var name : String
-    var navigationPoints: MapPointList = []
+    var navigationPoints: Array<MapPoint> = []
     var type: RouteType = .car
     var distance: Int = 0
     var duration: TimeInterval = 0.0
@@ -51,12 +51,38 @@ class Route: Codable{
         routepoints.last?.coordinate
     }
     
+    var canBeRequested: Bool{
+        navigationPoints.count > 1 && allNavigationPointsSet
+    }
+    
+    var allNavigationPointsSet: Bool{
+        navigationPoints.allSatisfy({
+            $0 != .zero
+        })
+    }
+    
+    var anyNavigationPointsSet: Bool{
+        !navigationPoints.allSatisfy({
+            $0 == .zero
+        })
+    }
+    
+    var isEditable: Bool{
+        !navigationPoints.isEmpty
+    }
+    
+    var isComplete: Bool{
+        navigationPoints.count > 1 && allNavigationPointsSet && !routepoints.isEmpty
+    }
+    
     var worldRect: CGRect?{
         coordinateRegion?.worldRect
     }
     
     init(){
         name = "Route"
+        navigationPoints.append(.zero)
+        navigationPoints.append(.zero)
     }
     
     init(gpx: GPXData){
@@ -71,13 +97,13 @@ class Route: Codable{
                 name = gpx.name
             }
         }
-        //updateFromRoutepoints()
+        navigationPoints.append(routepoints.first ?? .zero)
+        navigationPoints.append(routepoints.last ?? .zero)
     }
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         name = try container.decodeIfPresent(String.self, forKey: .name) ?? "Route"
-        navigationPoints = try container.decodeIfPresent(Array<MapPoint>.self, forKey: .navigationPoints) ?? []
         let s = try container.decodeIfPresent(String.self, forKey: .type)
         if let s, let type = RouteType(rawValue: s) {
             self.type = type
@@ -101,7 +127,6 @@ class Route: Codable{
     func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(name, forKey: .name)
-        try container.encode(navigationPoints, forKey: .navigationPoints)
         try container.encodeIfPresent(type.rawValue, forKey: .type)
         try container.encode(distance, forKey: .distance)
         try container.encode(duration, forKey: .duration)
@@ -114,7 +139,7 @@ class Route: Codable{
     
     func reset(){
         name = "Route"
-        navigationPoints.removeAll()
+        navigationPoints = [.zero, .zero]
         type = .car
         distance = 0
         duration = 0

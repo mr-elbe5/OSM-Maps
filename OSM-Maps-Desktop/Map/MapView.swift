@@ -46,7 +46,7 @@ class MapView: NSView {
     
     func showLocationOnMap(coordinate: CLLocationCoordinate2D) {
         scrollView.scrollToScreenCenter(coordinate: coordinate)
-        scrollView.updateLayersScale()
+        scrollView.updateLayerPositions()
     }
     
     func showMapRectOnMap(worldRect: CGRect) {
@@ -55,14 +55,13 @@ class MapView: NSView {
         scrollView.scrollToScreenCenter(coordinate: worldRect.centerCoordinate)
         Log.info("scrollZoom = \(MapStatus.shared.zoom)")
         Log.info("scrollScale = \(scrollView.zoomScale)")
-        scrollView.updateLayersScale()
+        scrollView.updateLayerPositions()
     }
     
     @objc func showCrossLocationMenu(){
         let menu = CrossButtonMenu()
         menu.popover.show(relativeTo: self.crossLocationView.frame, of: self, preferredEdge: .maxY)
     }
-    
     
     func zoomIn() {
         scrollView.zoomIn()
@@ -80,11 +79,11 @@ class MapView: NSView {
     
     func refreshMap() {
         refresh()
-        scrollView.updateLayersScale()
+        scrollView.updateLayerPositions()
     }
     
     func importTrack() {
-        scrollView.updateItemLayerContent()
+        scrollView.updateItemLayer()
     }
     
 }
@@ -100,7 +99,7 @@ extension MapView : MapScrollViewDelegate{
     func didZoom(to zoom: Int) {
         MapStatus.shared.scale = World.downScale(to: zoom)
         MapStatus.shared.save()
-        scrollView.updateLayersScale()
+        scrollView.updateLayerPositions()
         statusView.setZoom(MapStatus.shared.zoom)
     }
     

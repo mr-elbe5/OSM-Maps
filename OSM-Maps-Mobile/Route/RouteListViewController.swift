@@ -24,6 +24,9 @@ class RouteListViewController: ItemListViewController{
     
     override func getTrailingBarButtos() -> Array<UIBarButtonItem>{
         var items = Array<UIBarButtonItem>()
+        items.append(UIBarButtonItem(title: "addRoute".localize(), image: UIImage(systemName: "plus"), primaryAction: UIAction(){ action in
+            self.createRoute()
+        }))
         items.append(UIBarButtonItem(title: "importRoute".localize(), image: UIImage(systemName: "square.and.arrow.down"), primaryAction: UIAction(){ action in
             self.importRoute()
         }))
@@ -64,6 +67,11 @@ class RouteListViewController: ItemListViewController{
         picker.delegate = nil
         picker.title = "exportSelected".localize()
         present(picker, animated: true)
+    }
+    
+    func createRoute(){
+        MainViewController.shared.navigationController?.popToRootViewController(animated: true)
+        MainViewController.shared.createRoute()
     }
     
     func importRoute(){

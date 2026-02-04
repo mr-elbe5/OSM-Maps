@@ -13,62 +13,38 @@ class VisibleRoute{
     
     static var MAX_NAVIGATION_POINTS: Int = 7
     
-    var navigationPoints: [MapPoint?] = []
-    var routeType: RouteType = Preferences.shared.routeType
+    var routeItem: RouteItem? = nil
     
-    var route: Route? = nil
+    var route: Route?{
+        routeItem?.route
+    }
     
     var selectedIndex: Int = -1
     
-    var allNavigationPointsSet: Bool{
-        navigationPoints.allSatisfy({
-            $0 != nil
-        })
-    }
-    
-    var anyNavigationPointsSet: Bool{
-        !navigationPoints.allSatisfy({
-            $0 == nil
-        })
-    }
-    
-    var routeIsRequestable: Bool{
-        let valid = navigationPoints.count > 1 && allNavigationPointsSet
-        //Log.info("isRequestable: \(valid)")
-        return valid
-    }
-    
-    var isPresent: Bool{
-        anyNavigationPointsSet
-    }
-    
-    var isComplete: Bool{
-        allNavigationPointsSet && routeIsRequestable && route != nil
+    var canRequestRoute: Bool{
+        route?.canBeRequested ?? false
     }
     
     init(){
-        navigationPoints.append(nil)
-        navigationPoints.append(nil)
     }
     
     func addRoutePoint(){
-        if navigationPoints.count < VisibleRoute.MAX_NAVIGATION_POINTS{
-            navigationPoints.append(nil)
+        if let route = route, route.navigationPoints.count < VisibleRoute.MAX_NAVIGATION_POINTS{
+            route.navigationPoints.append(.zero)
         }
     }
     
-    func removeRoutePoint(completion: @escaping (Bool) -> Void){
-        if navigationPoints.count > 2{
-            navigationPoints.removeLast()
-            if routeIsRequestable{
+    func removeRoutePoint(completion: @escaping () -> Void){
+        if let route = route, route.navigationPoints.count > 2{
+            route.navigationPoints.removeLast()
+            if route.canBeRequested{
                 //Log.info("requesting route")
-                requestRoute(){ success in
-                    completion(success)
+                requestRoute(){
+                    completion()
                 }
                 return
             }
         }
-        completion(false)
     }
     
     func setIndex(_ idx: Int){
@@ -81,88 +57,71 @@ class VisibleRoute{
         //Log.info("selected index = \(selectedIndex)")
     }
     
-    func setCoordinateForRoutePoint(_ idx: Int,_ coordinate: CLLocationCoordinate2D, completion: @escaping (Bool) -> Void) {
-        if navigationPoints.count > idx {
-            navigationPoints[idx] = MapPoint(coordinate: coordinate)
-            if routeIsRequestable{
-                //Log.info("requesting route")
-                requestRoute(){ success in
-                    completion(success)
-                }
-                return
-            }
+    func setCoordinateForRoutePoint(_ idx: Int,_ coordinate: CLLocationCoordinate2D) {
+        if let route = route, route.navigationPoints.count > idx {
+            route.navigationPoints[idx] = MapPoint(coordinate: coordinate)
         }
-        completion(false)
     }
     
-    func setRouteType(_ type: RouteType, completion: @escaping (Bool) -> Void) {
-        self.routeType = type
-        if routeIsRequestable{
-            requestRoute(){ success in
-                completion(success)
+    func updateRoute(completion: @escaping () -> Void) -> Bool{
+        if let route = route, route.canBeRequested{
+            //Log.info("requesting route")
+            requestRoute(){
+                completion()
+            }
+            return true
+        }
+        return false
+    }
+    
+    func setRouteType(_ type: RouteType, completion: @escaping () -> Void) {
+        if let item = routeItem{
+            item.route.type = type
+        }
+        if let route = route, route.canBeRequested{
+            requestRoute(){
+                completion()
             }
             return
         }
-        completion(false)
     }
     
-    func setRoute(_ route: Route){
-        self.route = route
-        self.routeType = route.type
-        self.navigationPoints = route.navigationPoints
+    func setRouteItem(_ item: RouteItem){
+        self.routeItem = item
     }
     
-    func saveRoute(completion: ((Bool) -> Void)? = nil){
-        if isComplete{
-            let item = RouteItem(route: route!)
-            if let startPoint = route!.navigationPoints.first, let endPoint = route!.navigationPoints.last {
+    func saveRoute(completion: (() -> Void)? = nil){
+        if let item = routeItem, let route = route, route.isComplete{
+            if let startPoint = route.routepoints.first, let endPoint = route.routepoints.last {
                 item.coordinate = startPoint.coordinate
+                item.startLocation = LocationData(coordinate: startPoint.coordinate)
                 item.endLocation = LocationData(coordinate: endPoint.coordinate)
+                item.route.navigationPoints.removeAll()
+                item.updatePreview()
                 item.updateLocation(){
-                    item.endLocation!.updateLocation(){
+                    item.updateLocations(){
                         AppData.shared.addItem(item)
                         AppData.shared.save()
-                        completion?(true)
+                        completion?()
                     }
                 }
                 _ = item.getPreview()
             }
-            else{
-                completion?(false)
-            }
-        }
-        else{
-            completion?(false)
         }
     }
     
     func reset() {
-        navigationPoints.removeAll()
-        navigationPoints.append(nil)
-        navigationPoints.append(nil)
-        route = nil
+        routeItem = nil
         selectedIndex = -1
     }
     
-    func requestRoute(completion: @escaping (_ result: Bool) -> Void) {
-        if routeIsRequestable {
-            var coordinates = [CLLocationCoordinate2D]()
-            var navPoints = MapPointList()
-            for pnt in navigationPoints{
-                if let pnt = pnt{
-                    coordinates.append(pnt.coordinate)
-                    navPoints.append(pnt)
-                }
-            }
-            RouteRequest.getRoute(coordinates: coordinates, type: routeType){ route in
-                if let route = route{
-                    self.route = route
-                    route.navigationPoints = navPoints
-                    completion(true)
-                }
-                else {
-                    self.route = nil;
-                    completion(false)
+    func requestRoute(completion: @escaping () -> Void) {
+        guard canRequestRoute else { return }
+        if let item = routeItem, let route = route, route.canBeRequested {
+            RouteRequest.requestRoute(route: route){ success in
+                if success{
+                    item.route = route
+                    completion()
                 }
             }
         }

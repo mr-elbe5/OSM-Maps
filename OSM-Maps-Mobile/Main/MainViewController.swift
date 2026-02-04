@@ -15,8 +15,7 @@ class MainViewController: UIViewController {
     var mapView = MapView()
     var gpsStatusView = GPSStatusView()
     var topMenuView = TopMenuView()
-    var trackMenuView = TrackMenuView()
-    var routeMenuView = RouteMenuView()
+    var actionMenuView = ActionMenuView()
     var mapMenuView = MapMenuView()
     var trackStatusView = TrackStatusView()
     var statusView = LocationStatusView()
@@ -26,14 +25,6 @@ class MainViewController: UIViewController {
     var cancelAlert: UIAlertController? = nil
     
     var startCoordinate: CLLocationCoordinate2D? = nil
-    
-    var visibleTileRegion: TileRegion{
-        mapView.scrollView.tileRegion
-    }
-    
-    var routeLayerView: RouteLayerView{
-        mapView.routeLayerView
-    }
     
     override func loadView() {
         super.loadView()
@@ -47,7 +38,6 @@ class MainViewController: UIViewController {
         setupGpsStatusView(guide: guide)
         setupTopMenuView(guide: guide)
         setupTrackMenuView(guide: guide)
-        setupRouteMenuView(guide: guide)
         setupMapMenuView(guide: guide)
         setupLicenseView(guide: guide)
         setupStatusView(guide: guide)
@@ -147,23 +137,15 @@ class MainViewController: UIViewController {
     
     //left top
     func setupTrackMenuView(guide: UILayoutGuide){
-        view.addSubviewWithAnchors(trackMenuView, top: guide.topAnchor, leading: guide.leadingAnchor, insets: UIEdgeInsets(top: 40, left: 10, bottom: 0, right: 0))
-        trackMenuView.setup()
-    }
-    
-    //left below
-    func setupMapMenuView(guide: UILayoutGuide){
-        view.addSubviewWithAnchors(mapMenuView, top: trackMenuView.bottomAnchor, leading: guide.leadingAnchor, insets: UIEdgeInsets(top: 20, left: 10, bottom: 0, right: 0))
-        mapMenuView.setup()
+        view.addSubviewWithAnchors(actionMenuView, top: guide.topAnchor, leading: guide.leadingAnchor, insets: UIEdgeInsets(top: 40, left: 10, bottom: 0, right: 0))
+        actionMenuView.setup()
     }
     
     //top right
-    func setupRouteMenuView(guide: UILayoutGuide){
-        view.addSubviewWithAnchors(routeMenuView, top: guide.topAnchor, trailing: guide.trailingAnchor, insets: UIEdgeInsets(top: 40, left: 0, bottom: 0, right: 10))
-        routeMenuView.setup()
+    func setupMapMenuView(guide: UILayoutGuide){
+        view.addSubviewWithAnchors(mapMenuView, top: guide.topAnchor, trailing: guide.trailingAnchor, insets: UIEdgeInsets(top: 40, left: 0, bottom: 0, right: 10))
+        mapMenuView.setup()
     }
-    
-    
     
     func setupLicenseView(guide: UILayoutGuide){
         view.addSubviewWithAnchors(licenseView, trailing: guide.trailingAnchor, bottom: guide.bottomAnchor, insets: UIEdgeInsets(top: 0, left: 0, bottom: OSInsets.smallInset, right: OSInsets.defaultInset))
@@ -205,7 +187,6 @@ class MainViewController: UIViewController {
     }
     
     func setupRouteControlView(guide: UILayoutGuide){
-        routeControlView.setBackground(.transparentColor)
         routeControlView.setup()
         view.addSubviewWithAnchors(routeControlView, leading: guide.leadingAnchor, trailing: guide.trailingAnchor, bottom: guide.bottomAnchor, insets: OSInsets.defaultInsets)
         routeControlView.isHidden = true
@@ -325,83 +306,89 @@ class MainViewController: UIViewController {
     
     // route
     
+    func updateRouteLayer(){
+        mapView.updateRouteLayer()
+    }
+    
+    func createRoute(){
+        VisibleRoute.shared.reset()
+        VisibleRoute.shared.routeItem = RouteItem()
+        mapView.updateRouteLayer()
+        routeControlView.update()
+    }
+    
     func markerButtonPressed(_ idx: Int){
-        //Log.info("marker pressed \(idx)")
         VisibleRoute.shared.setIndex(idx)
-        routeMenuView.updateState()
+        routeControlView.updateState()
     }
     
     func addRoutePoint(){
         VisibleRoute.shared.addRoutePoint()
-        routePointsChanged()
+        updateRouteLayer()
+        routeControlView.update()
     }
     
     func removeRoutePoint(){
-        VisibleRoute.shared.removeRoutePoint(){ isComplete in
+        VisibleRoute.shared.removeRoutePoint(){
             DispatchQueue.main.async {
-                self.routeChanged()
+                self.updateRouteLayer()
+                self.routeControlView.update()
             }
         }
-        routePointsChanged()
-    }
-    
-    private func routePointsChanged(){
-        routeMenuView.updateButtons()
-        routeLayerView.setupNavigationMarkers()
-        routeControlView.setupStatusPanel()
+        updateRouteLayer()
+        routeControlView.update()
     }
     
     func setRoutePoint(idx: Int, screenPoint: CGPoint){
-        //Log.info("set route point at \(idx)")
+        Log.info("set route point at \(idx)")
         let mapPoint = mapView.scrollView.worldPoint(screenPoint: screenPoint)
-        let coordinate = mapPoint.coordinate
-        mapView.routeLayerView.setMarkerCoordinate(idx: idx, coordinate: coordinate)
-        VisibleRoute.shared.selectedIndex = -1
-        routeMenuView.updateState()
-        VisibleRoute.shared.setCoordinateForRoutePoint(idx, coordinate){ isComplete in
-            DispatchQueue.main.async {
-                self.routeChanged()
+        VisibleRoute.shared.setCoordinateForRoutePoint(idx, mapPoint.coordinate)
+        mapView.updateRouteLayer()
+        if VisibleRoute.shared.canRequestRoute{
+            VisibleRoute.shared.requestRoute(){
+                DispatchQueue.main.async {
+                    self.updateRouteLayer()
+                    self.routeControlView.update()
+                }
             }
         }
+        VisibleRoute.shared.selectedIndex = -1
+        routeControlView.updateState()
+        
     }
     
     func setRouteType(_ routeType: RouteType){
         Preferences.shared.routeType = routeType
         Preferences.shared.save()
-        VisibleRoute.shared.setRouteType(routeType){ isComplete in
+        VisibleRoute.shared.setRouteType(routeType){
             DispatchQueue.main.async {
-                self.routeChanged()
+                self.updateRouteLayer()
+                self.routeControlView.update()
             }
         }
     }
     
-    private func routeChanged(){
-        routeLayerView.setRoute(route: VisibleRoute.shared.route)
-        mapView.updateRouteLayer()
-        routeControlView.isHidden = false
-        routeControlView.setupStatusPanel()
-    }
-    
     func cancelRoute(){
         VisibleRoute.shared.reset()
-        routeLayerView.reset()
-        routeControlView.setupStatusPanel()
-        routeControlView.isHidden = true
-        routeMenuView.updateState()
+        updateRouteLayer()
+        routeControlView.update()
     }
     
     func saveRoute(){
-        if VisibleRoute.shared.isComplete{
-            VisibleRoute.shared.saveRoute()
+        if let route = VisibleRoute.shared.route, route.isComplete{
+            VisibleRoute.shared.saveRoute(){
+                DispatchQueue.main.async {
+                    self.updateRouteLayer()
+                    self.routeControlView.update()
+                }
+            }
         }
     }
     
     func showRouteOnMap(item: RouteItem){
-        VisibleRoute.shared.setRoute(item.route)
-        routeLayerView.setRoute(route: VisibleRoute.shared.route)
-        routeControlView.setupStatusPanel()
-        routeControlView.isHidden = false
-        routeMenuView.updateState()
+        VisibleRoute.shared.routeItem = item
+        updateRouteLayer()
+        routeControlView.update()
         Preferences.shared.followLocation = false
         if item.route.coordinateRegion == nil{
             item.route.updateCoordinateRegion()
@@ -413,16 +400,11 @@ class MainViewController: UIViewController {
         else{
             mapView.scrollTo(item.coordinate)
         }
-        mapView.routeLayerView.setNeedsDisplay()
     }
     
     func hideRouteOnMap(){
         VisibleRoute.shared.reset()
-        mapView.updateRouteLayer()
-    }
-    
-    func activateWaypoint(_ idx: Int){
-        routeControlView.activate(idx)
+        updateRouteLayer()
     }
     
     // camera

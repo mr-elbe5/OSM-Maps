@@ -80,28 +80,6 @@ class MapView: UIView {
         itemLayerView.updatePosition(offset: contentOffset, scale: scrollView.zoomScale)
     }
     
-    func updateTrackPosition(){
-        trackLayerView.updatePosition(offset: contentOffset, scale: scrollView.zoomScale)
-    }
-    
-    func updateRoutePosition(){
-        routeLayerView.updatePosition(offset: contentOffset, scale: scrollView.zoomScale)
-    }
-    
-    func zoomToCurrentZoom(){
-        Log.info("zooming to \(MapStatus.shared.zoom)")
-        scrollView.zoomTo(MapStatus.shared.zoom)
-        updateCurrentLocationView()
-    }
-    
-    func updateCurrentDirection(){
-        currentLocationView.updateDirection(direction: LocationStatus.shared.direction)
-    }
-    
-    func updateCurrentLocationView(){
-        currentLocationView.updateLocationPoint(location: LocationStatus.shared.location, offset: contentOffset, scale: zoomScale)
-    }
-    
     func updateTrackLayer(){
         if VisibleTrack.shared.isPresent{
             trackLayerView.updatePosition(offset: contentOffset, scale: scrollView.zoomScale)
@@ -111,8 +89,25 @@ class MapView: UIView {
         }
     }
     
+    func updateTrackPosition(){
+        trackLayerView.updatePosition(offset: contentOffset, scale: scrollView.zoomScale)
+    }
+    
     func updateRouteLayer(){
+        routeLayerView.updateView()
         routeLayerView.updatePosition(offset: contentOffset, scale: scrollView.zoomScale)
+    }
+    
+    func updateRoutePosition(){
+        routeLayerView.updatePosition(offset: contentOffset, scale: scrollView.zoomScale)
+    }
+    
+    func updateCurrentDirection(){
+        currentLocationView.updateDirection(direction: LocationStatus.shared.direction)
+    }
+    
+    func updateCurrentLocationView(){
+        currentLocationView.updateLocationPoint(location: LocationStatus.shared.location, offset: contentOffset, scale: zoomScale)
     }
     
     func refresh(){
@@ -126,6 +121,12 @@ class MapView: UIView {
     
     func focusUserLocation() {
         scrollTo(LocationStatus.shared.location.coordinate)
+    }
+    
+    func zoomToCurrentZoom(){
+        Log.info("zooming to \(MapStatus.shared.zoom)")
+        scrollView.zoomTo(MapStatus.shared.zoom)
+        updateCurrentLocationView()
     }
     
     func scrollTo(_ coordinate: CLLocationCoordinate2D){
@@ -153,24 +154,22 @@ extension MapView: MapScrollViewDelegate{
     
     func didZoom() {
         MapStatus.shared.scale = zoomScale
-        updateItemLayer()
+        updateItemPositions()
+        updateTrackPosition()
+        updateRoutePosition()
         updateCurrentLocationView()
     }
     
     func didScroll() {
         scrollView.assertCenteredContent()
         updateMapStatus()
-        updateItemLayer()
-        updateTrackLayer()
-        updateRouteLayer()
+        updateItemPositions()
+        updateTrackPosition()
+        updateRoutePosition()
         updateCurrentLocationView()
     }
     
     func didFinishZooming() {
-        updateItemLayer()
-        updateCurrentLocationView()
-        updateTrackLayer()
-        updateRouteLayer()
     }
     
 }

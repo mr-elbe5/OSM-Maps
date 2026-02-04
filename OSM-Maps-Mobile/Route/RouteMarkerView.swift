@@ -7,7 +7,7 @@
 import UIKit
 import CoreLocation
 
-class RouteMarkerView : UIButton{
+class RouteMarkerView : UIImageView{
     
     static var centerBaseFrame = CGRect(x: -12,y: -12, width: 24, height: 24)
     static var upperBaseFrame = CGRect(x: -12,y: -24, width: 24, height: 24)
@@ -16,11 +16,10 @@ class RouteMarkerView : UIButton{
     var coordinate: CLLocationCoordinate2D
     var baseFrame: CGRect = RouteMarkerView.centerBaseFrame
     
-    init(idx: Int, coordinate: CLLocationCoordinate2D, image: UIImage?){
+    init(idx: Int, coordinate: CLLocationCoordinate2D, image: UIImage){
         self.idx = idx
         self.coordinate = coordinate
-        super.init(frame: .zero)
-        self.setImage(image, for: .normal)
+        super.init(image: image)
     }
     
     required init?(coder: NSCoder) {

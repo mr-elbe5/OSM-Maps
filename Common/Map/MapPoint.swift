@@ -7,7 +7,13 @@
 import Foundation
 import CoreLocation
 
-class MapPoint: Codable{
+class MapPoint: Codable, Equatable{
+    
+    static var zero = MapPoint(coordinate: .zero)
+    
+    static func == (lhs: MapPoint, rhs: MapPoint) -> Bool {
+        lhs.coordinate.latitude == rhs.coordinate.latitude && lhs.coordinate.longitude == rhs.coordinate.longitude
+    }
     
     enum CodingKeys: String, CodingKey {
         case latitude

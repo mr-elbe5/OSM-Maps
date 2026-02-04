@@ -8,7 +8,7 @@ import Foundation
 import CoreLocation
 import CloudKit
 
-class MapItem: LocationData, Identifiable, Equatable, Hashable {
+class MapItem: LocationData, Identifiable, Hashable {
     
     static var recordType: CKRecord.RecordType = "item"
     

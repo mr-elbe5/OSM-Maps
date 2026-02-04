@@ -34,7 +34,7 @@ class ItemLayerView: LayerView {
         }
     }
     
-    override func updateScale(_ scale: CGFloat){
+    override func updatePosition(scale: CGFloat){
         self.scale = scale
         for subview in subviews{
             if let marker = subview as? ItemMarkerView{
@@ -48,7 +48,7 @@ class ItemLayerView: LayerView {
         needsDisplay = true
     }
     
-    override func updateContent(_ scale: CGFloat){
+    override func updateContent(scale: CGFloat){
         //Log.debug("updateContent")
         self.scale = scale
         for subview in subviews {
@@ -85,7 +85,7 @@ class ItemLayerView: LayerView {
                 addSubview(marker)
             }
         }
-        updateScale(scale)
+        updatePosition(scale: scale)
     }
     
     func getMarker(item: MapItem) -> MarkerView?{
