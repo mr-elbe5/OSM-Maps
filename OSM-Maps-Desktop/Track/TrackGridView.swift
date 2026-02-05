@@ -14,11 +14,20 @@ class TrackGridView: GridView{
     
     var menuView = TrackGridMenuView()
     
+    init(){
+        super.init(idx: 3)
+    }
+    
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     deinit{
         items.deselectAll()
     }
     
     override func setupView() {
+        super.setupView()
         addSubviewWithAnchors(menuView, top: topAnchor, leading: leadingAnchor, bottom: bottomAnchor)
             .width(40)
         menuView.setupView()

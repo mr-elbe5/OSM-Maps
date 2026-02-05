@@ -16,11 +16,20 @@ class ImageGridView: GridView{
     
     var hideUnselected: Bool = false
     
+    init(){
+        super.init(idx: 1)
+    }
+    
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     deinit{
         items.deselectAll()
     }
     
     override func setupView() {
+        super.setupView()
         addSubviewWithAnchors(menuView, top: topAnchor, leading: leadingAnchor, bottom: bottomAnchor, insets: .zero)
             .width(40)
         menuView.setupView()

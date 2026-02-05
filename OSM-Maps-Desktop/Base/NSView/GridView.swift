@@ -18,12 +18,27 @@ class GridView: NSView, GridMenuDelegate{
     static var defaultGridSize: CGFloat = 200
     static var gridSizeFactors : Array<CGFloat> = [0.5, 0.75, 1.0, 1.5, 2.0]
     
+    var idx: Int = 0
     let scrollView = NSScrollView()
     let collectionView = NSCollectionView()
     let layout = NSCollectionViewGridLayout()
     
     var gridSize: CGFloat{
         GridView.defaultGridSize * GridView.gridSizeFactors[Preferences.shared.gridSizeFactorIndex]
+    }
+    
+    init(idx: Int){
+        self.idx = idx
+        super.init(frame: .zero)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func setupView() {
+        super.setupView()
+        backgroundColor = .black
     }
     
     func increasePreviewSize() {

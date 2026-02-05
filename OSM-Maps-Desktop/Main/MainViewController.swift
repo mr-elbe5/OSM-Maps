@@ -8,14 +8,6 @@ import AppKit
 import AVFoundation
 import CoreLocation
 
-enum MainViewType: Int{
-    case map
-    case imageGrid
-    case avGrid
-    case trackGrid
-    case routeGrid
-}
-
 class MainViewController: ViewController {
     
     static var shared: MainViewController{
@@ -24,34 +16,12 @@ class MainViewController: ViewController {
         }
     }
     
-    var mainMenu = MainMenuView()
+    let mainMenu = MainMenuView()
+    let separator = NSView()
     var mapSplitView: SplitView!
     var mapView = MapView()
     var mapDetailView = MapDetailView()
-    var imageGridView = ImageGridView()
-    var videoGridView = VideoGridView()
-    var trackGridView = TrackGridView()
-    var routeGridView = RouteGridView()
-    
-    var imagePresenterView = ImagePresenterView()
-    var videoPresenterView = VideoPresenterView()
-    
-    var viewType: MainViewType = .map
-    
-    var currentView: NSView{
-        switch viewType{
-        case .map:
-            return mapSplitView
-        case .imageGrid:
-            return imageGridView
-        case .avGrid:
-            return videoGridView
-        case.trackGrid:
-            return trackGridView
-        case.routeGrid:
-            return routeGridView
-        }
-    }
+    var gridView: GridView?
     
     var mapScrollView: MapScrollView{
         mapView.scrollView
@@ -69,12 +39,27 @@ class MainViewController: ViewController {
         mapDetailView.routeControlView
     }
     
+    var imageGridView: ImageGridView?{
+        gridView as? ImageGridView
+    }
+    
+    var videoGridView: VideoGridView?{
+        gridView as? VideoGridView
+    }
+    
+    var trackGridView: TrackGridView?{
+        gridView as? TrackGridView
+    }
+    
+    var routeGridView: RouteGridView?{
+        gridView as? RouteGridView
+    }
+    
     override func loadView(){
         view = NSView()
         view.backgroundColor = .black
         mainMenu.setupView()
         view.addSubviewBelow(mainMenu, insets: .zero)
-        let separator = NSView()
         separator.backgroundColor = .darkGray
         view.addSubviewBelow(separator, upperView: mainMenu, insets: .zero)
             .height(3)
@@ -85,28 +70,6 @@ class MainViewController: ViewController {
         view.addSubviewBelow(mapSplitView, upperView: separator, insets: .zero)
             .connectToBottom(of: view, inset: .zero)
         routeControlView.setup()
-        imageGridView.setupView()
-        view.addSubviewBelow(imageGridView, upperView: mainMenu, insets: .zero)
-            .connectToBottom(of: view, inset: .zero)
-        imageGridView.isHidden = true
-        videoGridView.setupView()
-        view.addSubviewBelow(videoGridView, upperView: mainMenu, insets: .zero)
-            .connectToBottom(of: view, inset: .zero)
-        videoGridView.isHidden = true
-        trackGridView.setupView()
-        view.addSubviewBelow(trackGridView, upperView: mainMenu, insets: .zero)
-            .connectToBottom(of: view, inset: .zero)
-        trackGridView.isHidden = true
-        routeGridView.setupView()
-        view.addSubviewBelow(routeGridView, upperView: mainMenu, insets: .zero)
-            .connectToBottom(of: view, inset: .zero)
-        routeGridView.isHidden = true
-        view.addSubviewFilling(imagePresenterView, insets: .zero)
-        view.addSubviewFilling(videoPresenterView, insets: .zero)
-        imagePresenterView.setupView()
-        imagePresenterView.isHidden = true
-        videoPresenterView.setupView()
-        videoPresenterView.isHidden = true
     }
     
     override func viewWillAppear() {
@@ -123,41 +86,22 @@ class MainViewController: ViewController {
         itemListView.setItems(group.items)
     }
     
-    func setView(_ type: MainViewType){
-        switch type{
-        case .map:
-            mapSplitView.isHidden = false
-            imageGridView.isHidden = true
-            videoGridView.isHidden = true
-            trackGridView.isHidden = true
-            routeGridView.isHidden = true
-        case .imageGrid:
-            mapSplitView.isHidden = true
-            imageGridView.isHidden = false
-            videoGridView.isHidden = true
-            trackGridView.isHidden = true
-            routeGridView.isHidden = true
-        case .avGrid:
-            mapSplitView.isHidden = true
-            imageGridView.isHidden = true
-            videoGridView.isHidden = false
-            trackGridView.isHidden = true
-            routeGridView.isHidden = true
-        case .trackGrid:
-            mapSplitView.isHidden = true
-            imageGridView.isHidden = true
-            videoGridView.isHidden = true
-            trackGridView.isHidden = false
-            routeGridView.isHidden = true
-        case .routeGrid:
-            mapSplitView.isHidden = true
-            imageGridView.isHidden = true
-            videoGridView.isHidden = true
-            trackGridView.isHidden = true
-            routeGridView.isHidden = false
+    func setGridView(_ gridView: GridView?){
+        if gridView == nil {
+            self.gridView?.removeFromSuperview()
+            self.gridView = nil
         }
-        viewType = type
-        mainMenu.centerMenu.selectedSegment = type.rawValue
+        else{
+            self.gridView = gridView
+            self.gridView!.setupView()
+            view.addSubviewWithAnchors(self.gridView!, top: separator.bottomAnchor, leading: view.leadingAnchor, trailing: view.trailingAnchor, bottom: view.bottomAnchor, insets: .zero)
+        }
+        mainMenu.centerMenu.selectedSegment = gridView?.idx ?? 0
+    }
+    
+    func setViewer(_ viewer: PresenterView){
+        viewer.setupView()
+        view.addSubviewFilling(viewer, insets: .zero)
     }
     
     // map
@@ -189,7 +133,7 @@ class MainViewController: ViewController {
     }
     
     func showItemOnMap(_ item: MapItem){
-        setView(.map)
+        setGridView(nil)
         mapView.showLocationOnMap(coordinate: item.coordinate)
     }
     
@@ -216,13 +160,15 @@ class MainViewController: ViewController {
     // images
     
     func showImage(_ image: ImageItem){
-        imagePresenterView.setImage(item: image)
-        imagePresenterView.isHidden = false
+        let presenterView = ImagePresenterView()
+        setViewer(presenterView)
+        presenterView.setImage(item: image)
     }
     
     func showImages(_ images: [ImageItem]){
-        imagePresenterView.setImages(images)
-        imagePresenterView.isHidden = false
+        let presenterView = ImagePresenterView()
+        setViewer(presenterView)
+        presenterView.setImages(images)
     }
     
     func showFilteredImageGrid(selectedImages: [ImageItem]){
@@ -231,29 +177,31 @@ class MainViewController: ViewController {
     }
     
     func updateImageGrid(){
-        imageGridView.updateData()
+        imageGridView?.updateData()
     }
     
     //videos
     
     func showVideo(_ video: VideoItem){
-        videoPresenterView.setVideo(item: video)
-        videoPresenterView.isHidden = false
+        let presenterView = VideoPresenterView()
+        setViewer(presenterView)
+        presenterView.setVideo(item: video)
     }
     
     func showVideos(_ videos: [VideoItem]){
-        videoPresenterView.setVideos(videos)
-        videoPresenterView.isHidden = false
+        let presenterView = VideoPresenterView()
+        setViewer(presenterView)
+        presenterView.setVideos(videos)
     }
     
     func updateVideoGrid(){
-        videoGridView.updateData()
+        videoGridView?.updateData()
     }
     
     // tracks
     
     func showTrackOnMap(_ item: TrackItem?){
-        setView(.map)
+        setGridView(nil)
         if let item = item{
             VisibleTrack.shared.setTrack(item.track)
             mapScrollView.updateTrackLayerContent()
@@ -274,7 +222,7 @@ class MainViewController: ViewController {
     }
     
     func updateTrackGrid(){
-        trackGridView.updateData()
+        trackGridView?.updateData()
     }
     
     //route
@@ -291,7 +239,7 @@ class MainViewController: ViewController {
     }
     
     func showRouteOnMap(_ item: RouteItem?){
-        setView(.map)
+        setGridView(nil)
         if let item = item{
             VisibleRoute.shared.reset()
             VisibleRoute.shared.routeItem = item
@@ -395,20 +343,5 @@ class MainViewController: ViewController {
         routeControlView.updateStatusPanel()
         routeControlView.isHidden = true
     }
-    
-    // presenter
-    
-    func closeImagePresenter(){
-        imagePresenterView.isHidden = true
-    }
-    
-    func closeVideoPresenter(){
-        videoPresenterView.isHidden = true
-    }
    
 }
-
-
-
-
-

@@ -8,54 +8,24 @@ import AppKit
 import AVFoundation
 import AVKit
 
-
-class VideoPresenterView: NSView {
+class VideoPresenterView: PresenterView {
     
     var items = VideoItemList()
-    var currentIdx = 0
     
     var videoPlayer = AVPlayerView()
-    var nextButton: NSButton!
-    var previousButton: NSButton!
-    var closeButton: NSButton!
+    
+    override var itemCount: Int{
+        items.count
+    }
     
     deinit{
         videoPlayer.player = nil
     }
     
-    override func setupView(){
-        backgroundColor = .black
+    override func setupItemView(){
         //todo
         videoPlayer.controlsStyle = .floating
         addSubviewFilling(videoPlayer)
-        
-        let config = NSImage.SymbolConfiguration(textStyle: .headline, scale: .large)
-        let closeConfig = NSImage.SymbolConfiguration(textStyle: .headline, scale: .large)
-        nextButton = NSButton(image: NSImage(systemSymbolName: "chevron.right", accessibilityDescription: nil)!
-            .withSymbolConfiguration(config)!, target: self, action: #selector(nextVideo))
-        nextButton.bezelStyle = .inline
-        nextButton.keyEquivalent = NSString(characters: [unichar(NSRightArrowFunctionKey)], length: 1) as String
-        addSubview(nextButton)
-        nextButton.setAnchors().trailing(trailingAnchor, inset: -20)
-            .centerY(centerYAnchor)
-        previousButton = NSButton(image: NSImage(systemSymbolName: "chevron.left", accessibilityDescription: nil)!
-            .withSymbolConfiguration(config)!, target: self, action: #selector(previousImage))
-        previousButton.bezelStyle = .inline
-        previousButton.keyEquivalent = NSString(characters: [unichar(NSLeftArrowFunctionKey)], length: 1) as String
-        addSubview(previousButton)
-        previousButton.setAnchors().leading(leadingAnchor, inset: 20)
-            .centerY(centerYAnchor)
-        closeButton = NSButton(image: NSImage(systemSymbolName: "xmark.circle.fill", accessibilityDescription: nil)!.withTintColor(.systemRed)
-            .withSymbolConfiguration(closeConfig)!, target: self, action: #selector(close))
-        closeButton.bezelStyle = .inline
-        closeButton.keyEquivalent = "\u{1b}"
-        addSubview(closeButton)
-        closeButton.setAnchors().top(topAnchor, inset: 20).leading(leadingAnchor, inset: 10)
-        checkButtons()
-    }
-    
-    func show(_ flag: Bool) {
-        isHidden = !flag
     }
     
     func setVideos(_ items: VideoItemList){
@@ -81,29 +51,8 @@ class VideoPresenterView: NSView {
         }
     }
     
-    @objc func nextVideo(){
-        if currentIdx < items.count - 1{
-            currentIdx += 1
-            setVideoView(item: items[currentIdx])
-            checkButtons()
-        }
-    }
-    
-    @objc func previousImage(){
-        if currentIdx > 0{
-            currentIdx -= 1
-            setVideoView(item: items[currentIdx])
-            checkButtons()
-        }
-    }
-    
-    @objc func close(){
-        MainViewController.shared.closeVideoPresenter()
-    }
-    
-    private func checkButtons(){
-        previousButton.isHidden = currentIdx <= 0
-        nextButton.isHidden = currentIdx >= items.count - 1
+    override func setCurrentItem(){
+        setVideoView(item: items[currentIdx])
     }
     
 }
