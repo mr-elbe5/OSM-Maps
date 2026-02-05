@@ -83,7 +83,7 @@ class MapView: NSView {
     }
     
     func importTrack() {
-        scrollView.updateItemLayer()
+        scrollView.updateItemLayerContent()
     }
     
 }
@@ -93,13 +93,12 @@ extension MapView : MapScrollViewDelegate{
     func didScroll(to coordinate: CLLocationCoordinate2D) {
         MapStatus.shared.centerCoordinate = coordinate
         MapStatus.shared.save()
-        
     }
     
     func didZoom(to zoom: Int) {
         MapStatus.shared.scale = World.downScale(to: zoom)
         MapStatus.shared.save()
-        scrollView.updateLayerPositions()
+        scrollView.updateLayerContents()
         statusView.setZoom(MapStatus.shared.zoom)
     }
     

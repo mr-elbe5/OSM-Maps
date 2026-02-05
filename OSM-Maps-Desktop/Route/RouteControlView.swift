@@ -13,8 +13,8 @@ class RouteControlView : NSView{
     
     var routeTypeSelector = NSSegmentedControl()
     
+    var buttonPanel = NSView()
     var markerButtons: [NavMarkerButton] = []
-    var pointPanel = NSView()
     let cancelRouteButton = NSButton().asTextButton("cancel".localize(), color: .labelColor)
     let saveRouteButton = NSButton().asTextButton("save".localize(), color: .systemBlue)
     var addPointButton: NSButton!
@@ -31,19 +31,14 @@ class RouteControlView : NSView{
         routeTypeSelector.setImage(NSImage(systemSymbolName: "car", accessibilityDescription: nil)!, forSegment: 0)
         routeTypeSelector.setImage(NSImage(systemSymbolName: "bicycle", accessibilityDescription: nil)!, forSegment: 1)
         routeTypeSelector.setImage(NSImage(systemSymbolName: "figure.walk", accessibilityDescription: nil)!, forSegment: 2)
-        routeTypeSelector.selectedSegment = 0
+        routeTypeSelector.selectedSegment = RouteType.getRouteTypeIndex(type: Preferences.shared.routeType)
         routeTypeSelector.target = self
         routeTypeSelector.action = #selector(routeTypeChanged)
         addSubviewBelow(routeTypeSelector, upperView: label)
-        addSubviewWithAnchors(pointPanel, top: routeTypeSelector.bottomAnchor, leading: leadingAnchor, insets: .zero)
-        addPointButton = NSButton(icon: "plus.circle", target: self, action: #selector(addPoint))
-        addPointButton.toolTip = "addPoint".localize()
-        addSubviewWithAnchors(addPointButton, top: routeTypeSelector.bottomAnchor, leading: pointPanel.trailingAnchor)
-        removePointButton = NSButton(icon: "minus.circle", target: self, action: #selector(removePoint))
-        removePointButton.toolTip = "removePoint".localize()
-        addSubviewWithAnchors(removePointButton, top: routeTypeSelector.bottomAnchor, leading: addPointButton.trailingAnchor, trailing: trailingAnchor)
+        addSubviewBelow(buttonPanel, upperView: routeTypeSelector, insets: .zero)
+        
         scrollView.asVerticalScrollView(contentView: statusPanel)
-        addSubviewBelow(scrollView, upperView: pointPanel, insets: NSEdgeInsets(top: 10, left: 0, bottom: 10, right: 0))
+        addSubviewBelow(scrollView, upperView: buttonPanel, insets: NSEdgeInsets(top: 10, left: 0, bottom: 10, right: 0))
         cancelRouteButton.target = self
         cancelRouteButton.action = #selector(cancelRoute)
         addSubviewWithAnchors(cancelRouteButton, top: scrollView.bottomAnchor, leading: leadingAnchor, trailing: centerXAnchor, bottom: bottomAnchor, insets: .defaultInsets)
@@ -58,10 +53,11 @@ class RouteControlView : NSView{
         updateButtons()
         updateState()
         updateStatusPanel()
+        needsDisplay = true
     }
     
     func updateButtons(){
-        pointPanel.removeAllSubviews()
+        buttonPanel.removeAllSubviews()
         markerButtons.removeAll()
         if let route = VisibleRoute.shared.route {
             var lastView: NSView? = nil
@@ -76,36 +72,49 @@ class RouteControlView : NSView{
                     col = "marker-yellow"
                 }
                 let button = NavMarkerButton(idx: i, image: NSImage(named: col)!, target: self, action: #selector(markerButtonPressed))
-                pointPanel.addSubviewToRight(button, leftView: lastView)
+                buttonPanel.addSubviewToRight(button, leftView: lastView)
                 markerButtons.append(button)
                 lastView = button
             }
+            removePointButton = NSButton(icon: "minus.circle", target: self, action: #selector(removePoint))
+            removePointButton.toolTip = "removePoint".localize()
+            buttonPanel.addSubviewToLeft(removePointButton)
+            addPointButton = NSButton(icon: "plus.circle", target: self, action: #selector(addPoint))
+            addPointButton.toolTip = "addPoint".localize()
+            buttonPanel.addSubviewToLeft(addPointButton, rightView: removePointButton)
         }
     }
     
     func updateState(){
-        if let route = VisibleRoute.shared.route, route.isEditable{
-            pointPanel.isHidden = false
-            for idx in 0..<markerButtons.count{
-                let btn = markerButtons[idx]
-                if idx == VisibleRoute.shared.selectedIndex{
-                    btn.backgroundColor = Self.selectBackground
+        if let route = VisibleRoute.shared.route{
+            if route.isEditable{
+                for idx in 0..<markerButtons.count{
+                    let btn = markerButtons[idx]
+                    if idx == VisibleRoute.shared.selectedIndex{
+                        btn.backgroundColor = .selectedControlColor
+                    }
+                    else{
+                        btn.backgroundColor = .clear
+                    }
                 }
-                else{
-                    btn.backgroundColor = .clear
-                }
+                routeTypeSelector.isHidden = false
+                buttonPanel.isHidden = false
+                saveRouteButton.isHidden = !route.isComplete
+                addPointButton.isEnabled = route.navigationPoints.count < VisibleRoute.MAX_NAVIGATION_POINTS
+                removePointButton.isEnabled = route.navigationPoints.count > 2
             }
-            saveRouteButton.isHidden = !route.isComplete
-            addPointButton.isHidden = false
-            removePointButton.isHidden = false
-            addPointButton.isEnabled = route.navigationPoints.count < VisibleRoute.MAX_NAVIGATION_POINTS
-            removePointButton.isEnabled = route.navigationPoints.count > 2
+            else{
+                routeTypeSelector.isEnabled = false
+                addPointButton.isEnabled = false
+                removePointButton.isEnabled = false
+                buttonPanel.isHidden = true
+                saveRouteButton.isHidden = true
+            }
         }
         else{
+            routeTypeSelector.isHidden = true
+            buttonPanel.isHidden = true
             saveRouteButton.isHidden = true
-            pointPanel.isHidden = true
-            addPointButton.isHidden = true
-            removePointButton.isHidden = true
         }
     }
     
@@ -168,14 +177,12 @@ class RouteControlView : NSView{
                     waypointLine.setupView(iconName: iconName, text: str)
                 }
                 statusPanel.addSubviewBelow(waypointLine, upperView: lastLine, insets: .zero)
-                lastLine = waypointLine
                 waypointLines.append(waypointLine)
+                lastLine = waypointLine
             }
             lastLine.connectToBottom(of: statusPanel)
-            saveRouteButton.isEnabled = true
-        }
-        else{
-            saveRouteButton.isEnabled = false
+            Log.info("got \(statusPanel.subviews.count) subviews")
+            Log.info("got \(waypointLines.count) waypoints")
         }
     }
     
@@ -200,13 +207,9 @@ class RouteControlView : NSView{
         Log.info(" idx \(idx)")
         let type = RouteType.getRouteType(idx: idx)
         Log.info(" type \(type.rawValue)")
+        Preferences.shared.routeType = type
+        Preferences.shared.save()
         MainViewController.shared.setRouteType(type)
-    }
-    
-    func activate(_ idx: Int){
-        for waypointLine in waypointLines {
-            waypointLine.activate(waypointLine.idx == idx)
-        }
     }
     
     class WaypointLine : NSView {
@@ -253,6 +256,7 @@ class NavMarkerButton: NSButton {
         self.image = image
         self.target = target
         self.action = action
+        self.imageScaling = .scaleProportionallyDown
         self.bezelStyle = .smallSquare
     }
     

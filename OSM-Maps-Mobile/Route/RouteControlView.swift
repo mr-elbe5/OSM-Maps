@@ -195,12 +195,6 @@ class RouteControlView : UIView{
         MainViewController.shared.setRouteType(type)
     }
     
-    func activate(_ idx: Int){
-        for waypointLine in waypointLines {
-            waypointLine.activate(waypointLine.idx == idx)
-        }
-    }
-    
     class WaypointLine : UIView {
         
         let idx: Int

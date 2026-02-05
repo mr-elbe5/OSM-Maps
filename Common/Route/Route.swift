@@ -15,6 +15,10 @@ enum RouteType: String, CaseIterable {
     static func getRouteType(idx: Int) -> RouteType {
         RouteType.allCases[idx]
     }
+    
+    static func getRouteTypeIndex(type: RouteType) -> Int {
+        RouteType.allCases.firstIndex(of: type) ?? 0
+    }
 }
 
 class Route: Codable{

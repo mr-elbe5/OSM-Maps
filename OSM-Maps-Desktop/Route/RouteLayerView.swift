@@ -26,13 +26,12 @@ class RouteLayerView: LayerView {
     override func updateContent(scale: CGFloat){
         self.scale = scale
         updateNavigationMarkers()
-        needsDisplay = true
+        refresh()
     }
     
     func updateNavigationMarkers(){
         removeNavigationMarkerViews()
         if let route = VisibleRoute.shared.route{
-            isHidden = !route.anyNavigationPointsSet
             for idx in 0..<route.navigationPoints.count{
                 let coord = route.navigationPoints[idx].coordinate
                 var col = ""
@@ -54,7 +53,6 @@ class RouteLayerView: LayerView {
                 marker.updatePosition(scale: scale)
                 navigationMarkers.append(marker)
             }
-            needsLayout = true
         }
     }
     
@@ -77,7 +75,7 @@ class RouteLayerView: LayerView {
     
     override func reset(){
         removeNavigationMarkerViews()
-        needsDisplay = true
+        refresh()
     }
     
     override func draw(_ rect: CGRect) {

@@ -42,11 +42,9 @@ class MapScrollView : PlainMapScrollView{
         mapWorldView.addSubviewFilling(tileLayerView, insets: .zero)
         
         trackLayerView.setupView()
-        trackLayerView.isHidden = true
         mapWorldView.addSubviewFilling(trackLayerView, insets: .zero)
         
         routeLayerView.setupView()
-        routeLayerView.isHidden = true
         mapWorldView.addSubviewFilling(routeLayerView, insets: .zero)
         
         itemLayerView.setupView()
@@ -58,7 +56,7 @@ class MapScrollView : PlainMapScrollView{
         addScrollNotifications()
     }
     
-    func updateItemLayer(){
+    func updateItemLayerContent(){
         itemLayerView.updateContent(scale: zoomScale)
     }
     
@@ -66,7 +64,7 @@ class MapScrollView : PlainMapScrollView{
         itemLayerView.updatePosition(scale: zoomScale)
     }
     
-    func updateTrackLayer(){
+    func updateTrackLayerContent(){
         if VisibleTrack.shared.isPresent{
             trackLayerView.updatePosition(scale: zoomScale)
         }
@@ -79,7 +77,7 @@ class MapScrollView : PlainMapScrollView{
         trackLayerView.updatePosition(scale: zoomScale)
     }
     
-    func updateRouteLayer(){
+    func updateRouteLayerContent(){
         routeLayerView.updateContent(scale: zoomScale)
     }
     
@@ -93,27 +91,10 @@ class MapScrollView : PlainMapScrollView{
         updateRoutePosition()
     }
     
-    func showItemLayer(_ show: Bool){
-        showLayer(itemLayerView, show)
-    }
-    
-    func showTrackLayer(_ show: Bool){
-        showLayer(trackLayerView, show)
-    }
-    
-    func showRouteLayer(_ show: Bool){
-        showLayer(routeLayerView, show)
-    }
-    
-    func showLayer(_ layer: LayerView, _ show: Bool){
-        if show{
-            layer.isHidden = false
-            layer.updateContent(scale: zoomScale)
-        }
-        else{
-            layer.reset()
-            layer.isHidden = true
-        }
+    func updateLayerContents(){
+        updateItemLayerContent()
+        updateTrackLayerContent()
+        updateRouteLayerContent()
     }
     
     override func scrollWheel(with event: NSEvent) {
@@ -128,7 +109,7 @@ class MapScrollView : PlainMapScrollView{
         else if dy < 0.0{
             zoomOut()
         }
-        updateLayerPositions()
+        updateLayerContents()
     }
     
     @objc override func scrollViewDidScroll(){
