@@ -340,7 +340,7 @@ class MainViewController: UIViewController {
     }
     
     func setRoutePoint(idx: Int, screenPoint: CGPoint){
-        Log.info("set route point at \(idx)")
+        //Log.info("set route point at \(idx)")
         let mapPoint = mapView.scrollView.worldPoint(screenPoint: screenPoint)
         VisibleRoute.shared.setCoordinateForRoutePoint(idx, mapPoint.coordinate)
         mapView.updateRouteLayer()
@@ -378,6 +378,7 @@ class MainViewController: UIViewController {
         if let route = VisibleRoute.shared.route, route.isComplete{
             VisibleRoute.shared.saveRoute(){
                 DispatchQueue.main.async {
+                    self.updateItemLayer()
                     self.updateRouteLayer()
                     self.routeControlView.update()
                 }

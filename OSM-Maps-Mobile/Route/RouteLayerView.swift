@@ -105,7 +105,7 @@ class RouteLayerView: UIView {
     
     @objc func tapped(event: UITapGestureRecognizer){
         if let route = VisibleRoute.shared.route{
-            Log.info("tapped with idx \(VisibleRoute.shared.selectedIndex)")
+            //Log.info("tapped with idx \(VisibleRoute.shared.selectedIndex)")
             let location = event.location(in: self)
             let idx = VisibleRoute.shared.selectedIndex
             if idx != -1, idx < route.navigationPoints.count{

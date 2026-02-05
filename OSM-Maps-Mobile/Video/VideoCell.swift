@@ -55,11 +55,11 @@ class VideoCell: MapItemCell{
     
     override func updateItemView(){
         itemView.removeAllSubviews()
-        if let video = item{
+        if let video = item, let preview = video.preview{
             let imageView = UIImageView()
             imageView.withDefaults()
             imageView.setRoundedBorders()
-            imageView.image = video.preview
+            imageView.image = preview
             imageView.setAspectRatioConstraint()
             itemView.addSubviewFilling(imageView)
         }

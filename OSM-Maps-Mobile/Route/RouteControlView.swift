@@ -114,6 +114,7 @@ class RouteControlView : UIView{
                     btn.unsetRoundedBorders()
                 }
             }
+            routeTypeSelector.isEnabled = true
             saveRouteButton.isHidden = !route.isComplete
             addPointButton.isHidden = false
             removePointButton.isHidden = false
@@ -121,6 +122,7 @@ class RouteControlView : UIView{
             removePointButton.isEnabled = route.navigationPoints.count > 2
         }
         else{
+            routeTypeSelector.isEnabled = false
             saveRouteButton.isHidden = true
             pointPanel.isHidden = true
             addPointButton.isHidden = true
@@ -136,6 +138,10 @@ class RouteControlView : UIView{
             statusPanel.addSubviewBelow(linePanel, insets: .zero)
             var lastLine = linePanel
             linePanel = newLine(iconName: "stopwatch", text: route.duration.hmsString())
+            statusPanel.addSubviewBelow(linePanel, upperView: lastLine, insets: .zero)
+            lastLine = linePanel
+            let str = "routeType_" + route.type.rawValue
+            linePanel = newLine(text: "\("routeType".localize()): \(str.localize())")
             statusPanel.addSubviewBelow(linePanel, upperView: lastLine, insets: .zero)
             lastLine = linePanel
             var lastDistance = 0

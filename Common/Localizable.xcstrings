@@ -2432,6 +2432,23 @@
         }
       }
     },
+    "loadPreview" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorschau laden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lod Preview"
+          }
+        }
+      }
+    },
     "locationDetails" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3448,6 +3465,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Resume Recording"
+          }
+        }
+      }
+    },
+    "roundabout" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kreisverkehr"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roundabout"
           }
         }
       }
@@ -5148,6 +5182,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Use Filter for Map"
+          }
+        }
+      }
+    },
+    "uturn" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umdrehen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uturn"
           }
         }
       }

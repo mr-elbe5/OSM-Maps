@@ -64,11 +64,13 @@ class RouteCell: MapItemCell{
             itemView.addSubviewBelow(nameLabel, upperView: header)
             
             var rp = item.route.routepoints.isEmpty ? nil : item.route.routepoints.first
-            let startLabel = UILabel(text: "\("start".localize()): \(rp?.coordinate.asString ?? ""))")
+            var str = item.startLocation?.flatAddress ?? rp?.coordinate.asString ?? ""
+            let startLabel = UILabel(text: "\("start".localize()): \(str)")
             itemView.addSubviewBelow(startLabel, upperView: nameLabel)
             
             rp = item.route.routepoints.isEmpty ? nil : item.route.routepoints.last
-            let endLabel = UILabel(text: "\("end".localize()): \(rp?.coordinate.asString ?? ""))")
+            str = item.endLocation?.flatAddress ?? rp?.coordinate.asString ?? ""
+            let endLabel = UILabel(text: "\("end".localize()): \(str)")
             itemView.addSubviewBelow(endLabel, upperView: startLabel, insets: OSInsets.flatInsets)
             
             let distanceLabel = UILabel(text: "\("distance".localize()): \(Int(item.route.distance)) m")
@@ -91,7 +93,14 @@ class RouteCell: MapItemCell{
                     .connectToBottom(of: itemView)
             }
             else{
-                durationLabel.bottom(itemView.bottomAnchor)
+                let btn = TextButton(text: "loadPreview".localize(), tintColor: .darkColor, withBorder: false)
+                btn.addAction(UIAction(){ action in
+                    if RouteImageCreator.createPreview(item: item) != nil{
+                        DispatchQueue.main.async {
+                            self.updateItemView()
+                        }
+                    }
+                }, for: .touchDown)
             }
         }
     }

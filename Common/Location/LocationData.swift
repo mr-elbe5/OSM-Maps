@@ -95,6 +95,19 @@ class LocationData: MapPoint{
         return ""
     }
     
+    var flatAddress: String{
+        if !street.isEmpty{
+            if !city.isEmpty{
+                return "\(street), \(city)"
+            }
+            return street
+        }
+        if !city.isEmpty{
+            return city
+        }
+        return ""
+    }
+    
     func updateLocation(onCompletion: (() -> Void)? = nil){
         if !isUpdated, hasValidCoordinate{
             CLPlacemark.getPlacemark(for: coordinate, result: { placemark in

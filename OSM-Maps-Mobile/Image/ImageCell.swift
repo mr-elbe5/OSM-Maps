@@ -74,12 +74,24 @@ class ImageCell: MapItemCell{
     override func updateItemView(){
         itemView.removeAllSubviews()
         if let image = item{
-            let imageView = UIImageView()
-            imageView.withDefaults()
-            imageView.setRoundedBorders()
-            imageView.image = image.preview
-            imageView.setAspectRatioConstraint()
-            itemView.addSubviewFilling(imageView, insets: .zero)
+            if let preview = image.preview{
+                let imageView = UIImageView()
+                imageView.withDefaults()
+                imageView.setRoundedBorders()
+                imageView.image = image.preview
+                imageView.setAspectRatioConstraint()
+                itemView.addSubviewFilling(imageView, insets: .zero)
+            }
+            else{
+                let btn = TextButton(text: "loadPreview".localize(), tintColor: .darkColor, withBorder: false)
+                btn.addAction(UIAction(){ action in
+                    if image.createPreview(){
+                        DispatchQueue.main.async {
+                            self.updateItemView()
+                        }
+                    }
+                }, for: .touchDown)
+            }
         }
     }
     

@@ -172,6 +172,16 @@ class ImageItem: MapItem{
     }
     
     @discardableResult
+    func createPreview() -> Bool{
+        if let image = image, createPreviewFile(original: image){
+            Log.debug("save image and preview")
+            return true
+        }
+        Log.error("did not save image and preview")
+        return false
+    }
+    
+    @discardableResult
     func saveImage(data: Data) -> Bool{
         return FileManager.default.saveFile(data: data, url: url)
     }

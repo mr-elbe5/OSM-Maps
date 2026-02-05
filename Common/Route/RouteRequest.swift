@@ -63,16 +63,25 @@ class RouteRequest {
             route.duration = osmroute.duration
             for leg in osmroute.legs {
                 for step in leg.steps {
+                    var distance = 0
+                    var duration = 0
                     for coordinate in step.geometry.coordinates2D {
                         route.routepoints.append(MapPoint(coordinate: coordinate))
                     }
                     if let maneuver = step.maneuver, let coordinate = maneuver.coordinates2D{
+                        distance += Int(step.distance)
+                        duration += Int(step.duration)
+                        let type = getType(maneuver.type, maneuver.modifier)
+                        if type.isEmpty{
+                            continue
+                        }
                         let waypoint = Waypoint(coordinate: coordinate)
                         waypoint.name = step.name
-                        waypoint.distance = Int(step.distance)
-                        waypoint.duration = Int(step.duration)
-                        waypoint.type = maneuver.type
-                        waypoint.direction = maneuver.modifier
+                        waypoint.distance = distance
+                        distance = 0
+                        waypoint.duration = duration
+                        duration = 0
+                        waypoint.type = type
                         route.waypoints.append(waypoint)
                     }
                 }
@@ -80,6 +89,32 @@ class RouteRequest {
             return true
         }
         return false
+    }
+    
+    private static func getType(_ type: String, _ modifier: String) -> String {
+        switch type {
+        case "depart":
+            return "depart"
+        case "arrive":
+            return "arrive"
+        case "use lane":
+            return "straight"
+        case "roundabout", "rotary":
+            return "roundabout"
+        default:
+            switch modifier {
+            case "left", "slight left", "sharp left":
+                return "left"
+            case "right", "slight right", "sharp right":
+                return "right"
+            case "uturn":
+                return "uturn"
+            case "straight":
+                return "straight"
+            default:
+                return ""
+            }
+        }
     }
     
 }

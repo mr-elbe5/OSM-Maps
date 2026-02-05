@@ -99,7 +99,14 @@ class TrackCell: MapItemCell{
                     .connectToBottom(of: itemView)
             }
             else{
-                trackpointsLabel.bottom(itemView.bottomAnchor)
+                let btn = TextButton(text: "loadPreview".localize(), tintColor: .darkColor, withBorder: false)
+                btn.addAction(UIAction(){ action in
+                    if TrackImageCreator.createPreview(item: item) != nil{
+                        DispatchQueue.main.async {
+                            self.updateItemView()
+                        }
+                    }
+                }, for: .touchDown)
             }
         }
     }

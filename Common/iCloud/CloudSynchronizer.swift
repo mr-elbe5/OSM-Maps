@@ -77,6 +77,7 @@ class CloudSynchronizer: @unchecked Sendable{
                     }
                     if steps == 0{
                         Log.info("No synchronization steps - nothing to do")
+                        delegate?.synchronizationDone()
                         return
                     }
                     Log.info("Processing items...")
