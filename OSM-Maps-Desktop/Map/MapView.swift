@@ -53,8 +53,8 @@ class MapView: NSView {
         let viewSize = bounds.scaleBy(0.9).size
         scrollView.zoomTo(zoom: World.getZoomToFit(worldRect: worldRect, scaledSize: viewSize))
         scrollView.scrollToScreenCenter(coordinate: worldRect.centerCoordinate)
-        Log.info("scrollZoom = \(MapStatus.shared.zoom)")
-        Log.info("scrollScale = \(scrollView.zoomScale)")
+        //Log.info("scrollZoom = \(MapStatus.shared.zoom)")
+        //Log.info("scrollScale = \(scrollView.zoomScale)")
         scrollView.updateLayerPositions()
     }
     
@@ -75,6 +75,12 @@ class MapView: NSView {
         crossLocationView.isHidden = !crossLocationView.isHidden
         Preferences.shared.showCenterButton = !crossLocationView.isHidden
         Preferences.shared.save()
+    }
+    
+    func toggleMarkers() {
+        Preferences.shared.showMapPins = !Preferences.shared.showMapPins
+        Preferences.shared.save()
+        scrollView.updateItemLayerContent()
     }
     
     func refreshMap() {

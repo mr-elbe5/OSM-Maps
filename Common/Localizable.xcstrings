@@ -4761,6 +4761,23 @@
         }
       }
     },
+    "toggleMapPins" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Markierungen ein/ausblenden"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toggle Map Pins"
+          }
+        }
+      }
+    },
     "toggleSelection" : {
       "extractionState" : "manual",
       "localizations" : {

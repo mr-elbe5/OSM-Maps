@@ -87,8 +87,8 @@ class MainViewController: ViewController {
     }
     
     func setGridView(_ gridView: GridView?){
+        self.gridView?.removeFromSuperview()
         if gridView == nil {
-            self.gridView?.removeFromSuperview()
             self.gridView = nil
         }
         else{
@@ -130,6 +130,10 @@ class MainViewController: ViewController {
     
     func toggleCross() {
         mapView.toggleCross()
+    }
+    
+    func toggleMapPins() {
+        mapView.toggleMarkers()
     }
     
     func showItemOnMap(_ item: MapItem){

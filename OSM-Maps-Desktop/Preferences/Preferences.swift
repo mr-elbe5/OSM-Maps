@@ -25,6 +25,7 @@ class Preferences: Identifiable, Codable{
     enum CodingKeys: String, CodingKey {
         case mapSource
         case showCenterButton
+        case showMapPins
         case maxSearchResults
         case sortAscending
         case gridSizeFactorIndex
@@ -33,6 +34,7 @@ class Preferences: Identifiable, Codable{
     
     var mapSource : MapSource = .elbe5
     var showCenterButton: Bool = false
+    var showMapPins: Bool = true
     var showTrackpoints : Bool = false
     var gridSizeFactorIndex: Int = 2
     var routeType : RouteType = .car
@@ -50,6 +52,7 @@ class Preferences: Identifiable, Codable{
             mapSource = MapSource(rawValue: mapSourceString) ?? .osm
         }
         showCenterButton = try values.decodeIfPresent(Bool.self, forKey: .showCenterButton) ?? false
+        showMapPins = try values.decodeIfPresent(Bool.self, forKey: .showMapPins) ?? true
         sortAscending = try values.decodeIfPresent(Bool.self, forKey: .sortAscending) ?? true
         gridSizeFactorIndex = try values.decodeIfPresent(Int.self, forKey: .gridSizeFactorIndex) ?? 2
         if let type = try values.decodeIfPresent(String.self, forKey: .routeType){
@@ -61,6 +64,7 @@ class Preferences: Identifiable, Codable{
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(mapSource.rawValue, forKey: .mapSource)
         try container.encode(showCenterButton, forKey: .showCenterButton)
+        try container.encode(showMapPins, forKey: .showMapPins)
         try container.encode(maxSearchResults, forKey: .maxSearchResults)
         try container.encode(sortAscending, forKey: .sortAscending)
         try container.encode(gridSizeFactorIndex, forKey: .gridSizeFactorIndex)

@@ -11,11 +11,11 @@ class MapMenuView: NSView{
     var zoomInButton: NSButton!
     var zoomOutButton: NSButton!
     var toggleCrossButton: NSButton!
+    var toggleMapPinsButton: NSButton!
     var centerButton: NSButton!
     var refreshButton: NSButton!
     var searchButton: NSButton!
     var createRouteButton: NSButton!
-    
     
     var insets = OSInsets(top: OSInsets.defaultInset, left: OSInsets.smallInset, bottom: OSInsets.defaultInset, right: OSInsets.smallInset)
     
@@ -28,6 +28,8 @@ class MapMenuView: NSView{
         zoomOutButton.toolTip = "zoomOut".localize()
         toggleCrossButton = NSButton(icon: "plus.circle", target: self, action: #selector(toggleCross))
         toggleCrossButton.toolTip = "toggleCross".localize()
+        toggleMapPinsButton = NSButton(icon: "mappin.slash", target: self, action: #selector(toggleMapPins))
+        toggleMapPinsButton.toolTip = "toggleMapPins".localize()
         refreshButton = NSButton(icon: "arrow.clockwise", target: self, action: #selector(refreshMap))
         refreshButton.toolTip = "refresh".localize()
         searchButton = NSButton(icon: "magnifyingglass", target: self, action: #selector(openSearch))
@@ -44,7 +46,8 @@ class MapMenuView: NSView{
         addSubviewBelow(zoomInButton, insets: insets)
         addSubviewBelow(zoomOutButton, upperView: zoomInButton, insets: insets)
         addSubviewBelow(toggleCrossButton, upperView: zoomOutButton, insets: insets)
-        addSubviewBelow(refreshButton, upperView: toggleCrossButton, insets: insets)
+        addSubviewBelow(toggleMapPinsButton, upperView: toggleCrossButton, insets: insets)
+        addSubviewBelow(refreshButton, upperView: toggleMapPinsButton, insets: insets)
         addSubviewBelow(searchButton, upperView: refreshButton, insets: insets)
         addSubviewBelow(createRouteButton, upperView: searchButton, insets: insets)
     }
@@ -59,6 +62,10 @@ class MapMenuView: NSView{
     
     @objc func toggleCross() {
         MainViewController.shared.toggleCross()
+    }
+    
+    @objc func toggleMapPins() {
+        MainViewController.shared.toggleMapPins()
     }
     
     @objc func refreshMap() {
