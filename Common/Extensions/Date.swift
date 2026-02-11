@@ -8,6 +8,8 @@ import Foundation
 
 extension Date{
     
+    static var zero = Date(year: 1970, month: 1, day: 1)
+    
     static var utcZone = TimeZone(abbreviation: "UTC")
     
     static var localDate: Date{

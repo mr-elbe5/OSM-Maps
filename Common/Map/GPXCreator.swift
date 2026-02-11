@@ -33,26 +33,25 @@ class GPXCreator : NSObject{
         return nil
     }
     
-    static func trackPointString(tp: Trackpoint) -> String{
+    static func trackPointString(tp: MapPoint) -> String{
             """
-            
                   <trkpt lat="\(String(format:"%.7f", tp.coordinate.latitude))" lon="\(String(format:"%.7f", tp.coordinate.longitude))">
-                    <ele>\(String(format: "%.1f",tp.altitude))</ele>
-                    <time>\(tp.timestamp.isoString())</time>
+                    <ele>\(String(format: "%.1f",tp.altitude ?? 0))</ele>
+                    <time>\(tp.timestamp?.isoString() ?? "")</time>
                   </trkpt>
             """
     }
     
     static func trackString(track: Track) -> String{
         var str = """
-    <?xml version='1.0' encoding='UTF-8'?>
-    <gpx version="1.1" creator="OSM Maps" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
-      <metadata>
-        <name>\(track.name)</name>
-      </metadata>
-      <trk>
-        <trkseg>
-    """
+        <?xml version='1.0' encoding='UTF-8'?>
+        <gpx version="1.1" creator="OSM Maps" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+          <metadata>
+            <name>\(track.name)</name>
+          </metadata>
+          <trk>
+            <trkseg>
+        """
         for tp in track.trackpoints{
             str += trackPointString(tp: tp)
         }
@@ -68,7 +67,6 @@ class GPXCreator : NSObject{
     
     static func routePointString(rp: MapPoint) -> String{
             """
-            
                   <trkpt lat="\(String(format:"%.7f", rp.coordinate.latitude))" lon="\(String(format:"%.7f", rp.coordinate.longitude))">
                   </trkpt>
             """
@@ -88,7 +86,6 @@ class GPXCreator : NSObject{
             str += routePointString(rp: rp)
         }
         str += """
-        
         </trkseg>
       </trk>
     </gpx>

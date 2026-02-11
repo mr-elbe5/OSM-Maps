@@ -78,7 +78,7 @@ class ImageCell: MapItemCell{
                 let imageView = UIImageView()
                 imageView.withDefaults()
                 imageView.setRoundedBorders()
-                imageView.image = image.preview
+                imageView.image = preview
                 imageView.setAspectRatioConstraint()
                 itemView.addSubviewFilling(imageView, insets: .zero)
             }

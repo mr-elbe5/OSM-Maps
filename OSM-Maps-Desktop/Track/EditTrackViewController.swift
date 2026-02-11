@@ -27,7 +27,7 @@ class EditTrackViewController: ModalViewController {
     init(item: TrackItem){
         self.item = item
         for tp in item.track.trackpoints{
-            newItem.track.addTrackpoint(Trackpoint(coordinate: tp.coordinate, altitude: tp.altitude, timestamp: tp.timestamp))
+            newItem.track.addTrackpoint(MapPoint(coordinate: tp.coordinate, altitude: tp.altitude, timestamp: tp.timestamp))
         }
         menuView = EditTrackMenuView()
         mapView = EditTrackMapView(track: newItem)
@@ -79,7 +79,7 @@ class EditTrackViewController: ModalViewController {
     }
     
     func updateTrackpointDetailView(){
-        var trackpoint: Trackpoint? = nil
+        var trackpoint: MapPoint? = nil
         for tp in newItem.track.trackpoints{
             if tp.selected{
                 if trackpoint == nil{
@@ -152,7 +152,7 @@ extension EditTrackViewController: EditTrackMenuDelegate{
             }
             let tp1 = newItem.track.trackpoints[i]
             let tp2 = newItem.track.trackpoints[i+1]
-            let newTp = Trackpoint.getTrackpointBetween(tp1: tp1, tp2: tp2)
+            let newTp = MapPoint.getMapPointBetween(pnt1: tp1, pnt2: tp2)
             newItem.track.trackpoints.insert(newTp, at: i+1)
             newItem.track.selectSingleTrackpoint(at: i + 1)
             newItem.trackpointsChanged()
@@ -169,7 +169,7 @@ extension EditTrackViewController: EditTrackMenuDelegate{
             }
             let tp1 = newItem.track.trackpoints[i-1]
             let tp2 = newItem.track.trackpoints[i]
-            let newTp = Trackpoint.getTrackpointBetween(tp1: tp1, tp2: tp2)
+            let newTp = MapPoint.getMapPointBetween(pnt1: tp1, pnt2: tp2)
             newItem.track.trackpoints.insert(newTp, at: i)
             newItem.track.selectSingleTrackpoint(at: i)
             newItem.trackpointsChanged()
@@ -194,7 +194,7 @@ extension EditTrackViewController: EditTrackMenuDelegate{
     }
     
     func deleteSelectedTrackpoints() {
-        var list = TrackpointList()
+        var list = MapPointList()
         for i in 0..<newItem.track.trackpoints.count{
             let tp = newItem.track.trackpoints[i]
             if tp.selected{
@@ -207,7 +207,7 @@ extension EditTrackViewController: EditTrackMenuDelegate{
         print("deleting \(list.count) trackpoints")
         newItem.track.trackpoints.removeAll(where: { tp in
             list.contains(where: { tp1 in
-                return tp.id == tp1.id
+                return tp == tp1
             })
         })
         newItem.trackpointsChanged()
@@ -218,7 +218,7 @@ extension EditTrackViewController: EditTrackMenuDelegate{
     func undoTrackChanges(){
         newItem.track.trackpoints.removeAll()
         for tp in item.track.trackpoints{
-            newItem.track.trackpoints.append(Trackpoint(coordinate: tp.coordinate, altitude: tp.altitude, timestamp: tp.timestamp))
+            newItem.track.trackpoints.append(MapPoint(coordinate: tp.coordinate, altitude: tp.altitude, timestamp: tp.timestamp))
         }
         newItem.trackpointsChanged()
         mapView.trackpointsChanged()
@@ -228,7 +228,7 @@ extension EditTrackViewController: EditTrackMenuDelegate{
 
 extension EditTrackViewController: EditTrackMapDelegate{
     
-    func trackpointChangedInMap(_ trackpoint: Trackpoint) {
+    func trackpointChangedInMap(_ trackpoint: MapPoint) {
         updateTrackpointDetailView()
     }
     

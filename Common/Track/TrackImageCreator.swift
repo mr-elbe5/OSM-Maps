@@ -60,7 +60,7 @@ class TrackImageCreator{
         return img
     }
     
-    static func drawTrack(track: Track, ctx: CGContext, size: NSSize, zoom: Int, downScale: CGFloat, worldViewRect: CGRect) {
+    private static func drawTrack(track: Track, ctx: CGContext, size: NSSize, zoom: Int, downScale: CGFloat, worldViewRect: CGRect) {
         if !track.trackpoints.isEmpty{
             var drawPoints = Array<CGPoint>()
             for idx in 0..<track.trackpoints.count{
@@ -124,7 +124,7 @@ class TrackImageCreator{
         return img
     }
     
-    static func drawTrack(track: Track, ctx: CGContext, size: CGSize, zoom: Int, downScale: CGFloat, worldViewRect: CGRect, withPoints: Bool = false) {
+    private static func drawTrack(track: Track, ctx: CGContext, size: CGSize, zoom: Int, downScale: CGFloat, worldViewRect: CGRect, withPoints: Bool = false) {
         if !track.trackpoints.isEmpty{
             var drawPoints = Array<CGPoint>()
             for idx in 0..<track.trackpoints.count{

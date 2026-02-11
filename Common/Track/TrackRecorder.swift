@@ -10,7 +10,7 @@ import CoreLocation
 protocol TrackRecorderDelegate{
     func trackStarted()
     func trackRecordingChanged()
-    func addTrackpoint(_ trackpoint: Trackpoint)
+    func addTrackpoint(_ trackpoint: MapPoint)
     func saveTrack(_ track: Track, result: @escaping(Bool) -> Void)
 }
 
@@ -80,9 +80,9 @@ class TrackRecorder: NSObject{
         }
     }
     
-    func addTrackpoint(from location: CLLocation) -> Trackpoint?{
+    func addTrackpoint(from location: CLLocation) -> MapPoint?{
         if let track = track{
-            let tp = Trackpoint(location: location)
+            let tp = MapPoint(location: location)
             if track.trackpoints.isEmpty{
                 track.addTrackpoint(tp)
                 lastCoordinate = location.coordinate
@@ -95,11 +95,13 @@ class TrackRecorder: NSObject{
             }
             let previousTrackpoint = track.trackpoints.last!
             // check time interval
-            let timeDiff = previousTrackpoint.timestamp.distance(to: tp.timestamp)
-            //Log.debug("timeDiff = \(timeDiff)")
-            if timeDiff < Preferences.shared.trackpointInterval.interval{
-                //Log.debug("skipping by time")
-                return nil
+            if let prevTimestamp = previousTrackpoint.timestamp, let timestamp = tp.timestamp{
+                let timeDiff = prevTimestamp.distance(to: timestamp)
+                //Log.debug("timeDiff = \(timeDiff)")
+                if timeDiff < Preferences.shared.trackpointInterval.interval{
+                    //Log.debug("skipping by time")
+                    return nil
+                }
             }
             // check distance
             let horizontalDiff = lastCoordinate.distance(to: tp.coordinate)
@@ -122,21 +124,24 @@ class TrackRecorder: NSObject{
             track.addTrackpoint(tp)
             track.distance += horizontalDiff
             //checking uphill
-            let verticalDiff = tp.altitude - lastAltitude
-            //Log.debug("verticalDiff = \(verticalDiff)")
-            //Log.debug("verticalAccuracy = \(location.verticalAccuracy)")
-            if location.verticalAccuracy >= 0, verticalDiff >= location.verticalAccuracy{
-                if verticalDiff > 0{
-                    uphill += verticalDiff
+            if let tpAlt = tp.altitude{
+                let verticalDiff = tpAlt - lastAltitude
+                //Log.debug("verticalDiff = \(verticalDiff)")
+                //Log.debug("verticalAccuracy = \(location.verticalAccuracy)")
+                if location.verticalAccuracy >= 0, verticalDiff >= location.verticalAccuracy{
+                    if verticalDiff > 0{
+                        uphill += verticalDiff
+                    }
+                    else{
+                        downhill += abs(verticalDiff)
+                    }
+                    lastAltitude = tpAlt
                 }
                 else{
-                    downhill += abs(verticalDiff)
+                    //Log.debug("skipping altitude (missing accuracy)")
                 }
-                lastAltitude = tp.altitude
             }
-            else{
-                //Log.debug("skipping altitude (missing accuracy)")
-            }
+            
             delegate?.trackRecordingChanged()
             return tp
         }

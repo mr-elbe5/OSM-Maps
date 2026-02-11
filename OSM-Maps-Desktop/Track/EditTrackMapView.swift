@@ -9,7 +9,7 @@ import AppKit
 import CoreLocation
 
 protocol EditTrackMapDelegate{
-    func trackpointChangedInMap(_ trackpoint: Trackpoint)
+    func trackpointChangedInMap(_ trackpoint: MapPoint)
 }
 
 class EditTrackMapView : NSClipView{

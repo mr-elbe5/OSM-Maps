@@ -61,7 +61,7 @@ class Waypoint: MapPoint{
         }
     }
     
-    override init(coordinate: CLLocationCoordinate2D) {
+    init(coordinate: CLLocationCoordinate2D) {
         super.init(coordinate: coordinate)
     }
     

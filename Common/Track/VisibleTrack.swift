@@ -11,7 +11,7 @@ class VisibleTrack: NSObject{
     
     static var shared = VisibleTrack()
     
-    var trackpoints: TrackpointList = TrackpointList()
+    var trackpoints = MapPointList()
     var startMapPoint: CGPoint?
     var points = [CGPoint]()
     var boundingRect: CGRect = .zero
@@ -39,12 +39,12 @@ class VisibleTrack: NSObject{
         boundingRect = .zero
     }
     
-    func addTrackpoint(_ trackpoint: Trackpoint){
+    func addTrackpoint(_ trackpoint: MapPoint){
         trackpoints.append(trackpoint)
         addMapPoint(trackpoint: trackpoint)
     }
     
-    func addMapPoint(trackpoint: Trackpoint) {
+    func addMapPoint(trackpoint: MapPoint) {
         let scaledMapPoint = World.scaledPoint(trackpoint.coordinate, downScale: MapStatus.shared.scale)
         if let startPoint = startMapPoint{
             let pnt = CGPoint(x: scaledMapPoint.x - startPoint.x, y: scaledMapPoint.y - startPoint.y)

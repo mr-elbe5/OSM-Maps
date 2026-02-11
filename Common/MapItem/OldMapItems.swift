@@ -231,7 +231,7 @@ class OldTrackItem : LocatedItem{
     var pauseLength : TimeInterval = 0
     var endTime : Date
     var name : String
-    var trackpoints : TrackpointList
+    var trackpoints : MapPointList
     var distance : CGFloat
     var upDistance : CGFloat
     var downDistance : CGFloat
@@ -248,7 +248,7 @@ class OldTrackItem : LocatedItem{
         startTime = try values.decodeIfPresent(Date.self, forKey: .startTime) ?? Date.localDate
         endTime = try values.decodeIfPresent(Date.self, forKey: .endTime) ?? Date.localDate
         name = try values.decodeIfPresent(String.self, forKey: .name) ?? ""
-        trackpoints = try values.decodeIfPresent(TrackpointList.self, forKey: .trackpoints) ?? TrackpointList()
+        trackpoints = try values.decodeIfPresent(MapPointList.self, forKey: .trackpoints) ?? MapPointList()
         distance = try values.decodeIfPresent(CGFloat.self, forKey: .distance) ?? 0
         upDistance = try values.decodeIfPresent(CGFloat.self, forKey: .upDistance) ?? 0
         downDistance = try values.decodeIfPresent(CGFloat.self, forKey: .downDistance) ?? 0

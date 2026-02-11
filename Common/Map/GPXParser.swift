@@ -27,7 +27,7 @@ class GPXParser : XMLParser{
     
     private var name: String? = nil
     private var currentSegment : GPXSegment? = nil
-    private var currentPoint: GPXPoint? = nil
+    private var currentPoint: MapPoint? = nil
     private var currentElement : String? = nil
     
 }
@@ -35,22 +35,24 @@ class GPXParser : XMLParser{
 extension GPXParser : XMLParserDelegate{
     
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
-        if elementName == "name"{
+        switch elementName{
+        case "name":
             if data.name.isEmpty{
                 name = ""
             }
-        }
-        else if elementName == "trkseg"{
+        case "trkseg":
             currentSegment = GPXSegment()
-        }
-        else if elementName == "trkpt" || elementName == "wpt"{
+        case "trkpt", "wpt":
             guard let latString = attributeDict["lat"], let lonString = attributeDict["lon"] else { return }
             guard let lat = Double(latString), let lon = Double(lonString) else { return }
             guard let latDegrees = CLLocationDegrees(exactly: lat), let lonDegrees = CLLocationDegrees(exactly: lon) else { return }
             
-            currentPoint = GPXPoint(coordinate: CLLocationCoordinate2D(latitude: latDegrees, longitude: lonDegrees))
+            currentPoint = MapPoint(coordinate: CLLocationCoordinate2D(latitude: latDegrees, longitude: lonDegrees))
+            
+            currentElement = elementName
+        default :
+            break
         }
-        currentElement = elementName
     }
     
     func parser(_ parser: XMLParser, foundCharacters string: String) {
@@ -74,24 +76,27 @@ extension GPXParser : XMLParserDelegate{
     }
 
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-        if elementName == "name"{
+        switch elementName{
+        case "name":
             if let name = name{
                 data.name = name
                 self.name = nil
             }
-        }
-        else if elementName == "trkseg"{
+            
+        case "trkseg":
             if let segment = currentSegment{
                 data.segments.append(segment)
                 currentSegment = nil
             }
-        }
-        else if elementName == "trkpt" || elementName == "wpt"{
+        case "trkpt", "wpt":
             if let segment = currentSegment, let point = currentPoint{
                 segment.points.append(point)
                 currentPoint = nil
             }
+        default:
+            break
         }
+        
     }
     
 }

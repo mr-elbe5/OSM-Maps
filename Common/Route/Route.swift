@@ -37,7 +37,7 @@ class Route: Codable{
     }
     
     var name : String
-    var navigationPoints: Array<MapPoint> = []
+    var navigationPoints: MapPointList = []
     var type: RouteType = .car
     var distance: Int = 0
     var duration: TimeInterval = 0.0

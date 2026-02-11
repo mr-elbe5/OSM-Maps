@@ -147,10 +147,10 @@ extension TrackItemList{
         }
     }
     
-    func findClosestTrackpoint(to coordinate: CLLocationCoordinate2D, maxMeterDiff: Double = 100) -> (Trackpoint, Double)? {
-        var result: (Trackpoint, Double)?
+    func findClosestTrackpoint(to coordinate: CLLocationCoordinate2D, maxMeterDiff: Double = 100) -> (MapPoint, Double)? {
+        var result: (MapPoint, Double)?
         for item in self {
-            if let closests = item.track.findClosestTrackpoint(to: coordinate){
+            if let closests = item.track.trackpoints.findNearestPoint(to: coordinate){
                 if closests.1 < (result?.1 ?? Double.greatestFiniteMagnitude){
                     result = closests
                 }
@@ -162,10 +162,10 @@ extension TrackItemList{
         return result
     }
     
-    func findClosestTrackpoint(at date: Date, maxMinDiff: Double = 60) -> (Trackpoint, TimeInterval)?{
-        var result: (Trackpoint, Double)?
+    func findClosestTrackpoint(at date: Date, maxMinDiff: Double = 60) -> (MapPoint, TimeInterval)?{
+        var result: (MapPoint, Double)?
         for item in self {
-            if let closests = item.track.findClosestTrackpoint(at: date){
+            if let closests = item.track.trackpoints.findClosestPoint(to: date){
                 if closests.1 < (result?.1 ?? Double.greatestFiniteMagnitude){
                     result = closests
                 }

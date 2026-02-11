@@ -534,7 +534,7 @@ extension MainViewController: TrackRecorderDelegate {
         trackStatusView.updateTrackInfo()
     }
     
-    func addTrackpoint(_ trackpoint: Trackpoint) {
+    func addTrackpoint(_ trackpoint: MapPoint) {
         VisibleTrack.shared.addTrackpoint(trackpoint)
     }
     
@@ -544,7 +544,7 @@ extension MainViewController: TrackRecorderDelegate {
             item.track = track
             item.track.updateFromTrackpoints()
             item.coordinate = tp.coordinate
-            item.altitude = tp.altitude
+            item.altitude = tp.altitude ?? 0
             AppData.shared.addItem(item)
             TrackImageCreator.createPreview(item: item)
             result(true)

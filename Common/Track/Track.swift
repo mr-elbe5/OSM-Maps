@@ -34,7 +34,7 @@ class Track: Codable{
     }
     
     var name : String
-    var trackpoints: TrackpointList
+    var trackpoints: MapPointList
     var pauseTime : Date? = nil
     var pauseLength : TimeInterval = 0
     var distance : CGFloat
@@ -82,7 +82,7 @@ class Track: Codable{
     
     init(){
         name = "Tour"
-        trackpoints = TrackpointList()
+        trackpoints = MapPointList()
         distance = 0
         upDistance = 0
         downDistance = 0
@@ -90,14 +90,13 @@ class Track: Codable{
     
     init(gpx: GPXData){
         name = "Tour"
-        trackpoints = TrackpointList()
+        trackpoints = MapPointList()
         distance = 0
         upDistance = 0
         downDistance = 0
         for segment in gpx.segments{
             for point in segment.points{
-                let trackpoint = Trackpoint(coordinate: point.coordinate, altitude: point.altitude, timestamp: point.timestamp ?? Date())
-                addTrackpoint(trackpoint)
+                addTrackpoint(point)
                 name = gpx.name
             }
         }
@@ -107,7 +106,7 @@ class Track: Codable{
     required init(from decoder: Decoder) throws {
         let values: KeyedDecodingContainer<CodingKeys> = try decoder.container(keyedBy: CodingKeys.self)
         name = try values.decodeIfPresent(String.self, forKey: .name) ?? ""
-        trackpoints = try values.decodeIfPresent(TrackpointList.self, forKey: .trackpoints) ?? TrackpointList()
+        trackpoints = try values.decodeIfPresent(MapPointList.self, forKey: .trackpoints) ?? MapPointList()
         distance = try values.decodeIfPresent(CGFloat.self, forKey: .distance) ?? 0
         upDistance = try values.decodeIfPresent(CGFloat.self, forKey: .upDistance) ?? 0
         downDistance = try values.decodeIfPresent(CGFloat.self, forKey: .downDistance) ?? 0
@@ -157,8 +156,8 @@ class Track: Codable{
         }
     }
     
-    func trackpointIndex(of tp: Trackpoint) -> Int {
-        if let index = trackpoints.firstIndex(where: { $0.id == tp.id }) {
+    func trackpointIndex(of tp: MapPoint) -> Int {
+        if let index = trackpoints.firstIndex(where: { $0 == tp }) {
             return index
         }
         return -1
@@ -186,12 +185,12 @@ class Track: Codable{
         trackpoints[idx].selected = true
     }
     
-    func addTrackpoint(_ tp: Trackpoint){
+    func addTrackpoint(_ tp: MapPoint){
         trackpoints.append(tp)
         updateFromTrackpoints()
     }
     
-    func insertTrackpoint(_ tp: Trackpoint, at index: Int){
+    func insertTrackpoint(_ tp: MapPoint, at index: Int){
         if index < 0 || index >= trackpoints.count - 1{
             return
         }
@@ -199,7 +198,7 @@ class Track: Codable{
         updateFromTrackpoints()
     }
     
-    func setTrackpoints(_ trackpoints: TrackpointList){
+    func setTrackpoints(_ trackpoints: MapPointList){
         if !trackpoints.isEmpty{
             self.trackpoints = trackpoints
             updateFromTrackpoints()
@@ -211,16 +210,18 @@ class Track: Codable{
             distance = 0
             upDistance = 0
             downDistance = 0
-            var last : Trackpoint? = nil
+            var last : MapPoint? = nil
             for tp in trackpoints{
                 if let last = last{
                     distance += last.coordinate.distance(to: tp.coordinate)
-                    let verticalDiff = tp.altitude - last.altitude
-                    if verticalDiff > 0{
-                        upDistance += verticalDiff
-                    }
-                    else{
-                        downDistance += abs(verticalDiff)
+                    if let tpAlt = tp.altitude, let lastAlt = last.altitude{
+                        let verticalDiff = tpAlt - lastAlt
+                        if verticalDiff > 0{
+                            upDistance += verticalDiff
+                        }
+                        else{
+                            downDistance += abs(verticalDiff)
+                        }
                     }
                 }
                 last = tp
@@ -231,8 +232,8 @@ class Track: Codable{
     
     func setMinimalTrackpointDistances(minDistance: CGFloat){
         if !trackpoints.isEmpty{
-            var removables = Array<Trackpoint>()
-            var last : Trackpoint = trackpoints.first!
+            var removables = MapPointList()
+            var last : MapPoint = trackpoints.first!
             for idx in 1..<trackpoints.count - 1{
                 let tp = trackpoints[idx]
                 let distance = last.coordinate.distance(to: tp.coordinate)
@@ -245,7 +246,7 @@ class Track: Codable{
             }
             trackpoints.removeAll(where: { tp1 in
                 removables.contains(where: { tp2 in
-                    tp1.id == tp2.id
+                    tp1 == tp2
                 })
             })
         }
@@ -253,62 +254,8 @@ class Track: Codable{
     }
     
     func updateCoordinateRegion(){
-        let cr = CoordinateRegion()
-        if let start = trackpoints.first{
-            cr.minLatitude = start.coordinate.latitude
-            cr.maxLatitude = start.coordinate.latitude
-            cr.minLongitude = start.coordinate.longitude
-            cr.maxLongitude = start.coordinate.longitude
-            for i in 1..<self.trackpoints.count{
-                let tp = trackpoints[i]
-                if tp.coordinate.latitude < cr.minLatitude{
-                    cr.minLatitude = tp.coordinate.latitude
-                }
-                if tp.coordinate.latitude > cr.maxLatitude{
-                    cr.maxLatitude = tp.coordinate.latitude
-                }
-                if tp.coordinate.longitude < cr.minLongitude{
-                    cr.minLongitude = tp.coordinate.longitude
-                }
-                if tp.coordinate.longitude > cr.maxLongitude{
-                    cr.maxLongitude = tp.coordinate.longitude
-                }
-            }
-            coordinateRegion = cr
-            centerCoordinate = cr.center
-        }
-    }
-    
-    func findClosestTrackpoint(to coordinate: CLLocationCoordinate2D) -> (Trackpoint, Double)? {
-        var closestTrackpoint: Trackpoint?
-        var minDistance: Double?
-        for trackpoint in self.trackpoints {
-            let distance = trackpoint.coordinate.distance(to: coordinate)
-            if minDistance == nil || distance < minDistance! {
-                closestTrackpoint = trackpoint
-                minDistance = distance
-            }
-        }
-        if let tp = closestTrackpoint, let dist = minDistance {
-            return (tp, dist)
-        }
-        return nil
-    }
-    
-    func findClosestTrackpoint(at date: Date) -> (Trackpoint, TimeInterval)?{
-        var closestTrackpoint: Trackpoint?
-        var minDistance: TimeInterval?
-        for trackpoint in self.trackpoints {
-            let distance = trackpoint.timestamp.distance(to: date)
-            if minDistance == nil || distance < minDistance! {
-                closestTrackpoint = trackpoint
-                minDistance = distance
-            }
-        }
-        if let tp = closestTrackpoint, let dist = minDistance {
-            return (tp, dist)
-        }
-        return nil
+        coordinateRegion = trackpoints.coordinateRegion
+        centerCoordinate = coordinateRegion?.center
     }
     
 }

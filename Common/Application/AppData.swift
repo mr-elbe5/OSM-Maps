@@ -319,7 +319,7 @@ class AppData : Codable{
         let track = item.track
         for mapItem in mapItems{
             if let image = mapItem as? ImageItem, mapItem.hasValidCoordinate{
-                if let result = track.findClosestTrackpoint(to: image.coordinate){
+                if let result = track.trackpoints.findNearestPoint(to: image.coordinate){
                     let distance = result.1
                     if distance < maxDistance{
                         list.append(image)
