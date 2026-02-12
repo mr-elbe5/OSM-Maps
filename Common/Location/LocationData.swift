@@ -7,7 +7,7 @@
 import Foundation
 import CoreLocation
 
-class LocationData: MapPoint{
+class LocationData: Mappoint{
     
     private enum CodingKeys: String, CodingKey {
         case street

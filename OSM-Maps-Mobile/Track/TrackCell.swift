@@ -30,7 +30,7 @@ class TrackCell: MapItemCell{
             
             let exportButton = UIButton().asDarkIconButton("square.and.arrow.up")
             exportButton.addAction(UIAction(){ action in
-                if let track = self.item?.track, let url = GPXCreator.createTemporaryFile(track: track){
+                if let track = self.item?.track, let url = track.createGPXFile(){
                     let controller = UIDocumentPickerViewController(forExporting: [url], asCopy: false)
                     controller.delegate = nil
                     MainViewController.shared.present(controller, animated: true)

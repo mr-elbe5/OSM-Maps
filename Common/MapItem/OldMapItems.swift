@@ -231,7 +231,7 @@ class OldTrackItem : LocatedItem{
     var pauseLength : TimeInterval = 0
     var endTime : Date
     var name : String
-    var trackpoints : MapPointList
+    var trackpoints : TrackpointList
     var distance : CGFloat
     var upDistance : CGFloat
     var downDistance : CGFloat

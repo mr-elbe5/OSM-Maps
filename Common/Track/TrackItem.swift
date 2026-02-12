@@ -61,11 +61,6 @@ class TrackItem: MapItem{
         super.init()
     }
     
-    init(gpx: GPXData){
-        track = Track(gpx: gpx)
-        super.init()
-    }
-    
     init(track: Track){
         self.track = track
         super.init()
@@ -124,7 +119,7 @@ extension TrackItem: Transferable {
     public static var transferRepresentation: some TransferRepresentation {
         
         DataRepresentation(exportedContentType: .gpx) { item in
-            let gpx = GPXCreator.trackString(track: item.track)
+            let gpx = item.track.gpxString()
             return Data(gpx.utf8)
         }
     }
@@ -147,8 +142,8 @@ extension TrackItemList{
         }
     }
     
-    func findClosestTrackpoint(to coordinate: CLLocationCoordinate2D, maxMeterDiff: Double = 100) -> (MapPoint, Double)? {
-        var result: (MapPoint, Double)?
+    func findClosestTrackpoint(to coordinate: CLLocationCoordinate2D, maxMeterDiff: Double = 100) -> (Mappoint, Double)? {
+        var result: (Mappoint, Double)?
         for item in self {
             if let closests = item.track.trackpoints.findNearestPoint(to: coordinate){
                 if closests.1 < (result?.1 ?? Double.greatestFiniteMagnitude){
@@ -162,8 +157,8 @@ extension TrackItemList{
         return result
     }
     
-    func findClosestTrackpoint(at date: Date, maxMinDiff: Double = 60) -> (MapPoint, TimeInterval)?{
-        var result: (MapPoint, Double)?
+    func findClosestTrackpoint(at date: Date, maxMinDiff: Double = 60) -> (Mappoint, TimeInterval)?{
+        var result: (Mappoint, Double)?
         for item in self {
             if let closests = item.track.trackpoints.findClosestPoint(to: date){
                 if closests.1 < (result?.1 ?? Double.greatestFiniteMagnitude){

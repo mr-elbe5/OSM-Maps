@@ -9,13 +9,13 @@ import CoreLocation
 
 class DrawTrackpoint{
     
-    var trackpoint: MapPoint
+    var trackpoint: Mappoint
     var drawpoint: CGPoint
     
     var offset: CGPoint = .zero
     var zoom: Int
     
-    init(trackpoint: MapPoint, drawpoint: CGPoint, zoom: Int){
+    init(trackpoint: Mappoint, drawpoint: CGPoint, zoom: Int){
         self.trackpoint = trackpoint
         self.drawpoint = drawpoint
         self.zoom = zoom

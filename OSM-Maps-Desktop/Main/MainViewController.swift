@@ -298,7 +298,7 @@ class MainViewController: ViewController {
     func setRouteCoordinate(idx: Int, coordinate: CLLocationCoordinate2D){
         //Log.info("coordinate for \(idx) is \(coordinate)")
         if let route = VisibleRoute.shared.route{
-            route.navigationPoints[idx] = MapPoint(coordinate: coordinate)
+            route.navigationPoints[idx] = Mappoint(coordinate: coordinate)
             mapScrollView.updateRouteLayerContent()
             VisibleRoute.shared.selectedIndex = -1
             VisibleRoute.shared.requestRoute{

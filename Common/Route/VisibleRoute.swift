@@ -59,7 +59,7 @@ class VisibleRoute{
     
     func setCoordinateForRoutePoint(_ idx: Int,_ coordinate: CLLocationCoordinate2D) {
         if let route = route, route.navigationPoints.count > idx {
-            route.navigationPoints[idx] = MapPoint(coordinate: coordinate)
+            route.navigationPoints[idx] = Mappoint(coordinate: coordinate)
         }
     }
     

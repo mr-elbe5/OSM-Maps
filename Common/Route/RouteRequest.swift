@@ -66,7 +66,7 @@ class RouteRequest {
                     var distance = 0
                     var duration = 0
                     for coordinate in step.geometry.coordinates2D {
-                        route.routepoints.append(MapPoint(coordinate: coordinate))
+                        route.routepoints.append(Routepoint(coordinate: coordinate))
                     }
                     if let maneuver = step.maneuver, let coordinate = maneuver.coordinates2D{
                         distance += Int(step.distance)

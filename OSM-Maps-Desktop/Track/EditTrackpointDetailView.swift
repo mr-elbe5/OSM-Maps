@@ -19,7 +19,7 @@ class EditTrackpointDetailView: NSView{
         addSubviewWithAnchors(trackpointLabel, top: topAnchor, leading: label.trailingAnchor, trailing: trailingAnchor, bottom: bottomAnchor)
     }
     
-    func setTrackPoint(_ trackpoint: MapPoint?){
+    func setTrackPoint(_ trackpoint: Mappoint?){
         if let trackpoint = trackpoint{
             if let altitude = trackpoint.altitude, let timestamp = trackpoint.timestamp{
                 trackpointLabel.stringValue = "\(trackpoint.coordinate.asShortString), \(Int(altitude)) m, \(DateFormatter.localizedString(from: timestamp.toUTCDate(), dateStyle: .none, timeStyle: .medium))"

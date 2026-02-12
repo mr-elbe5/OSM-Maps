@@ -8,7 +8,18 @@ import Foundation
 import CoreLocation
 import CloudKit
 
-class Track: Codable{
+class Track: NSObject, Codable{
+    
+    static func loadFromFile(gpxUrl: URL) -> Track?{
+        if let data = FileManager.default.readFile(url: gpxUrl){
+            let parser = XMLParser(data: data)
+            let track = Track()
+            parser.delegate = track
+            guard parser.parse() else { return nil }
+            return track
+        }
+        return nil
+    }
     
     static var durationFormatter: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
@@ -34,7 +45,7 @@ class Track: Codable{
     }
     
     var name : String
-    var trackpoints: MapPointList
+    var trackpoints: TrackpointList
     var pauseTime : Date? = nil
     var pauseLength : TimeInterval = 0
     var distance : CGFloat
@@ -42,6 +53,9 @@ class Track: Codable{
     var downDistance : CGFloat
     var coordinateRegion : CoordinateRegion? = nil
     var centerCoordinate : CLLocationCoordinate2D? = nil
+    
+    var currentTag: String? = nil
+    var currentPoint: Trackpoint? = nil
     
     var worldRect: CGRect?{
         coordinateRegion?.worldRect
@@ -80,27 +94,13 @@ class Track: Codable{
         trackpoints.last?.coordinate
     }
     
-    init(){
+    override init(){
         name = "Tour"
-        trackpoints = MapPointList()
+        trackpoints = TrackpointList()
         distance = 0
         upDistance = 0
         downDistance = 0
-    }
-    
-    init(gpx: GPXData){
-        name = "Tour"
-        trackpoints = MapPointList()
-        distance = 0
-        upDistance = 0
-        downDistance = 0
-        for segment in gpx.segments{
-            for point in segment.points{
-                addTrackpoint(point)
-                name = gpx.name
-            }
-        }
-        updateFromTrackpoints()
+        super.init()
     }
     
     required init(from decoder: Decoder) throws {
@@ -117,6 +117,7 @@ class Track: Codable{
                 centerCoordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
             }
         }
+        super.init()
         if coordinateRegion == nil{
             updateCoordinateRegion()
         }
@@ -156,7 +157,7 @@ class Track: Codable{
         }
     }
     
-    func trackpointIndex(of tp: MapPoint) -> Int {
+    func trackpointIndex(of tp: Mappoint) -> Int {
         if let index = trackpoints.firstIndex(where: { $0 == tp }) {
             return index
         }
@@ -185,12 +186,12 @@ class Track: Codable{
         trackpoints[idx].selected = true
     }
     
-    func addTrackpoint(_ tp: MapPoint){
+    func addTrackpoint(_ tp: Trackpoint){
         trackpoints.append(tp)
         updateFromTrackpoints()
     }
     
-    func insertTrackpoint(_ tp: MapPoint, at index: Int){
+    func insertTrackpoint(_ tp: Trackpoint, at index: Int){
         if index < 0 || index >= trackpoints.count - 1{
             return
         }
@@ -198,7 +199,7 @@ class Track: Codable{
         updateFromTrackpoints()
     }
     
-    func setTrackpoints(_ trackpoints: MapPointList){
+    func setTrackpoints(_ trackpoints: TrackpointList){
         if !trackpoints.isEmpty{
             self.trackpoints = trackpoints
             updateFromTrackpoints()
@@ -210,7 +211,7 @@ class Track: Codable{
             distance = 0
             upDistance = 0
             downDistance = 0
-            var last : MapPoint? = nil
+            var last : Mappoint? = nil
             for tp in trackpoints{
                 if let last = last{
                     distance += last.coordinate.distance(to: tp.coordinate)
@@ -233,7 +234,7 @@ class Track: Codable{
     func setMinimalTrackpointDistances(minDistance: CGFloat){
         if !trackpoints.isEmpty{
             var removables = MapPointList()
-            var last : MapPoint = trackpoints.first!
+            var last : Mappoint = trackpoints.first!
             for idx in 1..<trackpoints.count - 1{
                 let tp = trackpoints[idx]
                 let distance = last.coordinate.distance(to: tp.coordinate)
@@ -256,6 +257,89 @@ class Track: Codable{
     func updateCoordinateRegion(){
         coordinateRegion = trackpoints.coordinateRegion
         centerCoordinate = coordinateRegion?.center
+    }
+    
+    func createGPXFile() -> URL?{
+        let fileName = name.replacingOccurrences(of: " ", with: "_")
+        if let url = URL(string: "track_\(fileName)_\(startTime.fileDate()).gpx", relativeTo: URL.temporaryDirectory){
+            let s = gpxString()
+            if let data = s.data(using: .utf8){
+                return FileManager.default.saveFile(data : data, url: url) ? url : nil
+            }
+        }
+        return nil
+    }
+    
+    func gpxString() -> String{
+        var str = """
+            <?xml version='1.0' encoding='UTF-8'?>
+            <gpx version="1.1" creator="OSM Maps" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+                <metadata>
+                    <name>\(name)</name>
+                </metadata>
+                <trk>
+                    <trkseg>
+            """
+            for tp in trackpoints{
+                str += tp.gpxString
+            }
+            str += """
+        
+                </trkseg>
+            </trk>
+        </gpx>
+        """
+        return str
+    }
+    
+}
+
+extension Track : XMLParserDelegate{
+    
+    func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
+        currentTag = elementName
+        switch elementName{
+        case "trkpt", "wpt":
+            guard let latString = attributeDict["lat"], let lonString = attributeDict["lon"] else { return }
+            guard let lat = Double(latString), let lon = Double(lonString) else { return }
+            guard let latDegrees = CLLocationDegrees(exactly: lat), let lonDegrees = CLLocationDegrees(exactly: lon) else { return }
+            currentPoint = Trackpoint(coordinate: CLLocationCoordinate2D(latitude: latDegrees, longitude: lonDegrees))
+        default :
+            break
+        }
+    }
+    
+    func parser(_ parser: XMLParser, foundCharacters string: String) {
+        if string.isEmpty{
+            return
+        }
+        switch currentTag{
+        case "name":
+            name += string
+        case "time":
+            if let point = currentPoint, let timestamp = string.ISO8601Date(){
+                point.timestamp = timestamp
+            }
+        case "ele":
+            if let point = currentPoint, let dist = CLLocationDistance(string){
+                point.altitude =  dist
+            }
+        default:
+            break
+        }
+    }
+
+    func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+        switch currentTag{
+        case "trkpt", "wpt":
+            if let point = currentPoint{
+                trackpoints.append(point)
+                currentPoint = nil
+            }
+        default:
+            break
+        }
+        currentTag = nil
     }
     
 }

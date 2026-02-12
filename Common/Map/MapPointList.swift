@@ -7,7 +7,7 @@
 import Foundation
 import CoreLocation
 
-typealias MapPointList = [MapPoint]
+typealias MapPointList<T: Mappoint> = [T]
 
 extension MapPointList{
     
@@ -93,8 +93,8 @@ extension MapPointList{
         return nil
     }
     
-    func findNearestPoint(to coordinate: CLLocationCoordinate2D) -> (MapPoint, Double)? {
-        var nearestPoint: MapPoint?
+    func findNearestPoint(to coordinate: CLLocationCoordinate2D) -> (Mappoint, Double)? {
+        var nearestPoint: Mappoint?
         var minDistance: Double?
         for point in self {
             let distance = point.coordinate.distance(to: coordinate)
@@ -109,8 +109,8 @@ extension MapPointList{
         return nil
     }
     
-    func findClosestPoint(to date: Date) -> (MapPoint, TimeInterval)?{
-        var closestPoint: MapPoint?
+    func findClosestPoint(to date: Date) -> (Mappoint, TimeInterval)?{
+        var closestPoint: Mappoint?
         var minTimeDiff: TimeInterval?
         for point in self {
             if let timestamp = point.timestamp {

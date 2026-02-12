@@ -129,7 +129,7 @@ extension MainViewController {
     }
     
     func exportTrack(_ item: TrackItem) {
-        if let url = GPXCreator.createTemporaryFile(track: item.track){
+        if let url = item.track.createGPXFile(){
             let savePanel = NSSavePanel()
             savePanel.allowedContentTypes = UTType.types(tag: "gpx", tagClass: UTTagClass.filenameExtension, conformingTo: nil)
             savePanel.nameFieldStringValue = "\(item.track.name)_\(item.track.startTime.fileDate()).gpx"
@@ -147,7 +147,7 @@ extension MainViewController {
     }
     
     func exportRoute(_ item: RouteItem) {
-        if let url = GPXCreator.createTemporaryFile(route: item.route){
+        if let url = item.route.createGPXFile(){
             let savePanel = NSSavePanel()
             savePanel.allowedContentTypes = UTType.types(tag: "gpx", tagClass: UTTagClass.filenameExtension, conformingTo: nil)
             savePanel.nameFieldStringValue = "\(item.route.name)_\(item.creationDate.fileDate()).gpx"

@@ -534,7 +534,7 @@ extension MainViewController: TrackRecorderDelegate {
         trackStatusView.updateTrackInfo()
     }
     
-    func addTrackpoint(_ trackpoint: MapPoint) {
+    func addTrackpoint(_ trackpoint: Mappoint) {
         VisibleTrack.shared.addTrackpoint(trackpoint)
     }
     

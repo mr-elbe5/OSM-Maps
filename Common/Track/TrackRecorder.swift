@@ -10,7 +10,7 @@ import CoreLocation
 protocol TrackRecorderDelegate{
     func trackStarted()
     func trackRecordingChanged()
-    func addTrackpoint(_ trackpoint: MapPoint)
+    func addTrackpoint(_ trackpoint: Mappoint)
     func saveTrack(_ track: Track, result: @escaping(Bool) -> Void)
 }
 
@@ -80,9 +80,9 @@ class TrackRecorder: NSObject{
         }
     }
     
-    func addTrackpoint(from location: CLLocation) -> MapPoint?{
+    func addTrackpoint(from location: CLLocation) -> Mappoint?{
         if let track = track{
-            let tp = MapPoint(location: location)
+            let tp = Trackpoint(location: location)
             if track.trackpoints.isEmpty{
                 track.addTrackpoint(tp)
                 lastCoordinate = location.coordinate

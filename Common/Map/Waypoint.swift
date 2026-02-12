@@ -7,7 +7,7 @@
 import Foundation
 import CoreLocation
 
-class Waypoint: MapPoint{
+class Waypoint: Mappoint{
     
     enum CodingKeys: String, CodingKey {
         case name
@@ -61,6 +61,10 @@ class Waypoint: MapPoint{
         }
     }
     
+    init(latitude: Double, longitude: Double) {
+        super.init(latitude: latitude, longitude: longitude)
+    }
+    
     init(coordinate: CLLocationCoordinate2D) {
         super.init(coordinate: coordinate)
     }
@@ -84,3 +88,5 @@ class Waypoint: MapPoint{
     }
     
 }
+
+typealias WaypointList = MapPointList<Waypoint>

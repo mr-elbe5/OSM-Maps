@@ -38,7 +38,7 @@ extension TrackStatus: TrackRecorderDelegate{
         
     }
     
-    func addTrackpoint(_ trackpoint: MapPoint) {
+    func addTrackpoint(_ trackpoint: Mappoint) {
     }
     
     func saveTrack(_ track: Track, result: @escaping (Bool) -> Void){

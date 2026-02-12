@@ -120,8 +120,7 @@ extension RouteGridView: RouteGridMenuDelegate{
     }
     
     private func importGPXFile(url: URL){
-        if let gpxData = GPXParser.parseFile(url: url), !gpxData.isEmpty{
-            let route = Route(gpx: gpxData)
+        if let route = Route.loadFromFile(gpxUrl: url){
             if route.name.isEmpty{
                 let ext = url.pathExtension
                 var name = url.lastPathComponent

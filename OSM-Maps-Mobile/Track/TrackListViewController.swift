@@ -52,7 +52,7 @@ class TrackListViewController: ItemListViewController{
         for i in 0..<tracks.count{
             let item = tracks[i]
             if item.selected{
-                if let url = GPXCreator.createTemporaryFile(track: item.track){
+                if let url = item.track.createGPXFile(){
                     exportList.append(url)
                 }
             }
@@ -89,8 +89,7 @@ extension TrackListViewController : UIDocumentPickerDelegate{
     
     private func importGPXFile(url: URL){
         if url.startAccessingSecurityScopedResource(){
-            if let gpxData = GPXParser.parseFile(url: url), !gpxData.isEmpty{
-                let track = Track(gpx: gpxData)
+            if let track = Track.loadFromFile(gpxUrl: url){
                 if track.name.isEmpty{
                     let ext = url.pathExtension
                     var name = url.lastPathComponent

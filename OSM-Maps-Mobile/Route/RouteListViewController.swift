@@ -55,7 +55,7 @@ class RouteListViewController: ItemListViewController{
         for i in 0..<routes.count{
             let item = routes[i]
             if item.selected{
-                if let url = GPXCreator.createTemporaryFile(route: item.route){
+                if let url = item.route.createGPXFile(){
                     exportList.append(url)
                 }
             }
@@ -97,8 +97,7 @@ extension RouteListViewController : UIDocumentPickerDelegate{
     
     private func importGPXFile(url: URL){
         if url.startAccessingSecurityScopedResource(){
-            if let gpxData = GPXParser.parseFile(url: url), !gpxData.isEmpty{
-                let route = Route(gpx: gpxData)
+            if let route = Route.loadFromFile(gpxUrl: url){
                 if route.name.isEmpty{
                     let ext = url.pathExtension
                     var name = url.lastPathComponent

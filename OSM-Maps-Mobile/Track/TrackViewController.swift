@@ -49,7 +49,7 @@ class TrackViewController: ScrollViewController{
             MainViewController.shared.showTrackOnMap(item: self.item)
         }))
         items.append(UIBarButtonItem(title: "export", image: UIImage(systemName: "square.and.arrow.up"), primaryAction: UIAction(){ action in
-            self.exportTrack(item: self.item.track)
+            self.exportTrack(track: self.item.track)
         }))
         groups.append(UIBarButtonItemGroup.fixedGroup(items: items))
         navigationItem.trailingItemGroups = groups
@@ -137,8 +137,8 @@ class TrackViewController: ScrollViewController{
         trackpointsLabel.text = "\("trackpoints".localize()): \(item.track.trackpoints.count)"
     }
     
-    func exportTrack(item: Track) {
-        if let url = GPXCreator.createTemporaryFile(track: item){
+    func exportTrack(track: Track) {
+        if let url = track.createGPXFile(){
             let controller = UIDocumentPickerViewController(forExporting: [url], asCopy: false)
             //controller.directoryURL = FileManager.exportGpxDirURL
             present(controller, animated: true)
