@@ -100,6 +100,7 @@ class VisibleRoute{
                 item.updatePreview()
                 item.updateLocation(){
                     item.updateLocations(){
+                        item.route.desc = item.desc
                         AppData.shared.addItem(item)
                         AppData.shared.save()
                         completion?()

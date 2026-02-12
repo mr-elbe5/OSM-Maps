@@ -36,6 +36,8 @@ class Route: NSObject, Codable{
     
     private enum CodingKeys: String, CodingKey {
         case name
+        case desc
+        case creationDate
         case navigationPoints
         case type
         case distance
@@ -49,6 +51,8 @@ class Route: NSObject, Codable{
     }
     
     var name : String
+    var desc = ""
+    var creationDate: Date
     var navigationPoints: MapPointList = []
     var type: RouteType = .car
     var distance: Int = 0
@@ -100,6 +104,7 @@ class Route: NSObject, Codable{
     
     override init(){
         name = "Route"
+        creationDate = Date()
         navigationPoints.append(.zero)
         navigationPoints.append(.zero)
         super.init()
@@ -108,6 +113,8 @@ class Route: NSObject, Codable{
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         name = try container.decodeIfPresent(String.self, forKey: .name) ?? "Route"
+        desc = try container.decodeIfPresent(String.self, forKey: .desc) ?? ""
+        creationDate = try container.decodeIfPresent(Date.self, forKey: .creationDate) ?? Date()
         let s = try container.decodeIfPresent(String.self, forKey: .type)
         if let s, let type = RouteType(rawValue: s) {
             self.type = type
@@ -138,6 +145,8 @@ class Route: NSObject, Codable{
     func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(name, forKey: .name)
+        try container.encode(desc, forKey: .desc)
+        try container.encode(creationDate, forKey: .creationDate)
         try container.encodeIfPresent(type.rawValue, forKey: .type)
         try container.encode(distance, forKey: .distance)
         try container.encode(duration, forKey: .duration)
@@ -150,6 +159,7 @@ class Route: NSObject, Codable{
     
     func reset(){
         name = "Route"
+        creationDate = Date()
         navigationPoints = [.zero, .zero]
         type = .car
         distance = 0
@@ -185,6 +195,14 @@ class Route: NSObject, Codable{
         }
     }
     
+    func updateRoutePoints(){
+        var date = creationDate
+        for pnt in routepoints{
+            date = Date(timeIntervalSince1970: date.timeIntervalSince1970 + Double(pnt.distance)*1000)
+            pnt.timestamp = date
+        }
+    }
+    
     func createGPXFile() -> URL?{
         let fileName = name.replacingOccurrences(of: " ", with: "_")
         if let url = URL(string: "route_\(fileName).gpx", relativeTo: URL.temporaryDirectory){
@@ -202,22 +220,26 @@ class Route: NSObject, Codable{
             <gpx version="1.1" creator="OSM Maps" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
                 <metadata>
                     <name>\(name)</name>
+                    <time>\(creationDate.isoString())</time>
                 </metadata>
                 <rte>
+                    <name>\(name)</name>
+                    <desc>\(desc)</desc>
+                    <type>\(type.rawValue)</type>
             """
-            for pnt in routepoints{
-                str += pnt.gpxString
-            }
-            str += """
+        for pnt in routepoints{
+            str += pnt.gpxString
+        }
+        str += """
                 
                 </rte>
                 <trk>
                     <trkseg>
             """
-            for tp in trackpoints{
-                str += tp.gpxString
-            }
-            str += """
+        for tp in trackpoints{
+            str += tp.gpxString
+        }
+        str += """
                 
                     </trkseg>
                 </trk>

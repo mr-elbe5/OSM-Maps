@@ -332,6 +332,7 @@ class MainViewController: ViewController {
     
     func saveRoute(){
         if let route = VisibleRoute.shared.route, route.isComplete{
+            route.updateRoutePoints()
             VisibleRoute.shared.saveRoute(){
                 DispatchQueue.main.async {
                     self.routeControlView.update()

@@ -68,6 +68,13 @@ class RouteItem: MapItem{
         BasePaths.previewDirURL.appendingPathComponent(fileName)
     }
     
+    var desc: String{
+        if let startAddress = startLocation?.flatAddress, let endAdress = endLocation?.flatAddress{
+            return "\(startAddress) - \(endAdress)"
+        }
+        return ""
+    }
+    
     override init(){
         route = Route()
         super.init()
@@ -76,7 +83,9 @@ class RouteItem: MapItem{
     init(route: Route){
         self.route = route
         super.init()
-        updateLocations()
+        updateLocations(){
+            route.desc = self.desc
+        }
         _ = getPreview()
     }
     
