@@ -299,7 +299,7 @@ extension Track : XMLParserDelegate{
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
         currentTag = elementName
         switch elementName{
-        case "trkpt", "wpt":
+        case "trkpt":
             guard let latString = attributeDict["lat"], let lonString = attributeDict["lon"] else { return }
             guard let lat = Double(latString), let lon = Double(lonString) else { return }
             guard let latDegrees = CLLocationDegrees(exactly: lat), let lonDegrees = CLLocationDegrees(exactly: lon) else { return }
@@ -331,7 +331,7 @@ extension Track : XMLParserDelegate{
 
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         switch currentTag{
-        case "trkpt", "wpt":
+        case "trkpt":
             if let point = currentPoint{
                 trackpoints.append(point)
                 currentPoint = nil

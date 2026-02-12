@@ -40,8 +40,9 @@ class Route: NSObject, Codable{
         case type
         case distance
         case duration
+        case trackpoints
         case routepoints
-        case waypoints
+        case waypoints //deprecated
         case coordinateRegion
         case centerCoordinateLatitude
         case centerCoordinateLongitude
@@ -52,22 +53,21 @@ class Route: NSObject, Codable{
     var type: RouteType = .car
     var distance: Int = 0
     var duration: TimeInterval = 0.0
+    var trackpoints: TrackpointList = []
     var routepoints: RoutepointList = []
-    var waypoints: Array<Waypoint> = []
     
     var coordinateRegion : CoordinateRegion? = nil
     var centerCoordinate : CLLocationCoordinate2D? = nil
     
     var currentTag: String? = nil
-    var currentRoutepoint: Routepoint? = nil
-    var currentWaypoint: Waypoint? = nil
+    var currentPoint: Mappoint? = nil
     
     var startCoordinate: CLLocationCoordinate2D?{
-        routepoints.first?.coordinate
+        trackpoints.first?.coordinate
     }
     
     var endCoordinate: CLLocationCoordinate2D?{
-        routepoints.last?.coordinate
+        trackpoints.last?.coordinate
     }
     
     var canBeRequested: Bool{
@@ -91,7 +91,7 @@ class Route: NSObject, Codable{
     }
     
     var isComplete: Bool{
-        navigationPoints.count > 1 && allNavigationPointsSet && !routepoints.isEmpty
+        navigationPoints.count > 1 && allNavigationPointsSet && !trackpoints.isEmpty
     }
     
     var worldRect: CGRect?{
@@ -114,8 +114,14 @@ class Route: NSObject, Codable{
         }
         distance = try container.decodeIfPresent(Int.self, forKey: .distance) ?? 0
         duration = try container.decodeIfPresent(TimeInterval.self, forKey: .duration) ?? 0.0
-        routepoints = try container.decodeIfPresent(MapPointList.self, forKey: .routepoints) ?? []
-        waypoints = try container.decodeIfPresent(Array<Waypoint>.self, forKey: .waypoints) ?? []
+        if container.contains(.trackpoints){
+            trackpoints = try container.decodeIfPresent(TrackpointList.self, forKey: .trackpoints) ?? []
+            routepoints = try container.decodeIfPresent(RoutepointList.self, forKey: .routepoints) ?? []
+        }
+        else{ //deprecated
+            trackpoints = try container.decodeIfPresent(MapPointList.self, forKey: .routepoints) ?? []
+            routepoints = try container.decodeIfPresent(Array<Routepoint>.self, forKey: .waypoints) ?? []
+        }
         coordinateRegion = try container.decodeIfPresent(CoordinateRegion.self, forKey: .coordinateRegion)
         if let lat = try container.decodeIfPresent(CLLocationDegrees.self, forKey: .centerCoordinateLatitude), lat != 0,
            let lon = try container.decodeIfPresent(CLLocationDegrees.self, forKey: .centerCoordinateLongitude){
@@ -135,8 +141,8 @@ class Route: NSObject, Codable{
         try container.encodeIfPresent(type.rawValue, forKey: .type)
         try container.encode(distance, forKey: .distance)
         try container.encode(duration, forKey: .duration)
+        try container.encode(trackpoints, forKey: .trackpoints)
         try container.encode(routepoints, forKey: .routepoints)
-        try container.encode(waypoints, forKey: .waypoints)
         try container.encode(coordinateRegion, forKey: .coordinateRegion)
         try container.encodeIfPresent(centerCoordinate?.latitude, forKey: .centerCoordinateLatitude)
         try container.encodeIfPresent(centerCoordinate?.longitude, forKey: .centerCoordinateLongitude)
@@ -148,19 +154,19 @@ class Route: NSObject, Codable{
         type = .car
         distance = 0
         duration = 0
+        trackpoints.removeAll()
         routepoints.removeAll()
-        waypoints.removeAll()
     }
     
     func updateCoordinateRegion(){
         let cr = CoordinateRegion()
-        if let start = routepoints.first{
+        if let start = trackpoints.first{
             cr.minLatitude = start.coordinate.latitude
             cr.maxLatitude = start.coordinate.latitude
             cr.minLongitude = start.coordinate.longitude
             cr.maxLongitude = start.coordinate.longitude
-            for i in 1..<self.routepoints.count{
-                let tp = routepoints[i]
+            for i in 1..<self.trackpoints.count{
+                let tp = trackpoints[i]
                 if tp.coordinate.latitude < cr.minLatitude{
                     cr.minLatitude = tp.coordinate.latitude
                 }
@@ -203,8 +209,18 @@ class Route: NSObject, Codable{
                 str += pnt.gpxString
             }
             str += """
-        
+                
                 </rte>
+                <trk>
+                    <trkseg>
+            """
+            for tp in trackpoints{
+                str += tp.gpxString
+            }
+            str += """
+                
+                    </trkseg>
+                </trk>
             </gpx>
         """
         return str
@@ -217,16 +233,21 @@ extension Route : XMLParserDelegate{
     func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
         currentTag = elementName
         switch elementName{
-        case "trkpt", "rtept":
+        case "trkpt":
             guard let latString = attributeDict["lat"], let lonString = attributeDict["lon"] else { return }
             guard let lat = Double(latString), let lon = Double(lonString) else { return }
             guard let latDegrees = CLLocationDegrees(exactly: lat), let lonDegrees = CLLocationDegrees(exactly: lon) else { return }
-            currentRoutepoint = Routepoint(coordinate: CLLocationCoordinate2D(latitude: latDegrees, longitude: lonDegrees))
+            currentPoint = Trackpoint(coordinate: CLLocationCoordinate2D(latitude: latDegrees, longitude: lonDegrees))
+        case "rtept":
+            guard let latString = attributeDict["lat"], let lonString = attributeDict["lon"] else { return }
+            guard let lat = Double(latString), let lon = Double(lonString) else { return }
+            guard let latDegrees = CLLocationDegrees(exactly: lat), let lonDegrees = CLLocationDegrees(exactly: lon) else { return }
+            currentPoint = Routepoint(coordinate: CLLocationCoordinate2D(latitude: latDegrees, longitude: lonDegrees))
         case "wpt":
             guard let latString = attributeDict["lat"], let lonString = attributeDict["lon"] else { return }
             guard let lat = Double(latString), let lon = Double(lonString) else { return }
             guard let latDegrees = CLLocationDegrees(exactly: lat), let lonDegrees = CLLocationDegrees(exactly: lon) else { return }
-            currentWaypoint = Waypoint(latitude: latDegrees, longitude: lonDegrees)
+            currentPoint = Routepoint(latitude: latDegrees, longitude: lonDegrees)
         default :
             break
         }
@@ -240,11 +261,11 @@ extension Route : XMLParserDelegate{
         case "name":
             name += string
         case "time":
-            if let point = currentRoutepoint, let timestamp = string.ISO8601Date(){
+            if let point = currentPoint, let timestamp = string.ISO8601Date(){
                 point.timestamp = timestamp
             }
         case "ele":
-            if let point = currentRoutepoint, let dist = CLLocationDistance(string){
+            if let point = currentPoint, let dist = CLLocationDistance(string){
                 point.altitude =  dist
             }
         default:
@@ -254,15 +275,20 @@ extension Route : XMLParserDelegate{
 
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         switch currentTag{
-        case "trkpt", "rtepnt":
-            if let point = currentRoutepoint{
-                routepoints.append(point)
-                currentRoutepoint = nil
+        case "trkpt":
+            if let point = currentPoint as? Trackpoint{
+                trackpoints.append(point)
+                currentPoint = nil
+            }
+        case "rtepnt":
+            if let point = currentPoint as? Routepoint{
+                navigationPoints.append(point)
+                currentPoint = nil
             }
         case  "wpt":
-            if let point = currentWaypoint{
-                waypoints.append(point)
-                currentWaypoint = nil
+            if let point = currentPoint as? Routepoint{
+                routepoints.append(point)
+                currentPoint = nil
             }
         default:
             break

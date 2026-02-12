@@ -7,7 +7,7 @@
 import Foundation
 import CoreLocation
 
-class Waypoint: Mappoint{
+class Routepoint: Mappoint{
     
     enum CodingKeys: String, CodingKey {
         case name
@@ -87,6 +87,23 @@ class Waypoint: Mappoint{
         try container.encode(duration, forKey: .duration)
     }
     
+    var gpxString: String
+    {
+        var str =
+        """
+        
+                <rtept lat="\(String(format:"%.7f", latitude))" lon="\(String(format:"%.7f", longitude))">
+        """
+        if let alt = altitude{
+            str += "<ele>\(String(format: "%.1f", alt))</ele>"
+        }
+        if let time = timestamp{
+            str += "<time>\(time.isoString())</time>"
+        }
+        str += "</rtept>"
+        return str
+    }
+    
 }
 
-typealias WaypointList = MapPointList<Waypoint>
+typealias RoutepointList = MapPointList<Routepoint>

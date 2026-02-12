@@ -48,11 +48,11 @@ class RouteCell: MapItemCell{
         let nameLabel = NSTextField(wrappingLabelWithString: item.route.name)
         itemView.addSubviewWithAnchors(nameLabel, top: itemView.topAnchor)
             .centerX(centerXAnchor)
-        var rp = item.route.routepoints.isEmpty ? nil : item.route.routepoints.first
+        var rp = item.route.trackpoints.isEmpty ? nil : item.route.trackpoints.first
         let startLabel = NSTextField(labelWithString: "\("start".localize()): \(rp?.coordinate.asString ?? ""))")
         itemView.addSubviewBelow(startLabel, upperView: nameLabel)
         
-        rp = item.route.routepoints.isEmpty ? nil : item.route.routepoints.last
+        rp = item.route.trackpoints.isEmpty ? nil : item.route.trackpoints.last
         let endLabel = NSTextField(labelWithString: "\("end".localize()): \(rp?.coordinate.asString ?? ""))")
         itemView.addSubviewBelow(endLabel, upperView: startLabel)
         let distLabel = NSTextField(labelWithString: "\("distance".localize()): \(Int(item.route.distance))m")

@@ -72,18 +72,18 @@ class RouteViewController: ScrollViewController{
         contentView.addSubviewBelow(header, upperView: lastView)
         lastView=header
         var lastDistance = 0
-        for i in 0..<item.route.waypoints.count{
-            let waypoint = item.route.waypoints[i]
+        for i in 0..<item.route.routepoints.count{
+            let routepoint = item.route.routepoints[i]
             if i > 0 {
                 text = UILabel(text: "\("after".localize()) \(lastDistance)m:")
                 contentView.addSubviewBelow(text, upperView: lastView)
                 lastView = text
             }
-            lastDistance = waypoint.distance
-            let iconName = waypoint.iconName
-            var str = waypoint.directionString
-            if !waypoint.name.isEmpty {
-                str += "\("on".localize()) \(waypoint.name)"
+            lastDistance = routepoint.distance
+            let iconName = routepoint.iconName
+            var str = routepoint.directionString
+            if !routepoint.name.isEmpty {
+                str += "\("on".localize()) \(routepoint.name)"
             }
             if iconName.isEmpty {
                 text = UILabel(text: str)

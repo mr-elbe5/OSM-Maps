@@ -92,7 +92,7 @@ class VisibleRoute{
     
     func saveRoute(completion: (() -> Void)? = nil){
         if let item = routeItem, let route = route, route.isComplete{
-            if let startPoint = route.routepoints.first, let endPoint = route.routepoints.last {
+            if let startPoint = route.trackpoints.first, let endPoint = route.trackpoints.last {
                 item.coordinate = startPoint.coordinate
                 item.startLocation = LocationData(coordinate: startPoint.coordinate)
                 item.endLocation = LocationData(coordinate: endPoint.coordinate)

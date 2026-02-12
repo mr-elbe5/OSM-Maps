@@ -82,8 +82,8 @@ class RouteLayerView: LayerView {
         super.draw(rect)
         if let route = VisibleRoute.shared.route{
             var drawPoints = Array<CGPoint>()
-            for idx in 0..<route.routepoints.count{
-                let point = route.routepoints[idx]
+            for idx in 0..<route.trackpoints.count{
+                let point = route.trackpoints[idx]
                 let mapPoint = CGPoint(point.coordinate)
                 let drawPoint = CGPoint(x: mapPoint.x*scale , y: mapPoint.y*scale)
                 drawPoints.append(drawPoint)

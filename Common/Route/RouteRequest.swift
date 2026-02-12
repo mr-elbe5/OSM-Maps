@@ -57,8 +57,8 @@ class RouteRequest {
     private static func updateRoute(route: Route, from osrmRouteData: OSRMRouteData) -> Bool {
         //Log.info("found routes: \(osrmRouteData.routes.count)")
         if let osmroute = osrmRouteData.routes.first {
+            route.trackpoints.removeAll()
             route.routepoints.removeAll()
-            route.waypoints.removeAll()
             route.distance = Int(osmroute.distance)
             route.duration = osmroute.duration
             for leg in osmroute.legs {
@@ -66,7 +66,7 @@ class RouteRequest {
                     var distance = 0
                     var duration = 0
                     for coordinate in step.geometry.coordinates2D {
-                        route.routepoints.append(Routepoint(coordinate: coordinate))
+                        route.trackpoints.append(Trackpoint(coordinate: coordinate))
                     }
                     if let maneuver = step.maneuver, let coordinate = maneuver.coordinates2D{
                         distance += Int(step.distance)
@@ -75,14 +75,14 @@ class RouteRequest {
                         if type.isEmpty{
                             continue
                         }
-                        let waypoint = Waypoint(coordinate: coordinate)
+                        let waypoint = Routepoint(coordinate: coordinate)
                         waypoint.name = step.name
                         waypoint.distance = distance
                         distance = 0
                         waypoint.duration = duration
                         duration = 0
                         waypoint.type = type
-                        route.waypoints.append(waypoint)
+                        route.routepoints.append(waypoint)
                     }
                 }
             }

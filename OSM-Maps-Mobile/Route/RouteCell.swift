@@ -63,12 +63,12 @@ class RouteCell: MapItemCell{
             nameLabel.textAlignment = .center
             itemView.addSubviewBelow(nameLabel, upperView: header)
             
-            var rp = item.route.routepoints.isEmpty ? nil : item.route.routepoints.first
+            var rp = item.route.trackpoints.isEmpty ? nil : item.route.trackpoints.first
             var str = item.startLocation?.flatAddress ?? rp?.coordinate.asString ?? ""
             let startLabel = UILabel(text: "\("start".localize()): \(str)")
             itemView.addSubviewBelow(startLabel, upperView: nameLabel)
             
-            rp = item.route.routepoints.isEmpty ? nil : item.route.routepoints.last
+            rp = item.route.trackpoints.isEmpty ? nil : item.route.trackpoints.last
             str = item.endLocation?.flatAddress ?? rp?.coordinate.asString ?? ""
             let endLabel = UILabel(text: "\("end".localize()): \(str)")
             itemView.addSubviewBelow(endLabel, upperView: startLabel, insets: OSInsets.flatInsets)

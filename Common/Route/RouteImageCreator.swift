@@ -34,10 +34,10 @@ class RouteImageCreator{
     }
     
     static func createImage(route: Route, size: NSSize) -> NSImage?{
-        if route.routepoints.isEmpty{
+        if route.trackpoints.isEmpty{
             return nil
         }
-        let boundingRouteRect = route.routepoints.boundingMapRect!
+        let boundingRouteRect = route.trackpoints.boundingMapRect!
         let zoom = World.getZoomToFit(worldRect: boundingRouteRect, scaledSize: size)
         let downScale = World.downScale(to: zoom)
         let centerCoordinate = boundingRouteRect.centerCoordinate
@@ -61,10 +61,10 @@ class RouteImageCreator{
     }
     
     static func drawRoute(route: Route, ctx: CGContext, size: NSSize, zoom: Int, downScale: CGFloat, worldViewRect: CGRect) {
-        if !route.routepoints.isEmpty{
+        if !route.trackpoints.isEmpty{
             var drawPoints = Array<CGPoint>()
-            for idx in 0..<route.routepoints.count{
-                let routePoint = route.routepoints[idx]
+            for idx in 0..<route.trackpoints.count{
+                let routePoint = route.trackpoints[idx]
                 let mapPoint = CGPoint(routePoint.coordinate)
                 let drawPoint = CGPoint(x: (mapPoint.x - worldViewRect.minX)*downScale, y: (mapPoint.y - worldViewRect.minY)*downScale)
                 //Log.debug("drawPoint = \(drawPoint)")
@@ -99,10 +99,10 @@ class RouteImageCreator{
     }
     
     static func createImage(route: Route, size: CGSize, withPoints: Bool = false) -> UIImage?{
-        if route.routepoints.isEmpty{
+        if route.trackpoints.isEmpty{
             return nil
         }
-        let boundingRouteRect = route.routepoints.boundingMapRect!
+        let boundingRouteRect = route.trackpoints.boundingMapRect!
         let zoom = World.getZoomToFit(worldRect: boundingRouteRect, scaledSize: size)
         let downScale = World.downScale(to: zoom)
         let centerCoordinate = boundingRouteRect.centerCoordinate
@@ -125,10 +125,10 @@ class RouteImageCreator{
     }
     
     static func drawRoute(route: Route, ctx: CGContext, size: CGSize, zoom: Int, downScale: CGFloat, worldViewRect: CGRect, withPoints: Bool = false) {
-        if !route.routepoints.isEmpty{
+        if !route.trackpoints.isEmpty{
             var drawPoints = Array<CGPoint>()
-            for idx in 0..<route.routepoints.count{
-                let routePoint = route.routepoints[idx]
+            for idx in 0..<route.trackpoints.count{
+                let routePoint = route.trackpoints[idx]
                 let mapPoint = CGPoint(routePoint.coordinate)
                 let drawPoint = CGPoint(x: (mapPoint.x - worldViewRect.minX)*downScale, y: (mapPoint.y - worldViewRect.minY)*downScale)
                 //Log.debug("drawPoint = \(drawPoint)")
