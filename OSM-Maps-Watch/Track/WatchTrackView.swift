@@ -43,7 +43,10 @@ struct WatchTrackView: View {
                             HStack{
                                 Button("save".localize(), action: {
                                     TrackRecorder.shared.saveTrack(){ success in
-                                        if !success{
+                                        if success{
+                                            TrackStatus.shared.reset()
+                                        }
+                                        else{
                                             showSaveAlert = true
                                         }
                                     }

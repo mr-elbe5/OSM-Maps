@@ -70,7 +70,6 @@ class TrackRecorder: NSObject{
                 }
                 result(success)
             }
-            delegate?.trackRecordingChanged()
         }
     }
     

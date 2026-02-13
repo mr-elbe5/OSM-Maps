@@ -18,6 +18,15 @@ import CoreLocation
     var coveredAltitude: Int = 0
     var trackpointCount: Int = 0
     
+    func reset(){
+        isTracking = false
+        isRecording = false
+        durationString = ""
+        coveredDistance = 0
+        coveredAltitude = 0
+        trackpointCount = 0
+    }
+    
 }
 
 extension TrackStatus: TrackRecorderDelegate{
@@ -52,11 +61,15 @@ extension TrackStatus: TrackRecorderDelegate{
                         self.trackRecordingChanged()
                     }
                     result(success)
-                    return
                 }
             }
+            else{
+                result(false)
+            }
         }
-        result(false)
+        else{
+            result(false)
+        }
     }
     
 }

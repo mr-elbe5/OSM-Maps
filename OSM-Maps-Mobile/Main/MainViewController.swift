@@ -267,13 +267,6 @@ class MainViewController: UIViewController {
         routeControlView.update()
     }
     
-    func saveTrack(result: @escaping (Bool) -> Void) {
-        if TrackRecorder.shared.isTracking{
-            TrackRecorder.shared.saveTrack(result: result)
-            trackStatusView.stopTrackInfo()
-        }
-    }
-    
     func cancelTrack() {
         if TrackRecorder.shared.isTracking{
             TrackRecorder.shared.cancelTracking()
@@ -541,6 +534,7 @@ extension MainViewController: LocationServiceDelegate {
 }
 
 extension MainViewController: TrackRecorderDelegate {
+    
     func trackStarted() {
         VisibleTrack.shared.reset()
     }
@@ -562,7 +556,7 @@ extension MainViewController: TrackRecorderDelegate {
             item.altitude = tp.altitude ?? 0
             TrackImageCreator.createPreview(item: item)
             let controller = SaveTrackViewController(item: item)
-            MainViewController.shared.navigationController?.pushViewController(controller, animated: true)
+            navigationController?.pushViewController(controller, animated: true)
             result(true)
         }
         else{

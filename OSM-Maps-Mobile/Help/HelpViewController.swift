@@ -55,6 +55,12 @@ class HelpViewController: ScrollViewController{
         })
         contentView.addSubviewBelow(iconText, upperView: lastView)
         lastView = iconText
+        iconText = HelpText(icon: "point.topright.arrow.triangle.backward.to.point.bottomleft.scurvepath", key: "routesList", moreAction: UIAction(){ action in
+            let controller = RouteHelpViewController()
+            self.navigationController?.pushViewController(controller, animated: true)
+        })
+        contentView.addSubviewBelow(iconText, upperView: lastView)
+        lastView = iconText
         iconText = HelpText(icon: "gearshape", key: "settings", moreAction: UIAction(){ action in
             let controller = SettingsHelpViewController()
             self.navigationController?.pushViewController(controller, animated: true)
@@ -130,6 +136,12 @@ class HelpViewController: ScrollViewController{
         contentView.addSubviewBelow(iconText, upperView: lastView)
         lastView = iconText
         iconText = HelpText(icon: "microphone", key: "openAudio")
+        contentView.addSubviewBelow(iconText, upperView: lastView)
+        lastView = iconText
+        iconText = HelpText(icon: "point.topright.arrow.triangle.backward.to.point.bottomleft.scurvepath", key: "createRoute", moreAction: UIAction(){ action in
+            let controller = CreateRouteHelpViewController()
+            self.navigationController?.pushViewController(controller, animated: true)
+        })
         contentView.addSubviewBelow(iconText, upperView: lastView)
         lastView = iconText
         

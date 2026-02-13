@@ -154,6 +154,23 @@
         }
       }
     },
+    "createRoute" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Route erstellen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create Route"
+          }
+        }
+      }
+    },
     "gpsStrength" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -252,6 +269,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "You can create backups and save them as a zip file. You can restore data from these files, even from backups from the older Maps For OSM."
+          }
+        }
+      }
+    },
+    "helpCreateRoute" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Route erzeugen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create Route"
+          }
+        }
+      }
+    },
+    "helpCreateRouteText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zum Erstellen einer Route werden Markierung-Icons (grün für Start, rot für Ende, gelb für Zwischenpunkte) selektiert.\nAntippen selektiert oder delektiert (Selektion angezeigt durch einen Rand).\nFür das selektierte Icon auf die Karte tippen, um die Position zu setzen.\nMit mindestens zwei Positionen wird eine Route abhängig von dem gewählten Routentyp berechnet.\nZwischenpunkte werden durch die Plus-Minus-Icons gesetzt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For creating a route you select a marker icon (green for start, red for target, yellow for intermediates. Tapping selects or deselects (selection shown by a border).\nFor the selected icon you tap on the map for setting the position. \nAs soon as at least two markers are set, a route is calculated depending on the selected tour type.\nIntermediate markers are added or removed with the plus/minus icon."
           }
         }
       }
@@ -456,6 +507,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "In Preferences you can change various presets of the app and preload map tiles for offline use."
+          }
+        }
+      }
+    },
+    "helpRoutes" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Routen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Routes"
+          }
+        }
+      }
+    },
+    "helpRoutesText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Liste zeigt alle Routen der App. Sie können dort auf der Karte angezeigt, importiert, exportiert oder gelöscht werden.\n\nDas Menü oben von links:\n- Reihenfolge umkehren\n- Route importieren\n- alle auswählen/abwählen\n\nDas Detailmenü von links:\n- Kartenposition anzeigen\n- Auswahl umkehren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The list shows all routes of this app.\nThere they can be shown on the map, exported or deleted.\n\nThe top menu from left:\n- import route\n- select/deselect all\n- delete selected\n\nThe detail menu from left:\n- show position on map\n- toggle selection"
           }
         }
       }
@@ -864,6 +949,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Right Menu"
+          }
+        }
+      }
+    },
+    "routesList" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Routenliste"
           }
         }
       }

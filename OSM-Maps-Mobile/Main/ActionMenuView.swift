@@ -80,9 +80,8 @@ class ActionMenuView: UIView {
     func getEndTrackingMenu() -> UIMenu{
         var actions = Array<UIAction>()
         actions.append(UIAction(title: "saveTrack".localize(), image: UIImage(systemName: "figure.walk.arrival")){ action in
-            MainViewController.shared.saveTrack(){ result in
+            TrackRecorder.shared.saveTrack(){ result in
                 if result{
-                    MainViewController.shared.updateItemLayer()
                     self.setupForIdle()
                 }
             }
