@@ -114,7 +114,7 @@ class Route: NSObject, Codable{
         let container = try decoder.container(keyedBy: CodingKeys.self)
         name = try container.decodeIfPresent(String.self, forKey: .name) ?? "Route"
         desc = try container.decodeIfPresent(String.self, forKey: .desc) ?? ""
-        creationDate = try container.decodeIfPresent(Date.self, forKey: .creationDate) ?? Date()
+        creationDate = try container.decodeIfPresent(Date.self, forKey: .creationDate) ?? .zero
         let s = try container.decodeIfPresent(String.self, forKey: .type)
         if let s, let type = RouteType(rawValue: s) {
             self.type = type
@@ -198,7 +198,7 @@ class Route: NSObject, Codable{
     func updateRoutePoints(){
         var date = creationDate
         for pnt in routepoints{
-            date = Date(timeIntervalSince1970: date.timeIntervalSince1970 + Double(pnt.distance)*1000)
+            date += TimeInterval(pnt.duration)
             pnt.timestamp = date
         }
     }
@@ -241,9 +241,9 @@ class Route: NSObject, Codable{
         }
         str += """
                 
-                    </trkseg>
-                </trk>
-            </gpx>
+                </trkseg>
+            </trk>
+        </gpx>
         """
         return str
     }

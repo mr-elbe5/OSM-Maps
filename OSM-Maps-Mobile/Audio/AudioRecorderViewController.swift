@@ -16,10 +16,9 @@ class AudioRecorderViewController : ScrollViewController, AVAudioRecorderDelegat
     override func loadView() {
         super.loadView()
         title = "audioRecording".localize()
-        view.addSubviewFillingSafeArea(scrollView, insets: .zero)
         setupScrollView()
+        addScrollViewFillingWithKeyboard()
         loadScrollableSubviews()
-        setupKeyboard()
     }
     
     func loadScrollableSubviews() {

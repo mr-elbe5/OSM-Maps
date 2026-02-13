@@ -248,6 +248,13 @@ public extension OSView {
     }
     
     @discardableResult
+    func addSubviewFillingSafeAreaWithKeyboard(_ subview: OSView, insets: OSInsets = .defaultInsets) -> OSView{
+        addSubview(subview)
+        subview.setAnchors(top: safeAreaLayoutGuide.topAnchor, leading: safeAreaLayoutGuide.leadingAnchor, trailing: safeAreaLayoutGuide.trailingAnchor, bottom: keyboardLayoutGuide.topAnchor, insets: insets)
+        return subview
+    }
+    
+    @discardableResult
     func addSubviewWithAnchors(_ subview: OSView, top: NSLayoutYAxisAnchor? = nil, leading: NSLayoutXAxisAnchor? = nil, trailing: NSLayoutXAxisAnchor? = nil, bottom: NSLayoutYAxisAnchor? = nil, insets: OSInsets = .defaultInsets) -> OSView{
         addSubview(subview)
         subview.setAnchors(top: top, leading: leading, trailing: trailing, bottom: bottom, insets: insets)

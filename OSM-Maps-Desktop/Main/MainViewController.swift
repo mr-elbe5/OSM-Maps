@@ -330,10 +330,10 @@ class MainViewController: ViewController {
         routeControlView.update()
     }
     
-    func saveRoute(){
+    func prepareRouteForSaving(){
         if let route = VisibleRoute.shared.route, route.isComplete{
             route.updateRoutePoints()
-            VisibleRoute.shared.saveRoute(){
+            VisibleRoute.shared.prepareRouteForSaving(){
                 DispatchQueue.main.async {
                     self.routeControlView.update()
                     NSAlert.showMessage(message: "routeSaved".localize())

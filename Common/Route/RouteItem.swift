@@ -1,11 +1,3 @@
-//
-//  TrackItem.swift
-//  OSM Maps
-//
-//  Created by Michael Rönnau on 28.12.25.
-//
-
-
 /*
  OSM Maps
  Display and use of OSM maps
@@ -95,7 +87,15 @@ class RouteItem: MapItem{
         startLocation = try values.decodeIfPresent(LocationData.self, forKey: .startLocation)
         endLocation = try values.decodeIfPresent(LocationData.self, forKey: .endLocation)
         try super.init(from: decoder)
-        updateLocations()
+        if route.creationDate == .zero{
+            route.creationDate = creationDate
+            route.updateRoutePoints()
+        }
+        updateLocations(){
+            if self.route.desc.isEmpty{
+                self.route.desc = self.desc
+            }
+        }
         coordinate = route.startCoordinate ?? .zero
     }
     

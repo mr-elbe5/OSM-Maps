@@ -26,11 +26,10 @@ class RouteViewController: ScrollViewController{
     override func loadView() {
         title = "route".localize()
         super.loadView()
-        view.addSubviewFillingSafeArea(scrollView, insets: .zero)
         scrollView.backgroundColor = .systemBackground
         setupScrollView()
+        addScrollViewFillingWithKeyboard()
         loadScrollableSubviews()
-        setupKeyboard()
     }
     
     func setupNavigationItems() {

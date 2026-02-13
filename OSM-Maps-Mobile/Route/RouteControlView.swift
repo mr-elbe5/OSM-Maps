@@ -40,7 +40,7 @@ class RouteControlView : UIView{
         controlPanel.addSubviewWithAnchors(saveRouteButton, leading: routeTypeSelector.trailingAnchor, insets: .defaultInsets)
             .centerY(routeTypeSelector.centerYAnchor)
         saveRouteButton.addAction(UIAction(){ action in
-            MainViewController.shared.saveRoute()
+            MainViewController.shared.prepareRouteForSaving()
         }, for: .touchDown)
         controlPanel.addSubviewWithAnchors(cancelRouteButton, trailing: controlPanel.trailingAnchor, insets: .defaultInsets)
             .centerY(routeTypeSelector.centerYAnchor)

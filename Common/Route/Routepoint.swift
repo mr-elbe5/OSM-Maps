@@ -100,6 +100,11 @@ class Routepoint: Mappoint{
         if let time = timestamp{
             str += "<time>\(time.isoString())</time>"
         }
+        str += "<type>\(type)</type>"
+        if !name.isEmpty{
+            str += "<name>\(name)</name>"
+        }
+        str += "<cmt>distance: \(distance)m, duration: \(duration)s</cmt>"
         str += "</rtept>"
         return str
     }

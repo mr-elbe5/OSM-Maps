@@ -259,6 +259,14 @@ class MainViewController: UIViewController {
         }
     }
     
+    func saveTrack(item: TrackItem){
+        AppData.shared.addItem(item)
+        AppData.shared.save()
+        updateItemLayer()
+        updateRouteLayer()
+        routeControlView.update()
+    }
+    
     func saveTrack(result: @escaping (Bool) -> Void) {
         if TrackRecorder.shared.isTracking{
             TrackRecorder.shared.saveTrack(result: result)
@@ -374,17 +382,23 @@ class MainViewController: UIViewController {
         routeControlView.update()
     }
     
-    func saveRoute(){
-        if let route = VisibleRoute.shared.route, route.isComplete{
-            route.updateRoutePoints()
-            VisibleRoute.shared.saveRoute(){
+    func prepareRouteForSaving(){
+        if let item = VisibleRoute.shared.routeItem, item.route.isComplete{
+            VisibleRoute.shared.prepareRouteForSaving(){
                 DispatchQueue.main.async {
-                    self.updateItemLayer()
-                    self.updateRouteLayer()
-                    self.routeControlView.update()
+                    let controller = SaveRouteViewController(item: item)
+                    MainViewController.shared.navigationController?.pushViewController(controller, animated: true)
                 }
             }
         }
+    }
+    
+    func saveRoute(item: RouteItem){
+        AppData.shared.addItem(item)
+        AppData.shared.save()
+        updateItemLayer()
+        updateRouteLayer()
+        routeControlView.update()
     }
     
     func showRouteOnMap(item: RouteItem){
@@ -546,8 +560,9 @@ extension MainViewController: TrackRecorderDelegate {
             item.track.updateFromTrackpoints()
             item.coordinate = tp.coordinate
             item.altitude = tp.altitude ?? 0
-            AppData.shared.addItem(item)
             TrackImageCreator.createPreview(item: item)
+            let controller = SaveTrackViewController(item: item)
+            MainViewController.shared.navigationController?.pushViewController(controller, animated: true)
             result(true)
         }
         else{

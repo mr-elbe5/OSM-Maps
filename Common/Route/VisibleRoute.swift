@@ -90,7 +90,7 @@ class VisibleRoute{
         self.routeItem = item
     }
     
-    func saveRoute(completion: (() -> Void)? = nil){
+    func prepareRouteForSaving(completion: (() -> Void)? = nil){
         if let item = routeItem, let route = route, route.isComplete{
             if let startPoint = route.trackpoints.first, let endPoint = route.trackpoints.last {
                 item.coordinate = startPoint.coordinate
@@ -100,9 +100,8 @@ class VisibleRoute{
                 item.updatePreview()
                 item.updateLocation(){
                     item.updateLocations(){
+                        item.route.updateRoutePoints()
                         item.route.desc = item.desc
-                        AppData.shared.addItem(item)
-                        AppData.shared.save()
                         completion?()
                     }
                 }

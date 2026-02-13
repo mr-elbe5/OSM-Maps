@@ -134,7 +134,7 @@ class RouteControlView : NSView{
     }
     
     @objc func saveRoute(){
-        MainViewController.shared.saveRoute()
+        MainViewController.shared.prepareRouteForSaving()
     }
     
     @objc func cancelRoute(){
@@ -155,34 +155,33 @@ class RouteControlView : NSView{
             statusPanel.addSubviewBelow(label, upperView: lastLine, insets: .defaultInsets)
             lastLine = label
             var lastDistance = 0
-            var waypointLine: RoutepointLine!
-            for i in 0..<route.routePoints.count {
-                let waypoint = route.routePoints[i]
+            var routepointLine: RoutepointLine!
+            for i in 0..<route.routepoints.count {
+                let routepoint = route.routepoints[i]
                 if lastDistance > 0 {
                     linePanel = newLine(text: "\("after".localize()) \(lastDistance)m:")
                     statusPanel.addSubviewBelow(linePanel, upperView: lastLine, insets: .zero)
                     lastLine = linePanel
                 }
-                lastDistance = waypoint.distance
-                let iconName: String = waypoint.iconName
-                var str = waypoint.directionString
-                if !waypoint.name.isEmpty {
-                    str += "\("on".localize()) \(waypoint.name)"
+                lastDistance = routepoint.distance
+                let iconName: String = routepoint.iconName
+                var str = routepoint.directionString
+                if !routepoint.name.isEmpty {
+                    str += "\("on".localize()) \(routepoint.name)"
                 }
-                waypointLine = RoutepointLine(idx: i)
+                routepointLine = RoutepointLine(idx: i)
                 if iconName.isEmpty {
-                    waypointLine.setupView(text: str)
+                    routepointLine.setupView(text: str)
                 }
                 else{
-                    waypointLine.setupView(iconName: iconName, text: str)
+                    routepointLine.setupView(iconName: iconName, text: str)
                 }
-                statusPanel.addSubviewBelow(waypointLine, upperView: lastLine, insets: .zero)
-                routepointLines.append(waypointLine)
-                lastLine = waypointLine
+                statusPanel.addSubviewBelow(routepointLine, upperView: lastLine, insets: .zero)
+                routepointLines.append(routepointLine)
+                lastLine = routepointLine
             }
             lastLine.connectToBottom(of: statusPanel)
-            Log.info("got \(statusPanel.subviews.count) subviews")
-            Log.info("got \(routepointLines.count) waypoints")
+            //Log.info("got \(routepointLines.count) routepoints")
         }
     }
     

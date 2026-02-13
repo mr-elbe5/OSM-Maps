@@ -30,10 +30,9 @@ class EditNoteViewController: ScrollViewController{
     override func loadView() {
         super.loadView()
         title = "note".localize()
-        view.addSubviewFillingSafeArea(scrollView, insets: .zero)
         setupScrollView()
+        addScrollViewFillingWithKeyboard()
         loadScrollableSubviews()
-        setupKeyboard()
         noteEditView.becomeFirstResponder()
     }
     

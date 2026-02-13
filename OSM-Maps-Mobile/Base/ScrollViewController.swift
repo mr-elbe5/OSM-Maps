@@ -13,28 +13,29 @@ class ScrollViewController: UIViewController{
     
     func setupScrollView() {
         scrollView.scrollsToTop = false
+        scrollView.alwaysBounceVertical = true
         scrollView.addSubviewWithAnchors(contentView, top: scrollView.topAnchor, leading: scrollView.leadingAnchor, bottom: scrollView.bottomAnchor)
             .width(scrollView.widthAnchor)
     }
     
-    func setupKeyboard(){
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name:UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name:UIResponder.keyboardWillHideNotification, object: nil)
+    func addScrollViewFillingWithKeyboard() {
+        view.addSubviewFillingSafeAreaWithKeyboard(scrollView, insets: .zero)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name:UIResponder.keyboardDidShowNotification, object: nil)
+    }
+        
+    @objc func keyboardDidShow(notification:NSNotification){
+        scrollForKeyboard()
     }
     
-    @objc func keyboardWillShow(notification:NSNotification){
-        let userInfo = notification.userInfo!
-        var keyboardFrame:CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
-        keyboardFrame = self.view.convert(keyboardFrame, from: nil)
-        var contentInset:UIEdgeInsets = self.scrollView.contentInset
-        contentInset.bottom = keyboardFrame.size.height + 100
-        scrollView.contentInset = contentInset
+    func scrollForKeyboard(){
     }
     
-    @objc func keyboardWillHide(notification:NSNotification){
-        let contentInset:UIEdgeInsets = UIEdgeInsets.zero
-        scrollView.contentInset = contentInset
+    func scrollToTop(){
+        let contentHeight = contentView.frame.height
+        let scrollViewHeight = scrollView.frame.height
+        if contentHeight > scrollViewHeight {
+            scrollView.setContentOffset(CGPoint(x: 0, y: contentHeight - scrollViewHeight), animated: true)
+        }
     }
-    
-}
 
+}

@@ -42,11 +42,10 @@ class EditTrackViewController: ScrollViewController{
     override func loadView() {
         super.loadView()
         title = "track".localize()
-        view.addSubviewFillingSafeArea(scrollView, insets: .zero)
         scrollView.backgroundColor = .systemBackground
         setupScrollView()
+        addScrollViewFillingWithKeyboard()
         loadScrollableSubviews()
-        setupKeyboard()
     }
     
     func loadScrollableSubviews() {
@@ -75,6 +74,10 @@ class EditTrackViewController: ScrollViewController{
         }, for: .touchDown)
         contentView.addSubviewCenteredBelow(saveButton, upperView: applyButton)
             .connectToBottom(of: contentView)
+    }
+    
+    override func scrollForKeyboard() {
+        scrollToTop()
     }
     
     func apply(){
