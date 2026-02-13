@@ -67,6 +67,18 @@ class HelpViewController: ScrollViewController{
         })
         contentView.addSubviewBelow(iconText, upperView: lastView)
         lastView = iconText
+        iconText = HelpText(icon: "cloud", key: "data", moreAction: UIAction(){ action in
+            let controller = DataHelpViewController()
+            self.navigationController?.pushViewController(controller, animated: true)
+        })
+        contentView.addSubviewBelow(iconText, upperView: lastView)
+        lastView = iconText
+        iconText = HelpText(icon: "map", key: "mapTiles", moreAction: UIAction(){ action in
+            let controller = MapTilesHelpViewController()
+            self.navigationController?.pushViewController(controller, animated: true)
+        })
+        contentView.addSubviewBelow(iconText, upperView: lastView)
+        lastView = iconText
         iconText = HelpText(icon: "questionmark.circle", key: "thisHelp")
         contentView.addSubviewBelow(iconText, upperView: lastView)
         lastView = iconText

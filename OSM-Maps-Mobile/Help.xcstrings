@@ -171,6 +171,23 @@
         }
       }
     },
+    "data" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data"
+          }
+        }
+      }
+    },
     "gpsStrength" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -303,6 +320,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "For creating a route you select a marker icon (green for start, red for target, yellow for intermediates. Tapping selects or deselects (selection shown by a border).\nFor the selected icon you tap on the map for setting the position. \nAs soon as at least two markers are set, a route is calculated depending on the selected tour type.\nIntermediate markers are added or removed with the plus/minus icon."
+          }
+        }
+      }
+    },
+    "helpData" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data"
           }
         }
       }
@@ -443,6 +477,40 @@
         }
       }
     },
+    "helpMapTiles" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kartenkacheln"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Map Tiles"
+          }
+        }
+      }
+    },
+    "helpMapTilesText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Man kann die Kartenquelle wechseln und Kartenkacheln für den aktuell sichtbaren Kartenausschnitt für spätere Offlinenutzung vorladen.\nZum Vorladen den Zoombereich wählen, die Kachelanzahl berechnen und den Download starten.\nAnschliessend können die Kacheln auch auf die Uhr hochgeladen werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can change the tile source and preload tiles for the currently visible map area for later offline use.\nFor preloading you select a range of zoom levels, calculate the tile amount and start the download.\nAfter that you may also upload these tiles to your watch."
+          }
+        }
+      }
+    },
     "helpNotes" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -477,36 +545,19 @@
         }
       }
     },
-    "helpPreferences" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Einstellungen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Settings"
-          }
-        }
-      }
-    },
     "helpPreferencesText" : {
       "extractionState" : "manual",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "In Einstellungen können diverse Voreinstellungen geändert sowie Kartenkacheln für Offline-Nutzung vorgeladen werden."
+            "value" : "In Einstellungen können diverse Voreinstellungen geändert werden."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "In Preferences you can change various presets of the app and preload map tiles for offline use."
+            "value" : "In Preferences you can change various presets of the app."
           }
         }
       }
@@ -541,6 +592,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "The list shows all routes of this app.\nThere they can be shown on the map, exported or deleted.\n\nThe top menu from left:\n- import route\n- select/deselect all\n- delete selected\n\nThe detail menu from left:\n- show position on map\n- toggle selection"
+          }
+        }
+      }
+    },
+    "helpSettings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
           }
         }
       }
@@ -766,6 +834,23 @@
         }
       }
     },
+    "mapTiles" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kartenkacheln"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Map Tiles"
+          }
+        }
+      }
+    },
     "mixedGroupMarker" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -987,13 +1072,30 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ansichtsfilter, iCloud, Sicherung, Karteneinstellungen, Karten vorladen"
+            "value" : "Einstellungen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "View Filter, iCloud, Backup, MapSettings, Tile Preload"
+            "value" : "Settings"
+          }
+        }
+      }
+    },
+    "SettingsPreferences" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
           }
         }
       }

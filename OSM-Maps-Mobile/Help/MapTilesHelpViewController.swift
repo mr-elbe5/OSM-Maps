@@ -7,11 +7,11 @@
 import UIKit
 import UniformTypeIdentifiers
 
-class SettingsHelpViewController: ScrollViewController{
+class MapTilesHelpViewController: ScrollViewController{
     
     
     override func loadView() {
-        title = "helpSettings".localize(table: "Help")
+        title = "helpMapTiles".localize(table: "Help")
         super.loadView()
         view.addSubviewFillingSafeArea(scrollView, insets: .zero)
         scrollView.backgroundColor = .systemBackground
@@ -21,16 +21,10 @@ class SettingsHelpViewController: ScrollViewController{
     
     func loadScrollableSubviews() {
         
-        var header = HelpText(icon: "calendar", headerKey: "helpViewFilter")
+        let header = HelpText(icon: "map", headerKey: "helpMapTiles")
         contentView.addSubviewBelow(header)
-        var text = HelpText(key: "helpViewFilterText")
+        let text = HelpText(key: "helpMapTilesText")
         contentView.addSubviewBelow(text, upperView: header)
-        
-        header = HelpText(icon: "gearshape", headerKey: "helpSettings")
-        contentView.addSubviewBelow(header, upperView: text)
-        text = HelpText(key: "helpPreferencesText")
-        contentView.addSubviewBelow(text, upperView: header)
-            .connectToBottom(of: contentView)
         
     }
     
