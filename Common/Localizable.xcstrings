@@ -3673,6 +3673,23 @@
         }
       }
     },
+    "saveRoute" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Route speichern"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save Route"
+          }
+        }
+      }
+    },
     "saveTrack" : {
       "extractionState" : "manual",
       "localizations" : {

@@ -265,11 +265,6 @@ extension Route : XMLParserDelegate{
             guard let lat = Double(latString), let lon = Double(lonString) else { return }
             guard let latDegrees = CLLocationDegrees(exactly: lat), let lonDegrees = CLLocationDegrees(exactly: lon) else { return }
             currentPoint = Routepoint(coordinate: CLLocationCoordinate2D(latitude: latDegrees, longitude: lonDegrees))
-        case "wpt":
-            guard let latString = attributeDict["lat"], let lonString = attributeDict["lon"] else { return }
-            guard let lat = Double(latString), let lon = Double(lonString) else { return }
-            guard let latDegrees = CLLocationDegrees(exactly: lat), let lonDegrees = CLLocationDegrees(exactly: lon) else { return }
-            currentPoint = Routepoint(latitude: latDegrees, longitude: lonDegrees)
         default :
             break
         }
@@ -281,14 +276,32 @@ extension Route : XMLParserDelegate{
         }
         switch currentTag{
         case "name":
-            name += string
+            if currentPoint == nil{
+                name = string
+            }
+            else if let point = currentPoint as? Routepoint{
+                point.name = string
+            }
         case "time":
-            if let point = currentPoint, let timestamp = string.ISO8601Date(){
-                point.timestamp = timestamp
+            if let timestamp = string.ISO8601Date(){
+                if currentPoint == nil{
+                    creationDate = timestamp
+                }
+                else if let point = currentPoint {
+                    point.timestamp = timestamp
+                }
             }
         case "ele":
             if let point = currentPoint, let dist = CLLocationDistance(string){
                 point.altitude =  dist
+            }
+        case "type":
+            if let point = currentPoint as? Routepoint{
+                point.type = string
+            }
+        case "desc":
+            if currentPoint == nil{
+                desc = string
             }
         default:
             break
@@ -303,11 +316,6 @@ extension Route : XMLParserDelegate{
                 currentPoint = nil
             }
         case "rtepnt":
-            if let point = currentPoint as? Routepoint{
-                navigationPoints.append(point)
-                currentPoint = nil
-            }
-        case  "wpt":
             if let point = currentPoint as? Routepoint{
                 routepoints.append(point)
                 currentPoint = nil

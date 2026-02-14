@@ -334,12 +334,25 @@ class MainViewController: ViewController {
         if let route = VisibleRoute.shared.route, route.isComplete{
             route.updateRoutePoints()
             VisibleRoute.shared.prepareRouteForSaving(){
-                DispatchQueue.main.async {
-                    self.routeControlView.update()
-                    NSAlert.showMessage(message: "routeSaved".localize())
+                if let item = VisibleRoute.shared.routeItem{
+                    DispatchQueue.main.async {
+                        let controller = SaveRouteViewController(item: item)
+                        if ModalWindow.run(title: "saveRoute".localize(), viewController: controller, outerWindow: MainWindowController.instance.window!, minSize: CGSize(width: 300, height: 200)) == .OK{
+                            self.saveRoute(item: item)
+                            NSAlert.showMessage(message: "routeSaved".localize())
+                        }
+                    }
                 }
             }
         }
+    }
+    
+    func saveRoute(item: RouteItem){
+        AppData.shared.addItem(item)
+        AppData.shared.save()
+        self.routeControlView.update()
+        self.itemsChanged()
+        self.routeGridView?.updateData()
     }
     
     func cancelRoute(){
