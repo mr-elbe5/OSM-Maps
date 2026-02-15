@@ -114,6 +114,14 @@ extension PhoneConnector: WCSessionDelegate {
                 else{
                     replyHandler(["success": false])
                 }
+            case "routeUpload":
+                if let json = message["json"] as? String, let route:Route = Route.fromJSON(encoded: json){
+                    RouteStatus.shared.setRoute(route)
+                    replyHandler(["success": true])
+                }
+                else{
+                    replyHandler(["success": false])
+                }
             case "missingTiles":
                 if let data = message["data"] as? Data, let tiles = try? JSONDecoder().decode(MapTileDataList.self, from: data){
                     var result = MapTileDataList()

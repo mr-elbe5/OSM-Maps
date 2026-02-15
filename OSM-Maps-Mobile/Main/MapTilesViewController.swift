@@ -75,7 +75,7 @@ class MapTilesViewController: ScrollViewController{
             startPreloadButton.isEnabled = true
             cancelPreloadButton.isEnabled = false
         }
-        if !WatchConnector.shared.isWatchConnectionActivated{
+        if !WatchConnector.shared.isWatchConnected{
             WatchConnector.shared.start()
             DispatchQueue.main.async {
                 self.updateConnectionStatus()
@@ -403,7 +403,7 @@ extension MapTilesViewController{
     }
     
     func startWatchUpload(){
-        if WatchConnector.shared.isWatchConnectionActivated{
+        if WatchConnector.shared.isWatchConnected{
             enableUpload(false)
             recalculateWatchTiles()
             uploadedTiles = 0
@@ -438,8 +438,8 @@ extension MapTilesViewController{
     }
     
     func updateConnectionStatus(){
-        watchStatusLabel.text = WatchConnector.shared.isWatchConnectionActivated ? "connected".localize() : "disconnected".localize()
-        enableUpload(WatchConnector.shared.isWatchConnectionActivated)
+        watchStatusLabel.text = WatchConnector.shared.isWatchConnected ? "connected".localize() : "disconnected".localize()
+        enableUpload(WatchConnector.shared.isWatchConnected)
     }
     
 }

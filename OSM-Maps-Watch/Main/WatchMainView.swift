@@ -9,6 +9,7 @@ import SwiftUI
 struct WatchMainView: View {
     
     @State var trackRecorder = TrackRecorder.shared
+    @State var routeStatus = RouteStatus.shared
     @State var healthStatus = WatchHealthStatus.shared
     @State var preferences = Preferences.shared
     @State var mapStatus = WatchMapStatus.shared
@@ -68,6 +69,13 @@ struct WatchMainView: View {
                 }
                 .mapButton()
                 .position(x: proxy.size.width - 20, y: proxy.size.height - 20)
+                if routeStatus.route != nil{
+                    NavigationLink(destination: WatchRouteView()) {
+                        Image(systemName: "point.topright.arrow.triangle.backward.to.point.bottomleft.scurvepath")
+                    }
+                    .mapButton()
+                    .position(x: 20, y: proxy.size.height - 20)
+                }
             }
             .clipped()
             .frame(maxWidth: .infinity)

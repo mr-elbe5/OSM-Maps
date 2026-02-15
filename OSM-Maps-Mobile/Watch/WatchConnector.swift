@@ -21,13 +21,13 @@ class WatchConnector: NSObject {
         session.activate()
     }
     
-    var isWatchConnectionActivated: Bool {
+    var isWatchConnected: Bool {
         session.isWatchAppInstalled && session.isPaired && session.activationState == .activated
     }
     
     func sendTile(_ tile: MapTile, data: Data, completion: @escaping (Bool) -> Void) {
         //Log.debug("sending tile")
-        if !isWatchConnectionActivated {
+        if !isWatchConnected {
             Log.error("not connected to phone")
             completion(false)
             return
@@ -52,9 +52,34 @@ class WatchConnector: NSObject {
         }
     }
     
+    func sendRoute(_ route: Route, completion: @escaping (Bool) -> Void) {
+        Log.debug("sending route")
+        if !isWatchConnected {
+            Log.error("not connected to phone")
+            completion(false)
+            return
+        }
+        let json = route.toJSON()
+        session.sendMessage([
+            "request": "routeUpload",
+            "json": json as Any
+        ], replyHandler: {response in
+            DispatchQueue.main.async {
+                if let success = response["success"] as? Bool {
+                    completion(success)
+                }
+                else{
+                    completion(false)
+                }
+            }
+        }) { error in
+            Log.error("error sending route: \(error)")
+        }
+    }
+    
     func checkTiles(_ tiles: MapTileDataList, completion: @escaping (MapTileDataList?) -> Void) {
         Log.debug("checking tiles")
-        if !isWatchConnectionActivated {
+        if !isWatchConnected {
             Log.error("not connected to phone")
             completion(nil)
             return

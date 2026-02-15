@@ -37,13 +37,25 @@ class RouteCell: MapItemCell{
                 }
             }, for: .touchDown)
             iconView.addSubviewToLeft(exportButton, rightView: selectedButton, insets: iconInsets)
-            
+            var lastView : UIView? = exportButton
+            if WatchConnector.shared.isWatchConnected {
+                let watchButton = UIButton().asDarkIconButton("applewatch.and.arrow.forward")
+                watchButton.addAction(UIAction(){ action in
+                    if let route = self.item?.route{
+                        WatchConnector.shared.sendRoute(route){ success in
+                            Log.info("route uploaded: \(success)")
+                        }
+                    }
+                }, for: .touchDown)
+                iconView.addSubviewToLeft(watchButton, rightView: lastView, insets: iconInsets)
+                lastView = watchButton
+            }
             let mapButton = UIButton().asDarkIconButton("map")
             mapButton.addAction(UIAction(){ action in
                 MainViewController.shared.showRouteOnMap(item: route)
                 MainViewController.shared.navigationController?.popViewController(animated: true)
             }, for: .touchDown)
-            iconView.addSubviewToLeft(mapButton, rightView: exportButton, insets: iconInsets)
+            iconView.addSubviewToLeft(mapButton, rightView: lastView, insets: iconInsets)
             let viewButton = UIButton().asDarkIconButton("magnifyingglass")
             viewButton.addAction(UIAction(){ action in
                 MainViewController.shared.navigationController?.pushViewController(RouteViewController(route: route), animated: true)

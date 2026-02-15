@@ -165,7 +165,7 @@ class MapPreloader {
         if watchTiles.isEmpty{
             return
         }
-        if WatchConnector.shared.isWatchConnectionActivated{
+        if WatchConnector.shared.isWatchConnected{
             uploadedTiles = 0
             uploadErrors = 0
             uploadQueue = OperationQueue()

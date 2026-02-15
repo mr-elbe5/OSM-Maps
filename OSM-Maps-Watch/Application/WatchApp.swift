@@ -18,6 +18,7 @@ class WatchAppDelegate: NSObject, WKApplicationDelegate {
         Preferences.shared.followLocation = true
         WatchMapStatus.shared.zoom = MapDefaults.startZoom
         TrackRecorder.shared.delegate = TrackStatus.shared
+        RouteStatus.loadStatus()
         //TileProvider.shared?.dumpTiles()
     }
     
