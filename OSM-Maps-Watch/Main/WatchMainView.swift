@@ -24,6 +24,12 @@ struct WatchMainView: View {
                     .background(.secondary)
                     .clipped()
                     .focusable()
+                if let route = routeStatus.route{
+                    RouteView(route: route, size: proxy.size)
+                        .frame(width: proxy.size.width, height: proxy.size.height)
+                        .background(.clear)
+                        .clipped()
+                }
                 if preferences.showCurrentLocation{
                     WatchLocationView()
                         .offset(mapStatus.currentLocationOffset)
@@ -70,7 +76,7 @@ struct WatchMainView: View {
                 .mapButton()
                 .position(x: proxy.size.width - 20, y: proxy.size.height - 20)
                 if routeStatus.route != nil{
-                    NavigationLink(destination: WatchRouteView()) {
+                    NavigationLink(destination: WatchRouteControlView()) {
                         Image(systemName: "point.topright.arrow.triangle.backward.to.point.bottomleft.scurvepath")
                     }
                     .mapButton()
@@ -87,7 +93,6 @@ struct WatchMainView: View {
     }
         
 }
-
 
 #Preview {
     NavigationStack(){

@@ -6,7 +6,7 @@
 
 import SwiftUI
 
-struct WatchRouteView: View {
+struct WatchRouteControlView: View {
     
     @State var routeStatus = RouteStatus.shared
     @State var preferences = Preferences.shared

@@ -158,6 +158,19 @@ typealias MapTileGrid = [MapTileRow]
         zoomTo(zoom - 1)
     }
     
+    func getScreenPoints(_ mappoints: [Mappoint], size: CGSize) -> [CGPoint]{
+        updateWorldValues()
+        var points = [CGPoint]()
+        let originX: Double = scaledWorldCenterX - size.width/2.0
+        let originY: Double = scaledWorldCenterY - size.height/2.0
+        for point in mappoints{
+            let pnt = World.scaledPoint(point.coordinate, downScale: downScaleFromWorld)
+            let cgpnt = CGPoint(x: pnt.x - originX, y: pnt.y - originY)
+            points.append(cgpnt)
+        }
+        return points
+    }
+    
 }
 
 extension WatchMapStatus: LocationServiceDelegate{
