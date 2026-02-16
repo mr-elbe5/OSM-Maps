@@ -6,22 +6,30 @@
 
 import SwiftUI
 
-struct RouteView: View{
+struct MapLinesCanvas: View{
     
     @State var mapStatus = WatchMapStatus.shared
+    @State var routeStatus = RouteStatus.shared
+    @State var trackStatus = TrackStatus.shared
     
-    //@State private var offset = CGSize.zero
     @State private var lastOffset = CGSize.zero
     
-    var route: Route
     var size: CGSize
     
     var body: some View{
         Canvas { context, size in
-            let points = mapStatus.getScreenPoints(route.trackpoints, size: size)
-            var path = Path()
-            path.addLines(points)
-            context.stroke(path, with: .color(.blue), lineWidth: 3)
+            if trackStatus.isTracking, let track = TrackRecorder.shared.track {
+                let points = mapStatus.getScreenPoints(track.trackpoints, size: size)
+                var path = Path()
+                path.addLines(points)
+                context.stroke(path, with: .color(.yellow), lineWidth: 3)
+            }
+            if let route = routeStatus.route, routeStatus.visible{
+                let points = mapStatus.getScreenPoints(route.trackpoints, size: size)
+                var path = Path()
+                path.addLines(points)
+                context.stroke(path, with: .color(.blue), lineWidth: 3)
+            }
         }
         .offset(x: mapStatus.dragOffset.width, y: mapStatus.dragOffset.height)
         .gesture(DragGesture()

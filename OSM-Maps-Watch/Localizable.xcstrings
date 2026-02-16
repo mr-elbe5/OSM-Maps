@@ -11,7 +11,8 @@
             "value" : "%1$@ %2$lldm:"
           }
         }
-      }
+      },
+      "shouldTranslate" : false
     },
     "%@: %@" : {
       "localizations" : {
@@ -673,7 +674,7 @@
         }
       }
     },
-    "stright" : {
+    "straight" : {
       "extractionState" : "manual",
       "localizations" : {
         "de" : {

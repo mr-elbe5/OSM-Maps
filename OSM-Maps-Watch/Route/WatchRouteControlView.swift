@@ -24,7 +24,7 @@ struct WatchRouteControlView: View {
                     }
                     Spacer()
                     Button(routeStatus.visible ? "hide".localize() : "show".localize(), action: {
-                        routeStatus.visible = !routeStatus.visible
+                        routeStatus.toggleVisible()
                     })
                     Spacer()
                     Button("delete".localize(), action: {
@@ -60,5 +60,5 @@ struct RoutepointView: View {
 }
 
 #Preview {
-    WatchTrackView()
+    WatchTrackControlView()
 }

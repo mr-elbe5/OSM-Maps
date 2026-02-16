@@ -6,7 +6,7 @@
 
 import SwiftUI
 
-struct WatchTrackView: View {
+struct WatchTrackControlView: View {
     
     @State var trackStatus = TrackStatus.shared
     @State var preferences = Preferences.shared
@@ -95,5 +95,5 @@ struct WatchTrackView: View {
 }
 
 #Preview {
-    WatchTrackView()
+    WatchTrackControlView()
 }

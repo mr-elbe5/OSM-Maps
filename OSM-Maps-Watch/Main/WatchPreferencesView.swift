@@ -94,7 +94,6 @@ struct WatchPreferencesView: View {
                     Button("testConnection".localize()) {
                         phoneConnector.requestConnection()
                     }
-                    .buttonStyle(.plain)
                     .foregroundColor(.blue)
                     Spacer()
                     switch phoneConnector.connectionState{
@@ -109,11 +108,10 @@ struct WatchPreferencesView: View {
                             .foregroundColor(.yellow)
                     }
                 }
-                Spacer()
+                Spacer(minLength: 20)
                 Button("clearMapTiles".localize(), action: {
                         TileProvider.shared.deleteAllTiles()
                     })
-                    .buttonStyle(PlainButtonStyle())
                     .foregroundStyle(.red)
             }
         }

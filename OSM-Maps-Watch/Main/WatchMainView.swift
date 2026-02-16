@@ -10,6 +10,7 @@ struct WatchMainView: View {
     
     @State var trackRecorder = TrackRecorder.shared
     @State var routeStatus = RouteStatus.shared
+    @State var trackStatus = TrackStatus.shared
     @State var healthStatus = WatchHealthStatus.shared
     @State var preferences = Preferences.shared
     @State var mapStatus = WatchMapStatus.shared
@@ -24,12 +25,10 @@ struct WatchMainView: View {
                     .background(.secondary)
                     .clipped()
                     .focusable()
-                if let route = routeStatus.route{
-                    RouteView(route: route, size: proxy.size)
-                        .frame(width: proxy.size.width, height: proxy.size.height)
-                        .background(.clear)
-                        .clipped()
-                }
+                MapLinesCanvas(size: proxy.size)
+                    .frame(width: proxy.size.width, height: proxy.size.height)
+                    .background(.clear)
+                    .clipped()
                 if preferences.showCurrentLocation{
                     WatchLocationView()
                         .offset(mapStatus.currentLocationOffset)
@@ -70,7 +69,7 @@ struct WatchMainView: View {
                 }
                 .mapButton()
                 .position(x: proxy.size.width - 20, y: 20)
-                NavigationLink(destination: WatchTrackView()) {
+                NavigationLink(destination: WatchTrackControlView()) {
                     Image(systemName: trackRecorder.isTracking ? "figure.walk" : "figure.stand")
                 }
                 .mapButton()

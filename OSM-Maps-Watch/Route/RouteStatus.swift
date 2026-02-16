@@ -7,15 +7,15 @@
 import Foundation
 import CoreLocation
 
-@Observable class RouteStatus: NSObject{
+@Observable class RouteStatus: NSObject, Codable{
     
     static var storeKey: String = "route"
     
     static var shared = RouteStatus()
     
     static func loadStatus(){
-        if let route : Route = StatusManager.shared.getCodable(key: RouteStatus.storeKey){
-            RouteStatus.shared.route = route
+        if let status : RouteStatus = StatusManager.shared.getCodable(key: RouteStatus.storeKey){
+            RouteStatus.shared = status
         }
     }
     
@@ -28,6 +28,11 @@ import CoreLocation
         save()
     }
     
+    func toggleVisible(){
+        visible = !visible
+        save()
+    }
+    
     func removeRoute(){
         route = nil
         visible = false
@@ -35,8 +40,8 @@ import CoreLocation
     }
     
     func save(){
-        StatusManager.shared.saveCodable(key: RouteStatus.storeKey, value: route)
-        Log.debug("route saved")
+        StatusManager.shared.saveCodable(key: RouteStatus.storeKey, value: self)
+        //Log.debug("route status saved")
     }
     
 }
