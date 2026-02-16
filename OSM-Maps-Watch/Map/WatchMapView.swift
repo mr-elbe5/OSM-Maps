@@ -11,9 +11,6 @@ struct MapView: View {
     @State var preferences = Preferences.shared
     @State var mapStatus = WatchMapStatus.shared
     
-    @State private var offset = CGSize.zero
-    @State private var lastOffset = CGSize.zero
-    
     var body: some View {
         ZStack(alignment: .center){
             VStack(alignment: .center, spacing: 0){
@@ -34,22 +31,7 @@ struct MapView: View {
                 }
                 
             }
-            .offset(x: mapStatus.tileOffsetX + offset.width, y: mapStatus.tileOffsetY + offset.height)
-            .gesture(DragGesture()
-                .onChanged { gesture in
-                    offset = gesture.translation
-                    mapStatus.currentLocationOffset.width += offset.width - lastOffset.width
-                    mapStatus.currentLocationOffset.height += offset.height - lastOffset.height
-                    lastOffset = offset
-                }
-                .onEnded { _ in
-                    mapStatus.moveBy(offset: offset)
-                    offset = .zero
-                    lastOffset = .zero
-                    Preferences.shared.followLocation = false
-                }
-            )
-            
+            .offset(x: mapStatus.tileOffsetX + mapStatus.dragOffset.width, y: mapStatus.tileOffsetY + mapStatus.dragOffset.height)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }

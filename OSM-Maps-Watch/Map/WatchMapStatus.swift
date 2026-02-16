@@ -32,6 +32,7 @@ typealias MapTileGrid = [MapTileRow]
     var tileOffsetX: CGFloat = 0
     var tileOffsetY: CGFloat = 0
     var currentLocationOffset: CGSize = .zero
+    var dragOffset: CGSize = .zero
     
     var zoom: Int = MapDefaults.startZoom
     
