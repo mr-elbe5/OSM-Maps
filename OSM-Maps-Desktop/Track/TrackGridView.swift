@@ -10,7 +10,9 @@ import UniformTypeIdentifiers
 
 class TrackGridView: GridView{
     
-    var items = Array<TrackItem>()
+    var trackItems: Array<TrackItem>{
+        items as! Array<TrackItem>
+    }
     
     var menuView = TrackGridMenuView()
     
@@ -34,47 +36,26 @@ class TrackGridView: GridView{
         menuView.delegate = self
         addSubviewWithAnchors(scrollView, top: topAnchor, leading: menuView.trailingAnchor, trailing: trailingAnchor, bottom: bottomAnchor)
         setupCollectionView()
+        collectionView.delegate = self
         collectionView.dataSource = self
         items.append(contentsOf: AppData.shared.tracks)
         collectionView.reloadData()
     }
     
-    func updateView(){
-        collectionView.removeAllSubviews()
-        updateData()
-    }
-    
-    func updateData(){
-        items.removeAll()
-        items.append(contentsOf: AppData.shared.tracks)
-        collectionView.reloadData()
-    }
-    
-    func getSelectedTracks() -> TrackItemList{
-        var arr = TrackItemList()
-        for path in collectionView.selectionIndexPaths{
-            arr.append(items[path.item])
-        }
-        arr.sortByDate(ascending: true)
-        return arr
-    }
-    
 }
 
-extension TrackGridView: NSCollectionViewDataSource{
+extension TrackGridView{
     
-    func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
-        items.count
-    }
-    
-    func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
-        let track = items[indexPath.item]
+    override func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
+        let track = trackItems[indexPath.item]
         if track.selected{
             collectionView.selectionIndexPaths.insert(indexPath)
         }
-        let item = TrackGridItem(track: track)
-        item.delegate = self
-        return item
+        let gridItem = TrackGridItem(track: track)
+        gridItem.isSelected = track.selected
+        gridItem.setHighlightState()
+        gridItem.delegate = self
+        return gridItem
     }
     
 }

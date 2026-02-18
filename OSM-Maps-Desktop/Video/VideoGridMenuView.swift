@@ -7,44 +7,25 @@
 import AppKit
 
 protocol VideoGridMenuDelegate: GridMenuDelegate{
-    
-    func toggleSelectAll()
     func showSelected()
     func importVideosFromPhotos()
     func importVideosFromFiles()
-    func deleteSelected()
 }
 
-class VideoGridMenuView: NSView{
+class VideoGridMenuView: GridMenuView{
     
-    var selectAllButton: NSButton!
     var showPresenterButton: NSButton!
-    var increaseSizeButton: NSButton!
-    var decreaseSizeButton: NSButton!
     var importVideosFromPhotosButton: NSButton!
     var importVideosFromFilesButton: NSButton!
-    var deleteButton: NSButton!
     
-    var delegate: VideoGridMenuDelegate? = nil
-    
-    var insets = OSInsets(top: 10, left: 5, bottom: 10, right: 5)
-    
-    init(){
-        super.init(frame: .zero)
-        selectAllButton = NSButton(icon: "checkmark.square", target: self, action: #selector(toggleSelectAll))
-        selectAllButton.toolTip = "selectAll".localize()
-        showPresenterButton = NSButton(icon: "video", target: self, action: #selector(showSelected))
-        showPresenterButton.toolTip = "showSelectedVideos".localize()
-        increaseSizeButton = NSButton(icon: "plus", target: self, action: #selector(increasePreviewSize))
-        increaseSizeButton.toolTip = "increaseImageSize".localize()
-        decreaseSizeButton = NSButton(icon: "minus", target: self, action: #selector(decreasePreviewSize))
-        decreaseSizeButton.toolTip = "decreaseImageSize".localize()
+    override init(){
+        super.init()
+        showPresenterButton = NSButton(icon: "photo", target: self, action: #selector(showSelected))
+        showPresenterButton.toolTip = "showSelectedImages".localize()
         importVideosFromPhotosButton = NSButton(icon: "video.badge.plus", target: self, action: #selector(importVideosFromPhotos))
         importVideosFromPhotosButton.toolTip = "importVideosFromPhotos".localize()
         importVideosFromFilesButton = NSButton(icon: "video.badge.plus.fill", target: self, action: #selector(importVideosFromFiles))
         importVideosFromFilesButton.toolTip = "importVideosFromFiles".localize()
-        deleteButton = NSButton(icon: "trash.square", color: .systemRed, target: self, action: #selector(deleteSelected))
-        deleteButton.toolTip = "deleteSelectedImages".localize()
     }
     
     required init?(coder: NSCoder) {
@@ -52,8 +33,9 @@ class VideoGridMenuView: NSView{
     }
     
     override func setupView(){
-        addSubviewBelow(selectAllButton, insets: insets)
-        addSubviewBelow(showPresenterButton, upperView: selectAllButton, insets: insets)
+        addSubviewBelow(selectButton, insets: insets)
+        addSubviewBelow(showButton, upperView: selectButton, insets: insets)
+        addSubviewBelow(showPresenterButton, upperView: showButton, insets: insets)
         addSubviewBelow(increaseSizeButton, upperView: showPresenterButton, insets: insets)
         addSubviewBelow(decreaseSizeButton, upperView: increaseSizeButton, insets: insets)
         addSubviewBelow(importVideosFromPhotosButton, upperView: decreaseSizeButton, insets: insets)
@@ -61,32 +43,16 @@ class VideoGridMenuView: NSView{
         addSubviewBelow(deleteButton, upperView: importVideosFromFilesButton, insets: insets)
     }
     
-    @objc func toggleSelectAll(){
-        delegate?.toggleSelectAll()
-    }
-    
     @objc func showSelected(){
-        delegate?.showSelected()
-    }
-    
-    @objc func increasePreviewSize() {
-        delegate?.increasePreviewSize()
-    }
-    
-    @objc func decreasePreviewSize() {
-        delegate?.decreasePreviewSize()
+        (delegate as? VideoGridMenuDelegate)?.showSelected()
     }
     
     @objc func importVideosFromPhotos(){
-        delegate?.importVideosFromPhotos()
+        (delegate as? VideoGridMenuDelegate)?.importVideosFromPhotos()
     }
     
     @objc func importVideosFromFiles(){
-        delegate?.importVideosFromFiles()
-    }
-    
-    @objc func deleteSelected(){
-        delegate?.deleteSelected()
+        (delegate as? VideoGridMenuDelegate)?.importVideosFromFiles()
     }
     
 }

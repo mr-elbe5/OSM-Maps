@@ -10,23 +10,12 @@ protocol TrackGridMenuDelegate: GridMenuDelegate{
     func importTrack()
 }
 
-class TrackGridMenuView: NSView{
+class TrackGridMenuView: GridMenuView{
     
-    var increaseSizeButton: NSButton!
-    var decreaseSizeButton: NSButton!
     var importTrackButton: NSButton!
     
-    var delegate: TrackGridMenuDelegate? = nil
-    
-    var insets = OSInsets(top: 10, left: 5, bottom: 10, right: 5)
-    
-    init(){
-        super.init(frame: .zero)
-        
-        increaseSizeButton = NSButton(image: NSImage(systemSymbolName: "plus", accessibilityDescription: nil)!, target: self, action: #selector(increaseImageSize))
-        increaseSizeButton.toolTip = "increaseImageSize".localize()
-        decreaseSizeButton = NSButton(image: NSImage(systemSymbolName: "minus", accessibilityDescription: nil)!, target: self, action: #selector(decreaseImageSize))
-        decreaseSizeButton.toolTip = "decreaseImageSize".localize()
+    override init(){
+        super.init()
         importTrackButton = NSButton(image: NSImage(systemSymbolName: "rectangle.portrait.badge.plus", accessibilityDescription: nil)!, target: self, action: #selector(importTrack))
         importTrackButton.toolTip = "importTrack".localize()
     }
@@ -36,21 +25,16 @@ class TrackGridMenuView: NSView{
     }
     
     override func setupView(){
-        addSubviewBelow(increaseSizeButton, insets: insets)
+        addSubviewBelow(selectButton, insets: insets)
+        addSubviewBelow(showButton, upperView: selectButton, insets: insets)
+        addSubviewBelow(increaseSizeButton, upperView: showButton, insets: insets)
         addSubviewBelow(decreaseSizeButton, upperView: increaseSizeButton, insets: insets)
         addSubviewBelow(importTrackButton, upperView: decreaseSizeButton, insets: insets)
+        addSubviewBelow(deleteButton, upperView: importTrackButton, insets: insets)
     }
     
-    @objc func increaseImageSize() {
-        delegate?.increasePreviewSize()
-    }
-    
-    @objc func decreaseImageSize() {
-        delegate?.decreasePreviewSize()
-    }
-    
-    @objc func importTrack() {
-        delegate?.importTrack()
+     @objc func importTrack() {
+        (delegate as? TrackGridMenuDelegate)?.importTrack()
     }
     
 }

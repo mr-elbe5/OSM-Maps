@@ -10,11 +10,11 @@ import UniformTypeIdentifiers
 
 class ImageGridView: GridView{
     
-    var items = Array<ImageItem>()
+    var imageItems: Array<ImageItem>{
+        items as!Array<ImageItem>
+    }
     
     var menuView = ImageGridMenuView()
-    
-    var hideUnselected: Bool = false
     
     init(){
         super.init(idx: 1)
@@ -42,21 +42,10 @@ class ImageGridView: GridView{
         collectionView.reloadData()
     }
     
-    func updateView(){
-        collectionView.removeAllSubviews()
-        updateData()
-    }
-    
-    func updateData(){
-        items.removeAll()
-        items.append(contentsOf: hideUnselected ? AppData.shared.selectedImages : AppData.shared.images)
-        collectionView.reloadData()
-    }
-    
     func getSelectedImages() -> Array<ImageItem>{
         var arr = ImageItemList()
         for path in collectionView.selectionIndexPaths{
-            arr.append(items[path.item])
+            arr.append(items[path.item] as! ImageItem)
         }
         arr.sortByDate(ascending: true)
         return arr
@@ -64,14 +53,10 @@ class ImageGridView: GridView{
     
 }
 
-extension ImageGridView: NSCollectionViewDataSource{
+extension ImageGridView{
     
-    func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
-        items.count
-    }
-    
-    func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
-        let image = items[indexPath.item]
+    override func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
+        let image = imageItems[indexPath.item]
         if image.selected{
             collectionView.selectionIndexPaths.insert(indexPath)
         }
@@ -84,54 +69,10 @@ extension ImageGridView: NSCollectionViewDataSource{
     
 }
 
-extension ImageGridView: NSCollectionViewDelegate{
-    
-    func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
-        for indexPath in indexPaths{
-            if let item = collectionView.item(at: indexPath) as? ImageGridItem{
-                item.select(true)
-                print("selected \(item.item.fileName)")
-                item.setHighlightState()
-            }
-        }
-    }
-    
-    func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
-        for indexPath in indexPaths{
-            if let item = collectionView.item(at: indexPath) as? ImageGridItem{
-                item.select(false)
-                print("deselected \(item.item.fileName)")
-                item.setHighlightState()
-            }
-        }
-    }
-    
-}
-
 extension ImageGridView: ImageGridMenuDelegate{
     
-    func selectAll() {
-        items.selectAll()
-        collectionView.reloadData()
-    }
-    
-    func deselectAll() {
-        items.deselectAll()
-        collectionView.reloadData()
-    }
-    
-    func showAllItems() {
-        hideUnselected = false
-        updateData()
-    }
-    
-    func hideUnselectedItems() {
-        hideUnselected = true
-        updateData()
-    }
-    
     func showSelected() {
-        let selected = getSelectedImages()
+        let selected = getSelectedItems() as! ImageItemList
         if !selected.isEmpty{
             MainViewController.shared.showImages(selected)
         }
@@ -148,19 +89,6 @@ extension ImageGridView: ImageGridMenuDelegate{
         MainViewController.shared.addImagesFromFiles(){
             MainViewController.shared.itemsChanged()
             self.updateData()
-        }
-    }
-    
-    func deleteSelected() {
-        let selected = getSelectedImages()
-        if !selected.isEmpty{
-            if NSAlert.acceptWarning(message: "deleteItemsWarning".localize()){
-                AppData.shared.deleteItems(selected)
-                for image in selected{
-                    items.remove(obj: image)
-                }
-                collectionView.reloadData()
-            }
         }
     }
     

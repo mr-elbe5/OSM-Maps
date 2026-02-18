@@ -12,15 +12,16 @@ protocol RouteGridItemDelegate{
     func deleteRoute(_ route: RouteItem)
 }
 
-class RouteGridItem: NSCollectionViewItem, RouteGridItemViewDelegate{
+class RouteGridItem: GridItem, RouteGridItemViewDelegate{
     
-    var route: RouteItem
+    var routeItem: RouteItem{
+        item as! RouteItem
+    }
     
     var delegate: RouteGridItemDelegate? = nil
     
     init(route: RouteItem) {
-        self.route = route
-        super.init(nibName: "", bundle: nil)
+        super.init(item: route)
     }
     
     required init?(coder: NSCoder) {
@@ -35,10 +36,10 @@ class RouteGridItem: NSCollectionViewItem, RouteGridItemViewDelegate{
         view.wantsLayer = true
         view.setGrayRoundedBorders()
         
-        let dateView = NSTextField(labelWithString: route.creationDate.dateTimeString())
+        let dateView = NSTextField(labelWithString: routeItem.creationDate.dateTimeString())
         view.addSubviewWithAnchors(dateView, top: view.topAnchor, insets: OSInsets.smallInsets).centerX(view.centerXAnchor)
         
-        let imgView = NSImageView(image: route.getPreview() ?? NSImage(named: "gear.grey")!)
+        let imgView = NSImageView(image: routeItem.getPreview() ?? NSImage(named: "gear.grey")!)
         view.addSubviewFilling(imgView, insets: NSEdgeInsets(top: 25, left: 5, bottom: 25, right: 5))
         
         let iconView = NSView()
@@ -56,15 +57,15 @@ class RouteGridItem: NSCollectionViewItem, RouteGridItemViewDelegate{
     }
     
     func exportRoute() {
-        delegate?.exportRoute(route)
+        delegate?.exportRoute(routeItem)
     }
     
     func showRouteOnMap() {
-        MainViewController.shared.showRouteOnMap(route)
+        MainViewController.shared.showRouteOnMap(routeItem)
     }
     
     func deleteRoute() {
-        delegate?.deleteRoute(route)
+        delegate?.deleteRoute(routeItem)
     }
 
 }

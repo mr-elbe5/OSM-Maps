@@ -10,9 +10,11 @@ import UniformTypeIdentifiers
 
 class VideoGridView: GridView{
     
-    var items = Array<VideoItem>()
-    
     var menuView = VideoGridMenuView()
+    
+    var videoItems: Array<VideoItem>{
+        items as!Array<VideoItem>
+    }
     
     init(){
         super.init(idx: 2)
@@ -20,10 +22,6 @@ class VideoGridView: GridView{
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    deinit{
-        items.deselectAll()
     }
     
     override func setupView() {
@@ -40,40 +38,16 @@ class VideoGridView: GridView{
         collectionView.reloadData()
     }
     
-    func updateView(){
-        collectionView.removeAllSubviews()
-        updateData()
-    }
-    
-    func updateData(){
-        items.removeAll()
-        items.append(contentsOf: AppData.shared.videos)
-        collectionView.reloadData()
-    }
-    
-    func getSelectedVideos() -> VideoItemList{
-        var arr = VideoItemList()
-        for path in collectionView.selectionIndexPaths{
-            arr.append(items[path.item])
-        }
-        arr.sortByDate(ascending: true)
-        return arr
-    }
-    
 }
 
-extension VideoGridView: NSCollectionViewDataSource{
+extension VideoGridView{
     
-    func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
-        items.count
-    }
-    
-    func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
-        let item = items[indexPath.item]
+    override func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
+        let item = videoItems[indexPath.item]
         if item.selected{
             collectionView.selectionIndexPaths.insert(indexPath)
         }
-        let gridItem = VideoGridItem(item: item)
+        let gridItem = VideoGridItem(video: item)
         gridItem.isSelected = item.selected
         gridItem.setHighlightState()
         gridItem.delegate = self
@@ -82,44 +56,10 @@ extension VideoGridView: NSCollectionViewDataSource{
     
 }
 
-extension VideoGridView: NSCollectionViewDelegate{
-    
-    func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
-        for indexPath in indexPaths{
-            if let item = collectionView.item(at: indexPath) as? VideoGridItem{
-                item.select(true)
-                print("selected \(item.item.fileName)")
-                item.setHighlightState()
-            }
-        }
-    }
-    
-    func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
-        for indexPath in indexPaths{
-            if let item = collectionView.item(at: indexPath) as? VideoGridItem{
-                item.select(false)
-                print("deselected \(item.item.fileName)")
-                item.setHighlightState()
-            }
-        }
-    }
-    
-}
-
 extension VideoGridView: VideoGridMenuDelegate{
     
-    func toggleSelectAll() {
-        if items.allSelected{
-            items.deselectAll()
-        }
-        else{
-            items.selectAll()
-        }
-        collectionView.reloadData()
-    }
-    
     func showSelected() {
-        let selected = getSelectedVideos()
+        let selected = getSelectedItems() as! VideoItemList
         if !selected.isEmpty{
             MainViewController.shared.showVideos(selected)
         }
@@ -136,19 +76,6 @@ extension VideoGridView: VideoGridMenuDelegate{
         MainViewController.shared.addVideosFromFiles(){
             MainViewController.shared.itemsChanged()
             self.updateData()
-        }
-    }
-    
-    func deleteSelected() {
-        let selected = getSelectedVideos()
-        if !selected.isEmpty{
-            if NSAlert.acceptWarning(message: "deleteItemsWarning".localize()){
-                AppData.shared.deleteItems(selected)
-                for image in selected{
-                    items.remove(obj: image)
-                }
-                collectionView.reloadData()
-            }
         }
     }
     

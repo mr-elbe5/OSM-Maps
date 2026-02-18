@@ -14,16 +14,16 @@ protocol VideoGridItemDelegate{
     func deleteItem(_ video: VideoItem)
 }
 
-class VideoGridItem: NSCollectionViewItem, VideoGridItemViewDelegate{
+class VideoGridItem: GridItem, VideoGridItemViewDelegate{
     
-    var item: VideoItem
+    var videoItem: VideoItem{
+        item as! VideoItem
+    }
     
     var delegate: VideoGridItemDelegate? = nil
     
-    init(item: VideoItem) {
-        self.item = item
-        super.init(nibName: "", bundle: nil)
-        setHighlightState()
+    init(video: VideoItem) {
+        super.init(item: video)
     }
     
     required init?(coder: NSCoder) {
@@ -38,10 +38,10 @@ class VideoGridItem: NSCollectionViewItem, VideoGridItemViewDelegate{
         view.wantsLayer = true
         view.setGrayRoundedBorders()
         
-        let dateView = NSTextField(labelWithString: item.creationDate.dateTimeString())
+        let dateView = NSTextField(labelWithString: videoItem.creationDate.dateTimeString())
         view.addSubviewWithAnchors(dateView, top: view.topAnchor, insets: OSInsets.smallInsets).centerX(view.centerXAnchor)
         
-        let imgView = NSImageView(image: item.preview ?? NSImage(named: "gear.grey")!)
+        let imgView = NSImageView(image: videoItem.preview ?? NSImage(named: "gear.grey")!)
         view.addSubviewFilling(imgView, insets: NSEdgeInsets(top: 25, left: 5, bottom: 25, right: 5))
         
         let iconView = NSView()
@@ -54,38 +54,29 @@ class VideoGridItem: NSCollectionViewItem, VideoGridItemViewDelegate{
         showOnMapButton.bezelStyle = .smallSquare
         iconView.addSubviewToRight(showOnMapButton, leftView: showFullSizeButton, insets: OSInsets.flatInsets)
             .connectToRight(of: iconView)
-        showOnMapButton.isHidden = !item.hasValidCoordinate
+        showOnMapButton.isHidden = !videoItem.hasValidCoordinate
         setHighlightState()
     }
     
     override func mouseDown(with event: NSEvent) {
         if event.clickCount > 1{
-            delegate?.showVideoFullSize(item)
+            delegate?.showVideoFullSize(videoItem)
         }
         else{
             super.mouseDown(with: event)
         }
     }
     
-    func select(_ flag: Bool){
-        isSelected = flag
-        item.selected = flag
-    }
-    
     func showVideoFullSize(){
-        delegate?.showVideoFullSize(item)
+        delegate?.showVideoFullSize(videoItem)
     }
     
     func showItemOnMap(){
-        MainViewController.shared.showItemOnMap(item)
+        MainViewController.shared.showItemOnMap(videoItem)
     }
     
     func deleteItem(){
-        delegate?.deleteItem(item)
-    }
-    
-    func setHighlightState() {
-        view.backgroundColor = isSelected ? NSColor(white: 0.7, alpha: 0.3) : .black
+        delegate?.deleteItem(videoItem)
     }
 
 }

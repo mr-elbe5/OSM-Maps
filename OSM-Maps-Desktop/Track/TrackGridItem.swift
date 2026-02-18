@@ -13,15 +13,16 @@ protocol TrackGridItemDelegate{
     func deleteTrack(_ track: TrackItem)
 }
 
-class TrackGridItem: NSCollectionViewItem, TrackGridItemViewDelegate{
+class TrackGridItem: GridItem, TrackGridItemViewDelegate{
     
-    var track: TrackItem
+    var trackItem: TrackItem{
+        item as! TrackItem
+    }
     
     var delegate: TrackGridItemDelegate? = nil
     
     init(track: TrackItem) {
-        self.track = track
-        super.init(nibName: "", bundle: nil)
+        super.init(item: track)
     }
     
     required init?(coder: NSCoder) {
@@ -36,10 +37,10 @@ class TrackGridItem: NSCollectionViewItem, TrackGridItemViewDelegate{
         view.wantsLayer = true
         view.setGrayRoundedBorders()
         
-        let dateView = NSTextField(labelWithString: track.creationDate.dateTimeString())
+        let dateView = NSTextField(labelWithString: trackItem.creationDate.dateTimeString())
         view.addSubviewWithAnchors(dateView, top: view.topAnchor, insets: OSInsets.smallInsets).centerX(view.centerXAnchor)
         
-        let imgView = NSImageView(image: track.getPreview() ?? NSImage(named: "gear.grey")!)
+        let imgView = NSImageView(image: trackItem.getPreview() ?? NSImage(named: "gear.grey")!)
         view.addSubviewFilling(imgView, insets: NSEdgeInsets(top: 25, left: 5, bottom: 25, right: 5))
         
         let iconView = NSView()
@@ -63,24 +64,24 @@ class TrackGridItem: NSCollectionViewItem, TrackGridItemViewDelegate{
     }
     
     func editTrack() {
-        delegate?.editTrack(track)
+        delegate?.editTrack(trackItem)
     }
     
     func exportTrack() {
-        delegate?.exportTrack(track)
+        delegate?.exportTrack(trackItem)
     }
     
     @objc func showTrackImages(){
-        let images = AppData.shared.getImagesOfTrack(item: track)
+        let images = AppData.shared.getImagesOfTrack(item: trackItem)
         MainViewController.shared.showImages(images)
     }
     
     func showTrackOnMap() {
-        MainViewController.shared.showTrackOnMap(track)
+        MainViewController.shared.showTrackOnMap(trackItem)
     }
     
     func deleteTrack() {
-        delegate?.deleteTrack(track)
+        delegate?.deleteTrack(trackItem)
     }
 
 }

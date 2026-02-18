@@ -10,7 +10,9 @@ import UniformTypeIdentifiers
 
 class RouteGridView: GridView{
     
-    var items = Array<RouteItem>()
+    var routeItems: Array<RouteItem>{
+        items as! Array<RouteItem>
+    }
     
     var menuView = RouteGridMenuView()
     
@@ -22,10 +24,6 @@ class RouteGridView: GridView{
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit{
-        items.deselectAll()
-    }
-    
     override func setupView() {
         super.setupView()
         addSubviewWithAnchors(menuView, top: topAnchor, leading: leadingAnchor, bottom: bottomAnchor)
@@ -34,47 +32,26 @@ class RouteGridView: GridView{
         menuView.delegate = self
         addSubviewWithAnchors(scrollView, top: topAnchor, leading: menuView.trailingAnchor, trailing: trailingAnchor, bottom: bottomAnchor)
         setupCollectionView()
+        collectionView.delegate = self
         collectionView.dataSource = self
         items.append(contentsOf: AppData.shared.routes)
         collectionView.reloadData()
     }
     
-    func updateView(){
-        collectionView.removeAllSubviews()
-        updateData()
-    }
-    
-    func updateData(){
-        items.removeAll()
-        items.append(contentsOf: AppData.shared.routes)
-        collectionView.reloadData()
-    }
-    
-    func getSelectedRoutes() -> RouteItemList{
-        var arr = RouteItemList()
-        for path in collectionView.selectionIndexPaths{
-            arr.append(items[path.item])
-        }
-        arr.sortByDate(ascending: true)
-        return arr
-    }
-    
 }
 
-extension RouteGridView: NSCollectionViewDataSource{
+extension RouteGridView{
     
-    func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
-        items.count
-    }
-    
-    func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
-        let route = items[indexPath.item]
+    override func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
+        let route = routeItems[indexPath.item]
         if route.selected{
             collectionView.selectionIndexPaths.insert(indexPath)
         }
-        let item = RouteGridItem(route: route)
-        item.delegate = self
-        return item
+        let gridItem = RouteGridItem(route: route)
+        gridItem.isSelected = route.selected
+        gridItem.setHighlightState()
+        gridItem.delegate = self
+        return gridItem
     }
     
 }

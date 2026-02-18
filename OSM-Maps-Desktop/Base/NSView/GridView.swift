@@ -8,20 +8,20 @@ import AppKit
 
 import UniformTypeIdentifiers
 
-protocol GridMenuDelegate{
-    func increasePreviewSize()
-    func decreasePreviewSize()
-}
-
 class GridView: NSView, GridMenuDelegate{
     
     static var defaultGridSize: CGFloat = 200
     static var gridSizeFactors : Array<CGFloat> = [0.5, 0.75, 1.0, 1.5, 2.0]
     
+    var items = Array<MapItem>()
     var idx: Int = 0
     let scrollView = NSScrollView()
     let collectionView = NSCollectionView()
     let layout = NSCollectionViewGridLayout()
+    
+    var hideUnselected: Bool = false
+    
+    var delegate: GridMenuDelegate?
     
     var gridSize: CGFloat{
         GridView.defaultGridSize * GridView.gridSizeFactors[Preferences.shared.gridSizeFactorIndex]
@@ -36,9 +36,24 @@ class GridView: NSView, GridMenuDelegate{
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit{
+        items.deselectAll()
+    }
+    
     override func setupView() {
         super.setupView()
         backgroundColor = .black
+    }
+    
+    func updateView(){
+        collectionView.removeAllSubviews()
+        updateData()
+    }
+    
+    func updateData(){
+        items.removeAll()
+        items.append(contentsOf: AppData.shared.videos)
+        collectionView.reloadData()
     }
     
     func increasePreviewSize() {
@@ -72,6 +87,85 @@ class GridView: NSView, GridMenuDelegate{
         layout.maximumItemSize = CGSize(width: gridSize * 1.25, height: gridSize * 1.25)
         collectionView.collectionViewLayout = layout
         
+    }
+    
+    func selectAll() {
+        items.selectAll()
+        collectionView.reloadData()
+    }
+    
+    func deselectAll() {
+        items.deselectAll()
+        collectionView.reloadData()
+    }
+    
+    func showAllItems() {
+        hideUnselected = false
+        updateData()
+    }
+    
+    func hideUnselectedItems() {
+        hideUnselected = true
+        updateData()
+    }
+    
+    func deleteSelected() {
+        let selected = getSelectedItems()
+        if !selected.isEmpty{
+            if NSAlert.acceptWarning(message: "deleteItemsWarning".localize()){
+                AppData.shared.deleteItems(selected)
+                for item in selected{
+                    items.remove(obj: item)
+                }
+                collectionView.reloadData()
+            }
+        }
+    }
+    
+    func getSelectedItems() -> MapItemList{
+        var arr = MapItemList()
+        for path in collectionView.selectionIndexPaths{
+            arr.append(items[path.item])
+            arr.append(items[path.item])
+        }
+        arr.sortByDate(ascending: true)
+        return arr
+    }
+    
+}
+
+extension GridView: NSCollectionViewDataSource{
+    
+    func collectionView(_ collectionView: NSCollectionView, numberOfItemsInSection section: Int) -> Int {
+        items.count
+    }
+    
+    func collectionView(_ collectionView: NSCollectionView, itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
+        NSCollectionViewItem()
+    }
+    
+}
+
+extension GridView: NSCollectionViewDelegate{
+    
+    func collectionView(_ collectionView: NSCollectionView, didSelectItemsAt indexPaths: Set<IndexPath>) {
+        for indexPath in indexPaths{
+            if let item = collectionView.item(at: indexPath) as? GridItem{
+                item.select(true)
+                print("selected \(item.item)")
+                item.setHighlightState()
+            }
+        }
+    }
+    
+    func collectionView(_ collectionView: NSCollectionView, didDeselectItemsAt indexPaths: Set<IndexPath>) {
+        for indexPath in indexPaths{
+            if let item = collectionView.item(at: indexPath) as? GridItem{
+                item.select(false)
+                print("deselected \(item.item)")
+                item.setHighlightState()
+            }
+        }
     }
     
 }
