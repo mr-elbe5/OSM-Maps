@@ -19,8 +19,29 @@ import CoreLocation
         }
     }
     
+    enum CodingKeys: String, CodingKey {
+        case route
+        case visible
+    }
+    
     var route: Route? = nil
     var visible: Bool = false
+    
+    override init(){
+        super.init()
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        route = try values.decodeIfPresent(Route.self, forKey: .route)
+        visible = try values.decodeIfPresent(Bool.self, forKey: .visible) ?? true
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(route, forKey: .route)
+        try container.encode(visible, forKey: .visible)
+    }
     
     func setRoute(_ route: Route){
         self.route = route

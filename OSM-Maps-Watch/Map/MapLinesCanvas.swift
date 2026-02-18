@@ -31,21 +31,19 @@ struct MapLinesCanvas: View{
                 context.stroke(path, with: .color(.blue), lineWidth: 3)
             }
         }
-        .offset(x: mapStatus.dragOffset.width, y: mapStatus.dragOffset.height)
         .gesture(DragGesture()
             .onChanged { gesture in
-                mapStatus.dragOffset = gesture.translation
-                mapStatus.currentLocationOffset.width += mapStatus.dragOffset.width - lastOffset.width
-                mapStatus.currentLocationOffset.height += mapStatus.dragOffset.height - lastOffset.height
-                lastOffset = mapStatus.dragOffset
+                Preferences.shared.followLocation = false
+                let dragOffset = gesture.translation
+                let diff = CGSize(width: dragOffset.width - lastOffset.width, height: dragOffset.height - lastOffset.height)
+                mapStatus.moveBy(offset: diff)
+                lastOffset = dragOffset
             }
             .onEnded { _ in
-                mapStatus.moveBy(offset: mapStatus.dragOffset)
-                mapStatus.dragOffset = .zero
                 lastOffset = .zero
-                Preferences.shared.followLocation = false
             }
         )
     }
     
 }
+

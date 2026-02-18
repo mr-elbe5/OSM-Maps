@@ -13,7 +13,6 @@ class MapView: NSView {
     
     var menuView = MapMenuView()
     var scrollView = MapScrollView()
-    var statusView = MapStatusView()
     var crossLocationView = NSButton().asIconButton("plus.circle", color: .black)
     
     override func setupView(){
@@ -21,12 +20,9 @@ class MapView: NSView {
             .width(40)
         menuView.setupView()
         
-        addSubviewWithAnchors(scrollView, top: topAnchor, leading: menuView.trailingAnchor, trailing: trailingAnchor, insets: .zero)
+        addSubviewWithAnchors(scrollView, top: topAnchor, leading: menuView.trailingAnchor, trailing: trailingAnchor, bottom: bottomAnchor, insets: .zero)
         scrollView.setupView()
         scrollView.mapDelegate = self
-        statusView.setupView()
-        addSubviewWithAnchors(statusView, top: scrollView.bottomAnchor, leading: menuView.trailingAnchor, trailing: trailingAnchor, bottom: bottomAnchor, insets: .zero)
-        
         crossLocationView.isBordered = false
         crossLocationView.font = .systemFont(ofSize: 20)
         crossLocationView.target = self
@@ -105,7 +101,6 @@ extension MapView : MapScrollViewDelegate{
         MapStatus.shared.scale = World.downScale(to: zoom)
         MapStatus.shared.save()
         scrollView.updateLayerContents()
-        statusView.setZoom(MapStatus.shared.zoom)
     }
     
     override func autoscroll(with event: NSEvent) -> Bool {

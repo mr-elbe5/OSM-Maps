@@ -31,7 +31,7 @@ struct MapView: View {
                 }
                 
             }
-            .offset(x: mapStatus.tileOffsetX + mapStatus.dragOffset.width, y: mapStatus.tileOffsetY + mapStatus.dragOffset.height)
+            .offset(x: mapStatus.tileOffsetX, y: mapStatus.tileOffsetY)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
