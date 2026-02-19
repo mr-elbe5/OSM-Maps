@@ -23,10 +23,6 @@ class GridView: NSView, GridMenuDelegate{
     
     var delegate: GridMenuDelegate?
     
-    var gridSize: CGFloat{
-        GridView.defaultGridSize * GridView.gridSizeFactors[Preferences.shared.gridSizeFactorIndex]
-    }
-    
     init(idx: Int){
         self.idx = idx
         super.init(frame: .zero)
@@ -59,17 +55,14 @@ class GridView: NSView, GridMenuDelegate{
     func increasePreviewSize() {
         if Preferences.shared.gridSizeFactorIndex < TrackGridView.gridSizeFactors.count - 1{
             Preferences.shared.gridSizeFactorIndex += 1
-            let gridSize = gridSize
-            layout.minimumItemSize = CGSize(width: gridSize * 0.75, height: gridSize * 0.75)
-            layout.maximumItemSize = CGSize(width: gridSize * 1.25, height: gridSize * 1.25)
+            setCellSize()
         }
     }
     
     func decreasePreviewSize() {
         if Preferences.shared.gridSizeFactorIndex > 0{
             Preferences.shared.gridSizeFactorIndex -= 1
-            layout.minimumItemSize = CGSize(width: gridSize * 0.75, height: gridSize * 0.75)
-            layout.maximumItemSize = CGSize(width: gridSize * 1.25, height: gridSize * 1.25)
+            setCellSize()
         }
     }
     
@@ -82,11 +75,15 @@ class GridView: NSView, GridMenuDelegate{
         scrollView.documentView = collectionView
         layout.minimumLineSpacing = OSInsets.smallInset
         layout.minimumInteritemSpacing = OSInsets.smallInset
-        let gridSize = gridSize
-        layout.minimumItemSize = CGSize(width: gridSize * 0.75, height: gridSize * 0.75)
-        layout.maximumItemSize = CGSize(width: gridSize * 1.25, height: gridSize * 1.25)
+        setCellSize()
         collectionView.collectionViewLayout = layout
         
+    }
+    
+    func setCellSize(){
+        let gridSize = GridView.defaultGridSize * GridView.gridSizeFactors[Preferences.shared.gridSizeFactorIndex]
+        layout.minimumItemSize = CGSize(width: gridSize * 0.75, height: gridSize * 0.75)
+        layout.maximumItemSize = CGSize(width: gridSize * 1.25, height: gridSize * 1.25)
     }
     
     func selectAll() {
