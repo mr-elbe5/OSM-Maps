@@ -53,7 +53,8 @@ class VideoPicker: NSObject  {
             for url in panel.urls{
                 let video = VideoItem()
                 if FileManager.default.fileExists(url: url){
-                    video.fileName = url.lastPathComponent
+                    video.originalFileName = url.lastPathComponent
+                    video.generateFileName()
                     if video.copyFile(from: url), video.createPreviewFile(){
                         if self.atCenter{
                             video.coordinate = MapStatus.shared.centerCoordinate
@@ -61,11 +62,13 @@ class VideoPicker: NSObject  {
                         else{
                             video.coordinate = .zero
                         }
-                        AppData.shared.addItem(video)
-                        AppData.shared.sortItemsByDate(ascending: ViewFilter.shared.defaultSortAscending)
-                        AppData.shared.save()
-                        DispatchQueue.main.async {
-                            self.completionHandler?()
+                        video.updateLocation(){
+                            AppData.shared.addItem(video)
+                            AppData.shared.sortItemsByDate(ascending: ViewFilter.shared.defaultSortAscending)
+                            AppData.shared.save()
+                            DispatchQueue.main.async {
+                                self.completionHandler?()
+                            }
                         }
                     }
                 }
@@ -107,7 +110,8 @@ extension VideoPicker: PHPickerViewControllerDelegate{
     func addVideo(url: URL?, asset: PHAsset?){
         if let url = url, FileManager.default.fileExists(url: url){
             let video = VideoItem()
-            video.fileName = url.lastPathComponent
+            video.originalFileName = url.lastPathComponent
+            video.generateFileName()
             if video.copyFile(from: url), video.createPreviewFile(){
                 if self.atCenter{
                     video.coordinate = MapStatus.shared.centerCoordinate
@@ -116,11 +120,13 @@ extension VideoPicker: PHPickerViewControllerDelegate{
                     video.coordinate = asset?.location?.coordinate ?? .zero
                 }
                 video.creationDate = asset?.creationDate ?? Date()
-                AppData.shared.addItem(video)
-                AppData.shared.sortItemsByDate(ascending: ViewFilter.shared.defaultSortAscending)
-                AppData.shared.save()
-                DispatchQueue.main.async {
-                    self.completionHandler?()
+                video.updateLocation(){
+                    AppData.shared.addItem(video)
+                    AppData.shared.sortItemsByDate(ascending: ViewFilter.shared.defaultSortAscending)
+                    AppData.shared.save()
+                    DispatchQueue.main.async {
+                        self.completionHandler?()
+                    }
                 }
             }
         }

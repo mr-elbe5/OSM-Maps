@@ -16,7 +16,7 @@ class TrackGridMenuView: GridMenuView{
     
     override init(){
         super.init()
-        importTrackButton = NSButton(image: NSImage(systemSymbolName: "rectangle.portrait.badge.plus", accessibilityDescription: nil)!, target: self, action: #selector(importTrack))
+        importTrackButton = NSButton(image: NSImage(systemSymbolName: "square.and.arrow.down", accessibilityDescription: nil)!, target: self, action: #selector(importTrack))
         importTrackButton.toolTip = "importTrack".localize()
     }
     
@@ -26,8 +26,7 @@ class TrackGridMenuView: GridMenuView{
     
     override func setupView(){
         addSubviewBelow(selectButton, insets: insets)
-        addSubviewBelow(showButton, upperView: selectButton, insets: insets)
-        addSubviewBelow(increaseSizeButton, upperView: showButton, insets: insets)
+        addSubviewBelow(increaseSizeButton, upperView: selectButton, insets: insets)
         addSubviewBelow(decreaseSizeButton, upperView: increaseSizeButton, insets: insets)
         addSubviewBelow(importTrackButton, upperView: decreaseSizeButton, insets: insets)
         addSubviewBelow(deleteButton, upperView: importTrackButton, insets: insets)

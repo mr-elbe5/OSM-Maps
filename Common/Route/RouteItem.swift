@@ -108,23 +108,7 @@ class RouteItem: MapItem{
     }
     
     func updateLocations(onCompletion: (() -> Void)? = nil){
-        var startDone: Bool = false
-        var endDone: Bool = false
-        if let startLocation = startLocation, let endLocation = endLocation{
-            startLocation.updateLocation(){
-                startDone = true
-                if startDone && endDone{
-                    onCompletion?()
-                }
-            }
-            endLocation.updateLocation(){
-                endDone = true
-                if startDone && endDone{
-                    onCompletion?()
-                }
-            }
-        }
-        else{
+        LocationData.updateLocations(for: [self, startLocation, endLocation]){ success in
             onCompletion?()
         }
     }

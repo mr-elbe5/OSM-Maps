@@ -38,6 +38,12 @@ class RouteGridView: GridView{
         collectionView.reloadData()
     }
     
+    override func updateData(){
+        items.removeAll()
+        items.append(contentsOf: AppData.shared.routes)
+        collectionView.reloadData()
+    }
+    
 }
 
 extension RouteGridView{

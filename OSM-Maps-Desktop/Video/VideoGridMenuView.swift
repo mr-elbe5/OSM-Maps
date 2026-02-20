@@ -20,11 +20,11 @@ class VideoGridMenuView: GridMenuView{
     
     override init(){
         super.init()
-        showPresenterButton = NSButton(icon: "photo", target: self, action: #selector(showSelected))
+        showPresenterButton = NSButton(icon: "photo.badge.magnifyingglass", target: self, action: #selector(showSelected))
         showPresenterButton.toolTip = "showSelectedImages".localize()
-        importVideosFromPhotosButton = NSButton(icon: "video.badge.plus", target: self, action: #selector(importVideosFromPhotos))
+        importVideosFromPhotosButton = NSButton(icon: "square.and.arrow.down", target: self, action: #selector(importVideosFromPhotos))
         importVideosFromPhotosButton.toolTip = "importVideosFromPhotos".localize()
-        importVideosFromFilesButton = NSButton(icon: "video.badge.plus.fill", target: self, action: #selector(importVideosFromFiles))
+        importVideosFromFilesButton = NSButton(icon: "square.and.arrow.down.fill", target: self, action: #selector(importVideosFromFiles))
         importVideosFromFilesButton.toolTip = "importVideosFromFiles".localize()
     }
     
@@ -34,8 +34,7 @@ class VideoGridMenuView: GridMenuView{
     
     override func setupView(){
         addSubviewBelow(selectButton, insets: insets)
-        addSubviewBelow(showButton, upperView: selectButton, insets: insets)
-        addSubviewBelow(showPresenterButton, upperView: showButton, insets: insets)
+        addSubviewBelow(showPresenterButton, upperView: selectButton, insets: insets)
         addSubviewBelow(increaseSizeButton, upperView: showPresenterButton, insets: insets)
         addSubviewBelow(decreaseSizeButton, upperView: increaseSizeButton, insets: insets)
         addSubviewBelow(importVideosFromPhotosButton, upperView: decreaseSizeButton, insets: insets)

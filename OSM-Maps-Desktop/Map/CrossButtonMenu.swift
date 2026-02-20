@@ -88,7 +88,6 @@ class CrossButtonMenuView: PopoverView{
             } else{
                 self.nameLabel.stringValue = location.coordinate.asString
             }
-            
         }
     }
     

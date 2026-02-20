@@ -100,6 +100,12 @@ class TrackItem: MapItem{
         return true
     }
     
+    func assertPreview(){
+        if !FileManager.default.fileExists(url: previewURL){
+            TrackImageCreator.createPreview(item: self)
+        }
+    }
+    
     func getPreview() -> OSImage?{
         if let data = getPreviewFile(){
             return OSImage(data: data)

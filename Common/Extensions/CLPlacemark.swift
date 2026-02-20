@@ -31,26 +31,22 @@ extension CLPlacemark{
         })
     }
     
-    static func getPlacemarkName(for coordinate: CLLocationCoordinate2D, result: @escaping(String) -> Void){
-        getPlacemarkName(for: CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude), result: result)
-    }
-    
-    static func getPlacemarkName(for location: CLLocation, result: @escaping(String) -> Void){
-        CLGeocoder().reverseGeocodeLocation(location, completionHandler: { (placemarks, error) in
-            if let error = error{
-                Log.error(error: error)
-                result("")
-                return
-            }
-            if let placemark =  placemarks?[0]{
-                //Log.debug("got placemark")
-                result(placemark.asString)
-            }
-            else{
-                //Log.debug("no placemark")
-                result("")
-            }
-        })
+    static func getPlacemarks(for locations: [CLLocation], result: @escaping([CLPlacemark?]) -> Void){
+        var placemarks = [CLPlacemark?]()
+        for _ in locations{
+            placemarks.append(nil)
+        }
+        var done = 0
+        for i in 0..<locations.count{
+            let location = locations[i]
+            getPlacemark(for: location, result: { (placemark) in
+                placemarks[i] = placemark
+                done += 1
+                if done == locations.count{
+                    result(placemarks)
+                }
+            })
+        }
     }
     
     var nameString: String?{

@@ -20,11 +20,11 @@ class ImageGridMenuView: GridMenuView{
     
     override init(){
         super.init()
-        showPresenterButton = NSButton(icon: "photo", target: self, action: #selector(showSelected))
+        showPresenterButton = NSButton(icon: "photo.badge.magnifyingglass", target: self, action: #selector(showSelected))
         showPresenterButton.toolTip = "showSelectedImages".localize()
-        importImagesFromPhotosButton = NSButton(icon: "photo.badge.plus", target: self, action: #selector(importImagesFromPhotos))
+        importImagesFromPhotosButton = NSButton(icon: "square.and.arrow.down", target: self, action: #selector(importImagesFromPhotos))
         importImagesFromPhotosButton.toolTip = "importImagesFromPhotos".localize()
-        importImagesFromFilesButton = NSButton(icon: "photo.badge.plus.fill", target: self, action: #selector(importImagesFromFiles))
+        importImagesFromFilesButton = NSButton(icon: "square.and.arrow.down.fill", target: self, action: #selector(importImagesFromFiles))
         importImagesFromFilesButton.toolTip = "importImagesFromFiles".localize()
     }
     
@@ -34,8 +34,7 @@ class ImageGridMenuView: GridMenuView{
     
     override func setupView(){
         addSubviewBelow(selectButton, insets: insets)
-        addSubviewBelow(showButton, upperView: selectButton, insets: insets)
-        addSubviewBelow(showPresenterButton, upperView: showButton, insets: insets)
+        addSubviewBelow(showPresenterButton, upperView: selectButton, insets: insets)
         addSubviewBelow(increaseSizeButton, upperView: showPresenterButton, insets: insets)
         addSubviewBelow(decreaseSizeButton, upperView: increaseSizeButton, insets: insets)
         addSubviewBelow(importImagesFromPhotosButton, upperView: decreaseSizeButton, insets: insets)

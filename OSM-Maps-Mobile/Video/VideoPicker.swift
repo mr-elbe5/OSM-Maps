@@ -81,7 +81,8 @@ extension VideoPicker: PHPickerViewControllerDelegate{
     func addVideo(url: URL?, asset: PHAsset?){
         if let url = url, FileManager.default.fileExists(url: url){
             let video = VideoItem()
-            video.fileName = url.lastPathComponent
+            video.originalFileName = url.lastPathComponent
+            video.generateFileName()
             if video.copyFile(from: url), video.createPreviewFile(){
                 if self.atCenter{
                     video.coordinate = MapStatus.shared.centerCoordinate
@@ -89,6 +90,7 @@ extension VideoPicker: PHPickerViewControllerDelegate{
                 else{
                     video.coordinate = asset?.location?.coordinate ?? .zero
                 }
+                video.generateFileName()
                 video.creationDate = asset?.creationDate ?? Date()
                 AppData.shared.addItem(video)
                 AppData.shared.sortItemsByDate(ascending: ViewFilter.shared.defaultSortAscending)
@@ -112,7 +114,8 @@ extension VideoPicker : UIDocumentPickerDelegate{
                     if atCenter{
                         video.coordinate = MapStatus.shared.centerCoordinate
                     }
-                    video.fileName = url.lastPathComponent
+                    video.originalFileName = url.lastPathComponent
+                    video.generateFileName()
                     if video.copyFile(from: url), video.createPreviewFile(){
                         if self.atCenter{
                             video.coordinate = MapStatus.shared.centerCoordinate

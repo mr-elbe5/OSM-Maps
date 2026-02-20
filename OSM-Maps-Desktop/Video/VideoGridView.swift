@@ -38,6 +38,12 @@ class VideoGridView: GridView{
         collectionView.reloadData()
     }
     
+    override func updateData(){
+        items.removeAll()
+        items.append(contentsOf: AppData.shared.videos)
+        collectionView.reloadData()
+    }
+    
 }
 
 extension VideoGridView{

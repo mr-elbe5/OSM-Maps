@@ -45,7 +45,7 @@ class ImageGridItem: GridItem, ImageGridItemViewDelegate{
         let iconView = NSView()
         view.addSubviewWithAnchors(iconView, bottom: view.bottomAnchor, insets: OSInsets.smallInsets).centerX(view.centerXAnchor)
         
-        let showFullSizeButton = NSButton(image: NSImage(systemSymbolName: "square.resize.up", accessibilityDescription: nil)!, target: itemView, action: #selector(itemView.showImageFullSize))
+        let showFullSizeButton = NSButton(image: NSImage(systemSymbolName: "magnifyingglass", accessibilityDescription: nil)!, target: itemView, action: #selector(itemView.showImageFullSize))
         showFullSizeButton.bezelStyle = .smallSquare
         iconView.addSubviewToRight(showFullSizeButton, insets: OSInsets.flatInsets)
         let showOnMapButton = NSButton(image: NSImage(systemSymbolName: "map", accessibilityDescription: nil)!, target: itemView, action: #selector(itemView.showImageOnMap))

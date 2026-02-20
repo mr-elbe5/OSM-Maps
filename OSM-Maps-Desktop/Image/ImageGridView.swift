@@ -51,6 +51,12 @@ class ImageGridView: GridView{
         return arr
     }
     
+    override func updateData(){
+        items.removeAll()
+        items.append(contentsOf: AppData.shared.images)
+        collectionView.reloadData()
+    }
+    
 }
 
 extension ImageGridView{

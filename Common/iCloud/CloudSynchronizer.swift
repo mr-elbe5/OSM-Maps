@@ -309,6 +309,11 @@ class CloudSynchronizer: @unchecked Sendable{
                     Log.info("creating local track item")
                     AppData.shared.addItem(trackItem)
                 }
+            case RouteItem.itemType:
+                if let json = remoteRecord.json, let routeItem: RouteItem = RouteItem.fromJSON(encoded: json){
+                    Log.info("creating local route item")
+                    AppData.shared.addItem(routeItem)
+                }
             default:
                 return
             }
@@ -331,6 +336,10 @@ class CloudSynchronizer: @unchecked Sendable{
             case TrackItem.itemType:
                 if let json = remoteRecord.json, let trackItem: TrackItem = TrackItem.fromJSON(encoded: json){
                     item.update(from: trackItem)
+                }
+            case RouteItem.itemType:
+                if let json = remoteRecord.json, let routeItem: RouteItem = RouteItem.fromJSON(encoded: json){
+                    item.update(from: routeItem)
                 }
             default:
                 return

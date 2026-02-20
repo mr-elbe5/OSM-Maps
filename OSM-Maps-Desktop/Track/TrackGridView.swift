@@ -42,6 +42,12 @@ class TrackGridView: GridView{
         collectionView.reloadData()
     }
     
+    override func updateData(){
+        items.removeAll()
+        items.append(contentsOf: AppData.shared.tracks)
+        collectionView.reloadData()
+    }
+    
 }
 
 extension TrackGridView{
@@ -113,8 +119,10 @@ extension TrackGridView: TrackGridMenuDelegate{
                 Log.debug(name)
                 track.name = name
             }
+            track.updateFromTrackpoints()
             let item = TrackItem()
             item.track = track
+            item.assertPreview()
             AppData.shared.addItem(item)
             AppData.shared.save()
             DispatchQueue.main.async {

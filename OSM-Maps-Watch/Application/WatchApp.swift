@@ -68,7 +68,9 @@ struct Watch_App: App {
             }
             .onAppear(){
                 WatchMapStatus.shared.screenSize = WKInterfaceDevice.current().screenBounds
+                WatchMapStatus.shared.locationChanged(to: LocationStatus.shared.location)
                 LocationService.shared.delegate = WatchMapStatus.shared
+                WatchMapStatus.shared.updateTiles()
             }
         }
         

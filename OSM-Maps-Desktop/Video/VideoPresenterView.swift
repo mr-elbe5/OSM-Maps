@@ -23,7 +23,6 @@ class VideoPresenterView: PresenterView {
     }
     
     override func setupItemView(){
-        //todo
         videoPlayer.controlsStyle = .floating
         addSubviewFilling(videoPlayer)
     }

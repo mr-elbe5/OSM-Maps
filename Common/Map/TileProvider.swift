@@ -20,33 +20,19 @@ class TileProvider{
         }
     }
     
-    var tileCache = TileCache()
-    
     func getTileImage(tile: MapTile, result: @escaping (Bool) -> Void) {
         if !tile.valid {
             return
         }
         //Log.debug("cache has \(tileCache.count) tiles")
-        let key = tile.shortDescription
-        if let data = tileCache.getData(key: key) {
-            tile.imageData = data
-            //Log.debug("got cached tile")
-            result(true)
-            return
-        }
         if tile.exists, let fileData = FileManager.default.contents(atPath: tile.fileUrl.path){
             //Log.debug("got local tile")
-            tileCache.setData(key: tile.shortDescription, data: fileData)
             tile.imageData = fileData
             result(true)
         } else {
             //Log.debug("loading tile")
             loadTileImage(tile: tile, result: result)
         }
-    }
-    
-    private func getTileFromCache(name: String) -> Data? {
-        tileCache.getData(key: name)
     }
     
     func loadTileImage(tile: MapTile, result: @escaping (Bool) -> Void) {
@@ -89,7 +75,6 @@ class TileProvider{
                 if tries > 1{
                     //Log.debug("TileProvider got tile in try \(tries)")
                 }
-                self.tileCache.setData(key: tile.shortDescription, data: data)
                 if !self.saveTile(fileUrl: tile.fileUrl, data: data){
                     Log.error("TileProvider could not save tile \(tile.shortDescription)")
                 }
@@ -123,8 +108,6 @@ class TileProvider{
     }
     
     func deleteAllTiles(){
-        tileCache.clear()
-        Log.info("TileProvider cache cleared")
         let count = FileManager.default.deleteAllFiles(dirURL: BasePaths.tileDirURL)
         Log.info("TileProvider \(count) tiles cleared")
     }

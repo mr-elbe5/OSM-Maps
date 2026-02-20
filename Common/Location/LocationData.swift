@@ -9,6 +9,28 @@ import CoreLocation
 
 class LocationData: Mappoint{
     
+    static func updateLocations(for locations: [LocationData?], result: @escaping(Bool) -> Void){
+        var done = 0
+        var hasErrors: Bool = false
+        for i in 0..<locations.count{
+            if let location = locations[i]{
+                location.updateLocation(){
+                    done += 1
+                    if done == locations.count{
+                        result(!hasErrors)
+                    }
+                }
+            }
+            else{
+                done += 1
+                hasErrors = true
+                if done == locations.count{
+                    result(false)
+                }
+            }
+        }
+    }
+    
     private enum CodingKeys: String, CodingKey {
         case street
         case city
@@ -104,6 +126,9 @@ class LocationData: Mappoint{
                     onCompletion?()
                 }
             })
+        }
+        else{
+            onCompletion?()
         }
     }
 

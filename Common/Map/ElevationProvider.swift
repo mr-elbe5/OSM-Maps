@@ -12,7 +12,7 @@ class ElevationProvider{
     
     func getElevation(for coordinate: CLLocationCoordinate2D, result: @escaping (Double) -> Void) {
         if let url = URL(string: MapDefaults.elbe5ElevationUrl.replacing("{lat}", with: String(coordinate.latitude)).replacing("{lon}", with: String(coordinate.longitude))){
-            let request = URLRequest(url: url, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 10.0)
+            let request = URLRequest(url: url, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 5.0)
             let task = getElevationTask(request: request, result: result)
             DispatchQueue.global(qos: .userInitiated).async{
                 //Log.debug("getting elevation")

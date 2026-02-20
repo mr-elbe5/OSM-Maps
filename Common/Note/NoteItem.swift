@@ -53,7 +53,7 @@ class NoteItem: MapItem {
     }
     
     func updateLocation(){
-        updateLocation(){
+        super.updateLocation(){
             if self.name.isEmpty{
                 self.name = self.address
             }

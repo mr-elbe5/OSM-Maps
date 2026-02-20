@@ -16,7 +16,7 @@ class RouteGridMenuView: GridMenuView{
     
     override init(){
         super.init()
-        importRouteButton = NSButton(image: NSImage(systemSymbolName: "rectangle.portrait.badge.plus", accessibilityDescription: nil)!, target: self, action: #selector(importRoute))
+        importRouteButton = NSButton(image: NSImage(systemSymbolName: "square.and.arrow.down", accessibilityDescription: nil)!, target: self, action: #selector(importRoute))
         importRouteButton.toolTip = "importTrack".localize()
     }
     
@@ -26,8 +26,7 @@ class RouteGridMenuView: GridMenuView{
     
     override func setupView(){
         addSubviewBelow(selectButton, insets: insets)
-        addSubviewBelow(showButton, upperView: selectButton, insets: insets)
-        addSubviewBelow(increaseSizeButton, upperView: showButton, insets: insets)
+        addSubviewBelow(increaseSizeButton, upperView: selectButton, insets: insets)
         addSubviewBelow(decreaseSizeButton, upperView: increaseSizeButton, insets: insets)
         addSubviewBelow(importRouteButton, upperView: decreaseSizeButton, insets: insets)
         addSubviewBelow(deleteButton, upperView: importRouteButton, insets: insets)

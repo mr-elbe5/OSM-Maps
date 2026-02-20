@@ -13,12 +13,25 @@ class VideoItem : MapItem{
     static var itemType: String = "video"
     
     enum VideoCodingKeys: String, CodingKey {
+        case originalFileName
+        case fileName
         case time
     }
     
+    var originalFileName: String = ""
     var fileName: String = ""
-    var previewName: String = ""
     var time: Double
+    
+    func generateFileName()
+    {
+        let ext = originalFileName.split(separator: ".").last
+        if let ext = ext, !ext.isEmpty{
+            fileName = "video_\(id.uuidString).\(ext)"
+        }
+        else{
+            fileName = "video_\(id.uuidString).mp4"
+        }
+    }
     
     var url: URL{
         get{
@@ -29,6 +42,12 @@ class VideoItem : MapItem{
     override var itemType : String{
         get{
             return VideoItem.itemType
+        }
+    }
+    
+    var previewName: String{
+        get{
+            return "video_\(id.uuidString).jpg"
         }
     }
     
@@ -71,28 +90,31 @@ class VideoItem : MapItem{
     override init(){
         time = 0.0
         super.init()
-        fileName = "video_\(id).mp4"
-        previewName = "preview_\(id).jpg"
+        generateFileName()
     }
     
     override init(coordinate: CLLocationCoordinate2D){
         time = 0.0
         super.init(coordinate: coordinate)
-        fileName = "video_\(id).mp4"
-        previewName = "preview_\(id).jpg"
+        generateFileName()
     }
     
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: VideoCodingKeys.self)
+        originalFileName = try values.decodeIfPresent(String.self, forKey: .originalFileName) ?? ""
+        fileName = try values.decodeIfPresent(String.self, forKey: .fileName) ?? ""
         time = try values.decode(Double.self, forKey: .time)
         try super.init(from: decoder)
-        fileName = "video_\(id).mp4"
-        previewName = "preview_\(id).jpg"
+        if fileName.isEmpty{
+            generateFileName()
+        }
     }
     
     override func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
         var container = encoder.container(keyedBy: VideoCodingKeys.self)
+        try container.encode(originalFileName, forKey: .originalFileName)
+        try container.encode(fileName, forKey: .fileName)
         try container.encode(time, forKey: .time)
     }
     
@@ -131,13 +153,13 @@ class VideoItem : MapItem{
         var success = true
         if FileManager.default.fileExists(url: url){
             if !FileManager.default.deleteFile(url: url){
-                Log.error("media item could not delete file: \(fileName)")
+                Log.error("video item could not delete file: \(fileName)")
                 success = false
             }
         }
         if FileManager.default.fileExists(url: previewUrl){
             if !FileManager.default.deleteFile(url: previewUrl){
-                Log.error("media item could not delete file: \(fileName)")
+                Log.error("video item could not delete file: \(fileName)")
                 success = false
             }
         }

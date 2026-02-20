@@ -39,6 +39,8 @@ typealias MapTileGrid = [MapTileRow]
     private var scaledWorldCenterX = 0.0
     private var scaledWorldCenterY = 0.0
     
+    var tilesLoaded = false
+    
     // tile 16/34530/21183
     
     override init(){
@@ -94,6 +96,32 @@ typealias MapTileGrid = [MapTileRow]
         updateTileGrid()
     }
     
+    func refresh(){
+        for y in 0..<gridHeight {
+            for x in 0..<gridWidth {
+                let tile = tileGrid[y][x]
+                TileProvider.shared.getTileImage(tile: tile){ success in
+                    if !success{
+                        Log.error("TileLayerView could not load tile \(tile.shortDescription)")
+                    }
+                }
+            }
+        }
+        checkTiles()
+    }
+    
+    func checkTiles(){
+        tilesLoaded = true
+        for y in 0..<gridHeight {
+            for x in 0..<gridWidth {
+                let tile = tileGrid[y][x]
+                if tile.imageData == nil{
+                    tilesLoaded = false
+                }
+            }
+        }
+    }
+    
     private func updateTileGrid(){
         //print("update grid")
         for y in 0..<gridHeight {
@@ -113,6 +141,7 @@ typealias MapTileGrid = [MapTileRow]
                 }
             }
         }
+        checkTiles()
     }
     
     func getTile(x: Int, y: Int) -> MapTile?{

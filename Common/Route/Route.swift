@@ -309,7 +309,7 @@ extension Route : XMLParserDelegate{
     }
 
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-        switch currentTag{
+        switch elementName{
         case "trkpt":
             if let point = currentPoint as? Trackpoint{
                 trackpoints.append(point)

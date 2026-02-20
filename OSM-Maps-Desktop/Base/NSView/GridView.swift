@@ -19,8 +19,6 @@ class GridView: NSView, GridMenuDelegate{
     let collectionView = NSCollectionView()
     let layout = NSCollectionViewGridLayout()
     
-    var hideUnselected: Bool = false
-    
     var delegate: GridMenuDelegate?
     
     init(idx: Int){
@@ -47,9 +45,6 @@ class GridView: NSView, GridMenuDelegate{
     }
     
     func updateData(){
-        items.removeAll()
-        items.append(contentsOf: AppData.shared.videos)
-        collectionView.reloadData()
     }
     
     func increasePreviewSize() {
@@ -96,16 +91,6 @@ class GridView: NSView, GridMenuDelegate{
         collectionView.reloadData()
     }
     
-    func showAllItems() {
-        hideUnselected = false
-        updateData()
-    }
-    
-    func hideUnselectedItems() {
-        hideUnselected = true
-        updateData()
-    }
-    
     func deleteSelected() {
         let selected = getSelectedItems()
         if !selected.isEmpty{
@@ -122,7 +107,6 @@ class GridView: NSView, GridMenuDelegate{
     func getSelectedItems() -> MapItemList{
         var arr = MapItemList()
         for path in collectionView.selectionIndexPaths{
-            arr.append(items[path.item])
             arr.append(items[path.item])
         }
         arr.sortByDate(ascending: true)

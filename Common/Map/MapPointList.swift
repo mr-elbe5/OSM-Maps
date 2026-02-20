@@ -79,8 +79,10 @@ extension MapPointList{
     }
     
     var coordinateRegion: CoordinateRegion{
-        let boundingCoordinates = boundingCoordinates
-        return CoordinateRegion(topLeft: boundingCoordinates!.topLeft, bottomRight: boundingCoordinates!.bottomRight)
+        if let boundingCoordinates = boundingCoordinates{
+            return CoordinateRegion(topLeft: boundingCoordinates.topLeft, bottomRight: boundingCoordinates.bottomRight)
+        }
+        return CoordinateRegion()
     }
     
     var boundingMapRect: CGRect?{

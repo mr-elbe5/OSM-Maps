@@ -98,12 +98,10 @@ class VisibleRoute{
                 item.endLocation = LocationData(coordinate: endPoint.coordinate)
                 item.route.navigationPoints.removeAll()
                 item.updatePreview()
-                item.updateLocation(){
-                    item.updateLocations(){
-                        item.route.updateRoutePoints()
-                        item.route.desc = item.desc
-                        completion?()
-                    }
+                item.updateLocations(){
+                    item.route.updateRoutePoints()
+                    item.route.desc = item.desc
+                    completion?()
                 }
                 _ = item.getPreview()
             }

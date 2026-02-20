@@ -54,8 +54,8 @@ class OldMapItems{
                     let item = VideoItem(coordinate: location.coordinate)
                     item.id = oldItem.id
                     item.creationDate = oldItem.creationDate
-                    item.fileName = oldItem.fileName
-                    item.previewName = "preview_\(oldItem.id).jpg"
+                    item.originalFileName = oldItem.fileName
+                    item.generateFileName()
                     item.time = oldItem.time
                     if item.copyFile(from: oldItem.tempURL), item.createPreviewFile(){
                         items.append(item)
