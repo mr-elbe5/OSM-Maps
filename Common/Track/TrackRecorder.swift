@@ -24,6 +24,8 @@ class TrackRecorder: NSObject{
     
     var interrupted = false
     
+    var timeZone: TimeZone = .current
+    
     var delegate: TrackRecorderDelegate?
     
     private var lastCoordinate = CLLocationCoordinate2D()
@@ -55,6 +57,11 @@ class TrackRecorder: NSObject{
         return track.trackpoints.count
     }
     
+    override init(){
+        super.init()
+        print("start time zone is \(timeZone.identifier)")
+    }
+    
     func startTrack(){
         track = Track()
         isRecording = true
@@ -83,6 +90,17 @@ class TrackRecorder: NSObject{
         if let track = track{
             let tp = Trackpoint(location: location)
             if track.trackpoints.isEmpty{
+                UTCOffset.getUTCDiff(coordinate: tp.coordinate){ utcDiff in
+                    print("utcDiff = \(utcDiff.value)")
+                    print("utcDiff = \(utcDiff.daylightValue)")
+                    if let time = tp.timestamp{
+                        print("tp time is \(time.dateTimeString)")
+                        print("tp iso time is \(time.toUTCDate().isoString)")
+                    }
+                    let time = Date()
+                    print("time is \(time.dateTimeString)")
+                    print("iso time is \(time.toUTCDate().isoString)")
+                }
                 track.addTrackpoint(tp)
                 lastCoordinate = location.coordinate
                 lastAltitude = location.altitude

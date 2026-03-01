@@ -22,6 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         ViewFilter.load()
         MapStatus.load()
         AppData.load()
+        print("current UTC offset: \(UTCOffset.current.value)")
         
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene

@@ -89,7 +89,7 @@ extension TrackListViewController : UIDocumentPickerDelegate{
     
     private func importGPXFile(url: URL){
         if url.startAccessingSecurityScopedResource(){
-            if let track = Track.loadFromFile(gpxUrl: url){
+            Track.loadFromFile(gpxUrl: url){ track in
                 if track.name.isEmpty{
                     let ext = url.pathExtension
                     var name = url.lastPathComponent
@@ -97,6 +97,7 @@ extension TrackListViewController : UIDocumentPickerDelegate{
                     Log.debug(name)
                     track.name = name
                 }
+                track.updateFromTrackpoints()
                 let item = TrackItem()
                 item.track = track
                 AppData.shared.addItem(item)

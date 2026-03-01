@@ -39,7 +39,7 @@ class MapItem: LocationData, Identifiable, Hashable {
         record["uuid"] = id.uuidString
         record["itemType"] = itemType
         record["version"] = Int64(cloudVersion)
-        record["changeDate"] = changeDate.rounded()
+        record["changeDate"] = changeDate.rounded
         record["json"] = self.toJSON()
         return record
     }
@@ -90,7 +90,7 @@ class MapItem: LocationData, Identifiable, Hashable {
     }
     
     func setModified(){
-        changeDate = Date().rounded()
+        changeDate = Date().rounded
     }
     
     func update(from item: MapItem){

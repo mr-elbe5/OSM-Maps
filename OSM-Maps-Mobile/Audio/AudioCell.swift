@@ -55,7 +55,7 @@ class AudioCell: MapItemCell{
     }
     
     override func setupTimeLabel(){
-        timeLabel.text = item?.creationDate.dateTimeString()
+        timeLabel.text = item?.creationDate.dateTimeString
     }
     
     override func updateItemView(){

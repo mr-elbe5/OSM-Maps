@@ -36,7 +36,7 @@ class ImageGridItem: GridItem, ImageGridItemViewDelegate{
         view.wantsLayer = true
         view.setGrayRoundedBorders()
         
-        let dateView = NSTextField(labelWithString: imageItem.creationDate.dateTimeString())
+        let dateView = NSTextField(labelWithString: imageItem.creationDate.dateTimeString)
         view.addSubviewWithAnchors(dateView, top: view.topAnchor, insets: OSInsets.smallInsets).centerX(view.centerXAnchor)
         
         let imgView = NSImageView(image: imageItem.preview ?? NSImage(named: "gear.grey")!)

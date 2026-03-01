@@ -146,7 +146,7 @@ class CloudSynchronizer: @unchecked Sendable{
                 let remoteVersion = remoteRecord.version
                 let localVersion = localItem.cloudVersion
                 let remoteChangeDate = remoteRecord.changeDate() ?? Date.distantPast
-                let localChangeDate = localItem.changeDate.rounded()
+                let localChangeDate = localItem.changeDate.rounded
                 if remoteVersion == localVersion{
                     if remoteChangeDate < localChangeDate{
                         if syncType == .full || syncType == .toCloud{

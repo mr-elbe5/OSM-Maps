@@ -67,10 +67,10 @@ class TrackCell: MapItemCell{
             itemView.addSubviewBelow(nameLabel, upperView: header)
             
             let tp = item.track.trackpoints.isEmpty ? nil : item.track.trackpoints[0]
-            let startLabel = UILabel(text: "\("start".localize()): \(tp?.coordinate.asString ?? ""), \(item.track.startTime.dateTimeString())")
+            let startLabel = UILabel(text: "\("start".localize()): \(tp?.coordinate.asString ?? ""), \(item.track.startTime.dateTimeString)")
             itemView.addSubviewBelow(startLabel, upperView: nameLabel)
             
-            let endLabel = UILabel(text: "\("end".localize()): \(item.track.endTime.dateTimeString())")
+            let endLabel = UILabel(text: "\("end".localize()): \(item.track.endTime.dateTimeString)")
             itemView.addSubviewBelow(endLabel, upperView: startLabel, insets: OSInsets.flatInsets)
             
             let distanceLabel = UILabel(text: "\("distance".localize()): \(Int(item.track.distance)) m")
@@ -112,7 +112,7 @@ class TrackCell: MapItemCell{
     }
     
     override func setupTimeLabel(){
-        timeLabel.text = item?.creationDate.dateTimeString()
+        timeLabel.text = item?.creationDate.dateTimeString
     }
     
     override func setupMapIcon() {

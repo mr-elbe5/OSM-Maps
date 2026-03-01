@@ -36,7 +36,7 @@ class ImageGridDetailViewController: PopoverViewController {
         let heightView = NSTextField(labelWithString: intString(val: image.metaData?.height) + " px")
         let coordinateView = NSTextField(labelWithString: coordString(lat: image.metaData?.latitude, lon: image.metaData?.longitude))
         let altitudeView = NSTextField(labelWithString: altString(val: image.metaData?.altitude))
-        let exifCreationDateView = NSTextField(labelWithString: image.metaData?.dateTime?.dateTimeString() ?? "")
+        let exifCreationDateView = NSTextField(labelWithString: image.metaData?.dateTime?.dateTimeString ?? "")
         addDataLine(name: "name".localize(), view: nameView)
         addDataLine(name: "camera".localize(), view: lensModelView)
         addDataLine(name: "width".localize(), view: widthView)

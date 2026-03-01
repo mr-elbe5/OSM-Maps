@@ -132,7 +132,7 @@ extension MainViewController {
         if let url = item.track.createGPXFile(){
             let savePanel = NSSavePanel()
             savePanel.allowedContentTypes = UTType.types(tag: "gpx", tagClass: UTTagClass.filenameExtension, conformingTo: nil)
-            savePanel.nameFieldStringValue = "\(item.track.name)_\(item.track.startTime.fileDate()).gpx"
+            savePanel.nameFieldStringValue = "\(item.track.name)_\(item.track.startTime.fileNameString).gpx"
             savePanel.directoryURL = FileManager.default.homeDirectoryForCurrentUser
             if savePanel.runModal() == .OK{
                 let spinner = startSpinner()
@@ -150,7 +150,7 @@ extension MainViewController {
         if let url = item.route.createGPXFile(){
             let savePanel = NSSavePanel()
             savePanel.allowedContentTypes = UTType.types(tag: "gpx", tagClass: UTTagClass.filenameExtension, conformingTo: nil)
-            savePanel.nameFieldStringValue = "\(item.route.name)_\(item.creationDate.fileDate()).gpx"
+            savePanel.nameFieldStringValue = "\(item.route.name)_\(item.creationDate.fileNameString).gpx"
             savePanel.directoryURL = FileManager.default.homeDirectoryForCurrentUser
             if savePanel.runModal() == .OK{
                 let spinner = startSpinner()

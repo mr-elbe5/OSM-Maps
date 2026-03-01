@@ -111,7 +111,7 @@ extension TrackGridView: TrackGridMenuDelegate{
     }
     
     private func importGPXFile(url: URL){
-        if let track = Track.loadFromFile(gpxUrl: url){
+        Track.loadFromFile(gpxUrl: url){ track in
             if track.name.isEmpty{
                 let ext = url.pathExtension
                 var name = url.lastPathComponent

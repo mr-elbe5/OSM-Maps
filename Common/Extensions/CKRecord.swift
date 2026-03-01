@@ -27,7 +27,7 @@ extension CKRecord{
     }
     
     func changeDate() -> Date?{
-        (value(forKey: "changeDate") as? Date)?.rounded()
+        (value(forKey: "changeDate") as? Date)?.rounded
     }
     
     func file() -> CKAsset?{

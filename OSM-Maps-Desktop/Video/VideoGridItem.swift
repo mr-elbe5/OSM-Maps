@@ -38,7 +38,7 @@ class VideoGridItem: GridItem, VideoGridItemViewDelegate{
         view.wantsLayer = true
         view.setGrayRoundedBorders()
         
-        let dateView = NSTextField(labelWithString: videoItem.creationDate.dateTimeString())
+        let dateView = NSTextField(labelWithString: videoItem.creationDate.dateTimeString)
         view.addSubviewWithAnchors(dateView, top: view.topAnchor, insets: OSInsets.smallInsets).centerX(view.centerXAnchor)
         
         let imgView = NSImageView(image: videoItem.preview ?? NSImage(named: "gear.grey")!)

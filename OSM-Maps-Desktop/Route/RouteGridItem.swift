@@ -36,7 +36,7 @@ class RouteGridItem: GridItem, RouteGridItemViewDelegate{
         view.wantsLayer = true
         view.setGrayRoundedBorders()
         
-        let dateView = NSTextField(labelWithString: routeItem.creationDate.dateTimeString())
+        let dateView = NSTextField(labelWithString: routeItem.creationDate.dateTimeString)
         view.addSubviewWithAnchors(dateView, top: view.topAnchor, insets: OSInsets.smallInsets).centerX(view.centerXAnchor)
         
         let imgView = NSImageView(image: routeItem.getPreview() ?? NSImage(named: "gear.grey")!)

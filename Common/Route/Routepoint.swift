@@ -98,7 +98,8 @@ class Routepoint: Mappoint{
             str += "<ele>\(String(format: "%.1f", alt))</ele>"
         }
         if let time = timestamp{
-            str += "<time>\(time.isoString())</time>"
+            // UTC time
+            str += "<time>\(time.toUTCDate().isoString)</time>"
         }
         str += "<type>\(type)</type>"
         if !name.isEmpty{

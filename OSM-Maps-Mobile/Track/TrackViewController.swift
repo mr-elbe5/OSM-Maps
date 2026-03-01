@@ -128,7 +128,7 @@ class TrackViewController: ScrollViewController{
     }
     
     func updateLabels(){
-        timeLabel.text = "\(item.track.startTime.dateTimeString()) - \(item.track.endTime.dateTimeString())"
+        timeLabel.text = "\(item.track.startTime.dateTimeString) - \(item.track.endTime.dateTimeString)"
         distanceLabel.text = "\("distance".localize()): \(Int(item.track.distance))m"
         upDistanceLabel.text = "\("upDistance".localize()): \(Int(item.track.upDistance))m"
         downDistanceLabel.text = "\("downDistance".localize()): \(Int(item.track.downDistance))m"

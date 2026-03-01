@@ -37,7 +37,7 @@ class TrackGridItem: GridItem, TrackGridItemViewDelegate{
         view.wantsLayer = true
         view.setGrayRoundedBorders()
         
-        let dateView = NSTextField(labelWithString: trackItem.creationDate.dateTimeString())
+        let dateView = NSTextField(labelWithString: trackItem.creationDate.dateTimeString)
         view.addSubviewWithAnchors(dateView, top: view.topAnchor, insets: OSInsets.smallInsets).centerX(view.centerXAnchor)
         
         let imgView = NSImageView(image: trackItem.getPreview() ?? NSImage(named: "gear.grey")!)

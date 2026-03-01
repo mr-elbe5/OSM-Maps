@@ -24,7 +24,7 @@ class BackupViewController: PopoverViewController {
     func createBackup(){
         let savePanel = NSSavePanel()
         savePanel.allowedContentTypes = UTType.types(tag: "zip", tagClass: UTTagClass.filenameExtension, conformingTo: nil)
-        savePanel.nameFieldStringValue = "maps4osm_backup_\(Date.localDate.shortFileDate()).zip"
+        savePanel.nameFieldStringValue = "maps4osm_backup_\(Date.now.fileNameString).zip"
         savePanel.directoryURL = FileManager.default.homeDirectoryForCurrentUser
         if savePanel.runModal() == .OK{
             let spinner = startSpinner()

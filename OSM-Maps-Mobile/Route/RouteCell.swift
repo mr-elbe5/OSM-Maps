@@ -118,7 +118,7 @@ class RouteCell: MapItemCell{
     }
     
     override func setupTimeLabel(){
-        timeLabel.text = item?.creationDate.dateTimeString()
+        timeLabel.text = item?.creationDate.dateTimeString
     }
     
     override func setupMapIcon() {

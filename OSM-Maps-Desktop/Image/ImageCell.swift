@@ -35,7 +35,7 @@ class ImageCell: MapItemCell{
     }
     
     override func setupTimeLabel(){
-        timeLabel.stringValue = item.creationDate.dateTimeString()
+        timeLabel.stringValue = item.creationDate.dateTimeString
     }
     
     override func setupMapIcon() {

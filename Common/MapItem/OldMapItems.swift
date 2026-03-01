@@ -245,8 +245,8 @@ class OldTrackItem : LocatedItem{
     
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        startTime = try values.decodeIfPresent(Date.self, forKey: .startTime) ?? Date.localDate
-        endTime = try values.decodeIfPresent(Date.self, forKey: .endTime) ?? Date.localDate
+        startTime = try values.decodeIfPresent(Date.self, forKey: .startTime) ?? .zero
+        endTime = try values.decodeIfPresent(Date.self, forKey: .endTime) ?? .zero
         name = try values.decodeIfPresent(String.self, forKey: .name) ?? ""
         trackpoints = try values.decodeIfPresent(MapPointList.self, forKey: .trackpoints) ?? MapPointList()
         distance = try values.decodeIfPresent(CGFloat.self, forKey: .distance) ?? 0
@@ -254,6 +254,12 @@ class OldTrackItem : LocatedItem{
         downDistance = try values.decodeIfPresent(CGFloat.self, forKey: .downDistance) ?? 0
         note = try values.decodeIfPresent(String.self, forKey: .note) ?? ""
         try super.init(from: decoder)
+        if startTime == .zero, let first = trackpoints.first?.timestamp{
+            startTime = first
+        }
+        if endTime == .zero, let last = trackpoints.last?.timestamp{
+            endTime = last
+        }
     }
     
 }
@@ -361,7 +367,7 @@ class OldMapItem : Decodable{
         let longitude = try values.decodeIfPresent(Double.self, forKey: .longitude) ?? 0
         coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         altitude = try values.decodeIfPresent(CLLocationDistance.self, forKey: .altitude) ?? 0
-        creationDate = try values.decodeIfPresent(Date.self, forKey: .creationDate) ?? Date.localDate
+        creationDate = try values.decodeIfPresent(Date.self, forKey: .creationDate) ?? Date.now
         name = try values.decodeIfPresent(String.self, forKey: .name) ?? ""
         address = try values.decodeIfPresent(String.self, forKey: .address) ?? ""
         self.items = try values.decodeIfPresent(Array<LocatedItemMetaData>.self, forKey: .items)?.toItemList() ?? LocatedItemsList()
@@ -390,7 +396,7 @@ class OldLocationData : Decodable{
         let longitude = try values.decodeIfPresent(Double.self, forKey: .longitude) ?? 0
         coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         altitude = try values.decodeIfPresent(CLLocationDistance.self, forKey: .altitude) ?? 0
-        creationDate = try values.decodeIfPresent(Date.self, forKey: .creationDate) ?? Date.localDate
+        creationDate = try values.decodeIfPresent(Date.self, forKey: .creationDate) ?? Date.now
         self.items = try values.decodeIfPresent(Array<LocatedItemMetaData>.self, forKey: .items)?.toItemList() ?? LocatedItemsList()
         for item in items{
             item.location = self

@@ -10,12 +10,57 @@ extension Date{
     
     static var zero = Date(year: 1970, month: 1, day: 1)
     
-    static var utcZone = TimeZone(abbreviation: "UTC")
+    var dateString: String{
+        DateFormatter.localizedString(from: self, dateStyle: .medium, timeStyle: .none)
+    }
     
-    static var localDate: Date{
-        get{
-            Date().toLocalDate()
-        }
+    var simpleDateString: String{
+        DateFormats.simpleDateFormatter.string(from: self)
+    }
+    
+    var dateTimeString: String{
+        DateFormatter.localizedString(from: self, dateStyle: .medium, timeStyle: .short)
+    }
+    
+    var longDateTimeString: String{
+        DateFormatter.localizedString(from: self, dateStyle: .medium, timeStyle: .medium)
+    }
+    
+    var timeString: String{
+        DateFormatter.localizedString(from: self, dateStyle: .none, timeStyle: .short)
+    }
+    
+    var startOfUTCDay: Date{
+        startOfDay(timeZone: .gmt)
+    }
+    
+    var startOfUTCMonth: Date{
+        startOfMonth(timeZone: .gmt)
+    }
+    
+    var rounded: Date{
+        let ti = self.timeIntervalSince1970
+        return Date(timeIntervalSince1970: ti.rounded())
+    }
+    
+    var fileNameString: String{
+        return DateFormats.fileDateFormatter.string(from: self)
+    }
+    
+    var isoString: String{
+        return DateFormats.isoFormatter.string(from: self)
+    }
+ 
+    var millisecondsSince1970:Int64 {
+        return Int64((self.timeIntervalSince1970 * 1000.0).rounded())
+    }
+    
+    var exifString : String{
+        DateFormats.exifDateFormatter.string(from: self)
+    }
+
+    init(milliseconds:Int) {
+        self = Date(timeIntervalSince1970: TimeInterval(milliseconds / 1000))
     }
     
     init(year: Int, month: Int, day: Int){
@@ -34,113 +79,40 @@ extension Date{
         }
     }
     
-    func rounded() -> Date{
-        let ti = self.timeIntervalSince1970
-        return Date(timeIntervalSince1970: ti.rounded())
-    }
-    
-    func toLocalDate() -> Date{
-        var secs = self.timeIntervalSince1970
-        secs += Double(TimeZone.current.secondsFromGMT())
-        return Date(timeIntervalSince1970: secs)
-    }
-    
-    func toUTCDate() -> Date{
-        var secs = self.timeIntervalSince1970
-        secs -= Double(TimeZone.current.secondsFromGMT())
-        return Date(timeIntervalSince1970: secs)
-    }
-    
-    func dateString() -> String{
-        DateFormatter.localizedString(from: self.toUTCDate(), dateStyle: .medium, timeStyle: .none)
-    }
-    
-    func simpleDateString() -> String{
-            DateFormats.simpleDateFormatter.string(from: self)
-        }
-    
-    func dateTimeString() -> String{
-        return DateFormatter.localizedString(from: self.toUTCDate(), dateStyle: .medium, timeStyle: .short)
-    }
-    
-    func longDateTimeString() -> String{
-        return DateFormatter.localizedString(from: self.toUTCDate(), dateStyle: .medium, timeStyle: .medium)
-    }
-    
-    func timeString() -> String{
-        return DateFormatter.localizedString(from: self.toUTCDate(), dateStyle: .none, timeStyle: .short)
-    }
-    
-    func startOfDay() -> Date{
+    func startOfDay(timeZone: TimeZone = .current) -> Date{
         var cal = Calendar.current
-        cal.timeZone = TimeZone(abbreviation: "UTC")!
+        cal.timeZone = timeZone
         return cal.startOfDay(for: self)
     }
     
-    func startOfMonth() -> Date{
+    func startOfMonth(timeZone: TimeZone = .current) -> Date{
         var cal = Calendar.current
-        cal.timeZone = TimeZone(abbreviation: "UTC")!
+        cal.timeZone = timeZone
         let components = cal .dateComponents([.month, .year], from: self)
         return cal.date(from: components)!
     }
     
-    func timestampString() -> String{
-        return DateFormats.timestampFormatter.string(from: self)
+    func fromUTCDate(offset: UTCOffset = UTCOffset.current) -> Date{
+        self.addingTimeInterval(Double(offset.value))
     }
     
-    func fileDate() -> String{
-        return DateFormats.fileDateFormatter.string(from: self)
-    }
-    
-    func shortFileDate() -> String{
-        return DateFormats.shortFileDateFormatter.string(from: self)
-    }
-    
-    func isoString() -> String{
-        return DateFormats.isoFormatter.string(from: self)
-    }
- 
-    var millisecondsSince1970:Int64 {
-        return Int64((self.timeIntervalSince1970 * 1000.0).rounded())
-    }
-    
-    var exifString : String{
-        DateFormats.exifDateFormatter.string(from: self)
-    }
-
-    init(milliseconds:Int) {
-        self = Date(timeIntervalSince1970: TimeInterval(milliseconds / 1000))
+    func toUTCDate(offset: UTCOffset = UTCOffset.current) -> Date{
+        self.addingTimeInterval(-Double(offset.value))
     }
 
 }
 
 class DateFormats{
     
-    static var timestampFormatter : DateFormatter{
+    static var simpleDateFormatter : DateFormatter{
         let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .medium
+        dateFormatter.dateFormat = "yyyy-MM-dd"
         return dateFormatter
     }
-    
-    static var simpleDateFormatter : DateFormatter{
-            let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = Date.utcZone
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-            return dateFormatter
-        }
     
     static var fileDateFormatter : DateFormatter{
         let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = Date.utcZone
         dateFormatter.dateFormat = "yyyyMMddHHmmss"
-        return dateFormatter
-    }
-    
-    static var shortFileDateFormatter : DateFormatter{
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = Date.utcZone
-        dateFormatter.dateFormat = "yyyy-MM-dd_HH-mm"
         return dateFormatter
     }
     
@@ -152,21 +124,18 @@ class DateFormats{
     
     static var exifDateFormatter : DateFormatter{
         let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = Date.utcZone
         dateFormatter.dateFormat = "yyyy:MM:dd HH:mm:ss"
         return dateFormatter
     }
     
     static var iptcDateFormatter : DateFormatter{
         let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = Date.utcZone
         dateFormatter.dateFormat = "yyyyMMdd"
         return dateFormatter
     }
     
     static var iptcTimeFormatter : DateFormatter{
         let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = Date.utcZone
         dateFormatter.dateFormat = "HHmmss"
         return dateFormatter
     }

@@ -220,7 +220,7 @@ class Route: NSObject, Codable{
             <gpx version="1.1" creator="OSM Maps" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
                 <metadata>
                     <name>\(name)</name>
-                    <time>\(creationDate.isoString())</time>
+                    <time>\(creationDate.toUTCDate().isoString)</time>
                 </metadata>
                 <rte>
                     <name>\(name)</name>

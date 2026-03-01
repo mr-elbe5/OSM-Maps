@@ -199,7 +199,7 @@ extension ItemListViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let day = days[section]
         let header = TableSectionHeader()
-        header.setupView(title: day.date.dateString())
+        header.setupView(title: day.date.dateString)
         return header
     }
     
