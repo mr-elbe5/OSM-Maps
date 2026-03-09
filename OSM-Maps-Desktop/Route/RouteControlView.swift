@@ -98,6 +98,7 @@ class RouteControlView : NSView{
                     }
                 }
                 routeTypeSelector.isHidden = false
+                routeTypeSelector.isEnabled = true
                 buttonPanel.isHidden = false
                 saveRouteButton.isHidden = !route.isComplete
                 addPointButton.isEnabled = route.navigationPoints.count < VisibleRoute.MAX_NAVIGATION_POINTS
@@ -203,9 +204,9 @@ class RouteControlView : NSView{
     
     @objc func routeTypeChanged(){
         let idx = self.routeTypeSelector.indexOfSelectedItem
-        Log.info(" idx \(idx)")
+        //Log.info(" idx \(idx)")
         let type = RouteType.getRouteType(idx: idx)
-        Log.info(" type \(type.rawValue)")
+        //Log.info(" type \(type.rawValue)")
         Settings.shared.routeType = type
         Settings.shared.save()
         MainViewController.shared.setRouteType(type)

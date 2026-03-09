@@ -255,7 +255,7 @@ class MainViewController: ViewController {
             if let coordinateRegion = item.coordinateRegion{
                 mapView.showMapRectOnMap(worldRect: coordinateRegion.worldRect)
             }
-            else{
+            else if item.coordinate != .zero{
                 mapView.showLocationOnMap(coordinate: item.coordinate)
             }
         }
@@ -268,7 +268,7 @@ class MainViewController: ViewController {
     }
     
     func markerButtonPressed(_ idx: Int){
-        Log.info("marker pressed \(idx)")
+        //Log.info("marker pressed \(idx)")
         VisibleRoute.shared.setIndex(idx)
         routeControlView.update()
     }

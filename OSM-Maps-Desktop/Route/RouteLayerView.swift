@@ -47,7 +47,7 @@ class RouteLayerView: LayerView {
                 }
                 let marker = RouteMarkerView(coordinate: coord, image: NSImage(named: col)!)
                 marker.baseFrame = RouteMarkerView.upperBaseFrame
-                Log.info("coord \(marker.coordinate)")
+                //Log.info("coord \(marker.coordinate)")
                 addSubview(marker)
                 marker.isHidden = (coord == .zero)
                 marker.updatePosition(scale: scale)
