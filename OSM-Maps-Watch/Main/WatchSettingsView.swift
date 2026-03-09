@@ -6,73 +6,73 @@
 
 import SwiftUI
 
-struct WatchPreferencesView: View {
+struct WatchSettingsView: View {
     
-    @State var preferences = Preferences.shared
+    @State var settings = Settings.shared
     @State var phoneConnector = PhoneConnector.shared
     
     var body: some View {
         ScrollView {
             VStack(alignment: .center) {
-                Text("preferences".localize()).font(Font.headline)
+                Text("settings".localize()).font(Font.headline)
                 Spacer(minLength: 20)
-                Picker("mapServer".localizeWithColon(), selection: $preferences.mapSource) {
+                Picker("mapServer".localizeWithColon(), selection: $settings.mapSource) {
                     ForEach(MapSource.allCases) { option in
                         Text("\(option.rawValue)_server".localize())
                     }
                 }
                 .pickerStyle(.navigationLink)
-                .onChange(of: preferences.mapSource) { oldValue, newValue in
-                    preferences.save()
+                .onChange(of: settings.mapSource) { oldValue, newValue in
+                    settings.save()
                 }
                 Spacer(minLength: 20)
-                Toggle(isOn: $preferences.showCurrentLocation) {
+                Toggle(isOn: $settings.showCurrentLocation) {
                     Text("showCurrentLocation".localize())
                     }
-                .onChange(of: preferences.showCurrentLocation) { oldValue, newValue in
-                    preferences.save()
+                .onChange(of: settings.showCurrentLocation) { oldValue, newValue in
+                    settings.save()
                 }
                 Spacer()
-                Toggle(isOn: $preferences.showDirection) {
+                Toggle(isOn: $settings.showDirection) {
                     Text("showDirection".localize())
                     }
-                .onChange(of: preferences.showDirection) { oldValue, newValue in
-                    preferences.save()
+                .onChange(of: settings.showDirection) { oldValue, newValue in
+                    settings.save()
                     LocationService.shared.updateShowDirection()
                 }
                 Spacer()
-                Toggle(isOn: $preferences.followLocation) {
+                Toggle(isOn: $settings.followLocation) {
                     Text("followLocation".localize())
                     }
-                .onChange(of: preferences.followLocation) { oldValue, newValue in
-                    preferences.save()
+                .onChange(of: settings.followLocation) { oldValue, newValue in
+                    settings.save()
                 }
-                Toggle(isOn: $preferences.showHeartRate) {
+                Toggle(isOn: $settings.showHeartRate) {
                     Text("showHeartrate".localize())
                     }
-                .onChange(of: preferences.showHeartRate) { oldValue, newValue in
-                    preferences.save()
+                .onChange(of: settings.showHeartRate) { oldValue, newValue in
+                    settings.save()
                 }
                 Spacer(minLength: 20)
-                Toggle(isOn: $preferences.countTrackpoints) {
+                Toggle(isOn: $settings.countTrackpoints) {
                     Text("countTrackpoints".localize())
                     }
-                .onChange(of: preferences.countTrackpoints) { oldValue, newValue in
-                    preferences.save()
+                .onChange(of: settings.countTrackpoints) { oldValue, newValue in
+                    settings.save()
                 }
                 Spacer(minLength: 20)
-                Picker("trackpointInterval".localizeWithColon(), selection: $preferences.trackpointInterval) {
+                Picker("trackpointInterval".localizeWithColon(), selection: $settings.trackpointInterval) {
                     ForEach(TrackpointInterval.allCases) { option in
                         Text("\(option.rawValue)s")
                     }
                 }
                 .pickerStyle(.navigationLink)
-                .onChange(of: preferences.trackpointInterval) { oldValue, newValue in
-                    preferences.save()
+                .onChange(of: settings.trackpointInterval) { oldValue, newValue in
+                    settings.save()
                 }
                 Text("trackpointIntervalHint".localize(table: "Hints"))
                     .hint()
-                Picker("distanceFilter".localizeWithColon(), selection: $preferences.distanceFilter) {
+                Picker("distanceFilter".localizeWithColon(), selection: $settings.distanceFilter) {
                     ForEach(LocationDistance.allCases) { option in
                         if option == .gps{
                             Text("gpsAccuracy".localize())
@@ -83,9 +83,9 @@ struct WatchPreferencesView: View {
                     }
                 }
                 .pickerStyle(.navigationLink)
-                .onChange(of: preferences.distanceFilter) { oldValue, newValue in
+                .onChange(of: settings.distanceFilter) { oldValue, newValue in
                     LocationService.shared.updateDistanceFilter()
-                    preferences.save()
+                    settings.save()
                 }
                 Text("distanceFilterHint".localize(table: "Hints"))
                     .hint()
@@ -119,5 +119,5 @@ struct WatchPreferencesView: View {
 }
 
 #Preview {
-    WatchPreferencesView()
+    WatchSettingsView()
 }

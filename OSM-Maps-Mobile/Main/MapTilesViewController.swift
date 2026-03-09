@@ -61,7 +61,7 @@ class MapTilesViewController: ScrollViewController{
     var mapSourceControl = UISegmentedControl()
     
     override func loadView() {
-        title = "preferences".localize()
+        title = "settings".localize()
         super.loadView()
         view.addSubviewFillingSafeArea(scrollView, insets: .zero)
         scrollView.backgroundColor = .systemBackground
@@ -91,19 +91,19 @@ class MapTilesViewController: ScrollViewController{
         contentView.addSubviewBelow(subheader)
         
         mapSourceControl.insertSegment(action: UIAction(){ action in
-            Preferences.shared.mapSource = .osm
+            Settings.shared.mapSource = .osm
         }, at: 0, animated: false)
         mapSourceControl.setTitle("osm".localize(), forSegmentAt: 0)
         mapSourceControl.insertSegment(action: UIAction(){ action in
-            Preferences.shared.mapSource = .elbe5
+            Settings.shared.mapSource = .elbe5
         }, at: 1, animated: false)
         mapSourceControl.setTitle("elbe5".localize(), forSegmentAt: 1)
         mapSourceControl.insertSegment(action: UIAction(){ action in
-            Preferences.shared.mapSource = .elbe5Topo
+            Settings.shared.mapSource = .elbe5Topo
         }, at: 2, animated: false)
         mapSourceControl.setTitle("elbe5topo".localize(), forSegmentAt: 2)
         mapSourceControl.setTitleTextAttributes(segmentTitleAttributes, for: .normal)
-        mapSourceControl.selectedSegmentIndex = MapSourceList.shared.indexOf(source: Preferences.shared.mapSource)
+        mapSourceControl.selectedSegmentIndex = MapSourceList.shared.indexOf(source: Settings.shared.mapSource)
         contentView.addSubviewBelow(mapSourceControl, upperView: subheader)
         
         let hint = UILabel(hint: "mapServerHint".localize(table: "Hints"))
@@ -124,7 +124,7 @@ class MapTilesViewController: ScrollViewController{
         
         let sourceLabel = UILabel()
         sourceLabel.numberOfLines = 0
-        sourceLabel.text = "\("currentServer".localize()): \(Preferences.shared.mapSource.rawValue.localize())"
+        sourceLabel.text = "\("currentServer".localize()): \(Settings.shared.mapSource.rawValue.localize())"
         contentView.addSubviewBelow(sourceLabel, upperView: note)
         
         let segSize = World.maxZoom - World.minZoom

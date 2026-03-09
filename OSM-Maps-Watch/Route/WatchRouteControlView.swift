@@ -9,7 +9,7 @@ import SwiftUI
 struct WatchRouteControlView: View {
     
     @State var routeStatus = RouteStatus.shared
-    @State var preferences = Preferences.shared
+    @State var settings = Settings.shared
     
     @State private var showDeleteAlert = false
     

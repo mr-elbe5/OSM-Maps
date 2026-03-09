@@ -11,7 +11,7 @@ import CoreLocation
 struct WatchLocationView: View {
     
     @State var mapStatus = WatchMapStatus.shared
-    @State var preferences = WatchPreferences.shared
+    @State var settings = WatchSettings.shared
     
     let currentDirectionColor = Color(red: 1.0, green: 0.2, blue: 0.2)
     
@@ -23,7 +23,7 @@ struct WatchLocationView: View {
             Circle()
                 .fill(Color(.blue))
                 .frame(width: 8, height: 8)
-            if preferences.showDirection{
+            if settings.showDirection{
                 Triangle(direction: $mapStatus.direction)
                     .fill(currentDirectionColor)
                     .frame(width: 30, height: 30)

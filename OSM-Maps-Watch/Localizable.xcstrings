@@ -453,23 +453,6 @@
         }
       }
     },
-    "preferences" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Einstellungen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preferences"
-          }
-        }
-      }
-    },
     "reallyDeleteTrack" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -568,6 +551,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Save"
+          }
+        }
+      }
+    },
+    "settings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "Einstellungen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
           }
         }
       }

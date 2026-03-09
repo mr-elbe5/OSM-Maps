@@ -14,7 +14,7 @@ class MainMenuView: NSView{
     var openViewSettingsButton: NSButton!
     var openICloudButton: NSButton!
     var openBackupButton: NSButton!
-    var openPreferencesButton: NSButton!
+    var openSettingsButton: NSButton!
     var openHelpButton: NSButton!
     
     var insets = OSInsets(top: 0, left: 5, bottom: 0, right: 5)
@@ -41,8 +41,8 @@ class MainMenuView: NSView{
         openICloudButton.toolTip = "iCloud".localize()
         openBackupButton = NSButton(icon: "zipper.page", target: self, action: #selector(openBackup))
         openBackupButton.toolTip = "data".localize()
-        openPreferencesButton = NSButton(icon: "gearshape", target: self, action: #selector(openPreferences))
-        openPreferencesButton.toolTip = "settings".localize()
+        openSettingsButton = NSButton(icon: "gearshape", target: self, action: #selector(openSettings))
+        openSettingsButton.toolTip = "settings".localize()
         openHelpButton = NSButton(icon: "questionmark", target: self, action: #selector(openHelp))
         openHelpButton.toolTip = "help".localize()
     }
@@ -58,8 +58,8 @@ class MainMenuView: NSView{
         rightMenu.addSubviewToRight(openViewSettingsButton, insets: insets)
         rightMenu.addSubviewToRight(openICloudButton, leftView: openViewSettingsButton, insets: insets)
         rightMenu.addSubviewToRight(openBackupButton, leftView: openICloudButton, insets: insets)
-        rightMenu.addSubviewToRight(openPreferencesButton, leftView: openBackupButton, insets: insets)
-        rightMenu.addSubviewToRight(openHelpButton, leftView: openPreferencesButton, insets: insets)
+        rightMenu.addSubviewToRight(openSettingsButton, leftView: openBackupButton, insets: insets)
+        rightMenu.addSubviewToRight(openHelpButton, leftView: openSettingsButton, insets: insets)
             .connectToRight(of: rightMenu, inset: .zero)
     }
     
@@ -86,8 +86,8 @@ class MainMenuView: NSView{
         MainViewController.shared.openBackup(at: openBackupButton)
     }
     
-    @objc func openPreferences(){
-        MainViewController.shared.openPreferences(at: openPreferencesButton)
+    @objc func openSettings(){
+        MainViewController.shared.openSettings(at: openSettingsButton)
     }
     
     @objc func openHelp(){

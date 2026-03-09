@@ -40,7 +40,7 @@ class TileProvider{
             result(false)
             return
         }
-        let request = URLRequest(url: tile.tileUrl(template: Preferences.shared.mapSource.templateUrl), cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 30.0)
+        let request = URLRequest(url: tile.tileUrl(template: Settings.shared.mapSource.templateUrl), cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 30.0)
         let task = getDownloadTask(request: request, tile: tile, tries: 1, result: result)
         DispatchQueue.global(qos: .userInitiated).async{
             //Log.debug("loading remote tile")
@@ -49,7 +49,7 @@ class TileProvider{
     }
     
     private func retryLoadTileImage(tile: MapTile, tries: Int, result: @escaping (Bool) -> Void) {
-        let request = URLRequest(url: tile.tileUrl(template: Preferences.shared.mapSource.templateUrl), cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 20.0)
+        let request = URLRequest(url: tile.tileUrl(template: Settings.shared.mapSource.templateUrl), cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 20.0)
         let task = getDownloadTask(request: request, tile: tile, tries: tries, result: result)
         DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 5){
             task.resume()

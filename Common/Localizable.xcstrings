@@ -2942,7 +2942,7 @@
         }
       }
     },
-    "openPreferences" : {
+    "openSettings" : {
       "extractionState" : "manual",
       "localizations" : {
         "de" : {
@@ -2954,7 +2954,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Preferences"
+            "value" : "Settings"
           }
         }
       }
@@ -3142,40 +3142,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "POI"
-          }
-        }
-      }
-    },
-    "preferences" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Einstellungen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preferences"
-          }
-        }
-      }
-    },
-    "preferencesSaved" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Einstellungen wurden gesichert."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Preferences have been saved."
           }
         }
       }
@@ -4060,6 +4026,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Settings"
+          }
+        }
+      }
+    },
+    "settingsSaved" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen wurden gesichert."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings have been saved."
           }
         }
       }

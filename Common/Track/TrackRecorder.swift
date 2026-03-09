@@ -115,7 +115,7 @@ class TrackRecorder: NSObject{
             if let prevTimestamp = previousTrackpoint.timestamp, let timestamp = tp.timestamp{
                 let timeDiff = prevTimestamp.distance(to: timestamp)
                 //Log.debug("timeDiff = \(timeDiff)")
-                if timeDiff < Preferences.shared.trackpointInterval.interval{
+                if timeDiff < Settings.shared.trackpointInterval.interval{
                     //Log.debug("skipping by time")
                     return nil
                 }
@@ -124,14 +124,14 @@ class TrackRecorder: NSObject{
             let horizontalDiff = lastCoordinate.distance(to: tp.coordinate)
             //Log.debug("horizontalDiff = \(horizontalDiff)")
             //Log.debug("horizontalAccuracy = \(location.horizontalAccuracy)")
-            if Preferences.shared.distanceFilter == .gps{
+            if Settings.shared.distanceFilter == .gps{
                 if location.horizontalAccuracy >= 0, horizontalDiff < location.horizontalAccuracy{
                     //Log.debug("skipping location (missing accuracy)")
                     return nil
                 }
             }
             else{
-                if location.horizontalAccuracy >= 0, horizontalDiff < Preferences.shared.distanceFilter.distance{
+                if location.horizontalAccuracy >= 0, horizontalDiff < Settings.shared.distanceFilter.distance{
                     //Log.debug("skipping location (missing accuracy)")
                     return nil
                 }

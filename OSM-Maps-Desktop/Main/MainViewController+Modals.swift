@@ -26,8 +26,8 @@ extension MainViewController {
         controller.popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
     }
     
-    func openPreferences(at button: NSButton) {
-        let controller = PreferencesViewController()
+    func openSettings(at button: NSButton) {
+        let controller = SettingsViewController()
         controller.popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
     }
     

@@ -6,19 +6,19 @@
 
 import Foundation
 
-@Observable class WatchPreferences: Identifiable, Codable{
+@Observable class WatchSettings: Identifiable, Codable{
     
     static var storeKey = "preferences"
     
-    static var shared = WatchPreferences()
+    static var shared = WatchSettings()
     
     static func load(){
-        if let prefs : WatchPreferences = StatusManager.shared.getCodable(key: WatchPreferences.storeKey){
-            WatchPreferences.shared = prefs
+        if let prefs : WatchSettings = StatusManager.shared.getCodable(key: WatchSettings.storeKey){
+            WatchSettings.shared = prefs
         }
         else{
-            Log.error("no saved data available for preferences")
-            WatchPreferences.shared = WatchPreferences()
+            Log.error("no saved data available for settings")
+            WatchSettings.shared = WatchSettings()
         }
     }
     
@@ -78,11 +78,11 @@ import Foundation
     }
     
     func save(){
-        StatusManager.shared.saveCodable(key: WatchPreferences.storeKey, value: self)
-        Log.debug("Preferences saved")
+        StatusManager.shared.saveCodable(key: WatchSettings.storeKey, value: self)
+        Log.debug("Settings saved")
     }
     
 }
 
-typealias Preferences = WatchPreferences
+typealias Settings = WatchSettings
 

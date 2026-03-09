@@ -15,7 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         World.setMaxZoom(18)
         World.scrollWidthFactor = 1
         MapDefaults.startZoom = 8
-        Preferences.load()
+        Settings.load()
         ViewFilter.load()
         MapStatus.load()
         AppData.load()
@@ -26,7 +26,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
-        Preferences.shared.save()
+        Settings.shared.save()
         AppStatus.shared.save()
         MapStatus.shared.save()
         AppData.shared.save()

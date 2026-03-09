@@ -295,14 +295,14 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Sie finden Links zu den Regeln in den Einstellungen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "You can find links to legal infos under preferences."
+            "value" : "You can find links to legal infos under settings."
           }
         }
       }

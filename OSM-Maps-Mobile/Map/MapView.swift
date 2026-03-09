@@ -44,7 +44,7 @@ class MapView: UIView {
         addSubview(currentLocationView)
         addSubviewFilling(itemLayerView, insets: .zero)
         updateItemLayer()
-        itemLayerView.isHidden = !Preferences.shared.showMapPins
+        itemLayerView.isHidden = !Settings.shared.showMapPins
         crossButton.addAction(UIAction(){ action in
             let coordinate = self.scrollView.screenCenterCoordinate
             let controller = CrossMenuViewController(coordinate: coordinate, title: "crossLocation".localize())
@@ -52,7 +52,7 @@ class MapView: UIView {
             MainViewController.shared.present(controller, animated: false)
         }, for: .touchDown)
         addSubviewCentered(crossButton, centerX: centerXAnchor, centerY: centerYAnchor)
-        crossButton.isHidden = !Preferences.shared.showCenterButton
+        crossButton.isHidden = !Settings.shared.showCenterButton
         let doubleTap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap))
         doubleTap.numberOfTapsRequired = 2
         self.addGestureRecognizer(doubleTap)

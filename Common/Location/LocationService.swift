@@ -33,7 +33,7 @@ class LocationService: NSObject{
         super.init()
         clManager.activityType = .other
         clManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        clManager.distanceFilter = Preferences.shared.distanceFilter.distance
+        clManager.distanceFilter = Settings.shared.distanceFilter.distance
         clManager.headingFilter = 5.0
         clManager.delegate = self
         clManager.allowsBackgroundLocationUpdates = true
@@ -47,7 +47,7 @@ class LocationService: NSObject{
         Log.debug("starting location manager")
         clManager.requestWhenInUseAuthorization()
         clManager.startUpdatingLocation()
-        if Preferences.shared.showDirection{
+        if Settings.shared.showDirection{
             clManager.startUpdatingHeading()
         }
         running = true
@@ -56,18 +56,18 @@ class LocationService: NSObject{
     func stop(){
         Log.debug("stopping location manager")
         clManager.stopUpdatingLocation()
-        if Preferences.shared.showDirection{
+        if Settings.shared.showDirection{
             clManager.stopUpdatingHeading()
         }
         running = false
     }
     
     func updateDistanceFilter(){
-        clManager.distanceFilter = Preferences.shared.distanceFilter.distance
+        clManager.distanceFilter = Settings.shared.distanceFilter.distance
     }
     
     func updateShowDirection(){
-        if Preferences.shared.showDirection{
+        if Settings.shared.showDirection{
             clManager.startUpdatingHeading()
         }else{
             clManager.stopUpdatingHeading()
@@ -109,7 +109,7 @@ extension LocationService: CLLocationManagerDelegate{
     }
   
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
-        if Preferences.shared.showDirection{
+        if Settings.shared.showDirection{
             let direction = newHeading.trueHeading
             LocationStatus.shared.direction = direction
             delegate?.directionChanged(to: direction)

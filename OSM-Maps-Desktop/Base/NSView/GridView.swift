@@ -48,15 +48,15 @@ class GridView: NSView, GridMenuDelegate{
     }
     
     func increasePreviewSize() {
-        if Preferences.shared.gridSizeFactorIndex < TrackGridView.gridSizeFactors.count - 1{
-            Preferences.shared.gridSizeFactorIndex += 1
+        if Settings.shared.gridSizeFactorIndex < TrackGridView.gridSizeFactors.count - 1{
+            Settings.shared.gridSizeFactorIndex += 1
             setCellSize()
         }
     }
     
     func decreasePreviewSize() {
-        if Preferences.shared.gridSizeFactorIndex > 0{
-            Preferences.shared.gridSizeFactorIndex -= 1
+        if Settings.shared.gridSizeFactorIndex > 0{
+            Settings.shared.gridSizeFactorIndex -= 1
             setCellSize()
         }
     }
@@ -76,7 +76,7 @@ class GridView: NSView, GridMenuDelegate{
     }
     
     func setCellSize(){
-        let gridSize = GridView.defaultGridSize * GridView.gridSizeFactors[Preferences.shared.gridSizeFactorIndex]
+        let gridSize = GridView.defaultGridSize * GridView.gridSizeFactors[Settings.shared.gridSizeFactorIndex]
         layout.minimumItemSize = CGSize(width: gridSize * 0.75, height: gridSize * 0.75)
         layout.maximumItemSize = CGSize(width: gridSize * 1.25, height: gridSize * 1.25)
     }

@@ -6,19 +6,19 @@
 
 import Foundation
 
-class IOSPreferences: Identifiable, Codable{
+class IOSSettings: Identifiable, Codable{
     
     static var storeKey = "preferences"
     
-    static var shared = IOSPreferences()
+    static var shared = IOSSettings()
     
     static func load(){
-        if let prefs : IOSPreferences = StatusManager.shared.getCodable(key: IOSPreferences.storeKey){
-            IOSPreferences.shared = prefs
+        if let prefs : IOSSettings = StatusManager.shared.getCodable(key: IOSSettings.storeKey){
+            IOSSettings.shared = prefs
         }
         else{
-            Log.error("no saved data available for preferences")
-            IOSPreferences.shared = IOSPreferences()
+            Log.error("no saved data available for settings")
+            IOSSettings.shared = IOSSettings()
         }
     }
     
@@ -87,11 +87,11 @@ class IOSPreferences: Identifiable, Codable{
     }
     
     func save(){
-        StatusManager.shared.saveCodable(key: IOSPreferences.storeKey, value: self)
-        Log.debug("Preferences saved")
+        StatusManager.shared.saveCodable(key: IOSSettings.storeKey, value: self)
+        Log.debug("Settings saved")
     }
     
 }
 
-typealias Preferences = IOSPreferences
+typealias Settings = IOSSettings
 

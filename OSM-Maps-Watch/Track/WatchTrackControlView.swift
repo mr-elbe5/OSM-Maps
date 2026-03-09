@@ -9,7 +9,7 @@ import SwiftUI
 struct WatchTrackControlView: View {
     
     @State var trackStatus = TrackStatus.shared
-    @State var preferences = Preferences.shared
+    @State var settings = Settings.shared
     
     @State private var showDeleteAlert = false
     @State private var showSaveAlert = false
@@ -79,7 +79,7 @@ struct WatchTrackControlView: View {
                     HStack{
                         Text("\("distance".localize()): \(trackStatus.coveredDistance) m")
                     }
-                    if preferences.countTrackpoints{
+                    if settings.countTrackpoints{
                         HStack{
                             Text("\("trackpoints".localize()): \(trackStatus.trackpointCount)")
                         }

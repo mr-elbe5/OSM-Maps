@@ -209,14 +209,14 @@ class MainViewController: UIViewController {
     // map view
     
     func toggleCross() {
-        Preferences.shared.showCenterButton = !Preferences.shared.showCenterButton
-        Preferences.shared.save()
-        mapView.crossButton.isHidden = !Preferences.shared.showCenterButton
+        Settings.shared.showCenterButton = !Settings.shared.showCenterButton
+        Settings.shared.save()
+        mapView.crossButton.isHidden = !Settings.shared.showCenterButton
     }
     
     func focusUserLocation() {
         mapView.focusUserLocation()
-        Preferences.shared.followLocation = true
+        Settings.shared.followLocation = true
     }
     
     func refreshMap() {
@@ -239,15 +239,15 @@ class MainViewController: UIViewController {
     }
     
     func toggleMapPins() {
-        Preferences.shared.showMapPins = !Preferences.shared.showMapPins
-        mapView.itemLayerView.isHidden = !Preferences.shared.showMapPins
-        Preferences.shared.save()
+        Settings.shared.showMapPins = !Settings.shared.showMapPins
+        mapView.itemLayerView.isHidden = !Settings.shared.showMapPins
+        Settings.shared.save()
     }
     
     // map items
     
     func showItemOnMap(item: MapItem){
-        Preferences.shared.followLocation = false
+        Settings.shared.followLocation = false
         mapView.scrollTo(item.coordinate)
     }
     
@@ -294,7 +294,7 @@ class MainViewController: UIViewController {
     
     func showTrackOnMap(item: TrackItem){
         VisibleTrack.shared.setTrack(item.track)
-        Preferences.shared.followLocation = false
+        Settings.shared.followLocation = false
         if item.track.coordinateRegion == nil{
             item.track.updateCoordinateRegion()
         }
@@ -367,8 +367,8 @@ class MainViewController: UIViewController {
     }
     
     func setRouteType(_ routeType: RouteType){
-        Preferences.shared.routeType = routeType
-        Preferences.shared.save()
+        Settings.shared.routeType = routeType
+        Settings.shared.save()
         VisibleRoute.shared.setRouteType(routeType){
             DispatchQueue.main.async {
                 self.updateRouteLayer()
@@ -406,7 +406,7 @@ class MainViewController: UIViewController {
         VisibleRoute.shared.routeItem = item
         updateRouteLayer()
         routeControlView.update()
-        Preferences.shared.followLocation = false
+        Settings.shared.followLocation = false
         if item.route.coordinateRegion == nil{
             item.route.updateCoordinateRegion()
         }
@@ -507,7 +507,7 @@ class MainViewController: UIViewController {
     }
     
     func showSearchResult(coordinate: CLLocationCoordinate2D, worldRect: CGRect?){
-        Preferences.shared.followLocation = false
+        Settings.shared.followLocation = false
         if let worldRect = worldRect{
             let zoom = World.getZoomToFit(worldRect: worldRect, scaledSize: mapView.bounds.size)
             mapView.zoomAndScrollTo(zoom, coordinate)
@@ -522,7 +522,7 @@ class MainViewController: UIViewController {
 extension MainViewController: LocationServiceDelegate {
     
     func locationChanged(to location: CLLocation){
-        if Preferences.shared.followLocation{
+        if Settings.shared.followLocation{
             MapStatus.shared.centerCoordinate = location.coordinate
             mapView.scrollTo(location.coordinate)
         }

@@ -54,7 +54,7 @@ class ItemLayerView: LayerView {
         for subview in subviews {
             subview.removeFromSuperview()
         }
-        if !Preferences.shared.showMapPins{
+        if !Settings.shared.showMapPins{
             return
         }
         let planetDist = 1.0/scale * MarkerView.size/2.0 //have no markers overlap

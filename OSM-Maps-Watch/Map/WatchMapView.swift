@@ -8,7 +8,7 @@ import SwiftUI
 
 struct MapView: View {
     
-    @State var preferences = Preferences.shared
+    @State var settings = Settings.shared
     @State var mapStatus = WatchMapStatus.shared
     
     var body: some View {

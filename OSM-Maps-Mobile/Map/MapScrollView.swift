@@ -121,8 +121,8 @@ extension MapScrollView: UIScrollViewDelegate{
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if isDragging, Preferences.shared.followLocation{
-            Preferences.shared.followLocation = false
+        if isDragging, Settings.shared.followLocation{
+            Settings.shared.followLocation = false
         }
         mapScrollViewDelegate?.didScroll()
     }

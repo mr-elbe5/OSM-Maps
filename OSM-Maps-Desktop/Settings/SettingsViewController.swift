@@ -7,14 +7,14 @@
 import AppKit
 import CoreLocation
 
-class PreferencesViewController: PopoverViewController {
+class SettingsViewController: PopoverViewController {
     
-    var contentView: PreferencesView{
-        view as! PreferencesView
+    var contentView: SettingsView{
+        view as! SettingsView
     }
     
     override func loadView() {
-        view = PreferencesView(controller: self)
+        view = SettingsView(controller: self)
         view.frame = CGRect(origin: .zero, size: CGSize(width: 300, height: 0))
         view.setupView()
     }
@@ -28,10 +28,10 @@ class PreferencesViewController: PopoverViewController {
     
 }
 
-class PreferencesView: PopoverView{
+class SettingsView: PopoverView{
     
-    var contentController: PreferencesViewController{
-        controller as! PreferencesViewController
+    var contentController: SettingsViewController{
+        controller as! SettingsViewController
     }
     
     var mapSourceControl: NSSegmentedControl!
@@ -41,7 +41,7 @@ class PreferencesView: PopoverView{
         let header = NSTextField(labelWithString: "map".localize())
         addSubviewCenteredBelow(header)
         
-        mapSourceControl.selectedSegment = MapSourceList.shared.indexOf(source: Preferences.shared.mapSource)
+        mapSourceControl.selectedSegment = MapSourceList.shared.indexOf(source: Settings.shared.mapSource)
         addSubviewBelow(mapSourceControl, upperView: header)
         
         let hint = NSTextField(wrappingLabelWithString: "mapServerHint".localize(table: "Hints")).asSmallLabel()
@@ -55,15 +55,15 @@ class PreferencesView: PopoverView{
     @objc func mapSourceChanged(){
         switch mapSourceControl.indexOfSelectedItem {
         case 0:
-            Preferences.shared.mapSource = .osm
+            Settings.shared.mapSource = .osm
         case 1:
-            Preferences.shared.mapSource = .elbe5
+            Settings.shared.mapSource = .elbe5
         case 2:
-            Preferences.shared.mapSource = .elbe5Topo
+            Settings.shared.mapSource = .elbe5Topo
         default:
             break
         }
-        Preferences.shared.save()
+        Settings.shared.save()
     }
     
     @objc func clearTiles(){

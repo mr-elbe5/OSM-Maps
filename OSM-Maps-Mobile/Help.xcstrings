@@ -465,14 +465,14 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "Die Kartensicht zeigt Karten auf der Basis der ausgewählten Quelle (siehe Einstellungen) an.\nSie kann verschoben und gezoomt werden, sowohl mit der Maus als auch mit den Plus- und Minus-Zeichen.\nAuf der Karte werden Orte von Notizen, Bildern und Touren angezeigt, wobei die Farben auf die Inhalte hinweisen: grün für Notiz, rot für Bild, blau für Tour. Liegen mehrere Markierungen eng zusammen, wird diese Gruppe durch ein Icon mit drei Nadeln angezeigt (violett für Bilder und Touren). Die Gruppen kann man durch Hineinzoomen auflösen.\nAnklicken einer Markierung öffnet eine Listenansicht der Elemente.\nÜber die Detailansicht können Elemente auf der Karte angezeigt oder editiert werden\nWeiterhin kann über das Kreuz in der Kartenmitte eine eine Notiz oder ein Bild hinzugefügt werden. Wird ein Bild auf diese Weise hinzugefügt, werden dessen GPS-Daten auf diese Position geändert.\nWenn auf der Karte ein Platzhalter erscheint (Zahnrad), dann wird dieser Teil der Karte noch geladen. Man kann das mit dem \"Neu laden\"-Knopf rechts überprüfen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The map view shows maps on the basis of the selected source (see preferences).\nIt can be scrolled, zoomed, using the mouse or using the plus and minus icons on the right.\nOn the map items are shown with pin icons in several colors: green for default, red for places including media,, blue for track.\nIf several items are too close, this group is shown with a triple pin icon (purple for media and tracks). You can dissolve it by zooming in.\nClicking on a pin opens the list view of its elements.\nUsing the detail view you can show item on the map (map icon) or edit them.\nFurther, you can add notes, photos and videos using the cross in the center of the map. If a photo is add this way, its GPS data is changed to this position.\nIf the map shows a placeholder (gear image), this part of the map is still loading. You may check this with the refresh button on the right."
+            "value" : "The map view shows maps on the basis of the selected source (see settings).\nIt can be scrolled, zoomed, using the mouse or using the plus and minus icons on the right.\nOn the map items are shown with pin icons in several colors: green for default, red for places including media, blue for track.\nIf several items are too close, this group is shown with a triple pin icon (purple for media and tracks). You can dissolve it by zooming in.\nClicking on a pin opens the list view of its elements.\nUsing the detail view you can show item on the map (map icon) or edit them.\nFurther, you can add notes, photos and videos using the cross in the center of the map. If a photo is add this way, its GPS data is changed to this position.\nIf the map shows a placeholder (gear image), this part of the map is still loading. You may check this with the refresh button on the right."
           }
         }
       }
@@ -545,23 +545,6 @@
         }
       }
     },
-    "helpPreferencesText" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "In Einstellungen können diverse Voreinstellungen geändert werden."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "In Preferences you can change various presets of the app."
-          }
-        }
-      }
-    },
     "helpRoutes" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -609,6 +592,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Settings"
+          }
+        }
+      }
+    },
+    "helpSettingsText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Einstellungen können diverse Voreinstellungen geändert werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Settings you can change various presets of the app."
           }
         }
       }
@@ -1067,23 +1067,6 @@
       }
     },
     "settings" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Einstellungen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Settings"
-          }
-        }
-      }
-    },
-    "SettingsPreferences" : {
       "extractionState" : "manual",
       "localizations" : {
         "de" : {

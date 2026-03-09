@@ -12,7 +12,7 @@ struct WatchMainView: View {
     @State var routeStatus = RouteStatus.shared
     @State var trackStatus = TrackStatus.shared
     @State var healthStatus = WatchHealthStatus.shared
-    @State var preferences = Preferences.shared
+    @State var settings = Settings.shared
     @State var mapStatus = WatchMapStatus.shared
     @State var zoomLevel: CGFloat = CGFloat(WatchMapStatus.shared.zoom)
     
@@ -29,14 +29,14 @@ struct WatchMainView: View {
                     .frame(width: proxy.size.width, height: proxy.size.height)
                     .background(.clear)
                     .clipped()
-                if preferences.showCurrentLocation{
+                if settings.showCurrentLocation{
                     WatchLocationView()
                         .offset(mapStatus.currentLocationOffset)
                 }
                 AccuracyView()
                     .position(x: 30, y: 15)
                     
-                if preferences.showHeartRate, healthStatus.isMonitoring{
+                if settings.showHeartRate, healthStatus.isMonitoring{
                     Text("❤️")
                         .font(.system(size: 12))
                         .offset(y: -proxy.size.height/2 + 20)
@@ -45,7 +45,7 @@ struct WatchMainView: View {
                         .foregroundColor(.black)
                         .offset(x: 20, y: -proxy.size.height/2 + 20)
                 }
-                if preferences.showCurrentLocation {
+                if settings.showCurrentLocation {
                     Image(systemName: "triangle.bottomhalf.filled")
                         .foregroundColor(.black)
                         .offset(y: proxy.size.height/2 - 20)
@@ -54,9 +54,9 @@ struct WatchMainView: View {
                         .foregroundColor(.black)
                         .offset(x: 35, y: proxy.size.height/2 - 18)
                 }
-                if !preferences.followLocation{
+                if !settings.followLocation{
                     Button(action: {
-                        Preferences.shared.followLocation = true
+                        Settings.shared.followLocation = true
                         WatchMapStatus.shared.locationChanged(to: LocationStatus.shared.location)
                     }) {
                         Image(systemName: "record.circle")
@@ -64,7 +64,7 @@ struct WatchMainView: View {
                     .mapButton()
                     .position(x: proxy.size.width - 20, y: proxy.size.height/2)
                 }
-                NavigationLink(destination: WatchPreferencesView()) {
+                NavigationLink(destination: WatchSettingsView()) {
                     Image(systemName: "gear")
                 }
                 .mapButton()

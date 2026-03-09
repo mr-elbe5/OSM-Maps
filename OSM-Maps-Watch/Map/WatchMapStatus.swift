@@ -207,11 +207,11 @@ extension WatchMapStatus: LocationServiceDelegate{
     func locationChanged(to location: CLLocation) {
         //Log.debug("locationChanged to \(location.coordinate)")
         self.setCurrentCoordinate(location.coordinate)
-        if Preferences.shared.followLocation {
+        if Settings.shared.followLocation {
             self.setCenterCoordinate(location.coordinate)
             self.updateTiles()
         }
-        if Preferences.shared.showCurrentLocation {
+        if Settings.shared.showCurrentLocation {
             self.updateCurrentLocationOffset()
         }
         if TrackRecorder.shared.isRecording {
@@ -220,7 +220,7 @@ extension WatchMapStatus: LocationServiceDelegate{
     }
     
     func directionChanged(to direction: CLLocationDirection) {
-        if Preferences.shared.showDirection {
+        if Settings.shared.showDirection {
             self.direction = direction
         }
     }

@@ -15,7 +15,7 @@ class WatchAppDelegate: NSObject, WKApplicationDelegate {
         AppStatus.shared.updateVersion()
         World.scrollWidthFactor = 1.0
         MapDefaults.startZoom = 14
-        Preferences.shared.followLocation = true
+        Settings.shared.followLocation = true
         WatchMapStatus.shared.zoom = MapDefaults.startZoom
         TrackRecorder.shared.delegate = TrackStatus.shared
         RouteStatus.loadStatus()

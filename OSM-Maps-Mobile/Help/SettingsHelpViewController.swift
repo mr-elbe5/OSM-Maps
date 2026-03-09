@@ -28,7 +28,7 @@ class SettingsHelpViewController: ScrollViewController{
         
         header = HelpText(icon: "gearshape", headerKey: "helpSettings")
         contentView.addSubviewBelow(header, upperView: text)
-        text = HelpText(key: "helpPreferencesText")
+        text = HelpText(key: "helpSettingsText")
         contentView.addSubviewBelow(text, upperView: header)
             .connectToBottom(of: contentView)
         
