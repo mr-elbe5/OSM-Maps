@@ -47,11 +47,28 @@ import CoreLocation
         self.route = route
         visible = true
         save()
+        showOnMap()
     }
     
     func toggleVisible(){
         visible = !visible
         save()
+        if visible{
+           showOnMap()
+        }
+    }
+    
+    private func showOnMap(){
+        if let route = route{
+            if route.coordinateRegion == nil{
+                route.updateCoordinateRegion()
+            }
+            if let coordinate = route.centerCoordinate{
+                WatchSettings.shared.followLocation = false
+                WatchMapStatus.shared.setCenterCoordinate(coordinate)
+                WatchMapStatus.shared.updateTiles()
+            }
+        }
     }
     
     func removeRoute(){
