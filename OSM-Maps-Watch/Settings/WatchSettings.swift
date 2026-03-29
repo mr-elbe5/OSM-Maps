@@ -6,24 +6,9 @@
 
 import Foundation
 
-@Observable class WatchSettings: Identifiable, Codable{
-    
-    static var storeKey = "preferences"
-    
-    static var shared = WatchSettings()
-    
-    static func load(){
-        if let prefs : WatchSettings = StatusManager.shared.getCodable(key: WatchSettings.storeKey){
-            WatchSettings.shared = prefs
-        }
-        else{
-            Log.error("no saved data available for settings")
-            WatchSettings.shared = WatchSettings()
-        }
-    }
+@Observable class WatchSettings: CommonSettings{
     
     enum CodingKeys: String, CodingKey {
-        case mapSource
         case followLocation
         case showCurrentLocation
         case showDirection
@@ -33,7 +18,6 @@ import Foundation
         case showHeartRate
     }
     
-    var mapSource : MapSource = .osm
     var followLocation : Bool = false
     var showCurrentLocation : Bool = true
     var showDirection : Bool = true
@@ -46,14 +30,12 @@ import Foundation
     var trackpointInterval: TrackpointInterval = MapDefaults.defaultTrackpointMinInterval
     var showHeartRate : Bool = true
     
-    init(){
+    override init(){
+        super.init()
     }
     
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        if let mapSourceString = try values.decodeIfPresent(String.self, forKey: .mapSource){
-            mapSource = MapSource(rawValue: mapSourceString) ?? .osm
-        }
         followLocation = try values.decodeIfPresent(Bool.self, forKey: .followLocation) ?? true
         showCurrentLocation = try values.decodeIfPresent(Bool.self, forKey: .showCurrentLocation) ?? true
         if let dist = try values.decodeIfPresent(String.self, forKey: .distanceFilter){
@@ -65,21 +47,17 @@ import Foundation
             trackpointInterval = TrackpointInterval(rawValue: interval) ?? .short
         }
         showHeartRate = try values.decodeIfPresent(Bool.self, forKey: .showHeartRate) ?? true
+        try super.init(from: decoder)
     }
     
-    func encode(to encoder: Encoder) throws {
+    override func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(mapSource.rawValue, forKey: .mapSource)
+        try super .encode(to: encoder)
         try container.encode(followLocation, forKey: .followLocation)
         try container.encode(showCurrentLocation, forKey: .showCurrentLocation)
         try container.encode(showDirection, forKey: .showDirection)
         try container.encode(distanceFilter.rawValue, forKey: .distanceFilter)
         try container.encode(showHeartRate, forKey: .showHeartRate)
-    }
-    
-    func save(){
-        StatusManager.shared.saveCodable(key: WatchSettings.storeKey, value: self)
-        Log.debug("Settings saved")
     }
     
 }

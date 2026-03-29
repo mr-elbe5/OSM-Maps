@@ -7,7 +7,7 @@
 import UIKit
 import UniformTypeIdentifiers
 
-class MapTilesViewController: ScrollViewController{
+class MapPreloadViewController: ScrollViewController{
     
     static var maxDownloadTiles = 5000
     
@@ -56,12 +56,8 @@ class MapTilesViewController: ScrollViewController{
     
     var uploadErrorsValueLabel = UILabel()
     
-    // other settings
-    
-    var mapSourceControl = UISegmentedControl()
-    
     override func loadView() {
-        title = "settings".localize()
+        title = "mapPreload".localize()
         super.loadView()
         view.addSubviewFillingSafeArea(scrollView, insets: .zero)
         scrollView.backgroundColor = .systemBackground
@@ -87,35 +83,23 @@ class MapTilesViewController: ScrollViewController{
         
         let segmentTitleAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 12)]
         
-        let subheader = UILabel(subheader: "mapServer".localize())
-        contentView.addSubviewBelow(subheader)
+        var header = UILabel(header: "currentServer".localize())
+        contentView.addSubviewBelow(header)
         
-        mapSourceControl.insertSegment(action: UIAction(){ action in
-            Settings.shared.mapSource = .osm
-        }, at: 0, animated: false)
-        mapSourceControl.setTitle("osm".localize(), forSegmentAt: 0)
-        mapSourceControl.insertSegment(action: UIAction(){ action in
-            Settings.shared.mapSource = .elbe5
-        }, at: 1, animated: false)
-        mapSourceControl.setTitle("elbe5".localize(), forSegmentAt: 1)
-        mapSourceControl.insertSegment(action: UIAction(){ action in
-            Settings.shared.mapSource = .elbe5Topo
-        }, at: 2, animated: false)
-        mapSourceControl.setTitle("elbe5topo".localize(), forSegmentAt: 2)
-        mapSourceControl.setTitleTextAttributes(segmentTitleAttributes, for: .normal)
-        mapSourceControl.selectedSegmentIndex = MapSourceList.shared.indexOf(source: Settings.shared.mapSource)
-        contentView.addSubviewBelow(mapSourceControl, upperView: subheader)
-        
-        let hint = UILabel(hint: "mapServerHint".localize(table: "Hints"))
-        contentView.addSubviewBelow(hint, upperView: mapSourceControl, insets: OSInsets.flatInsets)
+        let serverLabel = UILabel(text: Settings.shared.mapSource.displayName)
+        contentView.addSubviewBelow(serverLabel, upperView: header, insets: OSInsets.defaultInsets)
         
         let clearTileCacheButton = UIButton(name: "clearMapCache".localize(), action: UIAction(){ action in
             self.deleteAllTiles()
         })
-        contentView.addSubviewBelow(clearTileCacheButton, upperView: hint)
+        contentView.addSubviewBelow(clearTileCacheButton, upperView: serverLabel)
+        let clearCurrentTileCacheButton = UIButton(name: "clearCurrentMapCache".localize(), action: UIAction(){ action in
+            self.deleteCurrentTiles()
+        })
+        contentView.addSubviewBelow(clearCurrentTileCacheButton, upperView: clearTileCacheButton)
         
-        let header = UILabel(header: "mapTiles".localize())
-        contentView.addSubviewBelow(header, upperView: clearTileCacheButton)
+        header = UILabel(header: "mapTiles".localize())
+        contentView.addSubviewBelow(header, upperView: clearCurrentTileCacheButton)
         
         let note = UILabel(hint: "mapPreloadNote".localize(table: "Hints"))
         note.numberOfLines = 0
@@ -124,7 +108,7 @@ class MapTilesViewController: ScrollViewController{
         
         let sourceLabel = UILabel()
         sourceLabel.numberOfLines = 0
-        sourceLabel.text = "\("currentServer".localize()): \(Settings.shared.mapSource.rawValue.localize())"
+        sourceLabel.text = "\("currentServer".localize()): \(Settings.shared.mapSource.displayName)"
         contentView.addSubviewBelow(sourceLabel, upperView: note)
         
         let segSize = World.maxZoom - World.minZoom
@@ -241,14 +225,20 @@ class MapTilesViewController: ScrollViewController{
     }
     
     func deleteAllTiles(){
-        showDestructiveApprove(title: "deleteAllTiles".localize(), text: "deleteAllTilesHint".localize(table: "Hints")){
+        showDestructiveApprove(title: "clearMapCache".localize(), text: "clearMapCacheHint".localize(table: "Hints")){
             TileProvider.shared.deleteAllTiles()
+        }
+    }
+    
+    func deleteCurrentTiles(){
+        showDestructiveApprove(title: "clearCurrentMapCache".localize(), text: "clearCurrentMapCacheHint".localize(table: "Hints")){
+            TileProvider.shared.deleteCurrentTiles()
         }
     }
     
 }
 
-extension MapTilesViewController{
+extension MapPreloadViewController{
     
     // tiles
     
@@ -291,13 +281,13 @@ extension MapTilesViewController{
                     }
                 }
             }
-            if allPreloadTiles > MapTilesViewController.maxDownloadTiles{
+            if allPreloadTiles > MapPreloadViewController.maxDownloadTiles{
                 updateValueViews()
                 updateSliderValue()
                 enableDownload(false)
                 enableDownload(false)
                 stopSpinner(spinner)
-                showError("tooManyTiles".localize(param: String(MapTilesViewController.maxDownloadTiles)))
+                showError("tooManyTiles".localize(param: String(MapPreloadViewController.maxDownloadTiles)))
                 return
             }
             for zoom in region.tiles.keys{
@@ -444,7 +434,7 @@ extension MapTilesViewController{
     
 }
 
-extension MapTilesViewController: DownloadDelegate{
+extension MapPreloadViewController: DownloadDelegate{
     
     func downloadSucceeded() {
         existingTiles += 1
@@ -475,7 +465,7 @@ extension MapTilesViewController: DownloadDelegate{
     
 }
 
-extension MapTilesViewController: UploadDelegate{
+extension MapPreloadViewController: UploadDelegate{
     
     func uploadSucceeded() {
         uploadedTiles += 1

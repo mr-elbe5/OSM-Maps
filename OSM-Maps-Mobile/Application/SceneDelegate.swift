@@ -18,7 +18,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         AppStatus.load()
         AppStatus.shared.updateVersion()
         MapDefaults.startZoom = 14
+        MapSources.load()
         Settings.load()
+        Settings.shared.assertInitialTileDir()
         ViewFilter.load()
         MapStatus.load()
         AppData.load()
@@ -49,6 +51,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func sceneWillResignActive(_ scene: UIScene) {
         Log.debug("Scene will resign active, saving state, settings and data")
+        MapSources.shared.save()
         Settings.shared.save()
         MapStatus.shared.save()
         AppData.shared.save()

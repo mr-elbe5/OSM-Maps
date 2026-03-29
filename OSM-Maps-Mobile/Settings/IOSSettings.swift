@@ -6,24 +6,9 @@
 
 import Foundation
 
-class IOSSettings: Identifiable, Codable{
-    
-    static var storeKey = "preferences"
-    
-    static var shared = IOSSettings()
-    
-    static func load(){
-        if let prefs : IOSSettings = StatusManager.shared.getCodable(key: IOSSettings.storeKey){
-            IOSSettings.shared = prefs
-        }
-        else{
-            Log.error("no saved data available for settings")
-            IOSSettings.shared = IOSSettings()
-        }
-    }
+class IOSSettings: CommonSettings{
     
     enum CodingKeys: String, CodingKey {
-        case mapSource
         case showCenterButton
         case followLocation
         case showDirection
@@ -35,7 +20,6 @@ class IOSSettings: Identifiable, Codable{
         case maxSearchResults
     }
     
-    var mapSource : MapSource = .osm
     var showCenterButton: Bool = false
     var followLocation : Bool = false
     var showDirection : Bool = true
@@ -50,14 +34,12 @@ class IOSSettings: Identifiable, Codable{
     var trackpointInterval: TrackpointInterval = MapDefaults.defaultTrackpointMinInterval
     var maxSearchResults = MapDefaults.defaultMaxSearchResults
     
-    init(){
+    override init(){
+        super.init()
     }
 
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        if let mapSourceValue = try values.decodeIfPresent(String.self, forKey: .mapSource){
-            mapSource = MapSource(rawValue: mapSourceValue) ?? .osm
-        }
         showCenterButton = try values.decodeIfPresent(Bool.self, forKey: .showCenterButton) ?? false
         followLocation = try values.decodeIfPresent(Bool.self, forKey: .followLocation) ?? false
         if let dist = try values.decodeIfPresent(String.self, forKey: .distanceFilter){
@@ -72,11 +54,12 @@ class IOSSettings: Identifiable, Codable{
             trackpointInterval = TrackpointInterval(rawValue: interval) ?? .short
         }
         maxSearchResults = try values.decodeIfPresent(Int.self, forKey: .maxSearchResults) ?? MapDefaults.defaultMaxSearchResults
+        try super.init(from: decoder)
     }
     
-    func encode(to encoder: Encoder) throws {
+    override func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(mapSource.rawValue, forKey: .mapSource)
+        try super.encode(to: encoder)
         try container.encode(showCenterButton, forKey: .showCenterButton)
         try container.encode(followLocation, forKey: .followLocation)
         try container.encode(showDirection, forKey: .showDirection)
@@ -84,11 +67,6 @@ class IOSSettings: Identifiable, Codable{
         try container.encode(routeType.rawValue, forKey: .routeType)
         try container.encode(distanceFilter.rawValue, forKey: .distanceFilter)
         try container.encode(maxSearchResults, forKey: .maxSearchResults)
-    }
-    
-    func save(){
-        StatusManager.shared.saveCodable(key: IOSSettings.storeKey, value: self)
-        Log.debug("Settings saved")
     }
     
 }

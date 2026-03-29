@@ -31,7 +31,7 @@ class RouteControlView : NSView{
         routeTypeSelector.setImage(NSImage(systemSymbolName: "car", accessibilityDescription: nil)!, forSegment: 0)
         routeTypeSelector.setImage(NSImage(systemSymbolName: "bicycle", accessibilityDescription: nil)!, forSegment: 1)
         routeTypeSelector.setImage(NSImage(systemSymbolName: "figure.walk", accessibilityDescription: nil)!, forSegment: 2)
-        routeTypeSelector.selectedSegment = RouteType.getRouteTypeIndex(type: Settings.shared.routeType)
+        routeTypeSelector.selectedSegment = RouteType.getRouteTypeIndex(type: DesktopSettings.shared.routeType)
         routeTypeSelector.target = self
         routeTypeSelector.action = #selector(routeTypeChanged)
         addSubviewBelow(routeTypeSelector, upperView: label)
@@ -207,8 +207,8 @@ class RouteControlView : NSView{
         //Log.info(" idx \(idx)")
         let type = RouteType.getRouteType(idx: idx)
         //Log.info(" type \(type.rawValue)")
-        Settings.shared.routeType = type
-        Settings.shared.save()
+        DesktopSettings.shared.routeType = type
+        DesktopSettings.shared.save()
         MainViewController.shared.setRouteType(type)
     }
     

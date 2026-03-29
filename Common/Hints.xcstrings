@@ -69,6 +69,40 @@
         }
       }
     },
+    "clearCurrentMapCacheHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dies löscht alle gespeicherten Kartenkacheln der aktuellen Kartenquelle."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This deletes all cached map tiles for the current source."
+          }
+        }
+      }
+    },
+    "clearMapCacheHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dies löscht alle gespeicherten Kartenkacheln aller Kartenquellen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This deletes all cached map tiles for all sources."
+          }
+        }
+      }
+    },
     "deleteAllDataHint" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -92,7 +126,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dies löscht alle gemachten Kartenkacheln. Es kann bei einem Wechsel der Kartenquelle nützlich sein."
+            "value" : "Dies löscht alle gespeicherten Kartenkacheln aller Kartenquellen."
           }
         },
         "en" : {
@@ -295,7 +329,7 @@
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Sie finden Links zu den Regeln in den Einstellungen."
           }
         },

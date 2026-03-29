@@ -28,7 +28,7 @@ class MapView: NSView {
         crossLocationView.target = self
         crossLocationView.action = #selector(showCrossLocationMenu)
         addSubviewCentered(crossLocationView, centerX: scrollView.centerXAnchor, centerY: scrollView.centerYAnchor)
-        crossLocationView.isHidden = !Settings.shared.showCenterButton
+        crossLocationView.isHidden = !DesktopSettings.shared.showCenterButton
         
     }
     
@@ -69,13 +69,13 @@ class MapView: NSView {
     
     func toggleCross() {
         crossLocationView.isHidden = !crossLocationView.isHidden
-        Settings.shared.showCenterButton = !crossLocationView.isHidden
-        Settings.shared.save()
+        DesktopSettings.shared.showCenterButton = !crossLocationView.isHidden
+        DesktopSettings.shared.save()
     }
     
     func toggleMarkers() {
-        Settings.shared.showMapPins = !Settings.shared.showMapPins
-        Settings.shared.save()
+        DesktopSettings.shared.showMapPins = !DesktopSettings.shared.showMapPins
+        DesktopSettings.shared.save()
         scrollView.updateItemLayerContent()
     }
     

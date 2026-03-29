@@ -681,6 +681,23 @@
         }
       }
     },
+    "clearCurrentMapCache" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuellen Kartenspeicher leeren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear current Map Cache"
+          }
+        }
+      }
+    },
     "clearMapCache" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1095,13 +1112,30 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kartenkacheln löschen"
+            "value" : "Alle Kartenkacheln löschen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Delete Map Tiles"
+            "value" : "Delete all Map Tiles"
+          }
+        }
+      }
+    },
+    "deleteCurrentTiles" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuelle Kartenkacheln löschen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete current Map Tiles"
           }
         }
       }
@@ -2602,6 +2636,23 @@
         }
       }
     },
+    "mapServerHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zur Nutzung eines Kartenservers sollte dieser frei verfügbar sein oder  entsprechende Rechte sollten vorliegen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For using any map server it should be openly available or you should have respective rights."
+          }
+        }
+      }
+    },
     "mapSettings" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2615,6 +2666,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Map Settings"
+          }
+        }
+      }
+    },
+    "mapSource" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kartenquelle"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Map Source"
+          }
+        }
+      }
+    },
+    "mapSourceSaved" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kartenquelle gespeichert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Map source saved"
           }
         }
       }
@@ -3962,6 +4047,23 @@
         }
       }
     },
+    "serverName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Servername"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Server Name"
+          }
+        }
+      }
+    },
     "services" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4638,6 +4740,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Synchronize to iCloud"
+          }
+        }
+      }
+    },
+    "templateURL" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URL"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URL"
           }
         }
       }

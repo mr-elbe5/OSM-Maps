@@ -9,6 +9,7 @@ import SwiftUI
 struct WatchSettingsView: View {
     
     @State var settings = Settings.shared
+    @State var sourceName = Settings.shared.mapSource.displayName
     @State var phoneConnector = PhoneConnector.shared
     
     var body: some View {
@@ -16,28 +17,31 @@ struct WatchSettingsView: View {
             VStack(alignment: .center) {
                 Text("settings".localize()).font(Font.headline)
                 Spacer(minLength: 20)
-                Picker("mapServer".localizeWithColon(), selection: $settings.mapSource) {
-                    ForEach(MapSource.allCases) { option in
-                        Text("\(option.rawValue)_server".localize())
+                Picker("mapServer".localizeWithColon(), selection: $sourceName) {
+                    ForEach(MapSources.shared, id: \.self) { option in
+                        Text(option.displayName)
                     }
                 }
                 .pickerStyle(.navigationLink)
-                .onChange(of: settings.mapSource) { oldValue, newValue in
-                    settings.save()
+                .onChange(of: sourceName) { oldValue, newValue in
+                    if let newSource = MapSources.shared.first(where: { $0.displayName == newValue }) {
+                        Settings.shared.mapSource = newSource
+                        Settings.shared.save()
+                    }
                 }
                 Spacer(minLength: 20)
                 Toggle(isOn: $settings.showCurrentLocation) {
                     Text("showCurrentLocation".localize())
                     }
                 .onChange(of: settings.showCurrentLocation) { oldValue, newValue in
-                    settings.save()
+                    Settings.shared.save()
                 }
                 Spacer()
                 Toggle(isOn: $settings.showDirection) {
                     Text("showDirection".localize())
                     }
                 .onChange(of: settings.showDirection) { oldValue, newValue in
-                    settings.save()
+                    Settings.shared.save()
                     LocationService.shared.updateShowDirection()
                 }
                 Spacer()
@@ -51,14 +55,14 @@ struct WatchSettingsView: View {
                     Text("showHeartrate".localize())
                     }
                 .onChange(of: settings.showHeartRate) { oldValue, newValue in
-                    settings.save()
+                    Settings.shared.save()
                 }
                 Spacer(minLength: 20)
                 Toggle(isOn: $settings.countTrackpoints) {
                     Text("countTrackpoints".localize())
                     }
                 .onChange(of: settings.countTrackpoints) { oldValue, newValue in
-                    settings.save()
+                    Settings.shared.save()
                 }
                 Spacer(minLength: 20)
                 Picker("trackpointInterval".localizeWithColon(), selection: $settings.trackpointInterval) {
@@ -68,7 +72,7 @@ struct WatchSettingsView: View {
                 }
                 .pickerStyle(.navigationLink)
                 .onChange(of: settings.trackpointInterval) { oldValue, newValue in
-                    settings.save()
+                    Settings.shared.save()
                 }
                 Text("trackpointIntervalHint".localize(table: "Hints"))
                     .hint()
@@ -85,7 +89,7 @@ struct WatchSettingsView: View {
                 .pickerStyle(.navigationLink)
                 .onChange(of: settings.distanceFilter) { oldValue, newValue in
                     LocationService.shared.updateDistanceFilter()
-                    settings.save()
+                    Settings.shared.save()
                 }
                 Text("distanceFilterHint".localize(table: "Hints"))
                     .hint()

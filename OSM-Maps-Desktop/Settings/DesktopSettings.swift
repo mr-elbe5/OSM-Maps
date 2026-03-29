@@ -6,24 +6,9 @@
 
 import Foundation
 
-class Settings: Identifiable, Codable{
-    
-    static var storeKey = "preferences"
-    
-    static var shared = Settings()
-    
-    static func load(){
-        if let prefs : Settings = StatusManager.shared.getCodable(key: Settings.storeKey){
-            Settings.shared = prefs
-        }
-        else{
-            Log.error("no saved data available for settings")
-            Settings.shared = Settings()
-        }
-    }
+class DesktopSettings: CommonSettings{
     
     enum CodingKeys: String, CodingKey {
-        case mapSource
         case showCenterButton
         case showMapPins
         case maxSearchResults
@@ -32,7 +17,6 @@ class Settings: Identifiable, Codable{
         case routeType
     }
     
-    var mapSource : MapSource = .elbe5
     var showCenterButton: Bool = false
     var showMapPins: Bool = true
     var showTrackpoints : Bool = false
@@ -43,14 +27,12 @@ class Settings: Identifiable, Codable{
     
     var sortAscending: Bool = true
     
-    init(){
+    override init(){
+        super.init()
     }
 
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        if let mapSourceString = try? values.decodeIfPresent(String.self, forKey: .mapSource){
-            mapSource = MapSource(rawValue: mapSourceString) ?? .osm
-        }
         showCenterButton = try values.decodeIfPresent(Bool.self, forKey: .showCenterButton) ?? false
         showMapPins = try values.decodeIfPresent(Bool.self, forKey: .showMapPins) ?? true
         sortAscending = try values.decodeIfPresent(Bool.self, forKey: .sortAscending) ?? true
@@ -58,11 +40,12 @@ class Settings: Identifiable, Codable{
         if let type = try values.decodeIfPresent(String.self, forKey: .routeType){
             routeType = RouteType(rawValue: type) ?? .car
         }
+        try super.init(from: decoder)
     }
     
-    func encode(to encoder: Encoder) throws {
+    override func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(mapSource.rawValue, forKey: .mapSource)
+        try super.encode(to: encoder)
         try container.encode(showCenterButton, forKey: .showCenterButton)
         try container.encode(showMapPins, forKey: .showMapPins)
         try container.encode(maxSearchResults, forKey: .maxSearchResults)
@@ -71,11 +54,8 @@ class Settings: Identifiable, Codable{
         try container.encode(routeType.rawValue, forKey: .routeType)
     }
     
-    func save(){
-        StatusManager.shared.saveCodable(key: Settings.storeKey, value: self)
-        Log.debug("Settings saved")
-    }
-    
 }
+
+typealias Settings = DesktopSettings
 
 

@@ -34,7 +34,7 @@ class MapTile{
     }
     
     var fileUrl: URL{
-        BasePaths.tileDirURL.appendingPathComponent("\(shortDescription).png")
+        Settings.shared.tileDirURL.appendingPathComponent("\(shortDescription).png")
     }
     
     var exists: Bool{

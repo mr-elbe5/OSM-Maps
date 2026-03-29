@@ -90,8 +90,12 @@ class MainViewController: UIViewController {
             let controller = DataViewController()
             self.navigationController?.pushViewController(controller, animated: true)
         }))
-        items.append(UIBarButtonItem(title: "mapTiles".localize(), image: UIImage(systemName: "map"), primaryAction: UIAction(){ action in
-            let controller = MapTilesViewController()
+        items.append(UIBarButtonItem(title: "mapSource".localize(), image: UIImage(systemName: "map"), primaryAction: UIAction(){ action in
+            let controller = TileSourceViewController()
+            self.navigationController?.pushViewController(controller, animated: true)
+        }))
+        items.append(UIBarButtonItem(title: "mapTiles".localize(), image: UIImage(systemName: "square.grid.3x3.square"), primaryAction: UIAction(){ action in
+            let controller = MapPreloadViewController()
             self.navigationController?.pushViewController(controller, animated: true)
         }))
         items.append(UIBarButtonItem(title: "help".localize(), image: UIImage(systemName: "questionmark.circle"), primaryAction: UIAction(){ action in

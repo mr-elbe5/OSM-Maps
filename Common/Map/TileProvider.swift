@@ -112,6 +112,11 @@ class TileProvider{
         Log.info("TileProvider \(count) tiles cleared")
     }
     
+    func deleteCurrentTiles(){
+        let count = FileManager.default.deleteAllFiles(dirURL: Settings.shared.tileDirURL)
+        Log.info("TileProvider \(count) tiles cleared")
+    }
+    
     func dumpTiles(){
         var paths = Array<String>()
         if let subpaths = FileManager.default.subpaths(atPath: BasePaths.tileDirURL.path){

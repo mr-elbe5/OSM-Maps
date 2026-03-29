@@ -46,6 +46,22 @@ extension FileManager {
         return nil
     }
     
+    @discardableResult
+    func assertDirectory(url: URL) -> Bool{
+        var isDir:ObjCBool = true
+        if !fileExists(atPath: url.path, isDirectory: &isDir) {
+            do{
+                try createDirectory(at: url, withIntermediateDirectories: true)
+            }
+            catch let err{
+                Log.error("FileController could not create directory", err)
+                return false
+            }
+        }
+        return true
+    }
+    
+    @discardableResult
     func assertDirectoryFor(url: URL) -> Bool{
         let dirUrl = url.deletingLastPathComponent()
         var isDir:ObjCBool = true
@@ -116,6 +132,20 @@ extension FileManager {
             return true
         } catch let err{
             Log.error("FileController could not copy file", err)
+            return false
+        }
+    }
+    
+    @discardableResult
+    func moveFile(fromURL: URL, toURL: URL, replace: Bool = false) -> Bool{
+        do{
+            if replace && fileExists(url: toURL){
+                _ = deleteFile(url: toURL)
+            }
+            try FileManager.default.moveItem(at: fromURL, to: toURL)
+            return true
+        } catch let err{
+            Log.error("FileController could not move file", err)
             return false
         }
     }
