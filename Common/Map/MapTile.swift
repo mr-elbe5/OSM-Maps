@@ -22,6 +22,7 @@ class MapTile{
     var zoom: Int
     
     var imageData : Data? = nil
+    var overlayImageData : Data? = nil
     
     init(zoom: Int, x: Int, y: Int){
         self.zoom = zoom
@@ -37,8 +38,19 @@ class MapTile{
         Settings.shared.tileDirURL.appendingPathComponent("\(shortDescription).png")
     }
     
+    var overlayFileUrl: URL?{
+        Settings.shared.overlayTileDirURL?.appendingPathComponent("\(shortDescription).png")
+    }
+    
     var exists: Bool{
         FileManager.default.fileExists(atPath: fileUrl.path)
+    }
+    
+    var overlayExists: Bool{
+        if let url = overlayFileUrl{
+            return FileManager.default.fileExists(atPath: url.path)
+        }
+        return false
     }
     
     var shortDescription : String{

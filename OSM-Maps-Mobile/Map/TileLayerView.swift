@@ -39,7 +39,11 @@ class TileLayerView: UIView {
         let ctx = UIGraphicsGetCurrentContext()!
         upScale = 1.0/ctx.ctm.a*pointToPixelsFactor
         zoom = World.maxZoom - World.zoomLevelAtUpScale(scale: upScale)
-        drawTile(rect: rect)
+        let tile = MapTile.getTile(data: getTileData(rect: rect))
+        drawTile(tile, rect: rect)
+        if Settings.shared.hasOverlay{
+            drawOverlayTile(tile, rect: rect)
+        }
     }
     
     private func getTileData(rect: CGRect) -> MapTileData{
@@ -54,8 +58,7 @@ class TileLayerView: UIView {
     }
     
     // rect is in contentSize = planetSize
-    func drawTile(rect: CGRect){
-        let tile = MapTile.getTile(data: getTileData(rect: rect))
+    func drawTile(_ tile: MapTile, rect: CGRect){
         if let imageData = tile.imageData, let image = UIImage(data: imageData){
             image.draw(in: rect)
             return
@@ -69,6 +72,24 @@ class TileLayerView: UIView {
             }
             else{
                 Log.error("TileLayerView could not load tile \(tile.shortDescription)")
+            }
+        }
+    }
+    
+    // rect is in contentSize = planetSize
+    func drawOverlayTile(_ tile: MapTile, rect: CGRect){
+        if let overlayImageData = tile.overlayImageData, let overlayImage = UIImage(data: overlayImageData){
+            overlayImage.draw(in: rect)
+            return
+        }
+        TileProvider.shared.getTileOverlayImage(tile: tile){ success in
+            if success{
+                DispatchQueue.main.async {
+                    self.setNeedsDisplay(rect)
+                }
+            }
+            else{
+                Log.error("TileLayerView could not load overlay tile \(tile.shortDescription)")
             }
         }
     }

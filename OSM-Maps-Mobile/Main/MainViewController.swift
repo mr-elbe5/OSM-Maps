@@ -91,7 +91,7 @@ class MainViewController: UIViewController {
             self.navigationController?.pushViewController(controller, animated: true)
         }))
         items.append(UIBarButtonItem(title: "mapSource".localize(), image: UIImage(systemName: "map"), primaryAction: UIAction(){ action in
-            let controller = TileSourceViewController()
+            let controller = MapSourceViewController()
             self.navigationController?.pushViewController(controller, animated: true)
         }))
         items.append(UIBarButtonItem(title: "mapTiles".localize(), image: UIImage(systemName: "square.grid.3x3.square"), primaryAction: UIAction(){ action in

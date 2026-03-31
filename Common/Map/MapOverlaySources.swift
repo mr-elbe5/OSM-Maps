@@ -6,18 +6,12 @@
 
 import Foundation
 
-class MapSource: Codable, Hashable{
+class MapOverlaySource: Codable, Hashable{
     
-    static func == (lhs: MapSource, rhs: MapSource) -> Bool {
+    static func == (lhs: MapOverlaySource, rhs: MapOverlaySource) -> Bool {
         lhs.templateUrl == rhs.templateUrl
     }
-    
-    static var osmSource: MapSource = MapSource(name: "osm", displayName: "OpenStreetMap", templateUrl: "https://tile.openstreetmap.org/{z}/{x}/{y}.png")
-    static var elbe5Source: MapSource = MapSource(name: "elbe5", displayName: "Elbe5 Carto", templateUrl: "https://tiles.elbe5.de/carto/{z}/{x}/{y}.png")
-    static var elbe5TopoSource: MapSource = MapSource(name: "elbe5Topo", displayName: "Elbe5 Topo", templateUrl: "https://tiles.elbe5.de/topo/{z}/{x}/{y}.png")
-    static var openTopoSource: MapSource = MapSource(name: "openTopo", displayName: "Open Topomap", templateUrl: "https://a.tile.opentopomap.org/{z}/{x}/{y}.png")
-    
-    static var defaultMapSource: MapSource = MapSource.osmSource
+    static var waymarkedTrailsSource: MapOverlaySource = MapOverlaySource(name: "waymarkedTrails", displayName: "Waymarked Trails", templateUrl: "https://tile.waymarkedtrails.org/hiking/{z}/{x}/{y}.png")
     
     enum CodingKeys: String, CodingKey {
         case name
@@ -54,17 +48,17 @@ class MapSource: Codable, Hashable{
     }
 }
 
-typealias MapSources = Array<MapSource>
+typealias MapOverlaySources = Array<MapOverlaySource>
 
-extension MapSources{
+extension MapOverlaySources{
     
-    static var storeKey = "mapSources"
+    static var storeKey = "mapOverlaySources"
     
-    static var shared: MapSources = [.osmSource, .elbe5Source, .elbe5TopoSource, .openTopoSource]
+    static var shared: MapOverlaySources = [.waymarkedTrailsSource]
     
     static func load(){
-        if let list : MapSources = StatusManager.shared.getCodable(key: MapSources.storeKey){
-            MapSources.shared = list
+        if let list : MapOverlaySources = StatusManager.shared.getCodable(key: MapOverlaySources.storeKey){
+            MapOverlaySources.shared = list
         }
         else{
             Log.error("no saved data available for map sources")
@@ -72,7 +66,7 @@ extension MapSources{
     }
     
     static func setDefaults(){
-        shared = [.osmSource, .elbe5Source, .elbe5TopoSource, .openTopoSource]
+        shared = [.waymarkedTrailsSource]
         shared.save()
     }
     
@@ -101,7 +95,7 @@ extension MapSources{
         return 0
     }
     
-    func getByUrl(_ url: String) -> MapSource?{
+    func getByUrl(_ url: String) -> MapOverlaySource?{
         for i in 0..<count{
             if self[i].templateUrl == url{
                 return self[i]
@@ -110,18 +104,16 @@ extension MapSources{
         return nil
     }
     
-    mutating func remove(_ mapSource: MapSource){
-        if mapSource != .defaultMapSource{
-            self.removeAll(where: { $0 == mapSource})
-            if Settings.shared.mapSource == mapSource{
-                Settings.shared.mapSource = .defaultMapSource
-            }
+    mutating func remove(_ overlaySource: MapOverlaySource){
+        self.removeAll(where: { $0 == overlaySource})
+        if Settings.shared.mapOverlaySource == overlaySource{
+            Settings.shared.mapOverlaySource = nil
         }
     }
     
     func save(){
-        StatusManager.shared.saveCodable(key: MapSources.storeKey, value: self)
-        Log.debug("map sources saved")
+        StatusManager.shared.saveCodable(key: MapOverlaySources.storeKey, value: self)
+        Log.debug("map overlay sources saved")
     }
     
 }

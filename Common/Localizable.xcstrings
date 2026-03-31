@@ -2642,13 +2642,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zur Nutzung eines Kartenservers sollte dieser frei verfügbar sein oder  entsprechende Rechte sollten vorliegen."
+            "value" : "Bitte beachten! Zur Nutzung eines Kartenservers sollte dieser frei verfügbar sein oder  entsprechende Rechte sollten vorliegen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "For using any map server it should be openly available or you should have respective rights."
+            "value" : "Please note! For using any map server it should be openly available or you should have respective rights."
           }
         }
       }
@@ -3091,6 +3091,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Legal Info for tiles from OpenStreetMap.org"
+          }
+        }
+      }
+    },
+    "overlayName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overlay-Name"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overlay Name"
           }
         }
       }
@@ -4077,6 +4094,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Services"
+          }
+        }
+      }
+    },
+    "setDefaults" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standardeinstellungen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set Defaults"
           }
         }
       }

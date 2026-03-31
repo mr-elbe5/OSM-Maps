@@ -27,6 +27,22 @@ class IconButton : UIButton{
         }
     }
     
+    init(smallIcon: String, tintColor: UIColor = .label, backgroundColor: UIColor? = nil, withBorder: Bool = false){
+        self.hasBorder = withBorder
+        super.init(frame: .zero)
+        setImage(UIImage(systemName: smallIcon)?.withTintColor(tintColor, renderingMode: .alwaysOriginal), for: .normal)
+        setImage(UIImage(systemName: smallIcon)?.withTintColor(.systemGray, renderingMode: .alwaysOriginal), for: .disabled)
+        self.scaleBy(0.75)
+        if let bgcol = backgroundColor{
+            self.backgroundColor = bgcol
+            layer.cornerRadius = 3
+            layer.masksToBounds = true
+        }
+        if hasBorder{
+            setGrayRoundedBorders()
+        }
+    }
+    
     init(image: String, tintColor: UIColor = .label, backgroundColor: UIColor? = nil, withBorder: Bool = true){
         self.hasBorder = withBorder
         super.init(frame: .zero)

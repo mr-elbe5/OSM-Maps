@@ -24,12 +24,25 @@ class CommonSettings: Identifiable, Codable{
     
     enum CodingKeys: String, CodingKey {
         case mapSource
+        case mapOverlaySource
     }
     
-    var mapSource: MapSource = .osmSource
+    var mapSource: MapSource = MapSource.defaultMapSource
+    var mapOverlaySource: MapOverlaySource? = nil
+    
+    var hasOverlay: Bool{
+        mapOverlaySource != nil
+    }
     
     var tileDirURL: URL{
         BasePaths.tileDirURL.appendingPathComponent(mapSource.name)
+    }
+    
+    var overlayTileDirURL: URL?{
+        if let source = mapOverlaySource{
+            return BasePaths.tileDirURL.appendingPathComponent(source.name)
+        }
+        return nil
     }
     
     init(){
@@ -38,13 +51,17 @@ class CommonSettings: Identifiable, Codable{
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         if let mapSourceString = try? values.decodeIfPresent(String.self, forKey: .mapSource){
-            mapSource = MapSources.shared.first(where: { $0.name == mapSourceString }) ?? .osmSource
+            mapSource = MapSources.shared.first(where: { $0.name == mapSourceString }) ?? MapSource.defaultMapSource
+        }
+        if let overlaySourceString = try? values.decodeIfPresent(String.self, forKey: .mapOverlaySource){
+            mapOverlaySource = MapOverlaySources.shared.first(where: { $0.name == overlaySourceString })
         }
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(mapSource.name, forKey: .mapSource)
+        try container.encodeIfPresent(mapOverlaySource?.name, forKey: .mapOverlaySource)
     }
     
     func assertInitialTileDir(){
@@ -58,8 +75,17 @@ class CommonSettings: Identifiable, Codable{
         }
     }
     
-    func assertTileDir(){
+    func assertTileDirs(){
         FileManager.default.assertDirectory(url: tileDirURL)
+        if let url = overlayTileDirURL{
+            FileManager.default.assertDirectory(url: url)
+        }
+    }
+    
+    func setDefaultSources(){
+        mapSource = MapSource.defaultMapSource
+        mapOverlaySource = nil
+        save()
     }
     
     func save(){
