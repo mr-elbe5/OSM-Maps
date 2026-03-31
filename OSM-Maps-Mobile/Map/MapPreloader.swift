@@ -76,7 +76,7 @@ class MapPreloader {
                 for x in tileSet.minX...tileSet.maxX{
                     for y in tileSet.minY...tileSet.maxY{
                         let tile = MapTile(zoom: zoom, x: x, y: y)
-                        if tile.exists{
+                        if tile.fileExists{
                             existingTiles += 1
                             continue
                         }

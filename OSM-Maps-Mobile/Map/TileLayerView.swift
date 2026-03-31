@@ -60,11 +60,13 @@ class TileLayerView: UIView {
     // rect is in contentSize = planetSize
     func drawTile(_ tile: MapTile, rect: CGRect){
         if let imageData = tile.imageData, let image = UIImage(data: imageData){
+            Log.debug("drawing tile \(tile.shortDescription)")
             image.draw(in: rect)
             return
         }
         mapGearImage?.draw(in: rect.scaleCenteredBy(0.25))
         TileProvider.shared.getTileImage(tile: tile){ success in
+            Log.debug("refresh tile \(tile.shortDescription) \(success)")
             if success{
                 DispatchQueue.main.async {
                     self.setNeedsDisplay(rect)
@@ -79,10 +81,12 @@ class TileLayerView: UIView {
     // rect is in contentSize = planetSize
     func drawOverlayTile(_ tile: MapTile, rect: CGRect){
         if let overlayImageData = tile.overlayImageData, let overlayImage = UIImage(data: overlayImageData){
+            Log.debug("drawing overlay tile \(tile.shortDescription)")
             overlayImage.draw(in: rect)
             return
         }
         TileProvider.shared.getTileOverlayImage(tile: tile){ success in
+            Log.debug("refresh overlay tile \(tile.shortDescription) \(success)")
             if success{
                 DispatchQueue.main.async {
                     self.setNeedsDisplay(rect)

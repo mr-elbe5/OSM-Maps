@@ -11,7 +11,7 @@ class MapTile{
     static func getTile(data: MapTileData) -> MapTile{
         let tile = MapTile(zoom: data.zoom, x: data.x, y: data.y)
         //Log.debug("get tile \(tile.shortDescription)")
-        if tile.exists, let fileData = FileManager.default.contents(atPath: tile.fileUrl.path){
+        if tile.fileExists, let fileData = FileManager.default.contents(atPath: tile.fileUrl.path){
             tile.imageData = fileData
         }
         return tile
@@ -42,8 +42,12 @@ class MapTile{
         Settings.shared.overlayTileDirURL?.appendingPathComponent("\(shortDescription).png")
     }
     
-    var exists: Bool{
+    var fileExists: Bool{
         FileManager.default.fileExists(atPath: fileUrl.path)
+    }
+    
+    var overlayShouldExist: Bool{
+        Settings.shared.hasOverlay
     }
     
     var overlayExists: Bool{

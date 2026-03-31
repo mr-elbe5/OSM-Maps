@@ -24,7 +24,7 @@ class TileProvider{
         if !tile.valid {
             return
         }
-        if tile.exists, let fileData = FileManager.default.contents(atPath: tile.fileUrl.path){
+        if tile.fileExists, let fileData = FileManager.default.contents(atPath: tile.fileUrl.path){
             Log.debug("got local tile")
             tile.imageData = fileData
             result(true)
@@ -37,7 +37,7 @@ class TileProvider{
     }
     
     func getTileOverlayImage(tile: MapTile, result: @escaping (Bool) -> Void) {
-        if !tile.valid {
+        if !tile.valid || !tile.overlayShouldExist {
             return
         }
         if tile.overlayExists, let url = tile.overlayFileUrl, let fileData = FileManager.default.contents(atPath: url.path){
@@ -62,6 +62,7 @@ class TileProvider{
             if let data = data{
                 Log.debug("got remote tile in first try")
                 self.setImageData(data, to: tile)
+                result(true)
             }
             else{
                 self.retryLoadTileImage(tile: tile, tries: 1){ success in
@@ -86,6 +87,7 @@ class TileProvider{
                 if let data = data{
                     Log.debug("got remote overlay tile in first try")
                     self.setOverlayImageData(data, to: tile)
+                    result(true)
                 }
                 else{
                     self.retryLoadOverlayTileImage(tile: tile, tries: 1){ success in
@@ -105,7 +107,7 @@ class TileProvider{
     
     private func setImageData(_ data: Data, to tile: MapTile){
         tile.imageData = data
-        Log.debug("saving tile to \(tile.fileUrl)")
+        Log.debug("saving tile \(tile.shortDescription)")
         if !self.saveTile(fileUrl: tile.fileUrl, data: data){
             Log.error("TileProvider could not save tile \(tile.shortDescription)")
         }
@@ -114,7 +116,7 @@ class TileProvider{
     private func setOverlayImageData(_ data: Data, to tile: MapTile){
         if let url = tile.overlayFileUrl{
             tile.overlayImageData = data
-            Log.debug("saving overlay tile to \(tile.fileUrl)")
+            Log.debug("saving overlay tile \(tile.shortDescription)")
             if !self.saveTile(fileUrl: url, data: data){
                 Log.error("TileProvider could not save overlay tile \(tile.shortDescription)")
             }
