@@ -86,7 +86,7 @@ class MapPreloadViewController: ScrollViewController{
         var header = UILabel(header: "currentServer".localize())
         contentView.addSubviewBelow(header)
         
-        let serverLabel = UILabel(text: Settings.shared.mapSource.displayName)
+        let serverLabel = UILabel(text: Settings.shared.tileSource.displayName)
         contentView.addSubviewBelow(serverLabel, upperView: header, insets: OSInsets.defaultInsets)
         
         let clearTileCacheButton = UIButton(name: "clearMapCache".localize(), action: UIAction(){ action in
@@ -108,7 +108,7 @@ class MapPreloadViewController: ScrollViewController{
         
         let sourceLabel = UILabel()
         sourceLabel.numberOfLines = 0
-        sourceLabel.text = "\("currentServer".localize()): \(Settings.shared.mapSource.displayName)"
+        sourceLabel.text = "\("currentServer".localize()): \(Settings.shared.tileSource.displayName)"
         contentView.addSubviewBelow(sourceLabel, upperView: note)
         
         let segSize = World.maxZoom - World.minZoom
@@ -297,7 +297,7 @@ extension MapPreloadViewController{
                 if let tileSet = region.tiles[zoom]{
                     for x in tileSet.minX...tileSet.maxX{
                         for y in tileSet.minY...tileSet.maxY{
-                            let tile = MapTile(zoom: zoom, x: x, y: y)
+                            let tile = MapTile(zoom: zoom, x: x, y: y, tileSource: Settings.shared.tileSource)
                             if tile.fileExists{
                                 existingTiles += 1
                                 continue
@@ -383,7 +383,7 @@ extension MapPreloadViewController{
                 if let tileSet = region.tiles[zoom]{
                     for x in tileSet.minX...tileSet.maxX{
                         for y in tileSet.minY...tileSet.maxY{
-                            let tile = MapTile(zoom: zoom, x: x, y: y)
+                            let tile = MapTile(zoom: zoom, x: x, y: y, tileSource: Settings.shared.tileSource)
                             watchTiles.append(tile)
                         }
                     }

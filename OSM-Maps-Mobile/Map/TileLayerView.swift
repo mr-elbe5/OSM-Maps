@@ -39,10 +39,11 @@ class TileLayerView: UIView {
         let ctx = UIGraphicsGetCurrentContext()!
         upScale = 1.0/ctx.ctm.a*pointToPixelsFactor
         zoom = World.maxZoom - World.zoomLevelAtUpScale(scale: upScale)
-        let tile = MapTile.getTile(data: getTileData(rect: rect))
+        let tile = MapTile.getTile(data: getTileData(rect: rect), tileSource: Settings.shared.tileSource)
         drawTile(tile, rect: rect)
-        if Settings.shared.hasOverlay{
-            drawOverlayTile(tile, rect: rect)
+        if Settings.shared.hasOverlay, Settings.shared.showOverlay, let overlaySource = Settings.shared.overlayTileSource{
+            let overlayTile = MapTile.getTile(data: getTileData(rect: rect), tileSource: overlaySource)
+            drawTile(overlayTile, rect: rect, asOverlay: true)
         }
     }
     
@@ -54,19 +55,21 @@ class TileLayerView: UIView {
             x -= currentMaxTiles
         }
         let y = Int(round(rect.minY / upScale / Double(World.tileSize.height)))
-        return MapTileData(zoom: zoom, x: x, y: y)
+        return MapTileData(zoom: zoom, x: x, y: y, tileSource: Settings.shared.tileSource)
     }
     
     // rect is in contentSize = planetSize
-    func drawTile(_ tile: MapTile, rect: CGRect){
+    func drawTile(_ tile: MapTile, rect: CGRect, asOverlay: Bool = false){
         if let imageData = tile.imageData, let image = UIImage(data: imageData){
-            Log.debug("drawing tile \(tile.shortDescription)")
+            //Log.debug("drawing tile \(tile.shortDescription)")
             image.draw(in: rect)
             return
         }
-        mapGearImage?.draw(in: rect.scaleCenteredBy(0.25))
+        if !asOverlay{
+            mapGearImage?.draw(in: rect.scaleCenteredBy(0.25))
+        }
         TileProvider.shared.getTileImage(tile: tile){ success in
-            Log.debug("refresh tile \(tile.shortDescription) \(success)")
+            //Log.debug("refresh tile \(tile.shortDescription) \(success)")
             if success{
                 DispatchQueue.main.async {
                     self.setNeedsDisplay(rect)
@@ -74,26 +77,6 @@ class TileLayerView: UIView {
             }
             else{
                 Log.error("TileLayerView could not load tile \(tile.shortDescription)")
-            }
-        }
-    }
-    
-    // rect is in contentSize = planetSize
-    func drawOverlayTile(_ tile: MapTile, rect: CGRect){
-        if let overlayImageData = tile.overlayImageData, let overlayImage = UIImage(data: overlayImageData){
-            Log.debug("drawing overlay tile \(tile.shortDescription)")
-            overlayImage.draw(in: rect)
-            return
-        }
-        TileProvider.shared.getTileOverlayImage(tile: tile){ success in
-            Log.debug("refresh overlay tile \(tile.shortDescription) \(success)")
-            if success{
-                DispatchQueue.main.async {
-                    self.setNeedsDisplay(rect)
-                }
-            }
-            else{
-                Log.error("TileLayerView could not load overlay tile \(tile.shortDescription)")
             }
         }
     }

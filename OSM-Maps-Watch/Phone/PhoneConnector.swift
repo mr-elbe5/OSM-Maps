@@ -97,7 +97,7 @@ extension PhoneConnector: WCSessionDelegate {
                 let x = message["x"] as? Int ?? 0
                 let y = message["y"] as? Int ?? 0
                 if let data = message["data"] as? Data{
-                    let tile = MapTile(zoom: zoom, x: x, y: y)
+                    let tile = MapTile(zoom: zoom, x: x, y: y, tileSource: Settings.shared.tileSource)
                     tile.imageData = data
                     if FileManager.default.fileExists(atPath: tile.fileUrl.path()){
                         FileManager.default.deleteFile(url: tile.fileUrl)

@@ -75,7 +75,7 @@ class MapPreloader {
                 guard let tileSet = tileSets[zoom] else { continue }
                 for x in tileSet.minX...tileSet.maxX{
                     for y in tileSet.minY...tileSet.maxY{
-                        let tile = MapTile(zoom: zoom, x: x, y: y)
+                        let tile = MapTile(zoom: zoom, x: x, y: y, tileSource: Settings.shared.tileSource)
                         if tile.fileExists{
                             existingTiles += 1
                             continue
@@ -142,7 +142,7 @@ class MapPreloader {
                 guard let tileSet = tileSets[zoom] else { continue }
                 for x in tileSet.minX...tileSet.maxX{
                     for y in tileSet.minY...tileSet.maxY{
-                        let tile = MapTileData(zoom: zoom, x: x, y: y)
+                        let tile = MapTileData(zoom: zoom, x: x, y: y, tileSource: Settings.shared.tileSource)
                         tileList.append(tile)
                     }
                 }
@@ -150,7 +150,7 @@ class MapPreloader {
             WatchConnector.shared.checkTiles(tileList){ list in
                 if let missingTiles = list{
                     for tileData in missingTiles{
-                        self.watchTiles.append(MapTile(zoom: tileData.zoom, x: tileData.x, y: tileData.y))
+                        self.watchTiles.append(MapTile(zoom: tileData.zoom, x: tileData.x, y: tileData.y, tileSource: Settings.shared.tileSource))
                     }
                 }
                 self.existingWatchTiles = self.allWatchTiles - self.watchTiles.count

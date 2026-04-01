@@ -61,7 +61,7 @@ extension DrawTileList{
         for x in minTileX...maxTileX{
             for y in Int(minTileY)...maxTileY{
                 drawRect = CGRect(x: Double(x)*tileExtent - scaledWorldViewRect.minX, y: Double(y)*tileExtent - scaledWorldViewRect.minY, width: tileExtent, height: tileExtent)
-                let tile = MapTile(zoom: zoom, x: x, y: y)
+                let tile = MapTile(zoom: zoom, x: x, y: y, tileSource: Settings.shared.tileSource)
                 TileProvider.shared.getTileImage(tile: tile){ success in
                     if !success{
                         Log.error("loading tile failed")

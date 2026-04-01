@@ -25,28 +25,12 @@ class TileProvider{
             return
         }
         if tile.fileExists, let fileData = FileManager.default.contents(atPath: tile.fileUrl.path){
-            Log.debug("got local tile")
+            //Log.debug("got local tile")
             tile.imageData = fileData
             result(true)
         } else {
-            Log.debug("loading tile")
+            //Log.debug("loading tile")
             loadTileImage(tile: tile){ success in
-                result(success)
-            }
-        }
-    }
-    
-    func getTileOverlayImage(tile: MapTile, result: @escaping (Bool) -> Void) {
-        if !tile.valid || !tile.overlayShouldExist {
-            return
-        }
-        if tile.overlayExists, let url = tile.overlayFileUrl, let fileData = FileManager.default.contents(atPath: url.path){
-            Log.debug("got local overlay tile")
-            tile.overlayImageData = fileData
-            result(true)
-        } else {
-            Log.debug("loading overlay tile")
-            loadTileOverlayImage(tile: tile){ success in
                 result(success)
             }
         }
@@ -57,10 +41,10 @@ class TileProvider{
             result(false)
             return
         }
-        let request = URLRequest(url: tile.tileUrl(template: Settings.shared.mapSource.templateUrl), cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 30.0)
+        let request = URLRequest(url: tile.tileUrl, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 30.0)
         let task = getDownloadTask(request: request){ data in
             if let data = data{
-                Log.debug("got remote tile in first try")
+                //Log.debug("got remote tile in first try")
                 self.setImageData(data, to: tile)
                 result(true)
             }
@@ -71,89 +55,30 @@ class TileProvider{
             }
         }
         DispatchQueue.global(qos: .userInitiated).async{
-            Log.debug("loading remote tile")
+            //Log.debug("loading remote tile")
             task.resume()
-        }
-    }
-    
-    func loadTileOverlayImage(tile: MapTile, result: @escaping (Bool) -> Void) {
-        if !tile.valid {
-            result(false)
-            return
-        }
-        if let templateUrl = Settings.shared.mapOverlaySource?.templateUrl {
-            let request = URLRequest(url: tile.tileUrl(template: templateUrl), cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 30.0)
-            let task = getDownloadTask(request: request){ data in
-                if let data = data{
-                    Log.debug("got remote overlay tile in first try")
-                    self.setOverlayImageData(data, to: tile)
-                    result(true)
-                }
-                else{
-                    self.retryLoadOverlayTileImage(tile: tile, tries: 1){ success in
-                        result(success)
-                    }
-                }
-            }
-            DispatchQueue.global(qos: .userInitiated).async{
-                Log.debug("loading remote overlay tile")
-                task.resume()
-            }
-        }
-        else{
-            result(false)
         }
     }
     
     private func setImageData(_ data: Data, to tile: MapTile){
         tile.imageData = data
-        Log.debug("saving tile \(tile.shortDescription)")
+        //Log.debug("saving tile \(tile.shortDescription)")
         if !self.saveTile(fileUrl: tile.fileUrl, data: data){
             Log.error("TileProvider could not save tile \(tile.shortDescription)")
         }
     }
     
-    private func setOverlayImageData(_ data: Data, to tile: MapTile){
-        if let url = tile.overlayFileUrl{
-            tile.overlayImageData = data
-            Log.debug("saving overlay tile \(tile.shortDescription)")
-            if !self.saveTile(fileUrl: url, data: data){
-                Log.error("TileProvider could not save overlay tile \(tile.shortDescription)")
-            }
-        }
-    }
-    
     private func retryLoadTileImage(tile: MapTile, tries: Int, result: @escaping (Bool) -> Void) {
-        let request = URLRequest(url: tile.tileUrl(template: Settings.shared.mapSource.templateUrl), cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 20.0)
-        Log.debug("retrying remote loading tile, try \(tries)")
+        let request = URLRequest(url: tile.tileUrl, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 20.0)
+        //Log.debug("retrying remote loading tile, try \(tries)")
         let task = getDownloadTask(request: request){ data in
             if let data = data{
-                Log.debug("got remote tile, try \(tries)")
+                //Log.debug("got remote tile, try \(tries)")
                 self.setImageData(data, to: tile)
                 result(true)
             }
             else if tries <= TileProvider.maxTries{
                 self.retryLoadTileImage(tile: tile, tries: tries + 1){ success in
-                    result(success)
-                }
-            }
-        }
-        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 5){
-            task.resume()
-        }
-    }
-    
-    private func retryLoadOverlayTileImage(tile: MapTile, tries: Int, result: @escaping (Bool) -> Void) {
-        let request = URLRequest(url: tile.tileUrl(template: Settings.shared.mapSource.templateUrl), cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 20.0)
-        Log.debug("retrying remote loading overlay tile, try \(tries)")
-        let task = getDownloadTask(request: request){ data in
-            if let data = data{
-                Log.debug("got remote overlay tile, try \(tries)")
-                self.setOverlayImageData(data, to: tile)
-                result(true)
-            }
-            else if tries <= TileProvider.maxTries{
-                self.retryLoadOverlayTileImage(tile: tile, tries: tries + 1){ success in
                     result(success)
                 }
             }
@@ -193,7 +118,7 @@ class TileProvider{
                 //Log.debug("TileProvider file saved to \(fileUrl)")
                 return true
             } catch let err{
-                Log.debug("TileProvider saving tile: " + err.localizedDescription)
+                Log.error("TileProvider saving tile: " + err.localizedDescription)
                 return false
             }
         }

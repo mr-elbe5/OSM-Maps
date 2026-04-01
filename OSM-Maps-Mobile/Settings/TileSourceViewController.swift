@@ -6,7 +6,7 @@
 
 import UIKit
 
-class MapSourceViewController: ScrollViewController{
+class TileSourceViewController: ScrollViewController{
     
     var nameField = LabeledTextField()
     var tileUrlTemplateField = LabeledTextField()
@@ -15,7 +15,7 @@ class MapSourceViewController: ScrollViewController{
     var overlayUrlTemplateField = LabeledTextField()
     
     override func loadView() {
-        title = "mapSource".localize()
+        title = "tileSource".localize()
         super.loadView()
         addScrollViewFillingWithKeyboard()
         scrollView.backgroundColor = .systemBackground
@@ -25,13 +25,15 @@ class MapSourceViewController: ScrollViewController{
     
     func loadScrollableSubviews() {
         contentView.removeAllSubviews()
-        nameField.setupView(labelText: "serverName".localize(), text: Settings.shared.mapSource.displayName, isHorizontal: false)
+        nameField.setupView(labelText: "mapName".localize(), text: Settings.shared.tileSource.displayName, isHorizontal: false)
         contentView.addSubviewBelow(nameField, insets: .defaultInsets)
-        tileUrlTemplateField.setupView(labelText: "templateURL".localize(), text: Settings.shared.mapSource.templateUrl, isHorizontal: false)
+        tileUrlTemplateField.setupView(labelText: "templateURL".localize(), text: Settings.shared.tileSource.templateUrl, isHorizontal: false)
         contentView.addSubviewBelow(tileUrlTemplateField, upperView: nameField, insets: .defaultInsets)
-        var lastView: UIView = tileUrlTemplateField
+        var useLabel = UILabel(text: "use".localizeWithColon())
+        contentView.addSubviewBelow(useLabel, upperView: tileUrlTemplateField, insets: .defaultInsets)
+        var lastView: UIView = useLabel
         
-        for mapServer in MapSources.shared{
+        for mapServer in TileSources.shared{
             let button = UIButton(type: .system)
             button.setTitle(mapServer.displayName, for: .normal)
             button.setTitleColor(.systemBlue, for: .normal)
@@ -42,8 +44,8 @@ class MapSourceViewController: ScrollViewController{
             contentView.addSubviewWithAnchors(button, top: lastView.bottomAnchor, leading: contentView.leadingAnchor, insets: .flatInsets)
             let deleteButton = IconButton(smallIcon: "trash", tintColor: .systemRed)
             deleteButton.addAction(UIAction(){ action in
-                MapSources.shared.remove(mapServer)
-                MapSources.shared.save()
+                TileSources.shared.remove(mapServer)
+                TileSources.save()
                 self.loadScrollableSubviews()
             }, for: .touchDown)
             contentView.addSubviewWithAnchors(deleteButton, leading: button.trailingAnchor, insets: .flatInsets)
@@ -51,13 +53,19 @@ class MapSourceViewController: ScrollViewController{
             lastView = button
         }
         
-        overlayNameField.setupView(labelText: "overlayName".localize(), text: Settings.shared.mapOverlaySource?.displayName ?? "", isHorizontal: false)
+        overlayNameField.setupView(labelText: "overlayName".localize(), text: Settings.shared.overlayTileSource?.displayName ?? "", isHorizontal: false)
         contentView.addSubviewBelow(overlayNameField, upperView: lastView, insets: .defaultInsets)
-        overlayUrlTemplateField.setupView(labelText: "templateURL".localize(), text: Settings.shared.mapOverlaySource?.templateUrl ?? "", isHorizontal: false)
+        overlayUrlTemplateField.setupView(labelText: "templateURL".localize(), text: Settings.shared.overlayTileSource?.templateUrl ?? "", isHorizontal: false)
         contentView.addSubviewBelow(overlayUrlTemplateField, upperView: overlayNameField, insets: .defaultInsets)
-        lastView = overlayUrlTemplateField
+        let clearOverlayButton = UIButton(name: "clear".localize(), action: UIAction(){ action in
+            self.clearOverlay()
+        })
+        contentView.addSubviewBelow(clearOverlayButton, upperView: overlayUrlTemplateField)
+        useLabel = UILabel(text: "use".localizeWithColon())
+        contentView.addSubviewBelow(useLabel, upperView: clearOverlayButton, insets: .defaultInsets)
+        lastView = useLabel
         
-        for overlayServer in MapOverlaySources.shared{
+        for overlayServer in TileSources.sharedOverlays{
             let button = UIButton(type: .system)
             button.setTitle(overlayServer.displayName, for: .normal)
             button.setTitleColor(.systemBlue, for: .normal)
@@ -68,8 +76,8 @@ class MapSourceViewController: ScrollViewController{
             contentView.addSubviewWithAnchors(button, top: lastView.bottomAnchor, leading: contentView.leadingAnchor, insets: .flatInsets)
             let deleteButton = IconButton(smallIcon: "trash", tintColor: .systemRed)
             deleteButton.addAction(UIAction(){ action in
-                MapOverlaySources.shared.remove(overlayServer)
-                MapOverlaySources.shared.save()
+                TileSources.sharedOverlays.remove(overlayServer)
+                TileSources.saveOverlays()
                 self.loadScrollableSubviews()
             }, for: .touchDown)
             contentView.addSubviewWithAnchors(deleteButton, leading: button.trailingAnchor, insets: .flatInsets)
@@ -77,7 +85,7 @@ class MapSourceViewController: ScrollViewController{
             lastView = button
         }
         
-        let hintText = UILabel(text: "mapServerHint".localize())
+        let hintText = UILabel(text: "tileServerHint".localize())
         hintText.numberOfLines = 0
         hintText.font = .preferredFont(forTextStyle: .footnote)
         contentView.addSubviewBelow(hintText, upperView: lastView, insets: .flatInsets)
@@ -95,70 +103,76 @@ class MapSourceViewController: ScrollViewController{
             self.setDefaults()
         })
         contentView.addSubviewBelow(setDefaultsButton, upperView: saveButton)
-        let clearTileCacheButton = UIButton(name: "clearMapCache".localize(), action: UIAction(){ action in
+        let clearTileCacheButton = UIButton(name: "clearTileCache".localize(), action: UIAction(){ action in
             self.deleteAllTiles()
         })
         contentView.addSubviewBelow(clearTileCacheButton, upperView: setDefaultsButton)
-        let clearCurrentTileCacheButton = UIButton(name: "clearCurrentMapCache".localize(), action: UIAction(){ action in
+        let clearCurrentTileCacheButton = UIButton(name: "clearCurrentTileCache".localize(), action: UIAction(){ action in
             self.deleteCurrentTiles()
         })
         contentView.addSubviewBelow(clearCurrentTileCacheButton, upperView: clearTileCacheButton)
             .connectToBottom(of: contentView)
     }
     
-    func save(){
-        let serverDone = saveServer()
-        let overlayDone = saveOverlay()
-        if serverDone || overlayDone{
-            Settings.shared.save()
-            Settings.shared.assertTileDirs()
-            self.showDone(title: "ok".localize(), text: "mapSourceSaved".localize())
-        }
+    func clearOverlay(){
+        self.overlayNameField.text = ""
+        self.overlayUrlTemplateField.text = ""
     }
     
-    func saveServer() -> Bool{
+    func save(){
+        saveServer()
+        saveOverlay()
+        Settings.shared.save()
+        Settings.shared.assertTileDirs()
+        self.showDone(title: "ok".localize(), text: "mapSourceSaved".localize())
+        MainViewController.shared.mapView.refresh()
+    }
+    
+    func saveServer(){
         let newDisplayName = nameField.text
         let newTemplateUrl = tileUrlTemplateField.text
         if !newDisplayName.isEmpty, !newTemplateUrl.isEmpty{ // only name changed
-            if let mapSource = MapSources.shared.getByUrl(newTemplateUrl){
+            if let mapSource = TileSources.shared.getByUrl(newTemplateUrl){
                 mapSource.displayName = newDisplayName
-                Settings.shared.mapSource = mapSource
+                Settings.shared.tileSource = mapSource
             }
             else{
                 let newName = newDisplayName.lowercased().replacingOccurrences(of: " ", with: "_")
-                let mapSource = MapSource(name: newName, displayName: newDisplayName, templateUrl: newTemplateUrl)
-                MapSources.shared.append(mapSource)
-                Settings.shared.mapSource = mapSource
+                let mapSource = TileSource(name: newName, displayName: newDisplayName, templateUrl: newTemplateUrl)
+                TileSources.shared.append(mapSource)
+                Settings.shared.tileSource = mapSource
             }
-            MapSources.shared.save()
-            return true
+            TileSources.save()
         }
-        return false
     }
     
-    func saveOverlay() -> Bool{
+    func saveOverlay(){
         let newOverlayDisplayName = overlayNameField.text
         let newOverlayTemplateUrl = overlayUrlTemplateField.text
         if !newOverlayDisplayName.isEmpty, !newOverlayTemplateUrl.isEmpty{ // only name changed
-            if let overlaySource = MapOverlaySources.shared.getByUrl(newOverlayTemplateUrl){
+            if let overlaySource = TileSources.sharedOverlays.getByUrl(newOverlayTemplateUrl){
                 overlaySource.displayName = newOverlayDisplayName
-                Settings.shared.mapOverlaySource = overlaySource
+                Settings.shared.overlayTileSource = overlaySource
             }
             else{
                 let newName = newOverlayDisplayName.lowercased().replacingOccurrences(of: " ", with: "_")
-                let overlaySource = MapOverlaySource(name: newName, displayName: newOverlayDisplayName, templateUrl: newOverlayTemplateUrl)
-                MapOverlaySources.shared.append(overlaySource)
-                Settings.shared.mapOverlaySource = overlaySource
+                let overlaySource = TileSource(name: newName, displayName: newOverlayDisplayName, templateUrl: newOverlayTemplateUrl)
+                TileSources.sharedOverlays.append(overlaySource)
+                Settings.shared.overlayTileSource = overlaySource
             }
-            MapOverlaySources.shared.save()
-            return true
+            TileSources.saveOverlays()
         }
-        return false
+        else{
+            Settings.shared.overlayTileSource = nil
+        }
+        if Settings.shared.hasOverlay{
+            Settings.shared.showOverlay = true
+        }
     }
     
     func setDefaults(){
-        MapSources.setDefaults()
-        MapOverlaySources.setDefaults()
+        TileSources.setDefaults()
+        TileSources.setOverlayDefaults()
         Settings.shared.setDefaultSources()
         self.loadScrollableSubviews()
     }

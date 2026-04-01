@@ -55,7 +55,7 @@ typealias MapTileGrid = [MapTileRow]
         for _ in 0..<gridHeight {
             var row = MapTileRow()
             for _ in 0..<gridWidth {
-                row.append(MapTile(zoom: 0, x: 0, y: 0))
+                row.append(MapTile(zoom: 0, x: 0, y: 0, tileSource: Settings.shared.tileSource))
             }
             tileGrid.append(row)
         }
@@ -131,7 +131,7 @@ typealias MapTileGrid = [MapTileRow]
                 let newTileY = centerTileY - vertExtraTiles + y
                 if currentTile.zoom != zoom || currentTile.x != newTileX || currentTile.y != newTileY{
                     //print("changing tile")
-                    let tile = MapTile(zoom: zoom, x: newTileX, y: newTileY)
+                    let tile = MapTile(zoom: zoom, x: newTileX, y: newTileY, tileSource: Settings.shared.tileSource)
                     TileProvider.shared.getTileImage(tile: tile){ success in
                         if !success{
                             Log.error("TileLayerView could not load tile \(tile.shortDescription)")

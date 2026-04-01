@@ -41,7 +41,7 @@ class SettingsView: PopoverView{
         let header = NSTextField(labelWithString: "map".localize())
         addSubviewCenteredBelow(header)
         
-        mapSourceControl.selectedSegment = MapSources.shared.indexOf(source: DesktopSettings.shared.mapSource)
+        mapSourceControl.selectedSegment = TileSources.shared.indexOf(source: DesktopSettings.shared.tileSource)
         addSubviewBelow(mapSourceControl, upperView: header)
         
         let hint = NSTextField(wrappingLabelWithString: "mapServerHint".localize(table: "Hints")).asSmallLabel()
@@ -55,11 +55,11 @@ class SettingsView: PopoverView{
     @objc func mapSourceChanged(){
         switch mapSourceControl.indexOfSelectedItem {
         case 0:
-            Settings.shared.mapSource = .osmSource
+            Settings.shared.tileSource = .osmSource
         case 1:
-            Settings.shared.mapSource = .elbe5Source
+            Settings.shared.tileSource = .elbe5Source
         case 2:
-            Settings.shared.mapSource = .elbe5TopoSource
+            Settings.shared.tileSource = .elbe5TopoSource
         default:
             break
         }

@@ -23,23 +23,25 @@ class CommonSettings: Identifiable, Codable{
     }
     
     enum CodingKeys: String, CodingKey {
-        case mapSource
-        case mapOverlaySource
+        case tileSource
+        case overlayTileSource
+        case showOverlay
     }
     
-    var mapSource: MapSource = MapSource.defaultMapSource
-    var mapOverlaySource: MapOverlaySource? = nil
+    var tileSource: TileSource = TileSource.defaultTileSource
+    var overlayTileSource: TileSource? = nil
+    var showOverlay: Bool = false
     
     var hasOverlay: Bool{
-        mapOverlaySource != nil
+        overlayTileSource != nil
     }
     
     var tileDirURL: URL{
-        BasePaths.tileDirURL.appendingPathComponent(mapSource.name)
+        BasePaths.tileDirURL.appendingPathComponent(tileSource.name)
     }
     
     var overlayTileDirURL: URL?{
-        if let source = mapOverlaySource{
+        if let source = overlayTileSource{
             return BasePaths.tileDirURL.appendingPathComponent(source.name)
         }
         return nil
@@ -50,18 +52,20 @@ class CommonSettings: Identifiable, Codable{
 
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        if let mapSourceString = try? values.decodeIfPresent(String.self, forKey: .mapSource){
-            mapSource = MapSources.shared.first(where: { $0.name == mapSourceString }) ?? MapSource.defaultMapSource
+        if let tileSourceString = try? values.decodeIfPresent(String.self, forKey: .tileSource){
+            tileSource = TileSources.shared.first(where: { $0.name == tileSourceString }) ?? TileSource.defaultTileSource
         }
-        if let overlaySourceString = try? values.decodeIfPresent(String.self, forKey: .mapOverlaySource){
-            mapOverlaySource = MapOverlaySources.shared.first(where: { $0.name == overlaySourceString })
+        if let overlaySourceString = try? values.decodeIfPresent(String.self, forKey: .overlayTileSource){
+            overlayTileSource = TileSources.sharedOverlays.first(where: { $0.name == overlaySourceString })
         }
+        showOverlay = try values.decodeIfPresent(Bool.self, forKey: .showOverlay) ?? false
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(mapSource.name, forKey: .mapSource)
-        try container.encodeIfPresent(mapOverlaySource?.name, forKey: .mapOverlaySource)
+        try container.encode(tileSource.name, forKey: .tileSource)
+        try container.encodeIfPresent(overlayTileSource?.name, forKey: .overlayTileSource)
+        try container.encode(showOverlay, forKey: .showOverlay)
     }
     
     func assertInitialTileDir(){
@@ -83,8 +87,8 @@ class CommonSettings: Identifiable, Codable{
     }
     
     func setDefaultSources(){
-        mapSource = MapSource.defaultMapSource
-        mapOverlaySource = nil
+        tileSource = TileSource.defaultTileSource
+        overlayTileSource = nil
         save()
     }
     

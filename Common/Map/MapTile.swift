@@ -8,8 +8,8 @@ import Foundation
 
 class MapTile{
     
-    static func getTile(data: MapTileData) -> MapTile{
-        let tile = MapTile(zoom: data.zoom, x: data.x, y: data.y)
+    static func getTile(data: MapTileData, tileSource: TileSource) -> MapTile{
+        let tile = MapTile(zoom: data.zoom, x: data.x, y: data.y, tileSource: tileSource)
         //Log.debug("get tile \(tile.shortDescription)")
         if tile.fileExists, let fileData = FileManager.default.contents(atPath: tile.fileUrl.path){
             tile.imageData = fileData
@@ -21,13 +21,15 @@ class MapTile{
     var y: Int
     var zoom: Int
     
-    var imageData : Data? = nil
-    var overlayImageData : Data? = nil
+    var tileSource: TileSource
     
-    init(zoom: Int, x: Int, y: Int){
+    var imageData : Data? = nil
+    
+    init(zoom: Int, x: Int, y: Int, tileSource: TileSource){
         self.zoom = zoom
         self.x = x
         self.y = y
+        self.tileSource = tileSource
     }
     
     var valid: Bool{
@@ -35,26 +37,11 @@ class MapTile{
     }
     
     var fileUrl: URL{
-        Settings.shared.tileDirURL.appendingPathComponent("\(shortDescription).png")
-    }
-    
-    var overlayFileUrl: URL?{
-        Settings.shared.overlayTileDirURL?.appendingPathComponent("\(shortDescription).png")
+        BasePaths.tileDirURL.appendingPathComponent(tileSource.name).appendingPathComponent("\(shortDescription).png")
     }
     
     var fileExists: Bool{
         FileManager.default.fileExists(atPath: fileUrl.path)
-    }
-    
-    var overlayShouldExist: Bool{
-        Settings.shared.hasOverlay
-    }
-    
-    var overlayExists: Bool{
-        if let url = overlayFileUrl{
-            return FileManager.default.fileExists(atPath: url.path)
-        }
-        return false
     }
     
     var shortDescription : String{
@@ -73,8 +60,8 @@ class MapTile{
         return CGRect(origin: origin, size: CGSize(width: scaledTileExtent, height: scaledTileExtent))
     }
         
-    func tileUrl(template: String) -> URL{
-        URL(string: template.replacingOccurrences(of: "{z}", with: String(zoom)).replacingOccurrences(of: "{x}", with: String(x)).replacingOccurrences(of: "{y}", with: String(y)))!
+    var tileUrl: URL{
+        URL(string: tileSource.templateUrl.replacingOccurrences(of: "{z}", with: String(zoom)).replacingOccurrences(of: "{x}", with: String(x)).replacingOccurrences(of: "{y}", with: String(y)))!
     }
     
 }
@@ -83,22 +70,25 @@ typealias MapTileList = [MapTile]
 
 struct MapTileData: Codable{
     
-    init(zoom: Int, x: Int, y: Int) {
+    init(zoom: Int, x: Int, y: Int, tileSource: TileSource) {
         self.zoom = zoom
         self.x = x
         self.y = y
+        self.tileSource = tileSource
     }
     
     var zoom: Int
     var x: Int
     var y: Int
     
+    var tileSource: TileSource
+    
     var shortDescription : String{
         "\(zoom)-\(x)-\(y)"
     }
     
     var fileUrl: URL{
-        BasePaths.tileDirURL.appendingPathComponent("\(shortDescription).png")
+        BasePaths.tileDirURL.appendingPathComponent(tileSource.name).appendingPathComponent("\(shortDescription).png")
     }
     
     var exists: Bool{

@@ -9,7 +9,7 @@ import SwiftUI
 struct WatchSettingsView: View {
     
     @State var settings = Settings.shared
-    @State var sourceName = Settings.shared.mapSource.displayName
+    @State var sourceName = Settings.shared.tileSource.displayName
     @State var phoneConnector = PhoneConnector.shared
     
     var body: some View {
@@ -18,14 +18,14 @@ struct WatchSettingsView: View {
                 Text("settings".localize()).font(Font.headline)
                 Spacer(minLength: 20)
                 Picker("mapServer".localizeWithColon(), selection: $sourceName) {
-                    ForEach(MapSources.shared, id: \.self) { option in
+                    ForEach(TileSources.shared, id: \.self) { option in
                         Text(option.displayName)
                     }
                 }
                 .pickerStyle(.navigationLink)
                 .onChange(of: sourceName) { oldValue, newValue in
-                    if let newSource = MapSources.shared.first(where: { $0.displayName == newValue }) {
-                        Settings.shared.mapSource = newSource
+                    if let newSource = TileSources.shared.first(where: { $0.displayName == newValue }) {
+                        Settings.shared.tileSource = newSource
                         Settings.shared.save()
                     }
                 }

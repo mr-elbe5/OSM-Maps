@@ -664,6 +664,23 @@
         }
       }
     },
+    "clear" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Löschen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear"
+          }
+        }
+      }
+    },
     "clearCloud" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -681,7 +698,7 @@
         }
       }
     },
-    "clearCurrentMapCache" : {
+    "clearCurrentTileCache" : {
       "extractionState" : "manual",
       "localizations" : {
         "de" : {
@@ -698,7 +715,7 @@
         }
       }
     },
-    "clearMapCache" : {
+    "clearTileCache" : {
       "extractionState" : "manual",
       "localizations" : {
         "de" : {
@@ -2602,6 +2619,23 @@
         }
       }
     },
+    "mapName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kartenname"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Map Name"
+          }
+        }
+      }
+    },
     "mapPreload" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2632,23 +2666,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Map Server"
-          }
-        }
-      }
-    },
-    "mapServerHint" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bitte beachten! Zur Nutzung eines Kartenservers sollte dieser frei verfügbar sein oder  entsprechende Rechte sollten vorliegen."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Please note! For using any map server it should be openly available or you should have respective rights."
           }
         }
       }
@@ -4812,6 +4829,23 @@
         }
       }
     },
+    "tileServerHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitte beachten! Zur Nutzung eines Kartenservers sollte dieser frei verfügbar sein oder  entsprechende Rechte sollten vorliegen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please note! For using any map server it should be openly available or you should have respective rights."
+          }
+        }
+      }
+    },
     "tileSource" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -5318,6 +5352,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Uphill"
+          }
+        }
+      }
+    },
+    "use" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übernehmen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use"
           }
         }
       }

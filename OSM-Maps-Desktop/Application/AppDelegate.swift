@@ -15,8 +15,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         World.setMaxZoom(18)
         World.scrollWidthFactor = 1
         MapDefaults.startZoom = 8
-        MapSources.load()
+        TileSources.load()
         Settings.load()
+        Settings.shared.assertInitialTileDir()
         ViewFilter.load()
         MapStatus.load()
         AppData.load()
@@ -27,7 +28,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
-        MapSources.shared.save()
+        TileSources.save()
+        TileSources.saveOverlays()
         Settings.shared.save()
         AppStatus.shared.save()
         MapStatus.shared.save()

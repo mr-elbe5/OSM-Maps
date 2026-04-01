@@ -91,7 +91,7 @@ class MainViewController: UIViewController {
             self.navigationController?.pushViewController(controller, animated: true)
         }))
         items.append(UIBarButtonItem(title: "mapSource".localize(), image: UIImage(systemName: "map"), primaryAction: UIAction(){ action in
-            let controller = MapSourceViewController()
+            let controller = TileSourceViewController()
             self.navigationController?.pushViewController(controller, animated: true)
         }))
         items.append(UIBarButtonItem(title: "mapTiles".localize(), image: UIImage(systemName: "square.grid.3x3.square"), primaryAction: UIAction(){ action in
@@ -245,6 +245,12 @@ class MainViewController: UIViewController {
     func toggleMapPins() {
         Settings.shared.showMapPins = !Settings.shared.showMapPins
         mapView.itemLayerView.isHidden = !Settings.shared.showMapPins
+        Settings.shared.save()
+    }
+    
+    func toggleOverlay() {
+        Settings.shared.showOverlay = !Settings.shared.showOverlay
+        mapView.refresh()
         Settings.shared.save()
     }
     

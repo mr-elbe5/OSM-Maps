@@ -48,13 +48,13 @@ class TileLayerView: NSView {
     private func getTileData(rect: CGRect) -> MapTileData{
         let x = Int(round(rect.minX / World.tileExtent))
         let y = Int(round(rect.minY / World.tileExtent))
-        return MapTileData(zoom: MapStatus.shared.zoom, x: x, y: y)
+        return MapTileData(zoom: MapStatus.shared.zoom, x: x, y: y, tileSource: Settings.shared.tileSource)
     }
     
     // rect is in contentSize = planetSize
     func drawTile(rect: CGRect){
         let tileData = getTileData(rect: rect)
-        let tile = MapTile.getTile(data: tileData)
+        let tile = MapTile.getTile(data: tileData, tileSource: Settings.shared.tileSource)
         if let imageData = tile.imageData, let image = NSImage(data: imageData){
             image.draw(in: rect)
             return
