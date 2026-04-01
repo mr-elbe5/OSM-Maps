@@ -17,17 +17,30 @@ struct WatchSettingsView: View {
             VStack(alignment: .center) {
                 Text("settings".localize()).font(Font.headline)
                 Spacer(minLength: 20)
-                Picker("mapServer".localizeWithColon(), selection: $sourceName) {
-                    ForEach(TileSources.shared, id: \.self) { option in
+                Picker("tileSource".localizeWithColon(), selection: $sourceName) {
+                    ForEach(TileSources.shared, id: \.self.displayName) { option in
                         Text(option.displayName)
                     }
                 }
                 .pickerStyle(.navigationLink)
                 .onChange(of: sourceName) { oldValue, newValue in
+                    Log.debug("sourceName changed from \(oldValue) to \(newValue)")
                     if let newSource = TileSources.shared.first(where: { $0.displayName == newValue }) {
                         Settings.shared.tileSource = newSource
+                        Settings.shared.assertTileDirs()
+                        Log.debug("set tileSource to \(newSource.name)")
                         Settings.shared.save()
+                        MapStatus.shared.updateTiles()
                     }
+                }
+                Spacer(minLength: 20)
+                Text("\("overlay".localize()): \(settings.overlayTileSource?.displayName ?? "-")")
+                Toggle(isOn: $settings.showOverlay) {
+                    Text("showOverlay".localize())
+                    }
+                .onChange(of: settings.showOverlay) { oldValue, newValue in
+                    MapStatus.shared.updateTiles()
+                    Settings.shared.save()
                 }
                 Spacer(minLength: 20)
                 Toggle(isOn: $settings.showCurrentLocation) {

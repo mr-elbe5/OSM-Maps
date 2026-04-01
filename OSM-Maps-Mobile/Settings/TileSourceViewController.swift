@@ -103,10 +103,18 @@ class TileSourceViewController: ScrollViewController{
             self.setDefaults()
         })
         contentView.addSubviewBelow(setDefaultsButton, upperView: saveButton)
+        lastView = setDefaultsButton
+        if WatchConnector.shared.isWatchConnected {
+            let watchButton = UIButton(name: "sendToWatch".localize(), action: UIAction(){ action in
+                self.sendToWatch()
+            })
+            contentView.addSubviewBelow(watchButton, upperView: lastView)
+            lastView = watchButton
+        }
         let clearTileCacheButton = UIButton(name: "clearTileCache".localize(), action: UIAction(){ action in
             self.deleteAllTiles()
         })
-        contentView.addSubviewBelow(clearTileCacheButton, upperView: setDefaultsButton)
+        contentView.addSubviewBelow(clearTileCacheButton, upperView: lastView)
         let clearCurrentTileCacheButton = UIButton(name: "clearCurrentTileCache".localize(), action: UIAction(){ action in
             self.deleteCurrentTiles()
         })
@@ -175,6 +183,12 @@ class TileSourceViewController: ScrollViewController{
         TileSources.setOverlayDefaults()
         Settings.shared.setDefaultSources()
         self.loadScrollableSubviews()
+    }
+    
+    func sendToWatch(){
+        WatchConnector.shared.sendTileSources(){ success in
+            self.showDone(title: "tileSourcesSent".localize(), text: "tileSourcesSentText".localize())
+        }
     }
     
     func deleteAllTiles(){

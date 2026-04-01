@@ -80,6 +80,7 @@ class CommonSettings: Identifiable, Codable{
     }
     
     func assertTileDirs(){
+        Log.debug("asserting \(tileDirURL.lastPathComponent)")
         FileManager.default.assertDirectory(url: tileDirURL)
         if let url = overlayTileDirURL{
             FileManager.default.assertDirectory(url: url)

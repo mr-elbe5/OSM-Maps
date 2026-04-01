@@ -24,7 +24,7 @@ struct BasePaths {
         try! FileManager.default.createDirectory(at: statusDirURL, withIntermediateDirectories: true, attributes: nil)
         //Log.debug("status dir is: \(statusDirURL.path)")
         try! FileManager.default.createDirectory(at: tileDirURL, withIntermediateDirectories: true, attributes: nil)
-        //Log.debug("tile dir is: \(tileDirURL.path)")
+        Log.debug("tile dir is: \(tileDirURL.path)")
         try! FileManager.default.createDirectory(at: imageDirURL, withIntermediateDirectories: true, attributes: nil)
         //Log.debug("image dir is: \(imageDirURL.path)")
         try! FileManager.default.createDirectory(at: audioDirURL, withIntermediateDirectories: true, attributes: nil)

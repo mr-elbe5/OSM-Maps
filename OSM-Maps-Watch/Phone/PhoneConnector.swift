@@ -122,6 +122,23 @@ extension PhoneConnector: WCSessionDelegate {
                 else{
                     replyHandler(["success": false])
                 }
+            case "tileSourcesUpload":
+                if let tileJson = message["tileJson"] as? String, let tileSources:TileSources = TileSources.fromJSON(encoded: tileJson), let overlayJson = message["overlayJson"] as? String, let overlaySources:TileSources = TileSources.fromJSON(encoded: overlayJson){
+                    TileSources.shared = tileSources
+                    TileSources.sharedOverlays = overlaySources
+                    if !tileSources.contains(Settings.shared.tileSource){
+                        Settings.shared.tileSource = .defaultTileSource
+                    }
+                    if overlaySources.isEmpty{
+                        Settings.shared.overlayTileSource = nil
+                        Settings.shared.showOverlay = false
+                    }
+                    MapStatus.shared.updateTiles()
+                    replyHandler(["success": true])
+                }
+                else{
+                    replyHandler(["success": false])
+                }
             case "missingTiles":
                 if let data = message["data"] as? Data, let tiles = try? JSONDecoder().decode(MapTileDataList.self, from: data){
                     var result = MapTileDataList()

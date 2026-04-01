@@ -4863,6 +4863,40 @@
         }
       }
     },
+    "tileSourcesSent" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kartenquellen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tile Sources"
+          }
+        }
+      }
+    },
+    "tileSourcesSentText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kartenquellen wurden erfolgreich übertragen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sources have been sent successfully."
+          }
+        }
+      }
+    },
     "tilesToLoad" : {
       "extractionState" : "manual",
       "localizations" : {

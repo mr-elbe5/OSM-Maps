@@ -77,6 +77,33 @@ class WatchConnector: NSObject {
         }
     }
     
+    func sendTileSources(completion: @escaping (Bool) -> Void){
+        Log.debug("sending tile sources")
+        if !isWatchConnected {
+            Log.error("not connected to phone")
+            completion(false)
+            return
+        }
+        let tileJson = TileSources.shared.toJSON()
+        let overlayJson = TileSources.sharedOverlays.toJSON()
+        session.sendMessage([
+            "request": "tileSourcesUpload",
+            "tileJson": tileJson as Any,
+            "overlayJson": overlayJson as Any
+        ], replyHandler: {response in
+            DispatchQueue.main.async {
+                if let success = response["success"] as? Bool {
+                    completion(success)
+                }
+                else{
+                    completion(false)
+                }
+            }
+        }) { error in
+            Log.error("error sending tileSources: \(error)")
+        }
+    }
+    
     func checkTiles(_ tiles: MapTileDataList, completion: @escaping (MapTileDataList?) -> Void) {
         Log.debug("checking tiles")
         if !isWatchConnected {
