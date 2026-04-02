@@ -24,6 +24,7 @@ typealias MapTileGrid = [MapTileRow]
     var gridWidth: Int = 1
     var gridHeight: Int = 1
     var tileGrid: MapTileGrid = []
+    var overlayGrid: MapTileGrid = []
     
     var centerTileX: Int = 0
     var centerTileY: Int = 0
@@ -54,10 +55,13 @@ typealias MapTileGrid = [MapTileRow]
         //Log.debug("grid size = \(gridWidth) x \(gridHeight)")
         for _ in 0..<gridHeight {
             var row = MapTileRow()
+            var overlayRow = MapTileRow()
             for _ in 0..<gridWidth {
-                row.append(MapTile(zoom: 0, x: 0, y: 0, tileSource: Settings.shared.tileSource))
+                row.append(MapTile.dummyTile)
+                overlayRow.append(MapTile.dummyTile)
             }
             tileGrid.append(row)
+            overlayGrid.append(overlayRow)
         }
     }
     
@@ -97,51 +101,47 @@ typealias MapTileGrid = [MapTileRow]
     }
     
     func refresh(){
-        for y in 0..<gridHeight {
-            for x in 0..<gridWidth {
-                let tile = tileGrid[y][x]
-                TileProvider.shared.getTileImage(tile: tile){ success in
-                    if !success{
-                        Log.error("TileLayerView could not load tile \(tile.shortDescription)")
-                    }
-                }
-            }
-        }
-        checkTiles()
-    }
-    
-    func checkTiles(){
-        tilesLoaded = true
-        for y in 0..<gridHeight {
-            for x in 0..<gridWidth {
-                let tile = tileGrid[y][x]
-                if tile.imageData == nil{
-                    tilesLoaded = false
-                }
-            }
-        }
+        updateTileGrid()
     }
     
     private func updateTileGrid(){
-        //print("update grid")
+        print("update grid")
+        tilesLoaded = true
         for y in 0..<gridHeight {
             for x in 0..<gridWidth {
                 let currentTile = tileGrid[y][x]
                 let newTileX = centerTileX - horzExtraTiles + x
                 let newTileY = centerTileY - vertExtraTiles + y
-                if currentTile.zoom != zoom || currentTile.x != newTileX || currentTile.y != newTileY{
+                if currentTile.zoom != zoom || currentTile.x != newTileX || currentTile.y != newTileY || currentTile.tileSource != Settings.shared.tileSource{
                     //print("changing tile")
                     let tile = MapTile(zoom: zoom, x: newTileX, y: newTileY, tileSource: Settings.shared.tileSource)
                     TileProvider.shared.getTileImage(tile: tile){ success in
                         if !success{
+                            self.tilesLoaded = false
                             Log.error("TileLayerView could not load tile \(tile.shortDescription)")
                         }
                     }
                     tileGrid[y][x] = tile
                 }
+                if Settings.shared.hasOverlay, let overlaySource = Settings.shared.overlayTileSource{
+                    let currentTile = overlayGrid[y][x]
+                    if currentTile.zoom != zoom || currentTile.x != newTileX || currentTile.y != newTileY || currentTile.tileSource != Settings.shared.tileSource{
+                        //print("changing overlay tile")
+                        let tile = MapTile(zoom: zoom, x: newTileX, y: newTileY, tileSource: overlaySource)
+                        TileProvider.shared.getTileImage(tile: tile){ success in
+                            if !success{
+                                self.tilesLoaded = false
+                                Log.error("TileLayerView could not load overlay tile \(tile.shortDescription)")
+                            }
+                        }
+                        overlayGrid[y][x] = tile
+                    }
+                }
+                else{
+                    overlayGrid[y][x] = MapTile.dummyTile
+                }
             }
         }
-        checkTiles()
     }
     
     func getTile(x: Int, y: Int) -> MapTile?{
@@ -149,6 +149,13 @@ typealias MapTileGrid = [MapTileRow]
             print("out of range: \(x), \(y)")
             return nil }
         return tileGrid[y][x]
+    }
+    
+    func getOverlayTile(x: Int, y: Int) -> MapTile?{
+        guard x >= 0 && x < overlayGrid[0].count && y >= 0 && y < overlayGrid.count else {
+            print("out of range: \(x), \(y)")
+            return nil }
+        return overlayGrid[y][x]
     }
     
     func updateCurrentLocationOffset(){

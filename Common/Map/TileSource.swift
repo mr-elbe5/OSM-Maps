@@ -12,6 +12,8 @@ class TileSource: Codable, Hashable{
         lhs.templateUrl == rhs.templateUrl
     }
     
+    static var dummyTileSource: TileSource = TileSource(name: "dummy", displayName: "Dummy", templateUrl: "")
+    
     static var osmSource: TileSource = TileSource(name: "osm", displayName: "OpenStreetMap", templateUrl: "https://tile.openstreetmap.org/{z}/{x}/{y}.png")
     static var elbe5Source: TileSource = TileSource(name: "elbe5", displayName: "Elbe5 Carto", templateUrl: "https://tiles.elbe5.de/carto/{z}/{x}/{y}.png")
     static var elbe5TopoSource: TileSource = TileSource(name: "elbe5Topo", displayName: "Elbe5 Topo", templateUrl: "https://tiles.elbe5.de/topo/{z}/{x}/{y}.png")

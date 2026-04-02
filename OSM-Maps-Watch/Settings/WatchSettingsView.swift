@@ -9,7 +9,8 @@ import SwiftUI
 struct WatchSettingsView: View {
     
     @State var settings = Settings.shared
-    @State var sourceName = Settings.shared.tileSource.displayName
+    @State var sourceName:String = Settings.shared.tileSource.displayName
+    @State var overlaySourceName:String = Settings.shared.overlayTileSource?.displayName ?? "-"
     @State var phoneConnector = PhoneConnector.shared
     
     var body: some View {
@@ -24,23 +25,42 @@ struct WatchSettingsView: View {
                 }
                 .pickerStyle(.navigationLink)
                 .onChange(of: sourceName) { oldValue, newValue in
-                    Log.debug("sourceName changed from \(oldValue) to \(newValue)")
+                    Log.debug("source name changed from \(oldValue) to \(newValue)")
                     if let newSource = TileSources.shared.first(where: { $0.displayName == newValue }) {
                         Settings.shared.tileSource = newSource
                         Settings.shared.assertTileDirs()
                         Log.debug("set tileSource to \(newSource.name)")
                         Settings.shared.save()
+                        MapStatus.shared.tilesLoaded = false
                         MapStatus.shared.updateTiles()
                     }
                 }
                 Spacer(minLength: 20)
-                Text("\("overlay".localize()): \(settings.overlayTileSource?.displayName ?? "-")")
+                Picker("overlay".localizeWithColon(), selection: $overlaySourceName) {
+                    ForEach(TileSources.sharedOverlays, id: \.self.displayName) { option in
+                        Text(option.displayName)
+                    }
+                }
+                .pickerStyle(.navigationLink)
+                .onChange(of: overlaySourceName) { oldValue, newValue in
+                    Log.debug("overlay source name changed from \(oldValue) to \(newValue)")
+                    if let newSource = TileSources.sharedOverlays.first(where: { $0.displayName == newValue }) {
+                        Settings.shared.overlayTileSource = newSource
+                        Settings.shared.assertTileDirs()
+                        Settings.shared.showOverlay = true
+                        Log.debug("set overlay tileSource to \(newSource.name)")
+                        Settings.shared.save()
+                        MapStatus.shared.tilesLoaded = false
+                        MapStatus.shared.updateTiles()
+                    }
+                }
                 Toggle(isOn: $settings.showOverlay) {
                     Text("showOverlay".localize())
                     }
                 .onChange(of: settings.showOverlay) { oldValue, newValue in
-                    MapStatus.shared.updateTiles()
                     Settings.shared.save()
+                    MapStatus.shared.tilesLoaded = false
+                    MapStatus.shared.updateTiles()
                 }
                 Spacer(minLength: 20)
                 Toggle(isOn: $settings.showCurrentLocation) {

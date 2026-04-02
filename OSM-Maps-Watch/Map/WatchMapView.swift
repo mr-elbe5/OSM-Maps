@@ -17,14 +17,21 @@ struct MapView: View {
                 ForEach(0..<mapStatus.gridHeight, id: \.self){ y in
                     HStack(alignment: .center, spacing: 0){
                         ForEach(0..<mapStatus.gridWidth, id: \.self){ x in
-                            if let image = getImage(x, y){
-                                Image(uiImage: image)
-                                    .frame(width: World.tileExtent, height: World.tileExtent)
-                            }
-                            else{
-                                Image("gear.grey")
-                                    .resizable()
-                                    .frame(width: World.tileExtent, height: World.tileExtent)
+                            ZStack{
+                                if let image = getImage(x, y){
+                                    Image(uiImage: image)
+                                        .frame(width: World.tileExtent, height: World.tileExtent)
+                                }
+                                else{
+                                    Image("gear.grey")
+                                        .resizable()
+                                        .frame(width: World.tileExtent, height: World.tileExtent)
+                                }
+                                if settings.showOverlay, settings.hasOverlay, let image = getOverlayImage(x, y){
+                                    Image(uiImage: image)
+                                        .background(.clear)
+                                        .frame(width: World.tileExtent, height: World.tileExtent)
+                                }
                             }
                         }
                     }
@@ -38,6 +45,15 @@ struct MapView: View {
     
     func getImage(_ x: Int, _ y: Int) -> UIImage?{
         if let tile = mapStatus.getTile(x: x, y: y){
+            if let imageData = tile.imageData{
+                return UIImage(data: imageData)
+            }
+        }
+        return nil
+    }
+    
+    func getOverlayImage(_ x: Int, _ y: Int) -> UIImage?{
+        if let tile = mapStatus.getOverlayTile(x: x, y: y){
             if let imageData = tile.imageData{
                 return UIImage(data: imageData)
             }

@@ -368,6 +368,9 @@
         }
       }
     },
+    "Key" : {
+      "extractionState" : "manual"
+    },
     "no" : {
       "extractionState" : "manual",
       "localizations" : {

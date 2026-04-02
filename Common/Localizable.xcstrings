@@ -4081,6 +4081,23 @@
         }
       }
     },
+    "sendToWatch" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An Uhr schicken"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send to Watch"
+          }
+        }
+      }
+    },
     "serverName" : {
       "extractionState" : "manual",
       "localizations" : {

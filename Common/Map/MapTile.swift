@@ -16,6 +16,8 @@ class MapTile{
         }
         return tile
     }
+    
+    static var dummyTile: MapTile = MapTile(zoom: 0, x: 0, y: 0, tileSource: TileSource.dummyTileSource)
 
     var x: Int
     var y: Int
