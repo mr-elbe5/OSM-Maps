@@ -42,7 +42,12 @@ class TileLayerView: NSView {
     }
     
     override func draw(_ rect: CGRect) {
-        drawTile(rect: rect)
+        let tile = MapTile.getTile(data: getTileData(rect: rect), tileSource: Settings.shared.tileSource)
+        drawTile(tile, rect: rect)
+        if Settings.shared.hasOverlay, Settings.shared.showOverlay, let overlaySource = Settings.shared.overlayTileSource{
+            let overlayTile = MapTile.getTile(data: getTileData(rect: rect), tileSource: overlaySource)
+            drawTile(overlayTile, rect: rect, asOverlay: true)
+        }
     }
     
     private func getTileData(rect: CGRect) -> MapTileData{
@@ -52,18 +57,19 @@ class TileLayerView: NSView {
     }
     
     // rect is in contentSize = planetSize
-    func drawTile(rect: CGRect){
-        let tileData = getTileData(rect: rect)
-        let tile = MapTile.getTile(data: tileData, tileSource: Settings.shared.tileSource)
+    func drawTile(_ tile: MapTile, rect: CGRect, asOverlay: Bool = false){
         if let imageData = tile.imageData, let image = NSImage(data: imageData){
             image.draw(in: rect)
             return
         }
-        mapGearImage?.draw(in: rect.scaleCenteredBy(0.25))
+        if !asOverlay{
+            mapGearImage?.draw(in: rect.scaleCenteredBy(0.25))
+        }
         TileProvider.shared.getTileImage(tile: tile){ success in
+            //Log.debug("refresh tile \(tile.shortDescription) \(success)")
             if success{
                 DispatchQueue.main.async {
-                    self.layer?.setNeedsDisplay(rect)
+                    self.setNeedsDisplay(rect)
                 }
             }
             else{

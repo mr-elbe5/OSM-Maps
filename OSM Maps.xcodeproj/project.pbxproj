@@ -104,7 +104,6 @@
 				Route/Route.swift,
 				Route/Routepoint.swift,
 				Route/RouteRequest.swift,
-				Settings/CommonSettings.swift,
 				Track/Track.swift,
 				Track/Trackpoint.swift,
 				Track/TrackpointInterval.swift,

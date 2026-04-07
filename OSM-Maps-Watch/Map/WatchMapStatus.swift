@@ -105,7 +105,7 @@ typealias MapTileGrid = [MapTileRow]
     }
     
     private func updateTileGrid(){
-        print("update grid")
+        //print("update grid")
         tilesLoaded = true
         for y in 0..<gridHeight {
             for x in 0..<gridWidth {

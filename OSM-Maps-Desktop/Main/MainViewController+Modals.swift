@@ -27,7 +27,7 @@ extension MainViewController {
     }
     
     func openSettings(at button: NSButton) {
-        let controller = SettingsViewController()
+        let controller = TileSourceViewController()
         controller.popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
     }
     

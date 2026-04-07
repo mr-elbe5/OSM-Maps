@@ -83,7 +83,7 @@ class MainViewController: UIViewController {
         groups = Array<UIBarButtonItemGroup>()
         items = Array<UIBarButtonItem>()
         items.append(UIBarButtonItem(title: "settings".localize(), image: UIImage(systemName: "gearshape"), primaryAction: UIAction(){ action in
-            let controller = SettingsViewController()
+            let controller = TileSourceViewController()
             self.navigationController?.pushViewController(controller, animated: true)
         }))
         items.append(UIBarButtonItem(title: "data".localize(), image: UIImage(systemName: "cloud"), primaryAction: UIAction(){ action in
