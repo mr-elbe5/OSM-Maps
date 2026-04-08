@@ -136,6 +136,12 @@ class MainViewController: ViewController {
         mapView.toggleMarkers()
     }
     
+    func toggleOverlay() {
+        Settings.shared.showOverlay = !Settings.shared.showOverlay
+        mapView.refresh()
+        Settings.shared.save()
+    }
+    
     func showItemOnMap(_ item: MapItem){
         setGridView(nil)
         mapView.showLocationOnMap(coordinate: item.coordinate)
@@ -235,6 +241,7 @@ class MainViewController: ViewController {
         VisibleRoute.shared.reset()
         VisibleRoute.shared.routeItem = RouteItem()
         mapScrollView.updateRouteLayerContent()
+        mapSplitView.openSideView()
         routeControlView.update()
     }
     

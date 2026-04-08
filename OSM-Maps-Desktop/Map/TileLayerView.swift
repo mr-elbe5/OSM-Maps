@@ -69,7 +69,7 @@ class TileLayerView: NSView {
             //Log.debug("refresh tile \(tile.shortDescription) \(success)")
             if success{
                 DispatchQueue.main.async {
-                    self.setNeedsDisplay(rect)
+                    self.layer?.setNeedsDisplay(rect)
                 }
             }
             else{

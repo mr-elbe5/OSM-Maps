@@ -14,8 +14,9 @@ class MainMenuView: NSView{
     var openViewSettingsButton: NSButton!
     var openICloudButton: NSButton!
     var openBackupButton: NSButton!
-    var openSettingsButton: NSButton!
+    var openTrackSourceButton: NSButton!
     var openHelpButton: NSButton!
+    var toggleSideColumnButton: NSButton!
     
     var insets = OSInsets(top: 0, left: 5, bottom: 0, right: 5)
     
@@ -41,10 +42,12 @@ class MainMenuView: NSView{
         openICloudButton.toolTip = "iCloud".localize()
         openBackupButton = NSButton(icon: "zipper.page", target: self, action: #selector(openBackup))
         openBackupButton.toolTip = "data".localize()
-        openSettingsButton = NSButton(icon: "gearshape", target: self, action: #selector(openSettings))
-        openSettingsButton.toolTip = "settings".localize()
+        openTrackSourceButton = NSButton(icon: "map", target: self, action: #selector(openSettings))
+        openTrackSourceButton.toolTip = "mapServer".localize()
         openHelpButton = NSButton(icon: "questionmark", target: self, action: #selector(openHelp))
         openHelpButton.toolTip = "help".localize()
+        toggleSideColumnButton = NSButton(icon: "inset.filled.rightthird.rectangle", target: self, action: #selector(toggleSideColumn))
+        toggleSideColumnButton.toolTip = "sideColumn".localize()
     }
     
     required init?(coder: NSCoder) {
@@ -58,8 +61,9 @@ class MainMenuView: NSView{
         rightMenu.addSubviewToRight(openViewSettingsButton, insets: insets)
         rightMenu.addSubviewToRight(openICloudButton, leftView: openViewSettingsButton, insets: insets)
         rightMenu.addSubviewToRight(openBackupButton, leftView: openICloudButton, insets: insets)
-        rightMenu.addSubviewToRight(openSettingsButton, leftView: openBackupButton, insets: insets)
-        rightMenu.addSubviewToRight(openHelpButton, leftView: openSettingsButton, insets: insets)
+        rightMenu.addSubviewToRight(openTrackSourceButton, leftView: openBackupButton, insets: insets)
+        rightMenu.addSubviewToRight(openHelpButton, leftView: openTrackSourceButton, insets: insets)
+        rightMenu.addSubviewToRight(toggleSideColumnButton, leftView: openHelpButton, insets: insets)
             .connectToRight(of: rightMenu, inset: .zero)
     }
     
@@ -87,11 +91,15 @@ class MainMenuView: NSView{
     }
     
     @objc func openSettings(){
-        MainViewController.shared.openSettings(at: openSettingsButton)
+        MainViewController.shared.openSettings(at: openTrackSourceButton)
     }
     
     @objc func openHelp(){
         MainViewController.shared.openHelp(at: openHelpButton)
+    }
+    
+    @objc func toggleSideColumn(){
+        MainViewController.shared.toggleSideColumn()
     }
     
 }

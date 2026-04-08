@@ -46,19 +46,22 @@ class TileSourceView: PopoverView{
         controller as! TileSourceViewController
     }
     
-    var nameField = LabeledTextField()
-    var tileUrlTemplateField = LabeledTextField()
+    var nameField: LabeledTextField!
+    var tileUrlTemplateField: LabeledTextField!
     
-    var overlayNameField = LabeledTextField()
-    var overlayUrlTemplateField = LabeledTextField()
+    var overlayNameField: LabeledTextField!
+    var overlayUrlTemplateField: LabeledTextField!
     
     override func setupView(){
         setupContent()
     }
     
     func setupContent(){
+        removeAllSubviews()
+        nameField = LabeledTextField()
         nameField.setupView(labelText: "mapName".localize(), text: Settings.shared.tileSource.displayName, isHorizontal: false)
         addSubviewBelow(nameField, insets: .defaultInsets)
+        tileUrlTemplateField = LabeledTextField()
         tileUrlTemplateField.setupView(labelText: "templateURL".localize(), text: Settings.shared.tileSource.templateUrl, isHorizontal: false)
         addSubviewBelow(tileUrlTemplateField, upperView: nameField, insets: .defaultInsets)
         var useLabel = NSTextField(labelWithString: "use".localizeWithColon())
@@ -69,15 +72,19 @@ class TileSourceView: PopoverView{
             let button = TileSourceActionButton()
             button.asTextButton(mapServer.displayName,target: self, action: #selector(setTileSource))
             button.source = mapServer
-            addSubviewWithAnchors(button, top: lastView.bottomAnchor, leading: leadingAnchor, insets: .flatInsets)
+            addSubviewWithAnchors(button, top: lastView.bottomAnchor, leading: leadingAnchor)
             let deleteButton = TileSourceActionButton(icon: "trash", color: .systemRed, target: self, action: #selector(deleteTileSource))
-            addSubviewWithAnchors(deleteButton, leading: button.trailingAnchor, insets: .flatInsets)
+            deleteButton.source = mapServer
+            addSubviewWithAnchors(deleteButton, leading: button.trailingAnchor, trailing: trailingAnchor)
                 .centerY(button.centerYAnchor)
+                .width(30)
             lastView = button
         }
         
+        overlayNameField = LabeledTextField()
         overlayNameField.setupView(labelText: "overlayName".localize(), text: Settings.shared.overlayTileSource?.displayName ?? "", isHorizontal: false)
         addSubviewBelow(overlayNameField, upperView: lastView, insets: .defaultInsets)
+        overlayUrlTemplateField = LabeledTextField()
         overlayUrlTemplateField.setupView(labelText: "templateURL".localize(), text: Settings.shared.overlayTileSource?.templateUrl ?? "", isHorizontal: false)
         addSubviewBelow(overlayUrlTemplateField, upperView: overlayNameField, insets: .defaultInsets)
         let clearOverlayButton = NSButton().asTextButton("clear".localize(), target: self, action: #selector(clearOverlay))
@@ -90,14 +97,16 @@ class TileSourceView: PopoverView{
             let button = TileSourceActionButton()
             button.asTextButton(overlayServer.displayName, target: self, action: #selector(setOverlay))
             button.source = overlayServer
-            addSubviewWithAnchors(button, top: lastView.bottomAnchor, leading: leadingAnchor, insets: .flatInsets)
-            let deleteButton = NSButton(icon: "trash", color: .systemRed, target: self, action: #selector(deleteOverlay))
-            addSubviewWithAnchors(deleteButton, leading: button.trailingAnchor, insets: .flatInsets)
+            addSubviewWithAnchors(button, top: lastView.bottomAnchor, leading: leadingAnchor)
+            let deleteButton = TileSourceActionButton(icon: "trash", color: .systemRed, target: self, action: #selector(deleteOverlay))
+            deleteButton.source = overlayServer
+            addSubviewWithAnchors(deleteButton, leading: button.trailingAnchor, trailing: trailingAnchor)
                 .centerY(button.centerYAnchor)
+                .width(30)
             lastView = button
         }
         
-        let hintText = NSTextField(labelWithString: "tileServerHint".localize())
+        let hintText = NSTextField(wrappingLabelWithString: "tileServerHint".localize())
         hintText.font = .preferredFont(forTextStyle: .footnote)
         addSubviewBelow(hintText, upperView: lastView, insets: .flatInsets)
         

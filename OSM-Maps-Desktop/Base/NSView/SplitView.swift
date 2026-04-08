@@ -53,11 +53,13 @@ class SplitView: NSView{
     }
     
     func openSideView(){
-        setSideWidth(defaultSideWidth)
+        if sideViewWidthConstraint.constant == 0{
+            setSideWidth(defaultSideWidth)
+        }
     }
     
     func toggleSideView(){
-        if sideViewWidthConstraint.constant <= minSideWidth{
+        if sideViewWidthConstraint.constant == 0{
             setSideWidth(defaultSideWidth)
         }
         else{

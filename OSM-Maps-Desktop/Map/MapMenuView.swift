@@ -12,6 +12,7 @@ class MapMenuView: NSView{
     var zoomOutButton: NSButton!
     var toggleCrossButton: NSButton!
     var toggleMapPinsButton: NSButton!
+    var toggleOverlayButton: NSButton!
     var centerButton: NSButton!
     var refreshButton: NSButton!
     var searchButton: NSButton!
@@ -30,6 +31,7 @@ class MapMenuView: NSView{
         toggleCrossButton.toolTip = "toggleCross".localize()
         toggleMapPinsButton = NSButton(icon: "mappin.slash", target: self, action: #selector(toggleMapPins))
         toggleMapPinsButton.toolTip = "toggleMapPins".localize()
+        toggleOverlayButton = NSButton(icon: "rectangle.on.rectangle.slash", target: self, action: #selector(toggleOverlay))
         refreshButton = NSButton(icon: "arrow.clockwise", target: self, action: #selector(refreshMap))
         refreshButton.toolTip = "refresh".localize()
         searchButton = NSButton(icon: "magnifyingglass", target: self, action: #selector(openSearch))
@@ -47,7 +49,8 @@ class MapMenuView: NSView{
         addSubviewBelow(zoomOutButton, upperView: zoomInButton, insets: insets)
         addSubviewBelow(toggleCrossButton, upperView: zoomOutButton, insets: insets)
         addSubviewBelow(toggleMapPinsButton, upperView: toggleCrossButton, insets: insets)
-        addSubviewBelow(refreshButton, upperView: toggleMapPinsButton, insets: insets)
+        addSubviewBelow(toggleOverlayButton, upperView: toggleMapPinsButton, insets: insets)
+        addSubviewBelow(refreshButton, upperView: toggleOverlayButton, insets: insets)
         addSubviewBelow(searchButton, upperView: refreshButton, insets: insets)
         addSubviewBelow(createRouteButton, upperView: searchButton, insets: insets)
     }
@@ -66,6 +69,10 @@ class MapMenuView: NSView{
     
     @objc func toggleMapPins() {
         MainViewController.shared.toggleMapPins()
+    }
+    
+    @objc func toggleOverlay() {
+        MainViewController.shared.toggleOverlay()
     }
     
     @objc func refreshMap() {

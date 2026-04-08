@@ -43,6 +43,10 @@ extension MainViewController {
         }
     }
     
+    func toggleSideColumn(){
+        mapSplitView.toggleSideView()
+    }
+    
     func addNoteAtCenter(text: String) {
         let note = NoteItem(coordinate: MapStatus.shared.centerCoordinate)
         note.updateLocation()
