@@ -28,14 +28,15 @@ class RouteControlView : NSView{
         let label = NSTextField(labelWithString: "route".localize()).asHeadline()
         addSubviewBelow(label)
         routeTypeSelector.segmentCount = 3
+        routeTypeSelector.segmentStyle = .separated
         routeTypeSelector.setImage(NSImage(systemSymbolName: "car", accessibilityDescription: nil)!, forSegment: 0)
         routeTypeSelector.setImage(NSImage(systemSymbolName: "bicycle", accessibilityDescription: nil)!, forSegment: 1)
         routeTypeSelector.setImage(NSImage(systemSymbolName: "figure.walk", accessibilityDescription: nil)!, forSegment: 2)
-        routeTypeSelector.selectedSegment = RouteType.getRouteTypeIndex(type: DesktopSettings.shared.routeType)
+        routeTypeSelector.selectedSegment = RouteType.getRouteTypeIndex(type: Settings.shared.routeType)
         routeTypeSelector.target = self
         routeTypeSelector.action = #selector(routeTypeChanged)
-        addSubviewBelow(routeTypeSelector, upperView: label)
-        addSubviewBelow(buttonPanel, upperView: routeTypeSelector, insets: .zero)
+        addSubviewWithAnchors(routeTypeSelector, top: label.bottomAnchor, leading: leadingAnchor)
+        addSubviewBelow(buttonPanel, upperView: routeTypeSelector)
         
         scrollView.asVerticalScrollView(contentView: statusPanel)
         addSubviewBelow(scrollView, upperView: buttonPanel, insets: NSEdgeInsets(top: 10, left: 0, bottom: 10, right: 0))
@@ -140,6 +141,10 @@ class RouteControlView : NSView{
     
     @objc func cancelRoute(){
         MainViewController.shared.cancelRoute()
+    }
+    
+    func show(_ flag: Bool){
+        isHidden = !flag
     }
     
     func updateStatusPanel(){
