@@ -364,13 +364,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diese App zeigt OSM Karten aus wählbaren Quellen (OSM oder Elbe5). Dazu kann man Notizen erstellen, Bilder und Touren im GPX-Format hinzufügen und editieren sowie eigene Touren aufzeichnen.\nSie hat Listenansichten für alle hinzugefügten Elemente.\nSie kann all dies über die iCloud oder Backup-Dateien mit der Desktop-App synchronisieren."
+            "value" : "Diese App zeigt OSM Karten aus wählbaren Quellen (OSM, Elbe5, u.a.). Dazu kann man Notizen erstellen, Bilder und Touren im GPX-Format hinzufügen und editieren sowie eigene Touren aufzeichnen.\nSie hat Listenansichten für alle hinzugefügten Elemente.\nSie kann all dies über die iCloud oder Backup-Dateien mit der Desktop-App synchronisieren.\n\nKartenquellen können aus voreingestellten Quellen gewählt oder manuell (z.B. für eine eigene Quelle) eingegeben werden.\n\nZusätzlich können Layer wie z.B. für Wegmarkierungen hinzugefügt werden. Layer können auf die Uhr übertragen werden."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This app shows OSM maps from a selectable sources (OSM or Elbe5). You can create Notes add and edit photos and tracks in GPX format add record own tracks. It has list views of all attached items. It can synchronize all of this via iCloud or backup files with the desktop app."
+            "value" : "This app shows OSM maps from a various sources (OSM, Elbe5, etc). You can create Notes add and edit photos and tracks in GPX format add record own tracks. It has list views of all attached items. It can synchronize all of this via iCloud or backup files with the desktop app.\n\nMap sources can be chosen from given URLs or your own one. Additionally layers like for way marks can be added."
           }
         }
       }
@@ -460,12 +460,46 @@
         }
       }
     },
+    "helpMapSources" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kartenquellen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Map Sources"
+          }
+        }
+      }
+    },
+    "helpMapSourcesText" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Man kann die Kartenquelle aus einer der vordefinierten oder einer selbst erstellten Quelle wählen. Die URL muss ein Muster wie /{z}/{x}/{y}.png enthalten.\nZusätzlich können Layer gewählt werden, die über die Kartenkacheln geblendet werden.\nKartenquellen und Layer können auf die Uhr übertragen werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can change the tile source using one of the given sources or by manually setting one. The URL must contain a pattern like /{z}/{x}/{y}.png.\nAdditionally you can add layers. which will appear on top of the map tiles.\nTile sources can be transferred to the watch."
+          }
+        }
+      }
+    },
     "helpMapText" : {
       "extractionState" : "manual",
       "localizations" : {
         "de" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Die Kartensicht zeigt Karten auf der Basis der ausgewählten Quelle (siehe Einstellungen) an.\nSie kann verschoben und gezoomt werden, sowohl mit der Maus als auch mit den Plus- und Minus-Zeichen.\nAuf der Karte werden Orte von Notizen, Bildern und Touren angezeigt, wobei die Farben auf die Inhalte hinweisen: grün für Notiz, rot für Bild, blau für Tour. Liegen mehrere Markierungen eng zusammen, wird diese Gruppe durch ein Icon mit drei Nadeln angezeigt (violett für Bilder und Touren). Die Gruppen kann man durch Hineinzoomen auflösen.\nAnklicken einer Markierung öffnet eine Listenansicht der Elemente.\nÜber die Detailansicht können Elemente auf der Karte angezeigt oder editiert werden\nWeiterhin kann über das Kreuz in der Kartenmitte eine eine Notiz oder ein Bild hinzugefügt werden. Wird ein Bild auf diese Weise hinzugefügt, werden dessen GPS-Daten auf diese Position geändert.\nWenn auf der Karte ein Platzhalter erscheint (Zahnrad), dann wird dieser Teil der Karte noch geladen. Man kann das mit dem \"Neu laden\"-Knopf rechts überprüfen."
           }
         },
@@ -500,13 +534,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Man kann die Kartenquelle wechseln und Kartenkacheln für den aktuell sichtbaren Kartenausschnitt für spätere Offlinenutzung vorladen.\nZum Vorladen den Zoombereich wählen, die Kachelanzahl berechnen und den Download starten.\nAnschliessend können die Kacheln auch auf die Uhr hochgeladen werden."
+            "value" : "Man kann Kartenkacheln für den aktuell sichtbaren Kartenausschnitt für spätere Offlinenutzung vorladen.\nZum Vorladen den Zoombereich wählen, die Kachelanzahl berechnen und den Download starten.\nAnschliessend können die Kacheln auch auf die Uhr hochgeladen werden."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "You can change the tile source and preload tiles for the currently visible map area for later offline use.\nFor preloading you select a range of zoom levels, calculate the tile amount and start the download.\nAfter that you may also upload these tiles to your watch."
+            "value" : "You can preload tiles for the currently visible map area for later offline use.\nFor preloading you select a range of zoom levels, calculate the tile amount and start the download.\nAfter that you may also upload these tiles to your watch."
           }
         }
       }
@@ -830,6 +864,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Map Menus"
+          }
+        }
+      }
+    },
+    "mapSources" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kartenquellen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Map Sources"
           }
         }
       }

@@ -89,11 +89,11 @@ class MapPreloadViewController: ScrollViewController{
         let serverLabel = UILabel(text: Settings.shared.tileSource.displayName)
         contentView.addSubviewBelow(serverLabel, upperView: header, insets: OSInsets.defaultInsets)
         
-        let clearTileCacheButton = UIButton(name: "clearMapCache".localize(), action: UIAction(){ action in
+        let clearTileCacheButton = UIButton(name: "clearTileCache".localize(), action: UIAction(){ action in
             self.deleteAllTiles()
         })
         contentView.addSubviewBelow(clearTileCacheButton, upperView: serverLabel)
-        let clearCurrentTileCacheButton = UIButton(name: "clearCurrentMapCache".localize(), action: UIAction(){ action in
+        let clearCurrentTileCacheButton = UIButton(name: "clearCurrentTileCache".localize(), action: UIAction(){ action in
             self.deleteCurrentTiles()
         })
         contentView.addSubviewBelow(clearCurrentTileCacheButton, upperView: clearTileCacheButton)
