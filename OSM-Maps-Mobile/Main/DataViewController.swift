@@ -169,7 +169,7 @@ extension DataViewController{
     // backup
     
     func createBackup(){
-        let url = FileManager.default.temporaryDirectory.appendingPathComponent("maps4osm_backup_\(Date.now.fileNameString).zip")
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("osmmaps_backup_\(Date.now.fileNameString).zip")
         let spinner = startSpinner()
         DispatchQueue.global(qos: .userInitiated).async {
             if Backup.createBackupFile(at: url){

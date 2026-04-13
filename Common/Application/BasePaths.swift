@@ -17,24 +17,29 @@ struct BasePaths {
     static var videoPreviewDirURL = URL.cachesDirectory.appendingPathComponent("videoPreviews")
     
     static func initializeDirs() {
-        try! FileManager.default.createDirectory(at: URL.applicationSupportDirectory, withIntermediateDirectories: true, attributes: nil)
-        Log.debug("base dir is: \(URL.applicationSupportDirectory.path)")
-        Log.debug("document dir is: \(URL.documentsDirectory.path)")
-        Log.debug("cache dir is: \(URL.cachesDirectory.path)")
-        try! FileManager.default.createDirectory(at: statusDirURL, withIntermediateDirectories: true, attributes: nil)
-        //Log.debug("status dir is: \(statusDirURL.path)")
-        try! FileManager.default.createDirectory(at: tileDirURL, withIntermediateDirectories: true, attributes: nil)
-        Log.debug("tile dir is: \(tileDirURL.path)")
-        try! FileManager.default.createDirectory(at: imageDirURL, withIntermediateDirectories: true, attributes: nil)
-        //Log.debug("image dir is: \(imageDirURL.path)")
-        try! FileManager.default.createDirectory(at: audioDirURL, withIntermediateDirectories: true, attributes: nil)
-        //Log.debug("audio dir is: \(audioDirURL.path)")
-        try! FileManager.default.createDirectory(at: videoDirURL, withIntermediateDirectories: true, attributes: nil)
-        //Log.debug("video dir is: \(videoDirURL.path)")
-        try! FileManager.default.createDirectory(at: previewDirURL, withIntermediateDirectories: true, attributes: nil)
-        //Log.debug("preview dir is: \(previewDirURL.path)")
-        try! FileManager.default.createDirectory(at: videoPreviewDirURL, withIntermediateDirectories: true, attributes: nil)
-        //Log.debug("video preview dir is: \(videoPreviewDirURL.path)")
+        do{
+            try FileManager.default.createDirectory(at: URL.applicationSupportDirectory, withIntermediateDirectories: true, attributes: nil)
+            Log.debug("base dir is: \(URL.applicationSupportDirectory.path)")
+            Log.debug("document dir is: \(URL.documentsDirectory.path)")
+            Log.debug("cache dir is: \(URL.cachesDirectory.path)")
+            try FileManager.default.createDirectory(at: statusDirURL, withIntermediateDirectories: true, attributes: nil)
+            //Log.debug("status dir is: \(statusDirURL.path)")
+            try FileManager.default.createDirectory(at: tileDirURL, withIntermediateDirectories: true, attributes: nil)
+            Log.debug("tile dir is: \(tileDirURL.path)")
+            try FileManager.default.createDirectory(at: imageDirURL, withIntermediateDirectories: true, attributes: nil)
+            //Log.debug("image dir is: \(imageDirURL.path)")
+            try FileManager.default.createDirectory(at: audioDirURL, withIntermediateDirectories: true, attributes: nil)
+            //Log.debug("audio dir is: \(audioDirURL.path)")
+            try FileManager.default.createDirectory(at: videoDirURL, withIntermediateDirectories: true, attributes: nil)
+            //Log.debug("video dir is: \(videoDirURL.path)")
+            try FileManager.default.createDirectory(at: previewDirURL, withIntermediateDirectories: true, attributes: nil)
+            //Log.debug("preview dir is: \(previewDirURL.path)")
+            try FileManager.default.createDirectory(at: videoPreviewDirURL, withIntermediateDirectories: true, attributes: nil)
+            //Log.debug("video preview dir is: \(videoPreviewDirURL.path)")
+        }
+        catch{
+            Log.error("directories could not be created")
+        }
     }
     
     static func assertNewFileLocations(){

@@ -173,7 +173,12 @@ extension FileManager {
     }
     
     func listAllFiles(dirPath: String) -> Array<String>{
-        return try! FileManager.default.contentsOfDirectory(atPath: dirPath)
+        do{
+            return try FileManager.default.contentsOfDirectory(atPath: dirPath)
+        }
+        catch{
+            return []
+        }
     }
     
     func listAllURLs(dirURL: URL) -> Array<URL>{
