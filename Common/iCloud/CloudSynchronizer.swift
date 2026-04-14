@@ -197,6 +197,11 @@ class CloudSynchronizer: @unchecked Sendable{
                     ids.append(record.recordID)
                 }
                 try await deleteRemoteRecords(recordIds: ids)
+                DispatchQueue.main.async{
+                    for _ in 0..<ids.count{
+                        self.delegate?.nextSynchronizationStep()
+                    }
+                }
             }
             Log.info( "iCloud synchronization done")
             DispatchQueue.main.async{
@@ -353,9 +358,6 @@ class CloudSynchronizer: @unchecked Sendable{
         }
         if !fullResult.deleteResults.isEmpty{
             Log.info("deleted \(fullResult.deleteResults.count) items from iCloud")
-            DispatchQueue.main.async{
-                self.delegate?.nextSynchronizationStep()
-            }
         }
     }
     
