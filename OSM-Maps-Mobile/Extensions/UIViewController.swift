@@ -87,6 +87,14 @@ extension UIViewController{
         self.present(alertController, animated: true)
     }
     
+    func showMessage(title: String, text: String, onApprove: (() -> Void)? = nil){
+        let alertController = UIAlertController(title: title, message: text, preferredStyle: .actionSheet)
+        alertController.addAction(UIAlertAction(title: "ok".localize(table: "Base"), style: .default){ action in
+            onApprove?()
+        })
+        self.present(alertController, animated: true)
+    }
+    
     func showError(_ reason: String){
         showAlert(title: "error".localize(table: "Base"), text: reason.localize())
     }

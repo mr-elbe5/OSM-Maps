@@ -44,7 +44,7 @@ class MapItem: LocationData, Identifiable, Hashable {
         return record
     }
     
-    var isCloudSynchronizable: Bool{
+    var isValidItem: Bool{
         return true
     }
     

@@ -766,6 +766,108 @@
         }
       }
     },
+    "cloudStatusExtraLocalItems" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extra lokale Elemente"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extra local items"
+          }
+        }
+      }
+    },
+    "cloudStatusExtraRemoteItems" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extra Elemente in der Cloud"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extra remote items"
+          }
+        }
+      }
+    },
+    "cloudStatusLocalItems" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lokale Elemente"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local items"
+          }
+        }
+      }
+    },
+    "cloudStatusRemoteItems" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elemente in der Cloud"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remote items"
+          }
+        }
+      }
+    },
+    "cloudStatusUpdatedLocalItems" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geänderte lokale Elemente"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updated local items"
+          }
+        }
+      }
+    },
+    "cloudStatusUpdatedRemoteItems" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geänderte Elemente in der Cloud"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updated remote items"
+          }
+        }
+      }
+    },
     "comment" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4370,6 +4472,23 @@
         }
       }
     },
+    "showSyncStatus" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronisationsstatus anzeigen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Synchronization Status"
+          }
+        }
+      }
+    },
     "showTrackList" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4778,6 +4897,23 @@
         }
       }
     },
+    "synchronizeError" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronisierung fehlgeschlagen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronization failed"
+          }
+        }
+      }
+    },
     "synchronizeFromCloud" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -4795,19 +4931,19 @@
         }
       }
     },
-    "synchronizeNow" : {
+    "synchronizeFromCloudWithDeletion" : {
       "extractionState" : "manual",
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jetzt synchronisieren"
+            "value" : "Aus der iCloud synchronisieren und  löschen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Synchronize Now"
+            "value" : "Synchronize from iCloud and delete"
           }
         }
       }
@@ -4825,6 +4961,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Synchronize to iCloud"
+          }
+        }
+      }
+    },
+    "synchronizeToCloudWithDeletion" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In die iCloud synchronisieren und löschen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronize to iCloud \nand delete"
+          }
+        }
+      }
+    },
+    "syncStatus" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronisierungs-Status"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronization Status"
           }
         }
       }

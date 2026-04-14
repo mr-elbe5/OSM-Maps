@@ -20,36 +20,68 @@ class ICloudViewController: PopoverViewController {
         view.setupView()
     }
     
-    func synchronizeFromICloud(){
-        let synchronizer = CloudSynchronizer(syncType: .fromCloud)
-        synchronizer.delegate = contentView
+    func showICloudStatus(){
+        let synchronizer = CloudSynchronizer()
         Task{
-            AppData.shared.resetDeletedIds()
-            synchronizer.synchronize()
+            do{
+                AppData.shared.resetDeletedIds()
+                if let status = try await synchronizer.getSyncStatus(){
+                    DispatchQueue.main.async{
+                        self.showInfo(text: status.text)
+                    }
+                }
+            }
+            catch{
+                DispatchQueue.main.async{
+                    self.showError(text: "connectionError".localize())
+                }
+            }
         }
     }
     
-    func synchronizeToICloud(){
-        let synchronizer = CloudSynchronizer(syncType: .toCloud)
-        synchronizer.delegate = contentView
-        Task{
-            synchronizer.synchronize()
-        }
-    }
-    
-    func synchronizeNow(){
-        let synchronizer = CloudSynchronizer(syncType: .full)
-        synchronizer.delegate = contentView
-        Task{
-            synchronizer.synchronize()
-        }
-    }
-    
-    func clearICloud() {
+    func synchronizeFromICloud(deleteMissing: Bool){
         let synchronizer = CloudSynchronizer()
         synchronizer.delegate = contentView
         Task{
-            synchronizer.clear()
+            do{
+                AppData.shared.resetDeletedIds()
+                try await synchronizer.synchronizeFromICloud(deleteMissing: deleteMissing)
+            }
+            catch{
+                DispatchQueue.main.async{
+                    self.showError(text: "synchronizeError".localize())
+                }
+            }
+        }
+    }
+    
+    func synchronizeToICloud(deleteMissing: Bool){
+        let synchronizer = CloudSynchronizer()
+        synchronizer.delegate = contentView
+        Task{
+            do{
+                try await synchronizer.synchronizeToICloud(deleteMissing: deleteMissing)
+            }
+            catch{
+                DispatchQueue.main.async{
+                    self.showError(text: "synchronizeError".localize())
+                }
+            }
+        }
+    }
+    
+    func deleteAllFromICloud() {
+        let synchronizer = CloudSynchronizer()
+        synchronizer.delegate = contentView
+        Task{
+            do{
+                try await synchronizer.deleteAllFromICloud()
+            }
+            catch{
+                DispatchQueue.main.async{
+                    self.showError(text: "synchronizeError".localize())
+                }
+            }
         }
     }
     
@@ -81,9 +113,11 @@ class ICloudViewController: PopoverViewController {
 
 class ICloudView: PopoverView, CloudSynchronizerDelegate {
     
+    var showCloudStatusButton = NSButton()
     var synchronizeFromICloudButton = NSButton()
+    var synchronizeFromICloudWithDeletionButton = NSButton()
     var synchronizeToICloudButton = NSButton()
-    var synchronizeButton = NSButton()
+    var synchronizeToICloudWithDeletionButton = NSButton()
     var clearICloudButton = NSButton()
     
     var progressView = NSProgressIndicator()
@@ -96,11 +130,15 @@ class ICloudView: PopoverView, CloudSynchronizerDelegate {
     
     override func setupView() {
         
-        synchronizeButton.asTextButton("synchronizeNow".localize(), target: self, action: #selector(synchronizeNow))
-        addSubviewCenteredBelow(synchronizeButton)
         var label = NSTextField(wrappingLabelWithString: "synchronizeHint".localize(table: "Hints")).asSmallLabel()
         label.alignment = .center
-        addSubviewBelow(label, upperView: synchronizeButton)
+        addSubviewBelow(label)
+        
+        showCloudStatusButton.asTextButton("showSyncStatus".localize(), target: self, action: #selector(showICloudStatus))
+        addSubviewCenteredBelow(showCloudStatusButton, upperView: label, insets: OSInsets.doubleInsets)
+        label = NSTextField(wrappingLabelWithString: "cloudStatusHint".localize(table: "Hints")).asSmallLabel()
+        label.alignment = .center
+        addSubviewBelow(label, upperView: showCloudStatusButton)
         
         synchronizeFromICloudButton.asTextButton("synchronizeFromCloud".localize(), target: self, action: #selector(synchronizeFromICloud))
         addSubviewCenteredBelow(synchronizeFromICloudButton, upperView: label, insets: OSInsets.doubleInsets)
@@ -108,11 +146,23 @@ class ICloudView: PopoverView, CloudSynchronizerDelegate {
         label.alignment = .center
         addSubviewBelow(label, upperView: synchronizeFromICloudButton)
         
+        synchronizeFromICloudWithDeletionButton.asTextButton("synchronizeFromCloudWithDeletion".localize(), target: self, action: #selector(synchronizeFromICloudWithDeletion))
+        addSubviewCenteredBelow(synchronizeFromICloudWithDeletionButton, upperView: label, insets: OSInsets.doubleInsets)
+        label = NSTextField(wrappingLabelWithString: "synchronizeFromCloudWithDeletionHint".localize(table: "Hints")).asSmallLabel()
+        label.alignment = .center
+        addSubviewBelow(label, upperView: synchronizeFromICloudWithDeletionButton)
+        
         synchronizeToICloudButton.asTextButton("synchronizeToCloud".localize(), target: self, action: #selector(synchronizeToICloud))
         addSubviewCenteredBelow(synchronizeToICloudButton, upperView: label)
         label = NSTextField(wrappingLabelWithString: "synchronizeToCloudHint".localize(table: "Hints")).asSmallLabel()
         label.alignment = .center
         addSubviewBelow(label, upperView: synchronizeToICloudButton)
+        
+        synchronizeToICloudWithDeletionButton.asTextButton("synchronizeToCloudWithDeletion".localize(), target: self, action: #selector(synchronizeToICloudWithDeletion))
+        addSubviewCenteredBelow(synchronizeToICloudWithDeletionButton, upperView: label)
+        label = NSTextField(wrappingLabelWithString: "synchronizeToCloudWithDeletionHint".localize(table: "Hints")).asSmallLabel()
+        label.alignment = .center
+        addSubviewBelow(label, upperView: synchronizeToICloudWithDeletionButton)
         
         clearICloudButton.asTextButton("clearCloud".localize(), target: self, action: #selector(clearICloud))
         addSubviewCenteredBelow(clearICloudButton, upperView: label)
@@ -135,20 +185,28 @@ class ICloudView: PopoverView, CloudSynchronizerDelegate {
         progressView.doubleValue = 0
     }
     
+    @objc func showICloudStatus(){
+        contentController.showICloudStatus()
+    }
+    
     @objc func synchronizeFromICloud(){
-        contentController.synchronizeFromICloud()
+        contentController.synchronizeFromICloud(deleteMissing: false)
+    }
+    
+    @objc func synchronizeFromICloudWithDeletion(){
+        contentController.synchronizeFromICloud(deleteMissing: true)
     }
     
     @objc func synchronizeToICloud(){
-        contentController.synchronizeToICloud()
+        contentController.synchronizeToICloud(deleteMissing: false)
     }
     
-    @objc func synchronizeNow(){
-        contentController.synchronizeNow()
+    @objc func synchronizeToICloudWithDeletion(){
+        contentController.synchronizeToICloud(deleteMissing: true)
     }
     
     @objc func clearICloud(){
-        (controller as! ICloudViewController).clearICloud()
+        (controller as! ICloudViewController).deleteAllFromICloud()
         
     }
     
@@ -165,7 +223,6 @@ class ICloudView: PopoverView, CloudSynchronizerDelegate {
             let isOn = try await CKContainer.isConnected()
             synchronizeFromICloudButton.isEnabled = isOn
             synchronizeToICloudButton.isEnabled = isOn
-            synchronizeButton.isEnabled = isOn
         }
     }
     

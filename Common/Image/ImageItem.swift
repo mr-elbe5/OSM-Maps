@@ -51,7 +51,7 @@ class ImageItem: MapItem{
         BasePaths.previewDirURL.appendingPathComponent(fileName)
     }
     
-    override var isCloudSynchronizable: Bool{
+    override var isValidItem: Bool{
         return fileExists
     }
     

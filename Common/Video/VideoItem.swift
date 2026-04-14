@@ -75,7 +75,7 @@ class VideoItem : MapItem{
         return nil
     }
     
-    override var isCloudSynchronizable: Bool{
+    override var isValidItem: Bool{
         return fileExists
     }
     

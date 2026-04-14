@@ -58,13 +58,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "All Appdaten aus der iCloud löschen"
+            "value" : "Alle Elemente aus der iCloud löschen"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Delete all app data from iCloud"
+            "value" : "Delete all items from iCloud"
           }
         }
       }
@@ -99,6 +99,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "This deletes all cached map tiles for all sources."
+          }
+        }
+      }
+    },
+    "cloudStatusHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "‚Extra‘-Elemente können abhängig von der gewählten Funktion der anderen Seite hinzugefügt oder gelöscht werden."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "‚Extra‘ items may be be added to the other side or deleted depending on your action."
           }
         }
       }
@@ -398,13 +415,30 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nur aus der iCloud zu lokalen Daten synchronisieren"
+            "value" : "Aus der iCloud zu lokalen Daten synchronisieren, ohne lokale Extra-Elemente zu löschen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Synchronize only from iCloud to local data"
+            "value" : "Synchronize from iCloud to local data without deleting extra local items."
+          }
+        }
+      }
+    },
+    "synchronizeFromCloudWithDeletionHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aus der iCloud zu lokalen Daten synchronisieren und lokale Extra-Elemente löschen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronize from iCloud to local data with deleting extra local items."
           }
         }
       }
@@ -415,13 +449,13 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dies synchronisiert mit der iCloud in beiden Richtungen.\nDie Übertragung von Bildern kann einige Zeit dauern."
+            "value" : "Bitte geduldig bleiben. Synchronisierungen können eine Weile dauern."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This synchronizes with iCloud in both directions. Loading images may take some time."
+            "value" : "Please be patient. Synchronization functions may take some time."
           }
         }
       }
@@ -432,13 +466,30 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nur in die iCloud aus lokalen Daten synchronisieren"
+            "value" : "In die iCloud aus lokalen Daten synchronisieren, ohne Extra-iCloud-Elemente zu löschen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Synchronize only to iCloud from local data"
+            "value" : "Synchronize to iCloud from local data without deleting extra remote items."
+          }
+        }
+      }
+    },
+    "synchronizeToCloudWithDeletionHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In die iCloud aus lokalen Daten synchronisieren und Extra-iCloud-Elemente löschen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronize to iCloud from local data with deleting extra remote items."
           }
         }
       }

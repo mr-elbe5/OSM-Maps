@@ -31,7 +31,7 @@ class AudioItem : MapItem{
         }
     }
     
-    override var isCloudSynchronizable: Bool{
+    override var isValidItem: Bool{
         return fileExists
     }
     

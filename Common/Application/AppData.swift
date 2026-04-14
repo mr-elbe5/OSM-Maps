@@ -223,11 +223,11 @@ class AppData : Codable{
     }
     
     @discardableResult
-    func cleanup() -> Int{
+    func deleteInvalidItems() -> Int{
         var ids = Set<UUID>()
         var deletedCount = 0
         for item in _mapItems{
-            if !item.isCloudSynchronizable{
+            if !item.isValidItem{
                 Log.info("item is not valid for cloud: \(item.id) - deleting")
                 item.prepareToDelete()
                 _mapItems.remove(obj: item)

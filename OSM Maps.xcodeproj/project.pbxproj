@@ -153,6 +153,7 @@
 				Extensions/URL.swift,
 				Extensions/UTType.swift,
 				Hints.xcstrings,
+				iCloud/CloudStatus.swift,
 				iCloud/CloudSynchronizer.swift,
 				Image/ImageItem.swift,
 				Image/ImageMetaData.swift,

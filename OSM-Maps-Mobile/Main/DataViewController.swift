@@ -40,15 +40,15 @@ class DataViewController: ScrollViewController{
         header = UILabel(header: "iCloud".localize())
         contentView.addSubviewBelow(header, upperView: deleteDataButton)
         
-        let syncNowButton = UIButton()
-        syncNowButton.setTitle("synchronizeNow".localize(), for: .normal)
-        syncNowButton.setTitleColor(.systemBlue, for: .normal)
-        syncNowButton.addAction(UIAction(){ action in
-            self.synchronizeFull()
+        let showCloudStatusButton = UIButton()
+        showCloudStatusButton.setTitle("showSyncStatus".localize(), for: .normal)
+        showCloudStatusButton.setTitleColor(.systemBlue, for: .normal)
+        showCloudStatusButton.addAction(UIAction(){ action in
+            self.showCloudStatus()
         }, for: .touchDown)
-        contentView.addSubviewCenteredBelow(syncNowButton, upperView: header)
-        var hint = UILabel(hint: "synchronizeHint".localize(table: "Hints"))
-        contentView.addSubviewBelow(hint, upperView: syncNowButton, insets: OSInsets.flatInsets)
+        contentView.addSubviewCenteredBelow(showCloudStatusButton, upperView: header)
+        var hint = UILabel(hint: "cloudStatusHint".localize(table: "Hints"))
+        contentView.addSubviewBelow(hint, upperView: showCloudStatusButton, insets: OSInsets.flatInsets)
         
         let synchronizeFromCloudButton = UIButton()
         synchronizeFromCloudButton.setTitle("synchronizeFromCloud".localize(), for: .normal)
@@ -60,6 +60,16 @@ class DataViewController: ScrollViewController{
         hint = UILabel(hint: "synchronizeFromCloudHint".localize(table: "Hints"))
         contentView.addSubviewBelow(hint, upperView: synchronizeFromCloudButton, insets: OSInsets.flatInsets)
         
+        let synchronizeFromCloudWithDeletionButton = UIButton()
+        synchronizeFromCloudWithDeletionButton.setTitle("synchronizeFromCloudWithDeletion".localize(), for: .normal)
+        synchronizeFromCloudWithDeletionButton.setTitleColor(.systemBlue, for: .normal)
+        synchronizeFromCloudWithDeletionButton.addAction(UIAction(){ action in
+            self.synchronizeFromCloud()
+        }, for: .touchDown)
+        contentView.addSubviewCenteredBelow(synchronizeFromCloudWithDeletionButton, upperView: hint)
+        hint = UILabel(hint: "synchronizeFromCloudWithDeletionHint".localize(table: "Hints"))
+        contentView.addSubviewBelow(hint, upperView: synchronizeFromCloudWithDeletionButton, insets: OSInsets.flatInsets)
+        
         let synchronizeToCloudButton = UIButton()
         synchronizeToCloudButton.setTitle("synchronizeToCloud".localize(), for: .normal)
         synchronizeToCloudButton.setTitleColor(.systemBlue, for: .normal)
@@ -69,6 +79,16 @@ class DataViewController: ScrollViewController{
         contentView.addSubviewCenteredBelow(synchronizeToCloudButton, upperView: hint)
         hint = UILabel(hint: "synchronizeToCloudHint".localize(table: "Hints"))
         contentView.addSubviewBelow(hint, upperView: synchronizeToCloudButton, insets: OSInsets.flatInsets)
+        
+        let synchronizeToCloudWithDeletionButton = UIButton()
+        synchronizeToCloudWithDeletionButton.setTitle("synchronizeToCloudWithDeletion".localize(), for: .normal)
+        synchronizeToCloudWithDeletionButton.setTitleColor(.systemBlue, for: .normal)
+        synchronizeToCloudWithDeletionButton.addAction(UIAction(){ action in
+            self.synchronizeToCloudWithDeletion()
+        }, for: .touchDown)
+        contentView.addSubviewCenteredBelow(synchronizeToCloudWithDeletionButton, upperView: hint)
+        hint = UILabel(hint: "synchronizeToCloudWithDeletionHint".localize(table: "Hints"))
+        contentView.addSubviewBelow(hint, upperView: synchronizeToCloudWithDeletionButton, insets: OSInsets.flatInsets)
         
         let clearCloudButton = UIButton()
         clearCloudButton.setTitle("clearCloud".localize(), for: .normal)
@@ -126,42 +146,89 @@ extension DataViewController{
     
     // cloud
     
-    func synchronizeFull(){
-        showDestructiveApprove(title: "synchronize".localize(), text: "synchronizeWarnHint".localize(table: "Hints")){
-            let synchronizer = CloudSynchronizer(syncType: .full)
-            synchronizer.delegate = self
-            Task{
-                synchronizer.synchronize()
+    func showCloudStatus(){
+        let synchronizer = CloudSynchronizer()
+        Task{
+            if let status = try await synchronizer.getSyncStatus(){
+                showMessage(title: "syncStatus".localize(), text: status.text)
+            }
+            else{
+                showError("syncronizeFailed".localize())
             }
         }
     }
     
     func synchronizeFromCloud(){
         showDestructiveApprove(title: "synchronizeFromCloud".localize(), text: "synchronizeWarnHint".localize(table: "Hints")){
-            let synchronizer = CloudSynchronizer(syncType: .fromCloud)
+            let synchronizer = CloudSynchronizer()
             synchronizer.delegate = self
             Task{
-                synchronizer.synchronize()
+                do{
+                    try await synchronizer.synchronizeFromICloud(deleteMissing: false)
+                }
+                catch{
+                    self.showError("syncronizeFailed".localize())
+                }
+            }
+        }
+    }
+    
+    func synchronizeFromCloudWithDeletion(){
+        showDestructiveApprove(title: "synchronizeFromCloudWithDeletion".localize(), text: "synchronizeWarnHint".localize(table: "Hints")){
+            let synchronizer = CloudSynchronizer()
+            synchronizer.delegate = self
+            Task{
+                do{
+                    try await synchronizer.synchronizeFromICloud(deleteMissing: true)
+                }
+                catch{
+                    self.showError("syncronizeFailed".localize())
+                }
             }
         }
     }
     
     func synchronizeToCloud(){
         showDestructiveApprove(title: "synchronizeToCloud".localize(), text: "synchronizeWarnHint".localize(table: "Hints")){
-            let synchronizer = CloudSynchronizer(syncType: .toCloud)
+            let synchronizer = CloudSynchronizer()
             synchronizer.delegate = self
             Task{
-                synchronizer.synchronize()
+                do{
+                    try await synchronizer.synchronizeToICloud(deleteMissing: false)
+                }
+                catch{
+                    self.showError("syncronizeFailed".localize())
+                }
+            }
+        }
+    }
+    
+    func synchronizeToCloudWithDeletion(){
+        showDestructiveApprove(title: "synchronizeToCloudWithDeletion".localize(), text: "synchronizeWarnHint".localize(table: "Hints")){
+            let synchronizer = CloudSynchronizer()
+            synchronizer.delegate = self
+            Task{
+                do{
+                    try await synchronizer.synchronizeToICloud(deleteMissing: true)
+                }
+                catch{
+                    self.showError("syncronizeFailed".localize())
+                }
             }
         }
     }
     
     func clearCloud(){
-        showDestructiveApprove(title: "synchronize".localize(), text: "synchronizeHint".localize(table: "Hints")){
+        showDestructiveApprove(title: "synchronize".localize(), text: "synchronizeWarnHint".localize(table: "Hints")){
             let synchronizer = CloudSynchronizer()
             synchronizer.delegate = self
             Task{
-                synchronizer.clear()
+                do{
+                    try await synchronizer.deleteAllFromICloud()
+                }
+                catch{
+                    self.showError("syncronizeFailed".localize())
+                }
             }
         }
     }
