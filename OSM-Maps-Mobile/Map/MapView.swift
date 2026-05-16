@@ -6,6 +6,7 @@
 
 import UIKit
 import CoreLocation
+import OSLog
 
 class MapView: UIView {
     
@@ -64,10 +65,10 @@ class MapView: UIView {
     }
     
     func setStartLocation(){
-        Log.info("setting start location")
-        Log.info("zooming to \(MapStatus.shared.zoom)")
+        Logger.info("setting start location")
+        Logger.info("zooming to \(MapStatus.shared.zoom)")
         scrollView.zoomTo(MapStatus.shared.zoom)
-        Log.info("moving to \(MapStatus.shared.centerCoordinate.debugString)")
+        Logger.info("moving to \(MapStatus.shared.centerCoordinate.debugString)")
         scrollView.scrollTo(MapStatus.shared.centerCoordinate)
         canUpdatePosition = true
     }
@@ -124,7 +125,7 @@ class MapView: UIView {
     }
     
     func zoomToCurrentZoom(){
-        Log.info("zooming to \(MapStatus.shared.zoom)")
+        Logger.info("zooming to \(MapStatus.shared.zoom)")
         scrollView.zoomTo(MapStatus.shared.zoom)
         updateCurrentLocationView()
     }

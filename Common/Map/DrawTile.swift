@@ -5,6 +5,7 @@
  */
 
 import Foundation
+import OSLog
 
 class DrawTileData: Identifiable{
     
@@ -64,7 +65,7 @@ extension DrawTileList{
                 let tile = MapTile(zoom: zoom, x: x, y: y, tileSource: Settings.shared.tileSource)
                 TileProvider.shared.getTileImage(tile: tile){ success in
                     if !success{
-                        Log.error("loading tile failed")
+                        Logger.error("loading tile failed")
                     }
                 }
                 drawTileList.append(DrawTileData(drawRect: drawRect, tile: tile))

@@ -5,6 +5,7 @@
  */
 
 import UIKit
+import OSLog
 
 class TileLayerView: UIView {
     
@@ -41,7 +42,7 @@ class TileLayerView: UIView {
         zoom = World.maxZoom - World.zoomLevelAtUpScale(scale: upScale)
         let tile = MapTile.getTile(data: getTileData(rect: rect), tileSource: Settings.shared.tileSource)
         drawTile(tile, rect: rect)
-        if Settings.shared.hasOverlay, Settings.shared.showOverlay, let overlaySource = Settings.shared.overlayTileSource{
+        for overlaySource in Settings.shared.overlayTileSources{
             let overlayTile = MapTile.getTile(data: getTileData(rect: rect), tileSource: overlaySource)
             drawTile(overlayTile, rect: rect, asOverlay: true)
         }
@@ -61,7 +62,7 @@ class TileLayerView: UIView {
     // rect is in contentSize = planetSize
     func drawTile(_ tile: MapTile, rect: CGRect, asOverlay: Bool = false){
         if let imageData = tile.imageData, let image = UIImage(data: imageData){
-            //Log.debug("drawing tile \(tile.shortDescription)")
+            //Logger.debug("drawing tile \(tile.shortDescription)")
             image.draw(in: rect)
             return
         }
@@ -69,14 +70,14 @@ class TileLayerView: UIView {
             mapGearImage?.draw(in: rect.scaleCenteredBy(0.25))
         }
         TileProvider.shared.getTileImage(tile: tile){ success in
-            //Log.debug("refresh tile \(tile.shortDescription) \(success)")
+            //Logger.debug("refresh tile \(tile.shortDescription) \(success)")
             if success{
                 DispatchQueue.main.async {
                     self.setNeedsDisplay(rect)
                 }
             }
             else{
-                Log.error("TileLayerView could not load tile \(tile.shortDescription)")
+                Logger.error("TileLayerView could not load tile \(tile.shortDescription)")
             }
         }
     }

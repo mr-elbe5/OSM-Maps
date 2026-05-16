@@ -6,6 +6,7 @@
 
 import Foundation
 import CoreLocation
+import OSLog
 
 class AppStatus: Identifiable, Codable{
     
@@ -42,16 +43,16 @@ class AppStatus: Identifiable, Codable{
     
     func updateVersion(){
         if currentVersion == AppStatus.latestVersion{
-            Log.info("Version is up to date")
+            Logger.info("Version is up to date")
             return
         }
-        Log.info("current version is \(currentVersion)")
+        Logger.info("current version is \(currentVersion)")
         if currentVersion < 15{
             BasePaths.assertNewFileLocations()
         }
         currentVersion = Self.latestVersion
         save()
-        Log.info("updated to version \(currentVersion)")
+        Logger.info("updated to version \(currentVersion)")
     }
     
     func save(){

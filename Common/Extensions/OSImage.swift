@@ -7,6 +7,7 @@
 import Foundation
 import SwiftUI
 import UniformTypeIdentifiers
+import OSLog
 
 #if os(macOS)
 import AppKit
@@ -143,7 +144,7 @@ struct ImageDocument: FileDocument {
         }
         else{
             data = Data()
-            Log.error("Failed to convert image to data")
+            Logger.error("Failed to convert image to data")
         }
     }
 
@@ -153,7 +154,7 @@ struct ImageDocument: FileDocument {
         }
         else{
             data = Data()
-            Log.error("Failed to read file contents")
+            Logger.error("Failed to read file contents")
         }
     }
 

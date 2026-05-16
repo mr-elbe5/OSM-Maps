@@ -5,6 +5,7 @@
  */
 
 import WatchConnectivity
+import OSLog
 
 class WatchConnector: NSObject {
     
@@ -26,9 +27,9 @@ class WatchConnector: NSObject {
     }
     
     func sendTile(_ tile: MapTile, data: Data, completion: @escaping (Bool) -> Void) {
-        //Log.debug("sending tile")
+        //Logger.debug("sending tile")
         if !isWatchConnected {
-            Log.error("not connected to phone")
+            Logger.error("not connected to phone")
             completion(false)
             return
         }
@@ -48,14 +49,14 @@ class WatchConnector: NSObject {
                 }
             }
         }) { error in
-            Log.error("error sending tile: \(error)")
+            Logger.error("error sending tile: \(error)")
         }
     }
     
     func sendRoute(_ route: Route, completion: @escaping (Bool) -> Void) {
-        Log.debug("sending route")
+        Logger.debug("sending route")
         if !isWatchConnected {
-            Log.error("not connected to phone")
+            Logger.error("not connected to phone")
             completion(false)
             return
         }
@@ -73,19 +74,19 @@ class WatchConnector: NSObject {
                 }
             }
         }) { error in
-            Log.error("error sending route: \(error)")
+            Logger.error("error sending route: \(error)")
         }
     }
     
     func sendTileSources(completion: @escaping (Bool) -> Void){
-        Log.debug("sending tile sources")
+        Logger.debug("sending tile sources")
         if !isWatchConnected {
-            Log.error("not connected to phone")
+            Logger.error("not connected to phone")
             completion(false)
             return
         }
         let tileJson = TileSources.shared.toJSON()
-        let overlayJson = TileSources.sharedOverlays.toJSON()
+        let overlayJson = OverlayTileSources.shared.toJSON()
         session.sendMessage([
             "request": "tileSourcesUpload",
             "tileJson": tileJson as Any,
@@ -100,14 +101,14 @@ class WatchConnector: NSObject {
                 }
             }
         }) { error in
-            Log.error("error sending tileSources: \(error)")
+            Logger.error("error sending tileSources: \(error)")
         }
     }
     
     func checkTiles(_ tiles: MapTileDataList, completion: @escaping (MapTileDataList?) -> Void) {
-        Log.debug("checking tiles")
+        Logger.debug("checking tiles")
         if !isWatchConnected {
-            Log.error("not connected to phone")
+            Logger.error("not connected to phone")
             completion(nil)
             return
         }
@@ -135,12 +136,12 @@ class WatchConnector: NSObject {
                     }
                 }
             }) { error in
-                Log.error("error checking tiles: \(error)")
+                Logger.error("error checking tiles: \(error)")
                 completion(nil)
             }
         }
         else{
-            Log.error("could not encode tiles")
+            Logger.error("could not encode tiles")
             completion(nil)
         }
     }
@@ -150,39 +151,39 @@ extension WatchConnector: WCSessionDelegate {
 
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         if let error = error{
-            Log.error("Watch session failed with:\(String(describing: error))")
+            Logger.error("Watch session failed with:\(String(describing: error))")
             return
         }
-        Log.debug("Watch session is paired: \(session.isPaired)")
-        Log.debug("Watch session is activated: \(session.activationState == .activated)")
+        Logger.debug("Watch session is paired: \(session.isPaired)")
+        Logger.debug("Watch session is activated: \(session.activationState == .activated)")
     }
     
     func sessionReachabilityDidChange(_ session: WCSession) {
-        Log.debug("Watch session reachability is: \(session.isReachable)")
+        Logger.debug("Watch session reachability is: \(session.isReachable)")
     }
 
     func sessionDidBecomeInactive(_ session: WCSession) {
-        Log.debug("sessionDidBecomeInactive: \(session)")
+        Logger.debug("sessionDidBecomeInactive: \(session)")
     }
 
     func sessionDidDeactivate(_ session: WCSession) {
-        Log.debug("sessionDidDeactivate: \(session)")
+        Logger.debug("sessionDidDeactivate: \(session)")
     }
 
     func session(_: WCSession, didReceiveMessage message: [String: Any], replyHandler: @escaping ([String: Any]) -> Void) {
-        //Log.debug("didReceiveMessage: \(message)")
+        //Logger.debug("didReceiveMessage: \(message)")
         if let request = message["request"] as? String {
             switch request {
             case "connection":
-                //Log.debug("got connection request")
+                //Logger.debug("got connection request")
                 replyHandler(["connected": true as Any])
             case "saveTrack":
-                Log.debug("receiving track from watch")
+                Logger.debug("receiving track from watch")
                 if let json = message["json"] as? String, let track = createTrack(json: json){
                     let item = TrackItem(track: track)
                     AppData.shared.addItem(item)
                     AppData.shared.save()
-                    //Log.debug("saved track on phone")
+                    //Logger.debug("saved track on phone")
                     replyHandler(["success": true as Any])
                 }
                 else{
@@ -207,7 +208,7 @@ extension WatchConnector: WCSessionDelegate {
                     return track
                 }
                 catch (let err){
-                    Log.error(err.localizedDescription)
+                    Logger.error(err.localizedDescription)
                 }
             }
             return nil

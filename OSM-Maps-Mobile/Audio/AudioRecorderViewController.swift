@@ -6,6 +6,7 @@
 
 import UIKit
 import AVFoundation
+import OSLog
 
 class AudioRecorderViewController : ScrollViewController, AVAudioRecorderDelegate{
     
@@ -45,7 +46,7 @@ class AudioRecorderViewController : ScrollViewController, AVAudioRecorderDelegat
         let audioItem = AudioItem(coordinate: LocationStatus.shared.location.coordinate)
         audioItem.altitude = LocationStatus.shared.location.altitude
         audioItem.time = (audioRecorder.currentTime*100).rounded() / 100
-        //Log.debug("AudioRecorderViewController saving url \(audioFile.fileURL)")
+        //Logger.debug("AudioRecorderViewController saving url \(audioFile.fileURL)")
         if FileManager.default.copyFile(fromURL: audioRecorder.tmpFileURL, toURL: audioItem.url){
             AppData.shared.addItem(audioItem)
             audioRecorder.cleanup()

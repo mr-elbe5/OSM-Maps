@@ -6,6 +6,7 @@
 
 import AppKit
 import CoreLocation
+import OSLog
 
 import UniformTypeIdentifiers
 
@@ -49,8 +50,8 @@ class MapView: NSView {
         let viewSize = bounds.scaleBy(0.9).size
         scrollView.zoomTo(zoom: World.getZoomToFit(worldRect: worldRect, scaledSize: viewSize))
         scrollView.scrollToScreenCenter(coordinate: worldRect.centerCoordinate)
-        //Log.info("scrollZoom = \(MapStatus.shared.zoom)")
-        //Log.info("scrollScale = \(scrollView.zoomScale)")
+        //Logger.info("scrollZoom = \(MapStatus.shared.zoom)")
+        //Logger.info("scrollScale = \(scrollView.zoomScale)")
         scrollView.updateLayerPositions()
     }
     

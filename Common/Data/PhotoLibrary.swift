@@ -6,6 +6,7 @@
 
 import AVFoundation
 import CoreLocation
+import OSLog
 #if !os(watchOS)
 import Photos
 
@@ -27,7 +28,7 @@ class PhotoLibrary{
                     localIdentifier = creationRequest.placeholderForCreatedAsset!.localIdentifier
                 }, completionHandler: { _, error in
                     if let error = error {
-                        Log.error("Error occurred while saving photo to photo library: \(error)")
+                        Logger.error("Error occurred while saving photo to photo library: \(error)")
                     }
                     DispatchQueue.main.async{
                         resultHandler(localIdentifier)
@@ -52,7 +53,7 @@ class PhotoLibrary{
                     localIdentifier = creationRequest.placeholderForCreatedAsset!.localIdentifier
                 }, completionHandler: { success, error in
                     if let error = error {
-                        Log.error("Error. occurred while saving video to photo library: \(error)")
+                        Logger.error("Error. occurred while saving video to photo library: \(error)")
                     }
                     resultHandler(localIdentifier)
                 })

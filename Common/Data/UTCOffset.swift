@@ -8,6 +8,7 @@
 import Foundation
 
 import CoreLocation
+import OSLog
 
 class UTCOffset{
     
@@ -54,7 +55,7 @@ class UTCOffset{
     private static func getTimeZoneAsync(coordinate: CLLocationCoordinate2D, result: @escaping (TimeZone) -> Void){
         CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)){ (placemarks, error) in
             if error != nil{
-                Log.debug("placemark error getting timezone - using current")
+                Logger.debug("placemark error getting timezone - using current")
                 result(.current)
                 return
             }
@@ -62,7 +63,7 @@ class UTCOffset{
                 result(timeZone)
             }
             else{
-                Log.debug("no placemark found for timezone - using current")
+                Logger.debug("no placemark found for timezone - using current")
                 result(.current)
             }
         }

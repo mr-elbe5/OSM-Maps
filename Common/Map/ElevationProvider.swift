@@ -5,6 +5,7 @@
  */
 
 import CoreLocation
+import OSLog
 
 class ElevationProvider{
     
@@ -15,7 +16,7 @@ class ElevationProvider{
             let request = URLRequest(url: url, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 5.0)
             let task = getElevationTask(request: request, result: result)
             DispatchQueue.global(qos: .userInitiated).async{
-                //Log.debug("getting elevation")
+                //Logger.debug("getting elevation")
                 task.resume()
             }
         }
@@ -32,20 +33,20 @@ class ElevationProvider{
                 statusCode = httpResponse.statusCode
             }
             if statusCode == 200, let data = data, let string = String(data: data, encoding: .utf8), let elevation = Double(string){
-                //Log.debug("ElevationProvider got elevation \(elevation)")
+                //Logger.debug("ElevationProvider got elevation \(elevation)")
                 result(elevation)
                 return
             }
             if let err = err {
                 switch (err as? URLError)?.code {
                 case .some(.timedOut):
-                    Log.error("ElevationProvider timeout getting elevation, error: \(err.localizedDescription)")
+                    Logger.error("ElevationProvider timeout getting elevation, error: \(err.localizedDescription)")
                 default:
-                    Log.error("ElevationProvider getting elevation failed, error: \(err.localizedDescription)")
+                    Logger.error("ElevationProvider getting elevation failed, error: \(err.localizedDescription)")
                 }
             }
             else{
-                Log.debug("ElevationProvider getting elevation , statusCode=\(statusCode)")
+                Logger.debug("ElevationProvider getting elevation , statusCode=\(statusCode)")
             }
             result(0)
         }

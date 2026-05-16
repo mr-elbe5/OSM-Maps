@@ -8,6 +8,7 @@ import UIKit
 import AVFoundation
 import CoreLocation
 import Photos
+import OSLog
 
 extension CameraViewController{
     
@@ -63,7 +64,7 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
     
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         if let error = error {
-            Log.error("Error capturing photo: \(error)")
+            Logger.error("Error capturing photo: \(error)")
             return
         }
         self.photoData = photo.fileDataRepresentation()
@@ -71,12 +72,12 @@ extension PhotoCaptureProcessor: AVCapturePhotoCaptureDelegate {
     
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings, error: Error?) {
         if let error = error {
-            Log.error("Error capturing photo: \(error)")
+            Logger.error("Error capturing photo: \(error)")
             completionHandler(self)
             return
         }
         guard photoData != nil else {
-            Log.error("No photo data resource")
+            Logger.error("No photo data resource")
             completionHandler(self)
             return
         }

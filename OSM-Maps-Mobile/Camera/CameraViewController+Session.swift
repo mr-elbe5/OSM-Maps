@@ -8,6 +8,7 @@ import UIKit
 import AVFoundation
 import CoreLocation
 import Photos
+import OSLog
 
 extension CameraViewController{
     
@@ -32,7 +33,7 @@ extension CameraViewController{
             }
             userDefaults.set(true, forKey: "setInitialUserPreferredCamera")
             guard let videoDevice = defaultVideoDevice else {
-                Log.error("Default video device is unavailable.")
+                Logger.error("Default video device is unavailable.")
                 setupResult = .configurationFailed
                 session.commitConfiguration()
                 return
@@ -51,13 +52,13 @@ extension CameraViewController{
                     }
                 }
             } else {
-                Log.error("Couldn't add video device input to the session.")
+                Logger.error("Couldn't add video device input to the session.")
                 setupResult = .configurationFailed
                 session.commitConfiguration()
                 return
             }
         } catch {
-            Log.error("Couldn't create video device input: \(error)")
+            Logger.error("Couldn't create video device input: \(error)")
             setupResult = .configurationFailed
             session.commitConfiguration()
             return
@@ -69,10 +70,10 @@ extension CameraViewController{
             if session.canAddInput(audioDeviceInput) {
                 session.addInput(audioDeviceInput)
             } else {
-                Log.error("Could not add audio device input to the session")
+                Logger.error("Could not add audio device input to the session")
             }
         } catch {
-            Log.error("Could not create audio device input: \(error)")
+            Logger.error("Could not create audio device input: \(error)")
         }
         if session.canAddOutput(photoOutput) {
             session.addOutput(photoOutput)
@@ -80,13 +81,13 @@ extension CameraViewController{
             photoOutput.isLivePhotoCaptureEnabled = false
             photoOutput.maxPhotoQualityPrioritization = .quality
             if !self.configurePhotoOutput(){
-                Log.error("Could not configure photo output")
+                Logger.error("Could not configure photo output")
                 setupResult = .configurationFailed
                 session.commitConfiguration()
                 return
             }
         } else {
-            Log.error("Could not add photo output to the session")
+            Logger.error("Could not add photo output to the session")
             setupResult = .configurationFailed
             session.commitConfiguration()
             return

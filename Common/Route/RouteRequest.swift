@@ -6,6 +6,7 @@
 
 import Foundation
 import CoreLocation
+import OSLog
 
 class RouteRequest {
     
@@ -28,23 +29,23 @@ class RouteRequest {
         }
         string += "?geometries=geojson&alternatives=false&generate_hints=false&steps=true"
         if let url = URL(string: string){
-            Log.info(string)
+            Logger.info(string)
             let session = URLSession.shared
             session.dataTask(with: url, completionHandler: { data, response, err -> Void in
                 if let err = err {
-                    Log.error("OSRM error: \(err)")
+                    Logger.error("OSRM error: \(err)")
                     completion(false)
                     return
                 }
                 if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200, let data = data {
                     do{
-                        //Log.info(String(data: data, encoding: .utf8)!)
+                        //Logger.info(String(data: data, encoding: .utf8)!)
                         let response: OSRMRouteData = try JSONDecoder().decode(OSRMRouteData.self, from: data)
                         let success = updateRoute(route: route, from: response)
                         completion(success)
                     }
                     catch (let err){
-                        Log.error("OSRM decode error: \(err)")
+                        Logger.error("OSRM decode error: \(err)")
                         completion(false)
                     }
                 } else {
@@ -55,7 +56,7 @@ class RouteRequest {
     }
     
     private static func updateRoute(route: Route, from osrmRouteData: OSRMRouteData) -> Bool {
-        //Log.info("found routes: \(osrmRouteData.routes.count)")
+        //Logger.info("found routes: \(osrmRouteData.routes.count)")
         if let osmroute = osrmRouteData.routes.first {
             route.trackpoints.removeAll()
             route.routepoints.removeAll()

@@ -5,6 +5,7 @@
  */
 
 import SwiftUI
+import OSLog
 
 struct WatchSettingsView: View {
     
@@ -25,11 +26,11 @@ struct WatchSettingsView: View {
                 }
                 .pickerStyle(.navigationLink)
                 .onChange(of: sourceName) { oldValue, newValue in
-                    Log.debug("source name changed from \(oldValue) to \(newValue)")
+                    Logger.debug("source name changed from \(oldValue) to \(newValue)")
                     if let newSource = TileSources.shared.first(where: { $0.displayName == newValue }) {
                         Settings.shared.tileSource = newSource
                         Settings.shared.assertTileDirs()
-                        Log.debug("set tileSource to \(newSource.name)")
+                        Logger.debug("set tileSource to \(newSource.name)")
                         Settings.shared.save()
                         MapStatus.shared.tilesLoaded = false
                         MapStatus.shared.updateTiles()
@@ -37,18 +38,18 @@ struct WatchSettingsView: View {
                 }
                 Spacer(minLength: 20)
                 Picker("overlay".localizeWithColon(), selection: $overlaySourceName) {
-                    ForEach(TileSources.sharedOverlays, id: \.self.displayName) { option in
+                    ForEach(OverlayTileSources.shared, id: \.self.displayName) { option in
                         Text(option.displayName)
                     }
                 }
                 .pickerStyle(.navigationLink)
                 .onChange(of: overlaySourceName) { oldValue, newValue in
-                    Log.debug("overlay source name changed from \(oldValue) to \(newValue)")
-                    if let newSource = TileSources.sharedOverlays.first(where: { $0.displayName == newValue }) {
+                    Logger.debug("overlay source name changed from \(oldValue) to \(newValue)")
+                    if let newSource = OverlayTileSources.shared.first(where: { $0.displayName == newValue }) {
                         Settings.shared.overlayTileSource = newSource
                         Settings.shared.assertTileDirs()
                         Settings.shared.showOverlay = true
-                        Log.debug("set overlay tileSource to \(newSource.name)")
+                        Logger.debug("set overlay tileSource to \(newSource.name)")
                         Settings.shared.save()
                         MapStatus.shared.tilesLoaded = false
                         MapStatus.shared.updateTiles()

@@ -5,6 +5,7 @@
  */
 
 import AppKit
+import OSLog
 
 class GroupMarker : MarkerView{
     
@@ -36,7 +37,7 @@ class GroupMarker : MarkerView{
     }
     
     override func updatePosition(to pos: CGPoint){
-        //Log.debug("marker positon: \(pos)")
+        //Logger.debug("marker positon: \(pos)")
         frame = MarkerView.baseFrame.offsetBy(dx: pos.x, dy: pos.y + 8)
         needsDisplay = true
     }

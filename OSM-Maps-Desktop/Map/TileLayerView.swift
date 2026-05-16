@@ -5,6 +5,7 @@
  */
 
 import AppKit
+import OSLog
 
 protocol TileLayerDelegate{
     func mouseDragged(dx: CGFloat, dy: CGFloat)
@@ -66,14 +67,14 @@ class TileLayerView: NSView {
             mapGearImage?.draw(in: rect.scaleCenteredBy(0.25))
         }
         TileProvider.shared.getTileImage(tile: tile){ success in
-            //Log.debug("refresh tile \(tile.shortDescription) \(success)")
+            //Logger.debug("refresh tile \(tile.shortDescription) \(success)")
             if success{
                 DispatchQueue.main.async {
                     self.layer?.setNeedsDisplay(rect)
                 }
             }
             else{
-                Log.error("TileLayerView could not load tile \(tile.shortDescription)")
+                Logger.error("TileLayerView could not load tile \(tile.shortDescription)")
             }
         }
     }

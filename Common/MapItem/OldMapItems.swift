@@ -6,6 +6,7 @@
 
 import Foundation
 import CoreLocation
+import OSLog
 
 class OldMapItems{
     
@@ -31,7 +32,7 @@ class OldMapItems{
                     item.fileName = oldItem.fileName
                     if let data = FileManager.default.readFile(url: oldItem.tempURL), let image = OSImage(data: data){
                         if !item.copyImageAndCreatePreview(from: oldItem.tempURL, original: image){
-                            Log.debug( "Could not create files for \(item.id)")
+                            Logger.debug( "Could not create files for \(item.id)")
                             continue
                         }
                     }
@@ -45,7 +46,7 @@ class OldMapItems{
                     item.fileName = oldItem.fileName
                     item.time = oldItem.time
                     if !item.copyFile(from: oldItem.tempURL){
-                        Log.debug( "Could not create file for \(item.id)")
+                        Logger.debug( "Could not create file for \(item.id)")
                         continue
                     }
                     items.append(item)
@@ -61,7 +62,7 @@ class OldMapItems{
                         items.append(item)
                     }
                     else{
-                        Log.debug( "Could not create file for \(item.id)")
+                        Logger.debug( "Could not create file for \(item.id)")
                         continue
                     }
                 }

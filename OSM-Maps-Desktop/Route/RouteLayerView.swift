@@ -6,6 +6,7 @@
 
 import AppKit
 import CoreLocation
+import OSLog
 
 class RouteLayerView: LayerView {
     
@@ -47,7 +48,7 @@ class RouteLayerView: LayerView {
                 }
                 let marker = RouteMarkerView(coordinate: coord, image: NSImage(named: col)!)
                 marker.baseFrame = RouteMarkerView.upperBaseFrame
-                //Log.info("coord \(marker.coordinate)")
+                //Logger.info("coord \(marker.coordinate)")
                 addSubview(marker)
                 marker.isHidden = (coord == .zero)
                 marker.updatePosition(scale: scale)
@@ -57,7 +58,7 @@ class RouteLayerView: LayerView {
     }
     
     func setMarkerCoordinate(idx: Int, coordinate: CLLocationCoordinate2D){
-        //Log.info("setMarkerCoordinate")
+        //Logger.info("setMarkerCoordinate")
         if idx < navigationMarkers.count{
             let marker = navigationMarkers[idx]
             marker.coordinate = coordinate

@@ -8,6 +8,7 @@ import UIKit
 import AVFoundation
 import CoreLocation
 import Photos
+import OSLog
 
 class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelegate, AVCapturePhotoOutputReadinessCoordinatorDelegate {
     
@@ -113,13 +114,13 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
         if let device = frontVideoDeviceDiscoverySession.devices.first{
             frontDevice = device
         }
-        //Log.debug("found front camera")
+        //Logger.debug("found front camera")
         backDevices.removeAll()
         let backVideoDeviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: CameraViewController.discoverableDeviceTypes, mediaType: .video, position: .back)
         for device in backVideoDeviceDiscoverySession.devices where !device.isVirtualDevice{
             backDevices.append(device)
         }
-        //Log.debug("found \(backCameras.count) back cameras")
+        //Logger.debug("found \(backCameras.count) back cameras")
     }
     
     func addControls(){
@@ -300,7 +301,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
     }
     
     func changeVideoDevice(_ videoDevice: AVCaptureDevice, completion: ((Bool) -> Void)? = nil) {
-        //Log.debug("change video device")
+        //Logger.debug("change video device")
         sessionQueue.async {
             do {
                 let videoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
@@ -312,7 +313,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
                         NotificationCenter.default.addObserver(self, selector: #selector(self.subjectAreaDidChange), name: .AVCaptureDeviceSubjectAreaDidChange, object: videoDeviceInput.device)
                         self.session.addInput(videoDeviceInput)
                         self.currentDeviceInput = videoDeviceInput
-                        //Log.debug("current device: \(self.currentDevice.position)")
+                        //Logger.debug("current device: \(self.currentDevice.position)")
                         self.isCaptureEnabled = true
                     } else {
                         self.session.addInput(currentDeviceInput)
@@ -330,10 +331,10 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
                             do {
                                 try currentDevice.lockForConfiguration()
                                 currentDevice.activeFormat = self.selectedMovieMode10BitDeviceFormat!
-                                Log.info("Setting 'x420' format \(String(describing: self.selectedMovieMode10BitDeviceFormat)) for video recording")
+                                Logger.info("Setting 'x420' format \(String(describing: self.selectedMovieMode10BitDeviceFormat)) for video recording")
                                 currentDevice.unlockForConfiguration()
                             } catch {
-                                Log.error("Could not lock device for configuration: \(error)")
+                                Logger.error("Could not lock device for configuration: \(error)")
                             }
                         }
                     }
@@ -350,7 +351,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
                     return
                 }
             } catch {
-                Log.error("Error occurred while creating video device input: \(error)")
+                Logger.error("Error occurred while creating video device input: \(error)")
             }
             completion?(false)
         }
@@ -381,7 +382,7 @@ class CameraViewController: UIViewController, AVCaptureFileOutputRecordingDelega
                     device.isSubjectAreaChangeMonitoringEnabled = monitorSubjectAreaChange
                     device.unlockForConfiguration()
                 } catch {
-                    Log.error("Could not lock device for configuration: \(error)")
+                    Logger.error("Could not lock device for configuration: \(error)")
                 }
             }
         }

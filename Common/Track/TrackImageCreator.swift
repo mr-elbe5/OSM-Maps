@@ -10,6 +10,7 @@ import AppKit
 import UIKit
 #endif
 import CoreLocation
+import OSLog
 
 class TrackImageCreator{
     
@@ -22,7 +23,7 @@ class TrackImageCreator{
                 if let data = tiffData.representation(using: .jpeg, properties: [:]) {
                     _ = FileManager.default.assertDirectoryFor(url: item.previewURL)
                     if !FileManager.default.saveFile(data: data, url: item.previewURL){
-                        Log.error("preview could not be saved at \(item.previewURL)")
+                        Logger.error("preview could not be saved at \(item.previewURL)")
                         return nil
                     }
                     return preview
@@ -67,7 +68,7 @@ class TrackImageCreator{
                 let trackpoint = track.trackpoints[idx]
                 let mapPoint = CGPoint(trackpoint.coordinate)
                 let drawPoint = CGPoint(x: (mapPoint.x - worldViewRect.minX)*downScale, y: (mapPoint.y - worldViewRect.minY)*downScale)
-                //Log.debug("drawPoint = \(drawPoint)")
+                //Logger.debug("drawPoint = \(drawPoint)")
                 drawPoints.append(drawPoint)
             }
             ctx.beginPath()
@@ -89,7 +90,7 @@ class TrackImageCreator{
             if let data = preview.jpegData(compressionQuality: 0.85){
                 _ = FileManager.default.assertDirectoryFor(url: item.previewURL)
                 if !FileManager.default.saveFile(data: data, url: item.previewURL){
-                    Log.error("preview could not be saved at \(item.previewURL)")
+                    Logger.error("preview could not be saved at \(item.previewURL)")
                     return nil
                 }
             }
@@ -131,7 +132,7 @@ class TrackImageCreator{
                 let trackpoint = track.trackpoints[idx]
                 let mapPoint = CGPoint(trackpoint.coordinate)
                 let drawPoint = CGPoint(x: (mapPoint.x - worldViewRect.minX)*downScale, y: (mapPoint.y - worldViewRect.minY)*downScale)
-                //Log.debug("drawPoint = \(drawPoint)")
+                //Logger.debug("drawPoint = \(drawPoint)")
                 drawPoints.append(drawPoint)
             }
             ctx.beginPath()

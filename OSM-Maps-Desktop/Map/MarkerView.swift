@@ -5,6 +5,7 @@
  */
 
 import AppKit
+import OSLog
 
 class MarkerView : NSButton{
     
@@ -28,7 +29,7 @@ class MarkerView : NSButton{
     }
     
     func updatePosition(to pos: CGPoint){
-        //Log.debug("marker positon: \(pos)")
+        //Logger.debug("marker positon: \(pos)")
         frame = MarkerView.baseFrame.offsetBy(dx: pos.x, dy: pos.y + 2)
         needsDisplay = true
     }

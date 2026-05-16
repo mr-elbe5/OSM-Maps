@@ -6,6 +6,7 @@
 
 import UIKit
 import CoreLocation
+import OSLog
 
 class ItemListViewController: UIViewController{
     
@@ -215,7 +216,7 @@ extension ItemListViewController: UITableViewDelegate, UITableViewDataSource{
                 return cell
             }
             else{
-                Log.error("no valid item/cell for image")
+                Logger.error("no valid item/cell for image")
                 return UITableViewCell()
             }
         case AudioItem.itemType:
@@ -226,7 +227,7 @@ extension ItemListViewController: UITableViewDelegate, UITableViewDataSource{
                 return cell
             }
             else{
-                Log.error("no valid item/cell for audio")
+                Logger.error("no valid item/cell for audio")
                 return UITableViewCell()
             }
         case VideoItem.itemType:
@@ -237,7 +238,7 @@ extension ItemListViewController: UITableViewDelegate, UITableViewDataSource{
                 return cell
             }
             else{
-                Log.error("no valid item/cell for audio")
+                Logger.error("no valid item/cell for audio")
                 return UITableViewCell()
             }
         case TrackItem.itemType:
@@ -248,7 +249,7 @@ extension ItemListViewController: UITableViewDelegate, UITableViewDataSource{
                 return cell
             }
             else{
-                Log.error("no valid item/cell for track")
+                Logger.error("no valid item/cell for track")
                 return UITableViewCell()
             }
         case RouteItem.itemType:
@@ -259,7 +260,7 @@ extension ItemListViewController: UITableViewDelegate, UITableViewDataSource{
                 return cell
             }
             else{
-                Log.error("no valid item/cell for route")
+                Logger.error("no valid item/cell for route")
                 return UITableViewCell()
             }
         case NoteItem.itemType:
@@ -270,7 +271,7 @@ extension ItemListViewController: UITableViewDelegate, UITableViewDataSource{
                 return cell
             }
             else{
-                Log.error("no valid item/cell for note")
+                Logger.error("no valid item/cell for note")
                 return UITableViewCell()
             }
         default:

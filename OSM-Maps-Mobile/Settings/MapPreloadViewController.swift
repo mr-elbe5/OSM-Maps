@@ -6,6 +6,7 @@
 
 import UIKit
 import UniformTypeIdentifiers
+import OSLog
 
 class MapPreloadViewController: ScrollViewController{
     
@@ -401,7 +402,7 @@ extension MapPreloadViewController{
             tileUploadQueue = OperationQueue()
             tileUploadQueue!.name = "uploadQueue"
             tileUploadQueue!.maxConcurrentOperationCount = 1
-            Log.info("uploading \(watchTiles.count) tiles")
+            Logger.info("uploading \(watchTiles.count) tiles")
             watchTiles.forEach { tile in
                 if let data = FileManager.default.readFile(url: tile.fileUrl){
                     let operation = TileUploadOperation(tile: tile, data:data)

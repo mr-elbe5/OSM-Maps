@@ -6,6 +6,7 @@
 
 import Foundation
 import CoreLocation
+import OSLog
 
 class MapItemGroup {
     
@@ -90,7 +91,7 @@ class MapItemGroup {
     func isWithinRadius(item: MapItem, radius: CGFloat) -> Bool{
         if let centerCoordinate = centerCoordinate{
             let dist = centerCoordinate.distance(to: item.coordinate)
-            //Log.debug("dist = \(dist) at radius \(radius)")
+            //Logger.debug("dist = \(dist) at radius \(radius)")
             return dist <= radius
         }
         return false

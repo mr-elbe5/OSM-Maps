@@ -5,6 +5,7 @@
  */
 
 import Foundation
+import OSLog
 
 extension FileManager{
     
@@ -13,8 +14,8 @@ extension FileManager{
     static let movieLibraryURL : URL = FileManager.default.urls(for: .moviesDirectory,in: FileManager.SearchPathDomainMask.userDomainMask).first!
     
     static func initializeAppDirs() {
-        Log.info("document folder is \(FileManager.documentsURL.path())")
-        Log.info("image folder is \(FileManager.imagesURL.path())")
+        Logger.info("document folder is \(FileManager.documentsURL.path())")
+        Logger.info("image folder is \(FileManager.imagesURL.path())")
     }
     
 }

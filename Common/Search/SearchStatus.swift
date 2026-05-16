@@ -6,6 +6,7 @@
 
 import Foundation
 import CoreLocation
+import OSLog
 
 class SearchStatus: Identifiable, Codable{
     
@@ -18,7 +19,7 @@ class SearchStatus: Identifiable, Codable{
             SearchStatus.shared = status
         }
         else{
-            Log.error("no saved data available for search status")
+            Logger.error("no saved data available for search status")
             SearchStatus.shared = SearchStatus()
         }
     }

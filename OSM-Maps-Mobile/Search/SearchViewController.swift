@@ -6,6 +6,7 @@
 
 import UIKit
 import CoreLocation
+import OSLog
 
 class SearchViewController: UIViewController{
     
@@ -127,12 +128,12 @@ class SearchViewController: UIViewController{
             switch SearchStatus.shared.searchRegion{
             case .current:
                 let currentRegion = MapStatus.shared.getCoordinateRegion()
-                Log.debug("searching in current region \(currentRegion)")
+                Logger.debug("searching in current region \(currentRegion)")
                 searchQuery.coordinateRegion = currentRegion
             case .radius:
                 let currentCenter = MapStatus.shared.getCenterCoordinate()
                 let coordinateRegion = currentCenter.coordinateRegion(radiusMeters: SearchStatus.shared.searchRadius*1000)
-                Log.debug("searching in radius region \(coordinateRegion)")
+                Logger.debug("searching in radius region \(coordinateRegion)")
                 searchQuery.coordinateRegion = coordinateRegion
             default:
                 break
@@ -174,7 +175,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource{
             return cell
         }
         else{
-            Log.error("no valid item/cell for serach result")
+            Logger.error("no valid item/cell for serach result")
             return UITableViewCell()
         }
     }

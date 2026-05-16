@@ -7,6 +7,7 @@
 import UIKit
 import UniformTypeIdentifiers
 import CoreLocation
+import OSLog
 
 class RouteListViewController: ItemListViewController{
     
@@ -102,7 +103,7 @@ extension RouteListViewController : UIDocumentPickerDelegate{
                     let ext = url.pathExtension
                     var name = url.lastPathComponent
                     name = String(name[name.startIndex...name.index(name.endIndex, offsetBy: -ext.count)])
-                    Log.debug(name)
+                    Logger.debug(name)
                     route.name = name
                 }
                 let item = RouteItem()

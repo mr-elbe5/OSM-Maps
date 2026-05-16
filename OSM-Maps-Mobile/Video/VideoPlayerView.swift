@@ -6,6 +6,7 @@
 
 import UIKit
 import AVFoundation
+import OSLog
 
 class VideoPlayerView: UIView {
     
@@ -27,7 +28,7 @@ class VideoPlayerView: UIView {
                         }
                     }
                     catch let(err){
-                        Log.error(error: err)
+                        Logger.error(error: err)
                     }
                 }
                 let item = AVPlayerItem(asset: asset)

@@ -6,6 +6,7 @@
 
 import Foundation
 import CoreLocation
+import OSLog
 
 extension CLPlacemark{
     
@@ -16,16 +17,16 @@ extension CLPlacemark{
     static func getPlacemark(for location: CLLocation, result: @escaping(CLPlacemark?) -> Void){
         CLGeocoder().reverseGeocodeLocation(location, completionHandler: { (placemarks, error) in
             if let error = error{
-                Log.error(error: error)
+                Logger.error(error: error)
                 result(nil)
                 return
             }
             if let placemark =  placemarks?[0]{
-                //Log.debug("got placemark")
+                //Logger.debug("got placemark")
                 result(placemark)
             }
             else{
-                //Log.debug("no placemark")
+                //Logger.debug("no placemark")
                 result(nil)
             }
         })

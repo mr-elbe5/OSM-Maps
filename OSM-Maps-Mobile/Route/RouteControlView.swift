@@ -6,6 +6,7 @@
 
 import UIKit
 import CoreLocation
+import OSLog
 
 class RouteControlView : UIView{
     
@@ -195,9 +196,9 @@ class RouteControlView : UIView{
     
     @objc func routeTypeChanged(){
         let idx = self.routeTypeSelector.selectedSegmentIndex
-        Log.info(" idx \(idx)")
+        Logger.info(" idx \(idx)")
         let type = RouteType.getRouteType(idx: idx)
-        Log.info(" type \(type.rawValue)")
+        Logger.info(" type \(type.rawValue)")
         MainViewController.shared.setRouteType(type)
     }
     

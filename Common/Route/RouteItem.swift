@@ -7,7 +7,7 @@
 import Foundation
 import CoreLocation
 import CloudKit
-import SwiftUI
+import OSLog
 
 class RouteItem: MapItem{
     
@@ -128,7 +128,7 @@ class RouteItem: MapItem{
     func deleteFiles() -> Bool{
         if FileManager.default.fileExists(dirPath: BasePaths.previewDirURL.path, fileName: fileName){
             if !FileManager.default.deleteFile(url: BasePaths.previewDirURL.appendingPathComponent(fileName)){
-                Log.error("Route could not delete preview: \(fileName)")
+                Logger.error("Route could not delete preview: \(fileName)")
                 return false
             }
         }

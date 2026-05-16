@@ -5,6 +5,7 @@
  */
 
 import Foundation
+import OSLog
 
 extension Decodable{
     
@@ -17,7 +18,7 @@ extension Decodable{
                 return result
             }
             catch (let err){
-                Log.error(error: err)
+                Logger.error(error: err)
             }
         }
         return nil
@@ -32,7 +33,7 @@ extension Decodable{
                 return result
             }
             catch (let err){
-                Log.error(error: err)
+                Logger.error(error: err)
             }
         }
         return nil

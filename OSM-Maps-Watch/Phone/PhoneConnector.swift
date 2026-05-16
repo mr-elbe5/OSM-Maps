@@ -6,6 +6,7 @@
 
 import WatchKit
 import WatchConnectivity
+import OSLog
 
 @Observable class PhoneConnector: NSObject {
     
@@ -35,26 +36,26 @@ import WatchConnectivity
     }
     
     func requestConnection() {
-        //Log.debug("sending connection request")
+        //Logger.debug("sending connection request")
         let request = ["request": "connection"]
         session?.sendMessage(
             request,
             replyHandler: { response in
-                //Log.debug("Received response \(response)")
+                //Logger.debug("Received response \(response)")
                 DispatchQueue.main.async {
                     let result = response["connected"] as? Bool ?? false
                     self.connectionState = result ? .connectionEstablished : .connectionFailed
                 }
             },
             errorHandler: { error in
-                Log.error("Error sending message:", error)
+                Logger.error("Error sending message:", error)
                 self.connectionState = .connectionFailed
             }
         )
     }
     
     func saveTrack(json: String, completion: @escaping (Bool) -> Void) {
-        //Log.info("watch saving track")
+        //Logger.info("watch saving track")
         let request = ["request": "saveTrack", "json": json] as [String : Any]
         session?.sendMessage(
             request,
@@ -62,11 +63,11 @@ import WatchConnectivity
                 DispatchQueue.main.async {
                     if let success = response["success"] as? Bool {
                         if success {
-                            //Log.info("track saved on phone")
+                            //Logger.info("track saved on phone")
                             completion(true)
                         }
                         else{
-                            Log.error("track not saved on phone")
+                            Logger.error("track not saved on phone")
                             completion(false)
                         }
                     }
@@ -76,7 +77,7 @@ import WatchConnectivity
                 }
             },
             errorHandler: { error in
-                Log.error("Error sending message:", error)
+                Logger.error("Error sending message:", error)
                 completion(false)
             }
         )
@@ -85,11 +86,11 @@ import WatchConnectivity
 
 extension PhoneConnector: WCSessionDelegate {
     func session(_: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-        Log.debug("activationDidCompleteWith activationState:\(activationState.rawValue), error: \(String(describing: error))")
+        Logger.debug("activationDidCompleteWith activationState:\(activationState.rawValue), error: \(String(describing: error))")
     }
     
     func session(_: WCSession, didReceiveMessage message: [String: Any], replyHandler: @escaping ([String: Any]) -> Void) {
-        Log.error("didReceiveMessage: \(message["request"] as? String ?? "")")
+        Logger.error("didReceiveMessage: \(message["request"] as? String ?? "")")
         if let request = message["request"] as? String {
             switch request {
             case "tileUpload":
@@ -103,11 +104,11 @@ extension PhoneConnector: WCSessionDelegate {
                         FileManager.default.deleteFile(url: tile.fileUrl)
                     }
                     if FileManager.default.saveFile(data: data, url: tile.fileUrl){
-                        Log.error("file \(tile.fileUrl.lastPathComponent) received from phone")
+                        Logger.error("file \(tile.fileUrl.lastPathComponent) received from phone")
                         replyHandler(["success": true])
                     }
                     else{
-                        Log.error("could not save file \(tile.fileUrl.lastPathComponent)")
+                        Logger.error("could not save file \(tile.fileUrl.lastPathComponent)")
                         replyHandler(["success": false])
                     }
                 }
@@ -123,9 +124,9 @@ extension PhoneConnector: WCSessionDelegate {
                     replyHandler(["success": false])
                 }
             case "tileSourcesUpload":
-                if let tileJson = message["tileJson"] as? String, let tileSources:TileSources = TileSources.fromJSON(encoded: tileJson), let overlayJson = message["overlayJson"] as? String, let overlaySources:TileSources = TileSources.fromJSON(encoded: overlayJson){
+                if let tileJson = message["tileJson"] as? String, let tileSources:TileSources = TileSources.fromJSON(encoded: tileJson), let overlayJson = message["overlayJson"] as? String, let overlaySources:OverlayTileSources = OverlayTileSources.fromJSON(encoded: overlayJson){
                     TileSources.shared = tileSources
-                    TileSources.sharedOverlays = overlaySources
+                    OverlayTileSources.shared = overlaySources
                     if !tileSources.contains(Settings.shared.tileSource){
                         Settings.shared.tileSource = .defaultTileSource
                     }

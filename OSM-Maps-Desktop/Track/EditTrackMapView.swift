@@ -5,8 +5,8 @@
  */
 
 import AppKit
-
 import CoreLocation
+import OSLog
 
 protocol EditTrackMapDelegate{
     func trackpointChangedInMap(_ trackpoint: Mappoint)
@@ -48,18 +48,18 @@ class EditTrackMapView : NSClipView{
     override func setFrameSize(_ newSize: NSSize) {
         if !item.track.trackpoints.isEmpty{
             boundingTrackRect = item.track.trackpoints.boundingMapRect!
-            //Log.info("boundingTrackRect = \(boundingTrackRect)")
+            //Logger.info("boundingTrackRect = \(boundingTrackRect)")
             zoom = World.getZoomToFit(worldRect: boundingTrackRect, scaledSize: newSize)
-            //Log.info("zoom = \(zoom)")
-            //Log.info("downScale = \(downScale)")
+            //Logger.info("zoom = \(zoom)")
+            //Logger.info("downScale = \(downScale)")
             let centerCoordinate = boundingTrackRect.centerCoordinate
-            //Log.info("centerCoordinate = \(centerCoordinate)")
+            //Logger.info("centerCoordinate = \(centerCoordinate)")
             let centerPoint = CGPoint(x: World.scaledX(centerCoordinate.longitude, downScale: downScale), y: World.scaledY(centerCoordinate.latitude, downScale: downScale))
-            //Log.info("centerPoint = \(centerPoint)")
+            //Logger.info("centerPoint = \(centerPoint)")
             scaledWorldViewRect = CGRect(x: centerPoint.x - newSize.width/2, y: centerPoint.y - newSize.height/2, width: newSize.width, height: newSize.height)
-            //Log.info("scaledWorld = \(World.scaledWorld(zoom: zoom))")
+            //Logger.info("scaledWorld = \(World.scaledWorld(zoom: zoom))")
             worldViewRect = World.worldRect(scaledRect: scaledWorldViewRect, downScale: downScale)
-            //Log.info("worldViewRect = \(worldViewRect)")
+            //Logger.info("worldViewRect = \(worldViewRect)")
             setDrawTrackPoints()
             setMarkers()
         }

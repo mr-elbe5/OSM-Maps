@@ -5,6 +5,7 @@
  */
 
 import Foundation
+import OSLog
 
 class ViewFilter: Identifiable, Codable{
     
@@ -17,7 +18,7 @@ class ViewFilter: Identifiable, Codable{
             ViewFilter.shared = filter
         }
         else{
-            Log.error("No saved data available for date filter")
+            Logger.error("No saved data available for date filter")
             ViewFilter.shared = ViewFilter()
         }
     }
@@ -55,7 +56,7 @@ class ViewFilter: Identifiable, Codable{
     
     func save(){
         StatusManager.shared.saveCodable(key: ViewFilter.storeKey, value: self)
-        //Log.debug("Date filter saved")
+        //Logger.debug("Date filter saved")
     }
     
     func isInFilter(item: MapItem) -> Bool{

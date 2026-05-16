@@ -7,6 +7,7 @@
 import Foundation
 import CoreLocation
 import WatchKit
+import OSLog
 
 typealias MapTileRow = [MapTile]
 typealias MapTileGrid = [MapTileRow]
@@ -52,7 +53,7 @@ typealias MapTileGrid = [MapTileRow]
         vertExtraTiles = Int(floor(screenSize.height/2 / tileExtent)) + 2
         gridWidth = 2 * horzExtraTiles + 1
         gridHeight = 2 * vertExtraTiles + 1
-        //Log.debug("grid size = \(gridWidth) x \(gridHeight)")
+        //Logger.debug("grid size = \(gridWidth) x \(gridHeight)")
         for _ in 0..<gridHeight {
             var row = MapTileRow()
             var overlayRow = MapTileRow()
@@ -118,7 +119,7 @@ typealias MapTileGrid = [MapTileRow]
                     TileProvider.shared.getTileImage(tile: tile){ success in
                         if !success{
                             self.tilesLoaded = false
-                            Log.error("TileLayerView could not load tile \(tile.shortDescription)")
+                            Logger.error("TileLayerView could not load tile \(tile.shortDescription)")
                         }
                     }
                     tileGrid[y][x] = tile
@@ -131,7 +132,7 @@ typealias MapTileGrid = [MapTileRow]
                         TileProvider.shared.getTileImage(tile: tile){ success in
                             if !success{
                                 self.tilesLoaded = false
-                                Log.error("TileLayerView could not load overlay tile \(tile.shortDescription)")
+                                Logger.error("TileLayerView could not load overlay tile \(tile.shortDescription)")
                             }
                         }
                         overlayGrid[y][x] = tile
@@ -212,7 +213,7 @@ typealias MapTileGrid = [MapTileRow]
 extension WatchMapStatus: LocationServiceDelegate{
     
     func locationChanged(to location: CLLocation) {
-        //Log.debug("locationChanged to \(location.coordinate)")
+        //Logger.debug("locationChanged to \(location.coordinate)")
         self.setCurrentCoordinate(location.coordinate)
         if Settings.shared.followLocation {
             self.setCenterCoordinate(location.coordinate)

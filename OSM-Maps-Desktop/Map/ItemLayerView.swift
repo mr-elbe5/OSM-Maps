@@ -6,6 +6,7 @@
 
 import AppKit
 import CoreLocation
+import OSLog
 
 protocol ClickDelegate{
     func clicked(with event: NSEvent)
@@ -49,7 +50,7 @@ class ItemLayerView: LayerView {
     }
     
     override func updateContent(scale: CGFloat){
-        //Log.debug("updateContent")
+        //Logger.debug("updateContent")
         self.scale = scale
         for subview in subviews {
             subview.removeFromSuperview()

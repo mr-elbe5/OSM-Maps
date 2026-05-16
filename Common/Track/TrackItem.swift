@@ -7,7 +7,7 @@
 import Foundation
 import CoreLocation
 import CloudKit
-import SwiftUI
+import OSLog
 
 class TrackItem: MapItem{
     
@@ -93,7 +93,7 @@ class TrackItem: MapItem{
     func deleteFiles() -> Bool{
         if FileManager.default.fileExists(dirPath: BasePaths.previewDirURL.path, fileName: fileName){
             if !FileManager.default.deleteFile(url: BasePaths.previewDirURL.appendingPathComponent(fileName)){
-                Log.error("Track could not delete preview: \(fileName)")
+                Logger.error("Track could not delete preview: \(fileName)")
                 return false
             }
         }
@@ -118,21 +118,6 @@ class TrackItem: MapItem{
         deleteFiles()
     }
     
-}
-
-extension TrackItem: Transferable {
-    
-    public static var transferRepresentation: some TransferRepresentation {
-        
-        DataRepresentation(exportedContentType: .gpx) { item in
-            let gpx = item.track.gpxString()
-            return Data(gpx.utf8)
-        }
-    }
-    
-    enum ConversionError: Error {
-        case failedToConvertToGPX
-    }
 }
 
 typealias TrackItemList = LocationList<TrackItem>

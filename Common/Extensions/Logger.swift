@@ -8,36 +8,35 @@ import Foundation
 import OSLog
 
 extension Logger {
+    
     private static var subsystem = Bundle.main.bundleIdentifier!
+    
     static let logger = Logger(subsystem: subsystem, category: "log")
     
-}
-
-struct Log{
-    
     static func debug(_ message: String) {
-        Logger.logger.debug("\(message)")
+        logger.debug("\(message)")
     }
     
     static func debug(_ int: Int) {
-        Logger.logger.debug("\(int)")
+        logger.debug("\(int)")
     }
 
     static func info(_ message: String) {
-        Logger.logger.info("\(message)")
+        logger.info("\(message)")
     }
 
     static func error(_ message: String, _ error: Error) {
-        Logger.logger.error("\(message): \(error)")
+        logger.error("\(message): \(error)")
     }
     
     static func error(_ message: String) {
-        Logger.logger.error("\(message)")
+        logger.error("\(message)")
     }
     
     static func error(error: Error) {
-        Logger.logger.error("\(error)")
+        logger.error("\(error)")
     }
-
+    
 }
+
 

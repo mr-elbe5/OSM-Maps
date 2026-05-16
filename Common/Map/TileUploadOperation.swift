@@ -6,6 +6,7 @@
 
 import Foundation
 import Combine
+import OSLog
 
 protocol UploadDelegate {
     func uploadSucceeded()
@@ -25,17 +26,17 @@ class TileUploadOperation : AsyncOperation, @unchecked Sendable {
     }
     
     override func startExecution(){
-        //Log.debug("TileUploadOperation starting upload of \(tile.shortDescription)")
+        //Logger.debug("TileUploadOperation starting upload of \(tile.shortDescription)")
         WatchConnector.shared.sendTile(tile, data: data){ success in
             if success{
                 DispatchQueue.main.async { [self] in
-                    //Log.debug("TileUploadOperation succeeded")
+                    //Logger.debug("TileUploadOperation succeeded")
                     delegate?.uploadSucceeded()
                 }
             }
             else{
                 DispatchQueue.main.async { [self] in
-                    //Log.debug("TileUploadOperation uploading \(tile.shortDescription)")
+                    //Logger.debug("TileUploadOperation uploading \(tile.shortDescription)")
                     delegate?.uploadWithError()
                 }
             }

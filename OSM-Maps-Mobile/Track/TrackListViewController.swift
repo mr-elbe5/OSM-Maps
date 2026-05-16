@@ -7,6 +7,7 @@
 import UIKit
 import UniformTypeIdentifiers
 import CoreLocation
+import OSLog
 
 class TrackListViewController: ItemListViewController{
     
@@ -94,7 +95,7 @@ extension TrackListViewController : UIDocumentPickerDelegate{
                     let ext = url.pathExtension
                     var name = url.lastPathComponent
                     name = String(name[name.startIndex...name.index(name.endIndex, offsetBy: -ext.count)])
-                    Log.debug(name)
+                    Logger.debug(name)
                     track.name = name
                 }
                 track.updateFromTrackpoints()

@@ -15,7 +15,7 @@ class Backup{
         do {
             let count = FileManager.default.deleteTemporaryFiles()
             if count > 0{
-                Log.debug("\(count) temporary file(s) deleted before backup")
+                Logger.debug("\(count) temporary file(s) deleted before backup")
             }
             var paths = Array<URL>()
             paths.append(BasePaths.imageDirURL)
@@ -27,16 +27,16 @@ class Backup{
                 paths.append(url)
             }
             else{
-                Log.debug("could not create zip file: could not save json")
+                Logger.debug("could not create zip file: could not save json")
                 return false
             }
             try Zip.zipFiles(paths: paths, zipFilePath: url, password: nil, progress: { (progress) -> () in
-                //Log.debug(progress)
+                //Logger.debug(progress)
             })
             return true
         }
         catch let err {
-            Log.error("could not create zip file", err)
+            Logger.error("could not create zip file", err)
         }
         return false
     }
@@ -45,29 +45,29 @@ class Backup{
         do {
             let count = FileManager.default.deleteTemporaryFiles()
             if count > 0{
-                Log.debug("\(count) temporary file(s) deleted before restore")
+                Logger.debug("\(count) temporary file(s) deleted before restore")
             }
             try FileManager.default.createDirectory(at: URL.temporaryDirectory, withIntermediateDirectories: true)
             try Zip.unzipFile(zipFileURL, destination: URL.temporaryDirectory, overwrite: true, password: nil, progress: { (progress) -> () in
-                //Log.debug(progress)
+                //Logger.debug(progress)
             })
             return true
         }
         catch (let err){
-            Log.error("could not read zip file: \(err.localizedDescription)")
+            Logger.error("could not read zip file: \(err.localizedDescription)")
         }
         return false
     }
     
     static func restoreBackupFile() -> Bool{
         if !FileManager.default.fileExists(url: URL.temporaryDirectory.appendingPathComponent("images")){
-            Log.error("wrong zip file")
+            Logger.error("wrong zip file")
             FileManager.default.deleteTemporaryFiles()
             return false
         }
         var count = FileManager.default.deleteAllFiles(dirURL: BasePaths.imageDirURL)
         if count > 0{
-            Log.debug("\(count) image file(s) deleted before restore")
+            Logger.debug("\(count) image file(s) deleted before restore")
         }
         var fileNames = FileManager.default.listAllFiles(dirPath: URL.temporaryDirectory.appendingPathComponent("images").path)
         for name in fileNames{
@@ -75,7 +75,7 @@ class Backup{
         }
         count = FileManager.default.deleteAllFiles(dirURL: BasePaths.previewDirURL)
         if count > 0{
-            Log.debug("\(count) preview file(s) deleted before restore")
+            Logger.debug("\(count) preview file(s) deleted before restore")
         }
         fileNames = FileManager.default.listAllFiles(dirPath: URL.temporaryDirectory.appendingPathComponent("previews").path)
         for name in fileNames{
@@ -104,48 +104,48 @@ class Backup{
         }
         count = FileManager.default.deleteTemporaryFiles()
         if count > 0{
-            Log.debug("\(count) temporary file(s) deleted after restore")
+            Logger.debug("\(count) temporary file(s) deleted after restore")
         }
         return true
     }
     
     static func importfromMapsForOSMFile() -> Bool{
         if !FileManager.default.fileExists(url: URL.temporaryDirectory.appendingPathComponent("media")){
-            Log.error("wrong zip file")
+            Logger.error("wrong zip file")
             FileManager.default.deleteTemporaryFiles()
             return false
         }
         var count = FileManager.default.deleteAllFiles(dirURL: BasePaths.imageDirURL)
         if count > 0{
-            Log.debug("\(count) image files deleted before restore")
+            Logger.debug("\(count) image files deleted before restore")
         }
         count = FileManager.default.deleteAllFiles(dirURL: BasePaths.previewDirURL)
         if count > 0{
-            Log.debug("\(count) preview file(s) deleted before restore")
+            Logger.debug("\(count) preview file(s) deleted before restore")
         }
         count = FileManager.default.deleteAllFiles(dirURL: BasePaths.audioDirURL)
         if count > 0{
-            Log.debug("\(count) audio file(s) deleted before restore")
+            Logger.debug("\(count) audio file(s) deleted before restore")
         }
         count = FileManager.default.deleteAllFiles(dirURL: BasePaths.videoDirURL)
         if count > 0{
-            Log.debug("\(count) video file(s) deleted before restore")
+            Logger.debug("\(count) video file(s) deleted before restore")
         }
         count = FileManager.default.deleteAllFiles(dirURL: BasePaths.videoPreviewDirURL)
         if count > 0{
-            Log.debug("\(count) video preview file(s) deleted before restore")
+            Logger.debug("\(count) video preview file(s) deleted before restore")
         }
         let url = URL.temporaryDirectory.appendingPathComponent("locations.json")
         let oldMapItems = OldMapItems()
         let locationList = oldMapItems.loadFromFile(url: url)
-        Log.debug(locationList.count)
+        Logger.debug(locationList.count)
         oldMapItems.convert(from: locationList)
         AppData.shared.replaceItems(oldMapItems.items)
         AppData.shared.removeAllDeletedIds()
         AppData.shared.save()
         count = FileManager.default.deleteTemporaryFiles()
         if count > 0{
-            Log.debug("\(count) temporary files deleted after restore")
+            Logger.debug("\(count) temporary files deleted after restore")
         }
         return true
     }

@@ -6,6 +6,7 @@
 
 import Foundation
 import CoreLocation
+import OSLog
 
 protocol LocationServiceDelegate {
     func locationChanged(to location: CLLocation)
@@ -44,7 +45,7 @@ class LocationService: NSObject{
     }
     
     func start(){
-        Log.debug("starting location manager")
+        Logger.debug("starting location manager")
         clManager.requestWhenInUseAuthorization()
         clManager.startUpdatingLocation()
         if Settings.shared.showDirection{
@@ -54,7 +55,7 @@ class LocationService: NSObject{
     }
     
     func stop(){
-        Log.debug("stopping location manager")
+        Logger.debug("stopping location manager")
         clManager.stopUpdatingLocation()
         if Settings.shared.showDirection{
             clManager.stopUpdatingHeading()
@@ -85,14 +86,14 @@ extension LocationService: CLLocationManagerDelegate{
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         switch manager.authorizationStatus {
         case .denied :
-            Log.error("Location access denied")
+            Logger.error("Location access denied")
         case .restricted:
-            Log.error("Location access restricted")
+            Logger.error("Location access restricted")
         case .notDetermined:
-            Log.error("Location access not Determined")
+            Logger.error("Location access not Determined")
             manager.requestWhenInUseAuthorization()
         case .authorizedWhenInUse :
-            Log.debug("Location access authorized when in use")
+            Logger.debug("Location access authorized when in use")
             manager.allowsBackgroundLocationUpdates = true
             manager.startUpdatingLocation()
         default:
@@ -104,7 +105,7 @@ extension LocationService: CLLocationManagerDelegate{
         if let loc = locations.last, loc.horizontalAccuracy != -1{
             LocationStatus.shared.location = loc
             delegate?.locationChanged(to: loc)
-            //Log.debug("acc = \(loc.horizontalAccuracy)")
+            //Logger.debug("acc = \(loc.horizontalAccuracy)")
         }
     }
   
@@ -117,7 +118,7 @@ extension LocationService: CLLocationManagerDelegate{
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: any Error) {
-        Log.error("Error: \(error)")    
+        Logger.error("Error: \(error)")    
     }
     
 }

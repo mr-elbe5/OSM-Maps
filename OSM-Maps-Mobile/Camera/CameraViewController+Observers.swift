@@ -8,6 +8,7 @@ import UIKit
 import AVFoundation
 import CoreLocation
 import Photos
+import OSLog
 
 extension CameraViewController{
     
@@ -16,7 +17,7 @@ extension CameraViewController{
             guard let isSessionRunning = change.newValue else { return }
             
             DispatchQueue.main.async {
-                //Log.debug("observers: enable/disable buttons")
+                //Logger.debug("observers: enable/disable buttons")
                 self.cameraButton.isEnabled = isSessionRunning && AVCaptureDevice.DiscoverySession(deviceTypes: CameraViewController.discoverableDeviceTypes, mediaType: .video, position: .unspecified).uniqueDevicePositionsCount > 1
                 self.captureButton.isEnabled = isSessionRunning
                 self.captureModeControl.isEnabled = isSessionRunning
@@ -57,7 +58,7 @@ extension CameraViewController{
             if self.currentDevice == systemPreferredCamera {
                 return
             }
-            //Log.debug("changing device by observer")
+            //Logger.debug("changing device by observer")
             self.changeVideoDevice(systemPreferredCamera)
         } else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
@@ -87,7 +88,7 @@ extension CameraViewController{
     @objc func sessionRuntimeError(notification: NSNotification) {
         guard let error = notification.userInfo?[AVCaptureSessionErrorKey] as? AVError else { return }
         
-        Log.error("Capture session runtime error: \(error)")
+        Logger.error("Capture session runtime error: \(error)")
         if error.code == .mediaServicesWereReset {
             sessionQueue.async {
                 if self.isSessionRunning {

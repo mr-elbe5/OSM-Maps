@@ -5,6 +5,7 @@
  */
 
 import Cocoa
+import OSLog
 
 class AppDelegate: NSObject, NSApplicationDelegate {
 
@@ -36,7 +37,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         AppData.shared.save()
         let count = FileManager.default.deleteTemporaryFiles()
         if count > 0{
-            Log.debug("\(count) temporary file(s) deleted")
+            Logger.debug("\(count) temporary file(s) deleted")
         }
     }
 

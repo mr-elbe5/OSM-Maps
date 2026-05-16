@@ -17,7 +17,8 @@ struct ArrayIterator<T: Any>: IteratorProtocol {
 
     mutating func next() -> T? {
         guard array.count > idx else { return nil }
+        let obj = array[idx]
         idx += 1
-        return array[idx - 1]
+        return obj
     }
 }

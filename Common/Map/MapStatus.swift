@@ -6,6 +6,7 @@
 
 import Foundation
 import CoreLocation
+import OSLog
 
 class MapStatus: Identifiable, Codable{
     
@@ -75,9 +76,9 @@ class MapStatus: Identifiable, Codable{
     }
     
     func setZoom(_ zoom: Int){
-        //Log.debug("setZoom \(zoom)")
+        //Logger.debug("setZoom \(zoom)")
         scale = World.downScale(to: zoom)
-        //Log.debug("scale is \(scale)")
+        //Logger.debug("scale is \(scale)")
         coordinateRegion = nil
     }
     

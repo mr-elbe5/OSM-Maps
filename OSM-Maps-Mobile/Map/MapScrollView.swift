@@ -6,6 +6,7 @@
 
 import UIKit
 import CoreLocation
+import OSLog
 
 protocol MapScrollViewDelegate{
     func didScroll()
@@ -72,35 +73,35 @@ class MapScrollView: UIScrollView {
     }
     
     func scrollTo(_ coordinate: CLLocationCoordinate2D){
-        //Log.debug("scrolling to \(coordinate)")
+        //Logger.debug("scrolling to \(coordinate)")
         let screenCenter = screenCenter
-        //Log.debug("screen center is \(screenCenter)")
+        //Logger.debug("screen center is \(screenCenter)")
         let x = World.scaledX(coordinate.longitude, downScale: zoomScale) + World.scaledExtent(downScale: zoomScale)
         let y = World.scaledY(coordinate.latitude, downScale: zoomScale)
         let pnt = CGPoint(x: min(max(0, x - screenCenter.x), contentSize.width - visibleSize.width),
                           y: min(max(0, y - screenCenter.y), contentSize.height - visibleSize.height))
-        //Log.debug("screen offset is \(pnt)")
+        //Logger.debug("screen offset is \(pnt)")
         setContentOffset(pnt, animated: true)
     }
     
     func zoomTo(_ zoom: Int, animated: Bool = false){
-        //Log.debug("zooming to \(zoom)")
+        //Logger.debug("zooming to \(zoom)")
         let scale = World.downScale(to: zoom)
-        //Log.debug("setting zoom scale to \(scale)")
+        //Logger.debug("setting zoom scale to \(scale)")
         setZoomScale(scale, animated: false)
     }
     
     func zoomAndScrollTo(_ zoom: Int, _ coordinate: CLLocationCoordinate2D){
-        //Log.debug("zooming to \(zoom) and scrolling to \(coordinate)")
+        //Logger.debug("zooming to \(zoom) and scrolling to \(coordinate)")
         let scale = World.downScale(to: zoom)
         setZoomScale(scale, animated: false)
         let screenCenter = screenCenter
-        //Log.debug("screen center is \(screenCenter)")
+        //Logger.debug("screen center is \(screenCenter)")
         let x = World.scaledX(coordinate.longitude, downScale: scale) + World.scaledExtent(downScale: scale)
         let y = World.scaledY(coordinate.latitude, downScale: scale)
         let pnt = CGPoint(x: min(max(0, x - screenCenter.x), contentSize.width - visibleSize.width),
                           y: min(max(0, y - screenCenter.y), contentSize.height - visibleSize.height))
-        //Log.debug("screen offset is \(pnt)")
+        //Logger.debug("screen offset is \(pnt)")
         setContentOffset(pnt, animated: true)
     }
     

@@ -11,6 +11,8 @@ class TileSourceViewController: ScrollViewController{
     var nameField = LabeledTextField()
     var tileUrlTemplateField = LabeledTextField()
     
+    var overlaySelectPanel = UIView()
+    
     var overlayNameField = LabeledTextField()
     var overlayUrlTemplateField = LabeledTextField()
     
@@ -29,7 +31,7 @@ class TileSourceViewController: ScrollViewController{
         contentView.addSubviewBelow(nameField, insets: .defaultInsets)
         tileUrlTemplateField.setupView(labelText: "templateURL".localize(), text: Settings.shared.tileSource.templateUrl, isHorizontal: false)
         contentView.addSubviewBelow(tileUrlTemplateField, upperView: nameField, insets: .defaultInsets)
-        var useLabel = UILabel(text: "use".localizeWithColon())
+        let useLabel = UILabel(text: "use".localizeWithColon())
         contentView.addSubviewBelow(useLabel, upperView: tileUrlTemplateField, insets: .defaultInsets)
         var lastView: UIView = useLabel
         
@@ -45,50 +47,13 @@ class TileSourceViewController: ScrollViewController{
             let deleteButton = IconButton(smallIcon: "trash", tintColor: .systemRed)
             deleteButton.addAction(UIAction(){ action in
                 TileSources.shared.remove(mapServer)
-                TileSources.save()
+                TileSources.shared.save()
                 self.loadScrollableSubviews()
             }, for: .touchDown)
             contentView.addSubviewWithAnchors(deleteButton, leading: button.trailingAnchor, insets: .flatInsets)
                 .centerY(button.centerYAnchor)
             lastView = button
         }
-        
-        overlayNameField.setupView(labelText: "overlayName".localize(), text: Settings.shared.overlayTileSource?.displayName ?? "", isHorizontal: false)
-        contentView.addSubviewBelow(overlayNameField, upperView: lastView, insets: .defaultInsets)
-        overlayUrlTemplateField.setupView(labelText: "templateURL".localize(), text: Settings.shared.overlayTileSource?.templateUrl ?? "", isHorizontal: false)
-        contentView.addSubviewBelow(overlayUrlTemplateField, upperView: overlayNameField, insets: .defaultInsets)
-        let clearOverlayButton = UIButton(name: "clear".localize(), action: UIAction(){ action in
-            self.clearOverlay()
-        })
-        contentView.addSubviewBelow(clearOverlayButton, upperView: overlayUrlTemplateField)
-        useLabel = UILabel(text: "use".localizeWithColon())
-        contentView.addSubviewBelow(useLabel, upperView: clearOverlayButton, insets: .defaultInsets)
-        lastView = useLabel
-        
-        for overlayServer in TileSources.sharedOverlays{
-            let button = UIButton(type: .system)
-            button.setTitle(overlayServer.displayName, for: .normal)
-            button.setTitleColor(.systemBlue, for: .normal)
-            button.addAction(UIAction(){ action in
-                self.overlayNameField.text = overlayServer.displayName
-                self.overlayUrlTemplateField.text = overlayServer.templateUrl
-            }, for: .touchDown)
-            contentView.addSubviewWithAnchors(button, top: lastView.bottomAnchor, leading: contentView.leadingAnchor, insets: .flatInsets)
-            let deleteButton = IconButton(smallIcon: "trash", tintColor: .systemRed)
-            deleteButton.addAction(UIAction(){ action in
-                TileSources.sharedOverlays.remove(overlayServer)
-                TileSources.saveOverlays()
-                self.loadScrollableSubviews()
-            }, for: .touchDown)
-            contentView.addSubviewWithAnchors(deleteButton, leading: button.trailingAnchor, insets: .flatInsets)
-                .centerY(button.centerYAnchor)
-            lastView = button
-        }
-        
-        let hintText = UILabel(text: "tileServerHint".localize())
-        hintText.numberOfLines = 0
-        hintText.font = .preferredFont(forTextStyle: .footnote)
-        contentView.addSubviewBelow(hintText, upperView: lastView, insets: .flatInsets)
         
         let saveButton = UIButton()
         saveButton.setTitle("save".localize(), for: .normal)
@@ -96,13 +61,35 @@ class TileSourceViewController: ScrollViewController{
         saveButton.addAction(UIAction(){ action in
             self.save()
         }, for: .touchDown)
-        contentView.addSubviewWithAnchors(saveButton, top: hintText.bottomAnchor, insets: .doubleInsets)
+        contentView.addSubviewWithAnchors(saveButton, top: lastView.bottomAnchor, insets: .doubleInsets)
         .centerX(contentView.centerXAnchor)
+        
+        var label = UILabel(header: "overlays".localizeWithColon())
+        contentView.addSubviewBelow(label, upperView: saveButton)
+        setupOverlaySelectPanel()
+        contentView.addSubviewBelow(overlaySelectPanel, upperView: label)
+        
+        label = UILabel(text: "newOverlay".localizeWithColon())
+        contentView.addSubviewBelow(label, upperView: overlaySelectPanel)
+        overlayNameField.setupView(labelText: "overlayName".localize(), text: "", isHorizontal: false)
+        contentView.addSubviewBelow(overlayNameField, upperView: label, insets: .defaultInsets)
+        overlayUrlTemplateField.setupView(labelText: "templateURL".localize(), text: "", isHorizontal: false)
+        contentView.addSubviewBelow(overlayUrlTemplateField, upperView: overlayNameField, insets: .defaultInsets)
+        let addNewOverlayButton = UIButton(name: "add".localize(), action: UIAction(){ action in
+            self.addNewOverlay()
+        })
+        contentView.addSubviewBelow(addNewOverlayButton, upperView: overlayUrlTemplateField)
+        lastView = addNewOverlayButton
+        
+        let hintText = UILabel(text: "tileServerHint".localize())
+        hintText.numberOfLines = 0
+        hintText.font = .preferredFont(forTextStyle: .footnote)
+        contentView.addSubviewBelow(hintText, upperView: lastView, insets: .flatInsets)
         
         let setDefaultsButton = UIButton(name: "setDefaults".localize(), action: UIAction(){ action in
             self.setDefaults()
         })
-        contentView.addSubviewBelow(setDefaultsButton, upperView: saveButton)
+        contentView.addSubviewBelow(setDefaultsButton, upperView: hintText)
         lastView = setDefaultsButton
         if WatchConnector.shared.isWatchConnected {
             let watchButton = UIButton(name: "sendToWatch".localize(), action: UIAction(){ action in
@@ -122,21 +109,56 @@ class TileSourceViewController: ScrollViewController{
             .connectToBottom(of: contentView)
     }
     
-    func clearOverlay(){
-        self.overlayNameField.text = ""
-        self.overlayUrlTemplateField.text = ""
+    func setupOverlaySelectPanel(){
+        var lastLine: UIView? = nil
+        overlaySelectPanel.removeAllSubviews()
+        for idx in 0..<OverlayTileSources.shared.count{
+            let overlay = OverlayTileSources.shared[idx]
+            let overlayLine = OverlayLine(source: overlay)
+            overlayLine.setupView()
+            overlayLine.delegate = self
+            overlaySelectPanel.addSubviewBelow(overlayLine, upperView: lastLine, insets: .narrowInsets)
+            lastLine = overlayLine
+        }
+        lastLine?.connectToBottom(of: overlaySelectPanel)
+    }
+    
+    func addNewOverlay(){
+        let newOverlayDisplayName = overlayNameField.text
+        let newOverlayTemplateUrl = overlayUrlTemplateField.text
+        if !newOverlayDisplayName.isEmpty, !newOverlayTemplateUrl.isEmpty{
+            let newName = newOverlayDisplayName.lowercased().replacingOccurrences(of: " ", with: "_")
+            let overlaySource = OverlayTileSource(name: newName, displayName: newOverlayDisplayName, templateUrl: newOverlayTemplateUrl)
+            TileProvider.shared.checkSource(overlaySource){ success in
+                if success{
+                    OverlayTileSources.shared.append(overlaySource)
+                    OverlayTileSources.shared.updateIndices()
+                    OverlayTileSources.shared.save()
+                    DispatchQueue.main.async {
+                        self.overlayNameField.text = ""
+                        self.overlayUrlTemplateField.text = ""
+                        self.setupOverlaySelectPanel()
+                    }
+                }
+                else{
+                    DispatchQueue.main.async {
+                        self.showAlert(title: "error".localize(), text: "sourceNotFound".localize())
+                    }
+                }
+            }
+            
+        }
     }
     
     func save(){
-        saveServer()
-        saveOverlay()
+        saveTileSource()
         Settings.shared.save()
         Settings.shared.assertTileDirs()
         self.showDone(title: "ok".localize(), text: "mapSourceSaved".localize())
         MainViewController.shared.mapView.refresh()
     }
     
-    func saveServer(){
+    func saveTileSource(){
         let newDisplayName = nameField.text
         let newTemplateUrl = tileUrlTemplateField.text
         if !newDisplayName.isEmpty, !newTemplateUrl.isEmpty{ // only name changed
@@ -150,38 +172,14 @@ class TileSourceViewController: ScrollViewController{
                 TileSources.shared.append(mapSource)
                 Settings.shared.tileSource = mapSource
             }
-            TileSources.save()
-        }
-    }
-    
-    func saveOverlay(){
-        let newOverlayDisplayName = overlayNameField.text
-        let newOverlayTemplateUrl = overlayUrlTemplateField.text
-        if !newOverlayDisplayName.isEmpty, !newOverlayTemplateUrl.isEmpty{ // only name changed
-            if let overlaySource = TileSources.sharedOverlays.getByUrl(newOverlayTemplateUrl){
-                overlaySource.displayName = newOverlayDisplayName
-                Settings.shared.overlayTileSource = overlaySource
-            }
-            else{
-                let newName = newOverlayDisplayName.lowercased().replacingOccurrences(of: " ", with: "_")
-                let overlaySource = TileSource(name: newName, displayName: newOverlayDisplayName, templateUrl: newOverlayTemplateUrl)
-                TileSources.sharedOverlays.append(overlaySource)
-                Settings.shared.overlayTileSource = overlaySource
-            }
-            TileSources.saveOverlays()
-        }
-        else{
-            Settings.shared.overlayTileSource = nil
-        }
-        if Settings.shared.hasOverlay{
-            Settings.shared.showOverlay = true
+            TileSources.shared.save()
         }
     }
     
     func setDefaults(){
         TileSources.setDefaults()
-        TileSources.setOverlayDefaults()
-        Settings.shared.setDefaultSources()
+        OverlayTileSources.setDefaults()
+        
         self.loadScrollableSubviews()
     }
     
@@ -204,6 +202,87 @@ class TileSourceViewController: ScrollViewController{
     }
     
 }
+
+extension TileSourceViewController: OverlayLineDelegate{
+    
+    func selectionChanged(){
+        for sv in overlaySelectPanel.subviews{
+            if let ol = sv as? OverlayLine{
+                ol.source.active = ol.switchView.isOn
+            }
+        }
+    }
+    
+    func moveSourceUp(_ line: OverlayLine){
+        OverlayTileSources.shared.moveUp(idx: line.source.idx)
+        setupOverlaySelectPanel()
+    }
+    
+    func removeSource(_ line: OverlayLine){
+        if OverlayTileSources.shared.contains(line.source){
+            OverlayTileSources.shared.remove(line.source)
+            setupOverlaySelectPanel()
+        }
+    }
+    
+}
+
+protocol OverlayLineDelegate{
+    func selectionChanged()
+    func moveSourceUp(_ line: OverlayLine)
+    func removeSource(_ line: OverlayLine)
+}
+
+class OverlayLine: UIView{
+    
+    var source: OverlayTileSource
+    
+    var label: UILabel!
+    var switchView: UISwitch!
+    var upButton: UIButton
+    var deleteButton: UIButton
+    
+    var delegate: OverlayLineDelegate?
+    
+    init(source: OverlayTileSource) {
+        self.source = source
+        label = UILabel(text: source.name)
+        switchView = UISwitch()
+        switchView.preferredStyle = .checkbox
+        upButton = UIButton().asIconButton("arrow.up")
+        deleteButton = UIButton().asIconButton("trash", color: .systemRed)
+        super.init(frame: .zero)
+    }
+    
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setupView(){
+        height(20)
+        addSubviewWithAnchors(label, leading: leadingAnchor, insets: .zero).centerY(centerYAnchor)
+        addSubviewWithAnchors(switchView, leading: label.trailingAnchor).centerY(centerYAnchor)
+        
+        addSubviewWithAnchors(deleteButton, trailing: trailingAnchor).centerY(centerYAnchor)
+        addSubviewWithAnchors(upButton, trailing: deleteButton.leadingAnchor).centerY(centerYAnchor)
+        
+        switchView.addAction(UIAction(){ action in
+            self.source.active = self.switchView.isOn
+            self.delegate?.selectionChanged()
+        }, for: .valueChanged)
+        switchView.isOn = source.active
+        upButton.addAction(UIAction(){ action in
+            self.delegate?.moveSourceUp(self)
+        }, for: .touchDown)
+        upButton.isEnabled = source.idx > 0
+        deleteButton.addAction(UIAction(){ action in
+            self.delegate?.removeSource(self)
+        }, for: .touchDown)
+    }
+    
+}
+
+
 
     
 

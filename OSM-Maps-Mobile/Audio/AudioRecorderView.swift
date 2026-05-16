@@ -6,6 +6,7 @@
 
 import UIKit
 import AVFoundation
+import OSLog
 
 protocol AudioRecorderDelegate{
     func recordingFinished()
@@ -87,7 +88,7 @@ class AudioRecorderView : UIView, AVAudioRecorderDelegate{
             AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
             AVNumberOfChannelsKey: 1,
         ]
-        //Log.debug("AudioRecorderViewController recording on url \(tmpFileURL)")
+        //Logger.debug("AudioRecorderViewController recording on url \(tmpFileURL)")
         do{
             audioRecorder = try AVAudioRecorder(url: tmpFileURL, settings: settings)
             if let recorder = audioRecorder{
@@ -120,7 +121,7 @@ class AudioRecorderView : UIView, AVAudioRecorderDelegate{
         audioRecorder?.stop()
         audioRecorder = nil
         if success {
-            //Log.debug("AudioRecorderViewController playing on url \(tmpFileURL)")
+            //Logger.debug("AudioRecorderViewController playing on url \(tmpFileURL)")
             player.url = tmpFileURL
             player.enablePlayer()
             delegate?.recordingFinished()
@@ -158,7 +159,7 @@ class AudioRecorderView : UIView, AVAudioRecorderDelegate{
             do {
                 try FileManager.default.removeItem(atPath: tmpFileURL.path)
             } catch let err{
-                Log.error("AudioRecorderViewController Could not remove file at url: \(String(describing: tmpFileURL))", err)
+                Logger.error("AudioRecorderViewController Could not remove file at url: \(String(describing: tmpFileURL))", err)
             }
         }
     }

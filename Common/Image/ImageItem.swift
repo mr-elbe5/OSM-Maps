@@ -8,6 +8,7 @@ import Foundation
 import CoreLocation
 import CloudKit
 import Photos
+import OSLog
 
 class ImageItem: MapItem{
     
@@ -57,7 +58,7 @@ class ImageItem: MapItem{
     
     var fileExists: Bool{
         if !FileManager.default.fileExists(atPath: url.path){
-            Log.error("image file does not exist: \(url)")
+            Logger.error("image file does not exist: \(url)")
             return false
         }
         return true
@@ -67,7 +68,7 @@ class ImageItem: MapItem{
         if let data = FileManager.default.readFile(url: url){
             return data
         }
-        Log.error("image file does not exist: \(url)")
+        Logger.error("image file does not exist: \(url)")
         return nil
     }
     
@@ -87,7 +88,7 @@ class ImageItem: MapItem{
         if let data = FileManager.default.readFile(url: previewUrl){
             return data
         }
-        Log.error("preview file does not exist: \(url)")
+        Logger.error("preview file does not exist: \(url)")
         return nil
     }
     
@@ -154,30 +155,30 @@ class ImageItem: MapItem{
     @discardableResult
     func saveImageAndCreatePreview(data: Data) -> Bool{
         if saveImage(data: data), let original = OSImage(data: data), createPreviewFile(original: original){
-            Log.debug("save image and preview")
+            Logger.debug("save image and preview")
             return true
         }
-        Log.error("did not save image and preview")
+        Logger.error("did not save image and preview")
         return false
     }
     
     @discardableResult
     func copyImageAndCreatePreview(from: URL, original: OSImage) -> Bool{
         if copyImage(from: from), createPreviewFile(original: original){
-            Log.debug("save image and preview")
+            Logger.debug("save image and preview")
             return true
         }
-        Log.error("did not save image and preview")
+        Logger.error("did not save image and preview")
         return false
     }
     
     @discardableResult
     func createPreview() -> Bool{
         if let image = image, createPreviewFile(original: image){
-            Log.debug("save image and preview")
+            Logger.debug("save image and preview")
             return true
         }
-        Log.error("did not save image and preview")
+        Logger.error("did not save image and preview")
         return false
     }
     
@@ -206,13 +207,13 @@ class ImageItem: MapItem{
         var success = true
         if FileManager.default.fileExists(url: url){
             if !FileManager.default.deleteFile(url: url){
-                Log.error("ImageItem could not delete file: \(fileName)")
+                Logger.error("ImageItem could not delete file: \(fileName)")
                 success = false
             }
         }
         if FileManager.default.fileExists(url: previewUrl){
             if !FileManager.default.deleteFile(url: previewUrl){
-                Log.error("ImageItem could not delete preview: \(fileName)")
+                Logger.error("ImageItem could not delete preview: \(fileName)")
                 success = false
             }
         }

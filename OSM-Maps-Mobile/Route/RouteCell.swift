@@ -5,6 +5,7 @@
  */
 
 import UIKit
+import OSLog
 
 protocol RouteCellDelegate: MapItemCellDelegate {
 }
@@ -43,7 +44,7 @@ class RouteCell: MapItemCell{
                 watchButton.addAction(UIAction(){ action in
                     if let route = self.item?.route{
                         WatchConnector.shared.sendRoute(route){ success in
-                            Log.info("route uploaded: \(success)")
+                            Logger.info("route uploaded: \(success)")
                         }
                     }
                 }, for: .touchDown)

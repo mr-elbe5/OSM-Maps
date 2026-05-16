@@ -7,6 +7,7 @@
 import UIKit
 import CoreLocation
 import AVKit
+import OSLog
 
 class MainViewController: UIViewController {
     
@@ -359,7 +360,7 @@ class MainViewController: UIViewController {
     }
     
     func setRoutePoint(idx: Int, screenPoint: CGPoint){
-        //Log.info("set route point at \(idx)")
+        //Logger.info("set route point at \(idx)")
         let mapPoint = mapView.scrollView.worldPoint(screenPoint: screenPoint)
         VisibleRoute.shared.setCoordinateForRoutePoint(idx, mapPoint.coordinate)
         mapView.updateRouteLayer()
@@ -464,7 +465,7 @@ class MainViewController: UIViewController {
             imageData = dataWithCoordinates
         }
         imageItem.saveImageAndCreatePreview(data: imageData)
-        //Log.info("photo saved locally as \(imageItem.fileName)")
+        //Logger.info("photo saved locally as \(imageItem.fileName)")
         AppData.shared.addItem(imageItem)
         AppData.shared.sortItemsByDate(ascending: ViewFilter.shared.defaultSortAscending)
         AppData.shared.save()

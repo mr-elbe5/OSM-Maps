@@ -7,6 +7,7 @@
 import Foundation
 import CloudKit
 import AVKit
+import OSLog
 
 class VideoItem : MapItem{
     
@@ -64,7 +65,7 @@ class VideoItem : MapItem{
         if createPreviewFile(), let data = FileManager.default.readFile(url: previewUrl){
             return data
         }
-        Log.error("preview file does not exist: \(previewUrl)")
+        Logger.error("preview file does not exist: \(previewUrl)")
         return nil
     }
     
@@ -81,7 +82,7 @@ class VideoItem : MapItem{
     
     var fileExists: Bool{
         if !FileManager.default.fileExists(atPath: url.path){
-            Log.error("video file does not exist: \(url)")
+            Logger.error("video file does not exist: \(url)")
             return false
         }
         return true
@@ -130,10 +131,10 @@ class VideoItem : MapItem{
     @discardableResult
     func saveVideoAndCreatePreview(data: Data) -> Bool{
         if saveVideo(data: data), createPreviewFile(){
-            Log.debug("save video and preview")
+            Logger.debug("save video and preview")
             return true
         }
-        Log.error("did not save video and preview")
+        Logger.error("did not save video and preview")
         return false
     }
     
@@ -144,7 +145,7 @@ class VideoItem : MapItem{
     
     @discardableResult
     func copyFile(from: URL) -> Bool{
-        Log.info("save video file: \(fileName)")
+        Logger.info("save video file: \(fileName)")
         return FileManager.default.copyFile(fromURL: from, toURL: url, replace: true)
     }
     
@@ -153,13 +154,13 @@ class VideoItem : MapItem{
         var success = true
         if FileManager.default.fileExists(url: url){
             if !FileManager.default.deleteFile(url: url){
-                Log.error("video item could not delete file: \(fileName)")
+                Logger.error("video item could not delete file: \(fileName)")
                 success = false
             }
         }
         if FileManager.default.fileExists(url: previewUrl){
             if !FileManager.default.deleteFile(url: previewUrl){
-                Log.error("video item could not delete file: \(fileName)")
+                Logger.error("video item could not delete file: \(fileName)")
                 success = false
             }
         }
@@ -200,7 +201,7 @@ class VideoItem : MapItem{
     func createPreviewFile() -> Bool{
         if let preview = createPreview(size: ImageItem.previewSize){
             if let previewData = OSImage.getJpegData(from: preview), FileManager.default.saveFile(data: previewData, url: previewUrl){
-                Log.info("saved video preview file: \(previewUrl.lastPathComponent)")
+                Logger.info("saved video preview file: \(previewUrl.lastPathComponent)")
                 return true
             }
         }

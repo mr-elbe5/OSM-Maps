@@ -5,6 +5,7 @@
  */
 
 import Foundation
+import OSLog
 
 protocol DownloadDelegate {
     func downloadSucceeded()
@@ -31,7 +32,7 @@ class TileDownloadOperation : AsyncOperation, @unchecked Sendable {
             }
             else{
                 DispatchQueue.main.async { [self] in
-                    //Log.debug("TileDownloadOperation loading \(tile.shortDescription)")
+                    //Logger.debug("TileDownloadOperation loading \(tile.shortDescription)")
                     delegate?.downloadWithError()
                 }
             }

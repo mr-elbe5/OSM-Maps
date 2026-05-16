@@ -5,11 +5,12 @@
  */
 
 import UIKit
+import OSLog
 
 class MapItemLayerView: UIView {
     
     func setupMarkerViews(zoom: Int, offset: CGPoint, scale: CGFloat){
-        //Log.debug("setupMarkerViews, zoom=\(zoom),offset=\(offset),scale=\(scale)")
+        //Logger.debug("setupMarkerViews, zoom=\(zoom),offset=\(offset),scale=\(scale)")
         for subview in subviews {
             subview.removeFromSuperview()
         }

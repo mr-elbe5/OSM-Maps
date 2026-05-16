@@ -6,6 +6,7 @@
 
 import AppKit
 import CoreLocation
+import OSLog
 
 class RouteControlView : NSView{
     
@@ -187,7 +188,7 @@ class RouteControlView : NSView{
                 lastLine = routepointLine
             }
             lastLine.connectToBottom(of: statusPanel)
-            //Log.info("got \(routepointLines.count) routepoints")
+            //Logger.info("got \(routepointLines.count) routepoints")
         }
     }
     
@@ -209,9 +210,9 @@ class RouteControlView : NSView{
     
     @objc func routeTypeChanged(){
         let idx = self.routeTypeSelector.indexOfSelectedItem
-        //Log.info(" idx \(idx)")
+        //Logger.info(" idx \(idx)")
         let type = RouteType.getRouteType(idx: idx)
-        //Log.info(" type \(type.rawValue)")
+        //Logger.info(" type \(type.rawValue)")
         DesktopSettings.shared.routeType = type
         DesktopSettings.shared.save()
         MainViewController.shared.setRouteType(type)

@@ -7,6 +7,7 @@
 import Foundation
 import CoreLocation
 import CloudKit
+import OSLog
 
 class AppData : Codable{
     
@@ -16,12 +17,12 @@ class AppData : Codable{
     
     static func load(){
         if let data: AppData = StatusManager.shared.getCodable(key: storeKey){
-            Log.debug("got \(data.notes.count) local notes")
-            Log.debug("got \(data.images.count) local images")
-            Log.debug("got \(data.audios.count) local audios")
-            Log.debug("got \(data.videos.count) local videos")
-            Log.debug("got \(data.tracks.count) local tracks")
-            Log.debug("got \(data.routes.count) local routes")
+            Logger.debug("got \(data.notes.count) local notes")
+            Logger.debug("got \(data.images.count) local images")
+            Logger.debug("got \(data.audios.count) local audios")
+            Logger.debug("got \(data.videos.count) local videos")
+            Logger.debug("got \(data.tracks.count) local tracks")
+            Logger.debug("got \(data.routes.count) local routes")
             shared = data
         }
         else{
@@ -31,15 +32,15 @@ class AppData : Codable{
     
     func save(){
         if StatusManager.shared.saveCodable(key: Self.storeKey, value: self){
-            Log.debug("saved \(notes.count) local notes")
-            Log.debug("saved \(images.count) local images")
-            Log.debug("saved \(audios.count) local audios")
-            Log.debug("saved \(videos.count) local videos")
-            Log.debug("saved \(tracks.count) local tracks")
-            Log.debug("saved \(routes.count) local routes")
+            Logger.debug("saved \(notes.count) local notes")
+            Logger.debug("saved \(images.count) local images")
+            Logger.debug("saved \(audios.count) local audios")
+            Logger.debug("saved \(videos.count) local videos")
+            Logger.debug("saved \(tracks.count) local tracks")
+            Logger.debug("saved \(routes.count) local routes")
         }
         else{
-            Log.error("could not save map items data to StatusManager")
+            Logger.error("could not save map items data to StatusManager")
         }
     }
     
@@ -228,7 +229,7 @@ class AppData : Codable{
         var deletedCount = 0
         for item in _mapItems{
             if !item.isValidItem{
-                Log.info("item is not valid for cloud: \(item.id) - deleting")
+                Logger.info("item is not valid for cloud: \(item.id) - deleting")
                 item.prepareToDelete()
                 _mapItems.remove(obj: item)
                 deletedCount += 1
@@ -238,7 +239,7 @@ class AppData : Codable{
                 ids.insert(item.id)
             }
             else{
-                Log.info("double id found \(item.id) - deleting")
+                Logger.info("double id found \(item.id) - deleting")
                 item.prepareToDelete()
                 _mapItems.remove(obj: item)
                 deletedCount += 1

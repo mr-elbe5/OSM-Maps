@@ -5,6 +5,7 @@
  */
 
 import Foundation
+import OSLog
 
 class TileSource: Codable, Hashable{
     
@@ -18,8 +19,6 @@ class TileSource: Codable, Hashable{
     static var elbe5Source: TileSource = TileSource(name: "elbe5", displayName: "Elbe5 Carto", templateUrl: "https://tiles.elbe5.de/carto/{z}/{x}/{y}.png")
     static var elbe5TopoSource: TileSource = TileSource(name: "elbe5Topo", displayName: "Elbe5 Topo", templateUrl: "https://tiles.elbe5.de/topo/{z}/{x}/{y}.png")
     static var openTopoSource: TileSource = TileSource(name: "openTopo", displayName: "Open Topomap", templateUrl: "https://a.tile.opentopomap.org/{z}/{x}/{y}.png")
-    
-    static var waymarkedTrailsSource: TileSource = TileSource(name: "waymarkedTrails", displayName: "Waymarked Trails", templateUrl: "https://tile.waymarkedtrails.org/hiking/{z}/{x}/{y}.png")
     
     static var defaultTileSource: TileSource = TileSource.osmSource
     
@@ -66,43 +65,23 @@ extension TileSources{
     
     static var shared: TileSources = [.osmSource, .elbe5Source, .elbe5TopoSource, .openTopoSource]
     
-    static var overlayStoreKey = "overlayTileSources"
-    
-    static var sharedOverlays: TileSources = [.waymarkedTrailsSource]
-    
     static func load(){
         if let list : TileSources = StatusManager.shared.getCodable(key: TileSources.storeKey){
             TileSources.shared = list
         }
         else{
-            Log.error("no saved data available for tile sources")
-        }
-        if let list : TileSources = StatusManager.shared.getCodable(key: TileSources.overlayStoreKey){
-            TileSources.sharedOverlays = list
-        }
-        else{
-            Log.error("no saved data available for overlay tile sources")
+            Logger.error("no saved data available for tile sources")
         }
     }
     
     static func setDefaults(){
         shared = [.osmSource, .elbe5Source, .elbe5TopoSource, .openTopoSource]
-        save()
+        shared.save()
     }
     
-    static func setOverlayDefaults(){
-        sharedOverlays = [.waymarkedTrailsSource]
-        saveOverlays()
-    }
-    
-    static func save(){
-        StatusManager.shared.saveCodable(key: storeKey, value: shared)
-        Log.debug("tile sources saved")
-    }
-    
-    static func saveOverlays(){
-        StatusManager.shared.saveCodable(key: overlayStoreKey, value: sharedOverlays)
-        Log.debug("overlay tile sources saved")
+    func save(){
+        StatusManager.shared.saveCodable(key: Self.storeKey, value: self)
+        Logger.debug("tile sources saved")
     }
     
     var names: Array<String>{
@@ -119,15 +98,6 @@ extension TileSources{
             list.append(self[i].displayName)
         }
         return list
-    }
-    
-    func indexOf(source: TileSource) -> Int{
-        for i in 0..<count{
-            if self[i].name == source.name{
-                return i
-            }
-        }
-        return 0
     }
     
     func getByUrl(_ url: String) -> TileSource?{

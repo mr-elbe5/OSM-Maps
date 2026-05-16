@@ -7,6 +7,7 @@
 import AppKit
 import AVFoundation
 import CoreLocation
+import OSLog
 
 class MainViewController: ViewController {
     
@@ -275,7 +276,7 @@ class MainViewController: ViewController {
     }
     
     func markerButtonPressed(_ idx: Int){
-        //Log.info("marker pressed \(idx)")
+        //Logger.info("marker pressed \(idx)")
         VisibleRoute.shared.setIndex(idx)
         routeControlView.update()
     }
@@ -303,7 +304,7 @@ class MainViewController: ViewController {
     }
     
     func setRouteCoordinate(idx: Int, coordinate: CLLocationCoordinate2D){
-        //Log.info("coordinate for \(idx) is \(coordinate)")
+        //Logger.info("coordinate for \(idx) is \(coordinate)")
         if let route = VisibleRoute.shared.route{
             route.navigationPoints[idx] = Mappoint(coordinate: coordinate)
             mapScrollView.updateRouteLayerContent()

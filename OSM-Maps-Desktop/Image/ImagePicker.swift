@@ -8,6 +8,7 @@ import AppKit
 import AVFoundation
 import CoreLocation
 import PhotosUI
+import OSLog
 
 class ImagePicker: NSObject  {
     
@@ -153,7 +154,7 @@ extension ImagePicker: PHPickerViewControllerDelegate{
                         }
                     }
                     else{
-                        Log.error("invalid image, not imported")
+                        Logger.error("invalid image, not imported")
                     }
                 }
             }

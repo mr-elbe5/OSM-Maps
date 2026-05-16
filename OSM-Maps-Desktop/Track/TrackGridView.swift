@@ -5,8 +5,8 @@
  */
 
 import AppKit
-
 import UniformTypeIdentifiers
+import OSLog
 
 class TrackGridView: GridView{
     
@@ -116,7 +116,7 @@ extension TrackGridView: TrackGridMenuDelegate{
                 let ext = url.pathExtension
                 var name = url.lastPathComponent
                 name = String(name[name.startIndex...name.index(name.endIndex, offsetBy: -ext.count)])
-                Log.debug(name)
+                Logger.debug(name)
                 track.name = name
             }
             track.updateFromTrackpoints()

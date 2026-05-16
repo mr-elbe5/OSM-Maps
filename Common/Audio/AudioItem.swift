@@ -7,6 +7,7 @@
 import Foundation
 import CloudKit
 import AVKit
+import OSLog
 
 class AudioItem : MapItem{
     
@@ -37,7 +38,7 @@ class AudioItem : MapItem{
     
     var fileExists: Bool{
         if !FileManager.default.fileExists(atPath: url.path){
-            Log.error("media file does not exist: \(url)")
+            Logger.error("media file does not exist: \(url)")
             return false
         }
         return true
@@ -47,7 +48,7 @@ class AudioItem : MapItem{
         if let data = FileManager.default.readFile(url: url){
             return data
         }
-        Log.error("media file does not exist: \(url)")
+        Logger.error("media file does not exist: \(url)")
         return nil
     }
     
@@ -87,7 +88,7 @@ class AudioItem : MapItem{
     
     @discardableResult
     func copyFile(from: URL) -> Bool{
-        Log.info("save audio file: \(fileName)")
+        Logger.info("save audio file: \(fileName)")
         return FileManager.default.copyFile(fromURL: from, toURL: url, replace: true)
     }
     
@@ -96,7 +97,7 @@ class AudioItem : MapItem{
         var success = true
         if FileManager.default.fileExists(url: url){
             if !FileManager.default.deleteFile(url: url){
-                Log.error("media item could not delete file: \(fileName)")
+                Logger.error("media item could not delete file: \(fileName)")
                 success = false
             }
         }

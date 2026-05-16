@@ -6,6 +6,7 @@
 
 import Foundation
 import CloudKit
+import OSLog
 
 extension CKContainer{
     
@@ -18,7 +19,7 @@ extension CKContainer{
     
     static func isConnected() async throws -> Bool{
         let status = try await container.accountStatus()
-        Log.info("iCloud account status = \(status == .available ? "connected" : "disconnected")")
+        Logger.info("iCloud account status = \(status == .available ? "connected" : "disconnected")")
         return status == .available
     }
     

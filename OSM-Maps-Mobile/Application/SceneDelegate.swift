@@ -5,6 +5,7 @@
  */
 
 import UIKit
+import OSLog
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -13,7 +14,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        Log.debug("Scene will connect")
+        Logger.debug("Scene will connect")
         BasePaths.initializeDirs()
         AppStatus.load()
         AppStatus.shared.updateVersion()
@@ -37,22 +38,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
-        Log.debug("Scene did disconnect")
+        Logger.debug("Scene did disconnect")
         let count = FileManager.default.deleteTemporaryFiles()
         if count > 0{
-            Log.debug("\(count) temporary file(s) deleted")
+            Logger.debug("\(count) temporary file(s) deleted")
         }
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        Log.debug("Scene did become active")
+        Logger.debug("Scene did become active")
         assertLocationService()
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
-        Log.debug("Scene will resign active, saving state, settings and data")
+        Logger.debug("Scene will resign active, saving state, settings and data")
         TileSources.save()
-        TileSources.saveOverlays()
+        OverlayTileSources.save()
         Settings.shared.save()
         MapStatus.shared.save()
         AppData.shared.save()
@@ -60,12 +61,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
-        Log.debug("SceneDelegate entering foreground")
+        Logger.debug("SceneDelegate entering foreground")
         assertLocationService()
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
-        Log.debug("SceneDelegate entering background")
+        Logger.debug("SceneDelegate entering background")
         pauseLocationServiceIfNotRecording()
     }
 

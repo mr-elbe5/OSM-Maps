@@ -5,6 +5,7 @@
  */
 
 import CoreLocation
+import OSLog
 
 class MapPreloader {
     
@@ -63,12 +64,12 @@ class MapPreloader {
                 tileSet.maxX = World.tileX(coordinateRegion.maxLongitude, withZoom: zoom)
                 tileSet.minY = World.tileY(coordinateRegion.maxLatitude, withZoom: zoom)
                 tileSet.maxY = World.tileY(coordinateRegion.minLatitude, withZoom: zoom)
-                //Log.debug("tiles at \(zoom): \(tileSet.size) from \(tileSet.minX),\(tileSet.minY) to \(tileSet.maxX),\(tileSet.maxY)")
+                //Logger.debug("tiles at \(zoom): \(tileSet.size) from \(tileSet.minX),\(tileSet.minY) to \(tileSet.maxX),\(tileSet.maxY)")
                 tileSets[zoom] = tileSet
                 allTiles += tileSet.size
             }
             if allTiles > Self.maxDownloadTiles{
-                Log.info("too many tiles")
+                Logger.info("too many tiles")
                 return false
             }
             for zoom in tileSets.keys{
@@ -130,12 +131,12 @@ class MapPreloader {
                 tileSet.maxX = World.tileX(coordinateRegion.maxLongitude, withZoom: zoom)
                 tileSet.minY = World.tileY(coordinateRegion.maxLatitude, withZoom: zoom)
                 tileSet.maxY = World.tileY(coordinateRegion.minLatitude, withZoom: zoom)
-                //Log.debug("tiles at \(zoom): \(tileSet.size) from \(tileSet.minX),\(tileSet.minY) to \(tileSet.maxX),\(tileSet.maxY)")
+                //Logger.debug("tiles at \(zoom): \(tileSet.size) from \(tileSet.minX),\(tileSet.minY) to \(tileSet.maxX),\(tileSet.maxY)")
                 tileSets[zoom] = tileSet
                 allWatchTiles += tileSet.size
             }
             if allWatchTiles > Self.maxDownloadTiles{
-                Log.info("too many tiles")
+                Logger.info("too many tiles")
                 return false
             }
             for zoom in tileSets.keys{
@@ -154,7 +155,7 @@ class MapPreloader {
                     }
                 }
                 self.existingWatchTiles = self.allWatchTiles - self.watchTiles.count
-                Log.info("watch tiles missing: \(self.watchTiles.count)")
+                Logger.info("watch tiles missing: \(self.watchTiles.count)")
             }
             return true
         }
@@ -171,7 +172,7 @@ class MapPreloader {
             uploadQueue = OperationQueue()
             uploadQueue!.name = "uploadQueue"
             uploadQueue!.maxConcurrentOperationCount = 1
-            Log.info("uploading \(watchTiles.count) tiles")
+            Logger.info("uploading \(watchTiles.count) tiles")
             watchTiles.forEach { tile in
                 if let data = FileManager.default.readFile(url: tile.fileUrl){
                     let operation = TileUploadOperation(tile: tile, data:data)
@@ -182,13 +183,13 @@ class MapPreloader {
                     uploadWithError()
                 }
             }
-            Log.info("watch upload started")
+            Logger.info("watch upload started")
         }
     }
     
     func cancelWatchUpload(){
         uploadQueue?.cancelAllOperations()
-        Log.info("watch upload canceled")
+        Logger.info("watch upload canceled")
         reset()
     }
     

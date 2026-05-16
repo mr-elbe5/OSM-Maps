@@ -6,6 +6,7 @@
 
 import SwiftUI
 import WatchKit
+import OSLog
 
 class WatchAppDelegate: NSObject, WKApplicationDelegate {
     
@@ -26,33 +27,33 @@ class WatchAppDelegate: NSObject, WKApplicationDelegate {
     }
     
     func applicationDidFinishLaunching() {
-        Log.error("app did finish launching")
+        Logger.error("app did finish launching")
         LocationService.shared.start()
         LocationService.shared.delegate = WatchMapStatus.shared
         WatchHealthStatus.shared.startMonitoring()
     }
 
     func applicationDidBecomeActive(){
-        Log.debug("app did become active")
+        Logger.debug("app did become active")
         LocationService.shared.start()
     }
     
     func applicationWillResignActive(){
-        Log.debug("app will resign active")
+        Logger.debug("app will resign active")
         if !TrackRecorder.shared.isTracking {
             LocationService.shared.stop()
         }
     }
     
     func applicationDidEnterBackground() {
-        Log.debug("app did enter background")
+        Logger.debug("app did enter background")
         if !TrackRecorder.shared.isTracking {
             LocationService.shared.stop()
         }
     }
     
     func applicationWillEnterForeground() {
-        Log.debug("app will enter foreground")
+        Logger.debug("app will enter foreground")
         LocationService.shared.start()
     }
 

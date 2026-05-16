@@ -5,6 +5,7 @@
  */
 
 import Foundation
+import OSLog
 
 @Observable class CommonSettings: Identifiable, Codable{
     
@@ -17,7 +18,7 @@ import Foundation
             Settings.shared = prefs
         }
         else{
-            Log.error("no saved data available for settings")
+            Logger.error("no saved data available for settings")
             Settings.shared = Settings()
         }
     }
@@ -29,7 +30,7 @@ import Foundation
     }
     
     var tileSource: TileSource = TileSource.defaultTileSource
-    var overlayTileSource: TileSource? = nil
+    var overlayTileSource: OverlayTileSource? = nil
     var showOverlay: Bool = false
     
     var hasOverlay: Bool{
@@ -56,7 +57,7 @@ import Foundation
             tileSource = TileSources.shared.first(where: { $0.name == tileSourceString }) ?? TileSource.defaultTileSource
         }
         if let overlaySourceString = try? values.decodeIfPresent(String.self, forKey: .overlayTileSource){
-            overlayTileSource = TileSources.sharedOverlays.first(where: { $0.name == overlaySourceString })
+            overlayTileSource = OverlayTileSources.shared.first(where: { $0.name == overlaySourceString })
         }
         showOverlay = try values.decodeIfPresent(Bool.self, forKey: .showOverlay) ?? false
     }
@@ -74,13 +75,13 @@ import Foundation
         for name in names{
             if name.hasSuffix(".png"){
                 FileManager.default.moveFile(fromURL: BasePaths.tileDirURL.appendingPathComponent(name), toURL: tileDirURL.appendingPathComponent(name))
-                Log.info("moved file \(name)")
+                Logger.info("moved file \(name)")
             }
         }
     }
     
     func assertTileDirs(){
-        Log.debug("asserting \(tileDirURL.lastPathComponent)")
+        Logger.debug("asserting \(tileDirURL.lastPathComponent)")
         FileManager.default.assertDirectory(url: tileDirURL)
         if let url = overlayTileDirURL{
             FileManager.default.assertDirectory(url: url)
@@ -95,7 +96,7 @@ import Foundation
     
     func save(){
         StatusManager.shared.saveCodable(key: CommonSettings.storeKey, value: self)
-        Log.debug("Settings saved")
+        Logger.debug("Settings saved")
     }
     
 }

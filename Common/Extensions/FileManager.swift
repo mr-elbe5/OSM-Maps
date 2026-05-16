@@ -5,6 +5,7 @@
  */
 
 import Foundation
+import OSLog
 
 extension FileManager {
     
@@ -54,7 +55,7 @@ extension FileManager {
                 try createDirectory(at: url, withIntermediateDirectories: true)
             }
             catch let err{
-                Log.error("FileController could not create directory", err)
+                Logger.error("FileController could not create directory", err)
                 return false
             }
         }
@@ -70,7 +71,7 @@ extension FileManager {
                 try createDirectory(at: dirUrl, withIntermediateDirectories: true)
             }
             catch let err{
-                Log.error("FileController could not create directory", err)
+                Logger.error("FileController could not create directory", err)
                 return false
             }
         }
@@ -84,7 +85,7 @@ extension FileManager {
             try data.write(to: url, options: .atomic)
             return true
         } catch let err{
-            Log.error("FileController could not save file", err)
+            Logger.error("FileController could not save file", err)
             return false
         }
     }
@@ -96,7 +97,7 @@ extension FileManager {
             try text.write(to: url, atomically: true, encoding: .utf8)
             return true
         } catch let err{
-            Log.error("FileController could not save file", err)
+            Logger.error("FileController could not save file", err)
             return false
         }
     }
@@ -117,7 +118,7 @@ extension FileManager {
             try copyItem(at: fromDir.appendingPathComponent(name), to: toDir.appendingPathComponent(name))
             return true
         } catch let err{
-            Log.error("FileController could not copy file", err)
+            Logger.error("FileController could not copy file", err)
             return false
         }
     }
@@ -131,7 +132,7 @@ extension FileManager {
             try FileManager.default.copyItem(at: fromURL, to: toURL)
             return true
         } catch let err{
-            Log.error("FileController could not copy file", err)
+            Logger.error("FileController could not copy file", err)
             return false
         }
     }
@@ -145,7 +146,7 @@ extension FileManager {
             try FileManager.default.moveItem(at: fromURL, to: toURL)
             return true
         } catch let err{
-            Log.error("FileController could not move file", err)
+            Logger.error("FileController could not move file", err)
             return false
         }
     }
@@ -196,11 +197,11 @@ extension FileManager {
         var count = 0
         for name in names{
             if deleteFile(url: dirURL.appendingPathComponent(name)){
-                Log.debug("deleted \(name)")
+                Logger.debug("deleted \(name)")
                 count += 1
             }
         }
-        Log.debug("deleted \(count) file(s)")
+        Logger.debug("deleted \(count) file(s)")
         return count
     }
     

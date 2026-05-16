@@ -6,6 +6,7 @@
 
 import AppKit
 import CoreLocation
+import OSLog
 
 protocol EditTrackDelegate {
     func trackChanged(item: TrackItem)
@@ -115,10 +116,10 @@ class EditTrackViewController: ModalViewController {
 extension EditTrackViewController: EditTrackMenuDelegate{
     
     func selectLeading() {
-        //Log.debug("select leading")
+        //Logger.debug("select leading")
         let track = newItem.track
         if let idx = track.getSingleSelectedTrackpointIndex(), idx > 0{
-            //Log.debug("idx = \(idx)")
+            //Logger.debug("idx = \(idx)")
             track.selectSingleTrackpoint(at: idx - 1)
         }
         else if !track.trackpoints.isEmpty{
@@ -130,10 +131,10 @@ extension EditTrackViewController: EditTrackMenuDelegate{
     }
     
     func selectTrailing() {
-        //Log.debug("select trailing")
+        //Logger.debug("select trailing")
         let track = newItem.track
         if let idx = track.getSingleSelectedTrackpointIndex(), idx < track.trackpoints.count-1{
-            //Log.debug("idx = \(idx)")
+            //Logger.debug("idx = \(idx)")
             track.selectSingleTrackpoint(at: idx + 1)
         }
         else if !track.trackpoints.isEmpty{

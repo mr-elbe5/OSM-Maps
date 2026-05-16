@@ -5,6 +5,7 @@
  */
 
 import Foundation
+import OSLog
 
 class TileProvider{
     
@@ -13,10 +14,39 @@ class TileProvider{
     static let maxTries: Int = 3
     
     static func logTileFiles(){
-        Log.info("tile files:")
+        Logger.info("tile files:")
         let names = FileManager.default.listAllFiles(dirPath: BasePaths.tileDirURL.path)
         for name in names{
-            Log.error(name)
+            Logger.error(name)
+        }
+    }
+    
+    func checkSource(_ source: TileSource, onCompletion: @escaping (Bool) -> Void){
+        let tile = MapTile(zoom: 0, x: 0, y: 0, tileSource: source)
+        let request = URLRequest(url: tile.tileUrl, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 10.0)
+        let task = URLSession.shared.dataTask(with: request) { (data, response, err) in
+            var statusCode = 0
+            if let urlError = err as? URLError{
+                if urlError.code == .timedOut {
+                    print("tile request timed out ...")
+                }
+                onCompletion(false)
+                return
+            }
+            if (response != nil && response is HTTPURLResponse){
+                let httpResponse = response! as! HTTPURLResponse
+                statusCode = httpResponse.statusCode
+            }
+            if statusCode == 200, data != nil{
+                onCompletion(true)
+            }
+            else{
+                onCompletion(false)
+            }
+        }
+        DispatchQueue.global(qos: .userInitiated).async{
+            //Logger.debug("loading remote tile")
+            task.resume()
         }
     }
     
@@ -25,11 +55,11 @@ class TileProvider{
             return
         }
         if tile.fileExists, let fileData = FileManager.default.contents(atPath: tile.fileUrl.path){
-            //Log.debug("got local tile")
+            //Logger.debug("got local tile")
             tile.imageData = fileData
             result(true)
         } else {
-            //Log.debug("loading tile")
+            //Logger.debug("loading tile")
             loadTileImage(tile: tile){ success in
                 result(success)
             }
@@ -44,7 +74,7 @@ class TileProvider{
         let request = URLRequest(url: tile.tileUrl, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 30.0)
         let task = getDownloadTask(request: request){ data in
             if let data = data{
-                //Log.debug("got remote tile in first try")
+                //Logger.debug("got remote tile in first try")
                 self.setImageData(data, to: tile)
                 result(true)
             }
@@ -55,25 +85,25 @@ class TileProvider{
             }
         }
         DispatchQueue.global(qos: .userInitiated).async{
-            //Log.debug("loading remote tile")
+            //Logger.debug("loading remote tile")
             task.resume()
         }
     }
     
     private func setImageData(_ data: Data, to tile: MapTile){
         tile.imageData = data
-        //Log.debug("saving tile \(tile.shortDescription)")
+        //Logger.debug("saving tile \(tile.shortDescription)")
         if !self.saveTile(fileUrl: tile.fileUrl, data: data){
-            Log.error("TileProvider could not save tile \(tile.shortDescription)")
+            Logger.error("TileProvider could not save tile \(tile.shortDescription)")
         }
     }
     
     private func retryLoadTileImage(tile: MapTile, tries: Int, result: @escaping (Bool) -> Void) {
         let request = URLRequest(url: tile.tileUrl, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 20.0)
-        //Log.debug("retrying remote loading tile, try \(tries)")
+        //Logger.debug("retrying remote loading tile, try \(tries)")
         let task = getDownloadTask(request: request){ data in
             if let data = data{
-                //Log.debug("got remote tile, try \(tries)")
+                //Logger.debug("got remote tile, try \(tries)")
                 self.setImageData(data, to: tile)
                 result(true)
             }
@@ -115,10 +145,10 @@ class TileProvider{
         if let data = data{
             do{
                 try data.write(to: fileUrl, options: .atomic)
-                //Log.debug("TileProvider file saved to \(fileUrl)")
+                //Logger.debug("TileProvider file saved to \(fileUrl)")
                 return true
             } catch let err{
-                Log.error("TileProvider saving tile: " + err.localizedDescription)
+                Logger.error("TileProvider saving tile: " + err.localizedDescription)
                 return false
             }
         }
@@ -127,12 +157,12 @@ class TileProvider{
     
     func deleteAllTiles(){
         let count = FileManager.default.deleteAllFiles(dirURL: BasePaths.tileDirURL)
-        Log.info("TileProvider \(count) tiles cleared")
+        Logger.info("TileProvider \(count) tiles cleared")
     }
     
     func deleteCurrentTiles(){
         let count = FileManager.default.deleteAllFiles(dirURL: Settings.shared.tileDirURL)
-        Log.info("TileProvider \(count) tiles cleared")
+        Logger.info("TileProvider \(count) tiles cleared")
     }
     
     func dumpTiles(){
@@ -144,7 +174,7 @@ class TileProvider{
             paths.sort()
         }
         for path in paths{
-            Log.error(path)
+            Logger.error(path)
         }
     }
     

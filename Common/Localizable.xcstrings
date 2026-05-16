@@ -35,6 +35,23 @@
         }
       }
     },
+    "add" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinzufügen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add"
+          }
+        }
+      }
+    },
     "addImage" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2959,6 +2976,23 @@
         }
       }
     },
+    "newOverlay" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neues Overlay"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Overlay"
+          }
+        }
+      }
+    },
     "no" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -3220,13 +3254,30 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Overlay-Name"
+            "value" : "Name"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Overlay Name"
+            "value" : "Name"
+          }
+        }
+      }
+    },
+    "overlays" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overlays"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overlays"
           }
         }
       }
@@ -4689,6 +4740,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sorting"
+          }
+        }
+      }
+    },
+    "sourceNotFound" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Quelle antwortet nicht. Evtl. später erneut versuchen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This source does not answer. Try again later."
           }
         }
       }

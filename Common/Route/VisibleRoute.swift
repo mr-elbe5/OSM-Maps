@@ -6,6 +6,7 @@
 
 import Foundation
 import CoreLocation
+import OSLog
 
 class VisibleRoute{
     
@@ -38,7 +39,7 @@ class VisibleRoute{
         if let route = route, route.navigationPoints.count > 2{
             route.navigationPoints.removeLast()
             if route.canBeRequested{
-                //Log.info("requesting route")
+                //Logger.info("requesting route")
                 requestRoute(){
                     completion()
                 }
@@ -54,7 +55,7 @@ class VisibleRoute{
         else{
             selectedIndex = idx
         }
-        //Log.info("selected index = \(selectedIndex)")
+        //Logger.info("selected index = \(selectedIndex)")
     }
     
     func setCoordinateForRoutePoint(_ idx: Int,_ coordinate: CLLocationCoordinate2D) {
@@ -65,7 +66,7 @@ class VisibleRoute{
     
     func updateRoute(completion: @escaping () -> Void) -> Bool{
         if let route = route, route.canBeRequested{
-            //Log.info("requesting route")
+            //Logger.info("requesting route")
             requestRoute(){
                 completion()
             }

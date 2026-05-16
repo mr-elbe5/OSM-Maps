@@ -6,11 +6,12 @@
 
 import Foundation
 import CoreLocation
+import OSLog
 
 class Nominatim {
     
     static func getLocation(query: String, completion: @escaping (_ result: Array<NominatimLocation>) -> Void)  {
-        //Log.debug(query)
+        //Logger.debug(query)
         if let queryURL = URL(string: query){
             let session = URLSession.shared
             session.dataTask(with: queryURL, completionHandler: { data, response, err -> Void in
@@ -34,7 +35,7 @@ class Nominatim {
                             completion(result)
                         }
                     } catch let err {
-                        Log.error("Nominatim error: \(err)")
+                        Logger.error("Nominatim error: \(err)")
                         completion(result)
                     }
                 } else {

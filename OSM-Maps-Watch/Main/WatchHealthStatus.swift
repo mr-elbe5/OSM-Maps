@@ -6,6 +6,7 @@
 
 import Foundation
 import HealthKit
+import OSLog
 
 @Observable class WatchHealthStatus: NSObject {
     
@@ -52,7 +53,7 @@ import HealthKit
     }
     
     private func process(samples: [HKQuantitySample]) {
-        //Log.info("process heart rate")
+        //Logger.info("process heart rate")
         for sample in samples {
             if sample.endDate > appStartTime {
                 let heartRateUnit = HKUnit.count().unitDivided(by: HKUnit.minute())

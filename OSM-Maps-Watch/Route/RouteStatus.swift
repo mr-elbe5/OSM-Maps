@@ -6,6 +6,7 @@
 
 import Foundation
 import CoreLocation
+import OSLog
 
 @Observable class RouteStatus: NSObject, Codable{
     
@@ -79,7 +80,7 @@ import CoreLocation
     
     func save(){
         StatusManager.shared.saveCodable(key: RouteStatus.storeKey, value: self)
-        //Log.debug("route status saved")
+        //Logger.debug("route status saved")
     }
     
 }

@@ -5,12 +5,13 @@
  */
 
 import Foundation
+import OSLog
 
 class MapTile{
     
     static func getTile(data: MapTileData, tileSource: TileSource) -> MapTile{
         let tile = MapTile(zoom: data.zoom, x: data.x, y: data.y, tileSource: tileSource)
-        //Log.debug("get tile \(tile.shortDescription)")
+        //Logger.debug("get tile \(tile.shortDescription)")
         if tile.fileExists, let fileData = FileManager.default.contents(atPath: tile.fileUrl.path){
             tile.imageData = fileData
         }

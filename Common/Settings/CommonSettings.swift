@@ -5,6 +5,7 @@
  */
 
 import Foundation
+import OSLog
 
 class CommonSettings: Identifiable, Codable{
     
@@ -17,34 +18,36 @@ class CommonSettings: Identifiable, Codable{
             Settings.shared = prefs
         }
         else{
-            Log.error("no saved data available for settings")
+            Logger.error("no saved data available for settings")
             Settings.shared = Settings()
         }
     }
     
     enum CodingKeys: String, CodingKey {
         case tileSource
-        case overlayTileSource
         case showOverlay
     }
     
     var tileSource: TileSource = TileSource.defaultTileSource
-    var overlayTileSource: TileSource? = nil
+    var overlayTileSources: [OverlayTileSource]{
+        OverlayTileSources.shared.filter { $0.active }.sorted()
+    }
     var showOverlay: Bool = false
     
     var hasOverlay: Bool{
-        overlayTileSource != nil
+        !overlayTileSources.isEmpty
     }
     
     var tileDirURL: URL{
         BasePaths.tileDirURL.appendingPathComponent(tileSource.name)
     }
     
-    var overlayTileDirURL: URL?{
-        if let source = overlayTileSource{
-            return BasePaths.tileDirURL.appendingPathComponent(source.name)
+    var overlayTileDirURLs: Array<URL>{
+        var urls = Array<URL>()
+        for source in overlayTileSources{
+            urls.append(BasePaths.tileDirURL.appendingPathComponent(source.name))
         }
-        return nil
+        return urls
     }
     
     init(){
@@ -55,16 +58,12 @@ class CommonSettings: Identifiable, Codable{
         if let tileSourceString = try? values.decodeIfPresent(String.self, forKey: .tileSource){
             tileSource = TileSources.shared.first(where: { $0.name == tileSourceString }) ?? TileSource.defaultTileSource
         }
-        if let overlaySourceString = try? values.decodeIfPresent(String.self, forKey: .overlayTileSource){
-            overlayTileSource = TileSources.sharedOverlays.first(where: { $0.name == overlaySourceString })
-        }
         showOverlay = try values.decodeIfPresent(Bool.self, forKey: .showOverlay) ?? false
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(tileSource.name, forKey: .tileSource)
-        try container.encodeIfPresent(overlayTileSource?.name, forKey: .overlayTileSource)
         try container.encode(showOverlay, forKey: .showOverlay)
     }
     
@@ -74,28 +73,22 @@ class CommonSettings: Identifiable, Codable{
         for name in names{
             if name.hasSuffix(".png"){
                 FileManager.default.moveFile(fromURL: BasePaths.tileDirURL.appendingPathComponent(name), toURL: tileDirURL.appendingPathComponent(name))
-                Log.info("moved file \(name)")
+                Logger.info("moved file \(name)")
             }
         }
     }
     
     func assertTileDirs(){
-        Log.debug("asserting \(tileDirURL.lastPathComponent)")
+        Logger.debug("asserting \(tileDirURL.lastPathComponent)")
         FileManager.default.assertDirectory(url: tileDirURL)
-        if let url = overlayTileDirURL{
+        for url in overlayTileDirURLs{
             FileManager.default.assertDirectory(url: url)
         }
     }
     
-    func setDefaultSources(){
-        tileSource = TileSource.defaultTileSource
-        overlayTileSource = nil
-        save()
-    }
-    
     func save(){
         StatusManager.shared.saveCodable(key: CommonSettings.storeKey, value: self)
-        Log.debug("Settings saved")
+        Logger.debug("Settings saved")
     }
     
 }
