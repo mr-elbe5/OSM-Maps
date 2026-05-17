@@ -49,6 +49,8 @@ class TileSourceView: PopoverView{
     var nameField: LabeledTextField!
     var tileUrlTemplateField: LabeledTextField!
     
+    var overlaySelectPanel = NSView()
+    
     var overlayNameField: LabeledTextField!
     var overlayUrlTemplateField: LabeledTextField!
     
@@ -64,9 +66,9 @@ class TileSourceView: PopoverView{
         tileUrlTemplateField = LabeledTextField()
         tileUrlTemplateField.setupView(labelText: "templateURL".localize(), text: Settings.shared.tileSource.templateUrl, isHorizontal: false)
         addSubviewBelow(tileUrlTemplateField, upperView: nameField, insets: .defaultInsets)
-        var useLabel = NSTextField(labelWithString: "use".localizeWithColon())
-        addSubviewBelow(useLabel, upperView: tileUrlTemplateField, insets: .defaultInsets)
-        var lastView: NSView = useLabel
+        var label = NSTextField(labelWithString: "use".localizeWithColon())
+        addSubviewBelow(label, upperView: tileUrlTemplateField, insets: .defaultInsets)
+        var lastView: NSView = label
         
         for mapServer in TileSources.shared{
             let button = TileSourceActionButton()
@@ -81,47 +83,53 @@ class TileSourceView: PopoverView{
             lastView = button
         }
         
-        overlayNameField = LabeledTextField()
-        overlayNameField.setupView(labelText: "overlayName".localize(), text: Settings.shared.overlayTileSource?.displayName ?? "", isHorizontal: false)
-        addSubviewBelow(overlayNameField, upperView: lastView, insets: .defaultInsets)
-        overlayUrlTemplateField = LabeledTextField()
-        overlayUrlTemplateField.setupView(labelText: "templateURL".localize(), text: Settings.shared.overlayTileSource?.templateUrl ?? "", isHorizontal: false)
-        addSubviewBelow(overlayUrlTemplateField, upperView: overlayNameField, insets: .defaultInsets)
-        let clearOverlayButton = NSButton().asTextButton("clear".localize(), target: self, action: #selector(clearOverlay))
-        addSubviewBelow(clearOverlayButton, upperView: overlayUrlTemplateField)
-        useLabel = NSTextField(labelWithString: "use".localizeWithColon())
-        addSubviewBelow(useLabel, upperView: clearOverlayButton, insets: .defaultInsets)
-        lastView = useLabel
+        let saveButton = NSButton().asTextButton("save".localize(), target: self, action: #selector(save))
+        addSubviewWithAnchors(saveButton, top: lastView.bottomAnchor, insets: .doubleInsets)
+        .centerX(centerXAnchor)
         
-        for overlayServer in TileSources.sharedOverlays{
-            let button = TileSourceActionButton()
-            button.asTextButton(overlayServer.displayName, target: self, action: #selector(setOverlay))
-            button.source = overlayServer
-            addSubviewWithAnchors(button, top: lastView.bottomAnchor, leading: leadingAnchor)
-            let deleteButton = TileSourceActionButton(icon: "trash", color: .systemRed, target: self, action: #selector(deleteOverlay))
-            deleteButton.source = overlayServer
-            addSubviewWithAnchors(deleteButton, leading: button.trailingAnchor, trailing: trailingAnchor)
-                .centerY(button.centerYAnchor)
-                .width(30)
-            lastView = button
-        }
+        label = NSTextField(labelWithString: "overlays".localizeWithColon()).asHeadline()
+        addSubviewBelow(label, upperView: saveButton)
+        setupOverlaySelectPanel()
+        addSubviewBelow(overlaySelectPanel, upperView: label)
+        
+        label = NSTextField(labelWithString: "newOverlay".localizeWithColon()).asHeadline()
+        addSubviewBelow(label, upperView: overlaySelectPanel)
+        overlayNameField = LabeledTextField()
+        overlayNameField.setupView(labelText: "overlayName".localize(), text: "", isHorizontal: false)
+        addSubviewBelow(overlayNameField, upperView: label, insets: .defaultInsets)
+        overlayUrlTemplateField = LabeledTextField()
+        overlayUrlTemplateField.setupView(labelText: "templateURL".localize(), text: "", isHorizontal: false)
+        addSubviewBelow(overlayUrlTemplateField, upperView: overlayNameField, insets: .defaultInsets)
+        let addOverlayButton = NSButton().asTextButton("add".localize(), target: self, action: #selector(addNewOverlay))
+        addSubviewWithAnchors(addOverlayButton, top: overlayUrlTemplateField.bottomAnchor, insets: .doubleInsets)
+        .centerX(centerXAnchor)
         
         let hintText = NSTextField(wrappingLabelWithString: "tileServerHint".localize())
         hintText.font = .preferredFont(forTextStyle: .footnote)
-        addSubviewBelow(hintText, upperView: lastView, insets: .flatInsets)
-        
-        let saveButton = NSButton().asTextButton("save".localize(), target: self, action: #selector(save))
-        addSubviewWithAnchors(saveButton, top: hintText.bottomAnchor, insets: .doubleInsets)
-        .centerX(centerXAnchor)
+        addSubviewBelow(hintText, upperView: addOverlayButton, insets: .flatInsets)
         
         let setDefaultsButton = NSButton().asTextButton("setDefaults".localize(), target: self, action: #selector(setDefaults))
-        addSubviewBelow(setDefaultsButton, upperView: saveButton)
+        addSubviewBelow(setDefaultsButton, upperView: hintText)
         lastView = setDefaultsButton
         let clearTileCacheButton = NSButton().asTextButton("clearTileCache".localize(), target: self,  action: #selector(deleteAllTiles))
         addSubviewBelow(clearTileCacheButton, upperView: lastView)
         let clearCurrentTileCacheButton = NSButton().asTextButton("clearCurrentTileCache".localize(), target: self, action: #selector(deleteCurrentTiles))
         addSubviewBelow(clearCurrentTileCacheButton, upperView: clearTileCacheButton)
             .connectToBottom(of: self)
+    }
+    
+    func setupOverlaySelectPanel(){
+        var lastLine: NSView? = nil
+        overlaySelectPanel.removeAllSubviews()
+        for idx in 0..<OverlayTileSources.shared.count{
+            let overlay = OverlayTileSources.shared[idx]
+            let overlayLine = OverlayLine(source: overlay)
+            overlayLine.setupView()
+            overlayLine.delegate = self
+            overlaySelectPanel.addSubviewBelow(overlayLine, upperView: lastLine, insets: .narrowInsets)
+            lastLine = overlayLine
+        }
+        lastLine?.connectToBottom(of: overlaySelectPanel)
     }
     
     @objc func setTileSource(_ sender: AnyObject){
@@ -134,22 +142,42 @@ class TileSourceView: PopoverView{
     @objc func deleteTileSource(_ sender: AnyObject){
         if let button = sender as? TileSourceActionButton{
             TileSources.shared.remove(button.source)
-            TileSources.save()
+            TileSources.shared.save()
             self.setupContent()
         }
     }
     
-    @objc func setOverlay(_ sender: AnyObject){
-        if let button = sender as? TileSourceActionButton{
-            self.overlayNameField.text = button.source.displayName
-            self.overlayUrlTemplateField.text = button.source.templateUrl
+    @objc func addNewOverlay(){
+        let newOverlayDisplayName = overlayNameField.text
+        let newOverlayTemplateUrl = overlayUrlTemplateField.text
+        if !newOverlayDisplayName.isEmpty, !newOverlayTemplateUrl.isEmpty{
+            let newName = newOverlayDisplayName.lowercased().replacingOccurrences(of: " ", with: "_")
+            let overlaySource = OverlayTileSource(name: newName, displayName: newOverlayDisplayName, templateUrl: newOverlayTemplateUrl)
+            TileProvider.shared.checkSource(overlaySource){ success in
+                if success{
+                    OverlayTileSources.shared.append(overlaySource)
+                    OverlayTileSources.shared.updateIndices()
+                    OverlayTileSources.shared.save()
+                    DispatchQueue.main.async {
+                        self.overlayNameField.text = ""
+                        self.overlayUrlTemplateField.text = ""
+                        self.setupOverlaySelectPanel()
+                    }
+                }
+                else{
+                    DispatchQueue.main.async {
+                        self.contentController.showError(text: "sourceNotFound".localize())
+                    }
+                }
+            }
+            
         }
     }
     
     @objc func deleteOverlay(_ sender: AnyObject){
         if let button = sender as? TileSourceActionButton{
-            TileSources.sharedOverlays.remove(button.source)
-            TileSources.save()
+            OverlayTileSources.shared.remove(button.source)
+            OverlayTileSources.shared.save()
             self.setupContent()
         }
     }
@@ -161,14 +189,14 @@ class TileSourceView: PopoverView{
     }
     
     @objc func save(){
-        saveServer()
+        saveTileSource()
         saveOverlay()
         Settings.shared.save()
         Settings.shared.assertTileDirs()
         MainViewController.shared.mapView.refresh()
     }
     
-    @objc func saveServer(){
+    @objc func saveTileSource(){
         let newDisplayName = nameField.text
         let newTemplateUrl = tileUrlTemplateField.text
         if !newDisplayName.isEmpty, !newTemplateUrl.isEmpty{ // only name changed
@@ -182,7 +210,7 @@ class TileSourceView: PopoverView{
                 TileSources.shared.append(mapSource)
                 Settings.shared.tileSource = mapSource
             }
-            TileSources.save()
+            TileSources.shared.save()
         }
     }
     
@@ -190,20 +218,10 @@ class TileSourceView: PopoverView{
         let newOverlayDisplayName = overlayNameField.text
         let newOverlayTemplateUrl = overlayUrlTemplateField.text
         if !newOverlayDisplayName.isEmpty, !newOverlayTemplateUrl.isEmpty{ // only name changed
-            if let overlaySource = TileSources.sharedOverlays.getByUrl(newOverlayTemplateUrl){
-                overlaySource.displayName = newOverlayDisplayName
-                Settings.shared.overlayTileSource = overlaySource
-            }
-            else{
-                let newName = newOverlayDisplayName.lowercased().replacingOccurrences(of: " ", with: "_")
-                let overlaySource = TileSource(name: newName, displayName: newOverlayDisplayName, templateUrl: newOverlayTemplateUrl)
-                TileSources.sharedOverlays.append(overlaySource)
-                Settings.shared.overlayTileSource = overlaySource
-            }
-            TileSources.saveOverlays()
-        }
-        else{
-            Settings.shared.overlayTileSource = nil
+            let newName = newOverlayDisplayName.lowercased().replacingOccurrences(of: " ", with: "_")
+            let overlaySource = OverlayTileSource(name: newName, displayName: newOverlayDisplayName, templateUrl: newOverlayTemplateUrl)
+            OverlayTileSources.shared.append(overlaySource)
+            OverlayTileSources.shared.save()
         }
         if Settings.shared.hasOverlay{
             Settings.shared.showOverlay = true
@@ -212,8 +230,8 @@ class TileSourceView: PopoverView{
     
     @objc func setDefaults(){
         TileSources.setDefaults()
-        TileSources.setOverlayDefaults()
-        Settings.shared.setDefaultSources()
+        OverlayTileSources.setDefaults()
+        Settings.shared.tileSource = TileSource.defaultTileSource
         self.setupContent()
     }
     
@@ -227,9 +245,98 @@ class TileSourceView: PopoverView{
     
 }
 
+extension TileSourceView: OverlayLineDelegate{
+    
+    func selectionChanged(){
+        for sv in overlaySelectPanel.subviews{
+            if let ol = sv as? OverlayLine{
+                ol.source.active = ol.switchView.state == .on
+            }
+        }
+    }
+    
+    func moveSourceUp(_ line: OverlayLine){
+        OverlayTileSources.shared.moveUp(idx: line.source.idx)
+        setupOverlaySelectPanel()
+    }
+    
+    func removeSource(_ line: OverlayLine){
+        if OverlayTileSources.shared.contains(line.source){
+            OverlayTileSources.shared.remove(line.source)
+            setupOverlaySelectPanel()
+        }
+    }
+    
+}
+
+protocol OverlayLineDelegate{
+    func selectionChanged()
+    func moveSourceUp(_ line: OverlayLine)
+    func removeSource(_ line: OverlayLine)
+}
+
+class OverlayLine: NSView{
+    
+    var source: OverlayTileSource
+    
+    var label: NSTextField!
+    var switchView: NSSwitch!
+    var upButton: NSButton
+    var deleteButton: NSButton
+    
+    var delegate: OverlayLineDelegate?
+    
+    init(source: OverlayTileSource) {
+        self.source = source
+        label = NSTextField(labelWithString: source.name)
+        switchView = NSSwitch()
+        upButton = NSButton().asIconButton("arrow.up", color: .white)
+        deleteButton = NSButton().asIconButton("trash", color: .systemRed)
+        super.init(frame: .zero)
+    }
+    
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func setupView(){
+        height(20)
+        addSubviewWithAnchors(label, leading: leadingAnchor, insets: .zero).centerY(centerYAnchor)
+        addSubviewWithAnchors(switchView, leading: label.trailingAnchor).centerY(centerYAnchor)
+        
+        addSubviewWithAnchors(deleteButton, trailing: trailingAnchor).centerY(centerYAnchor)
+        addSubviewWithAnchors(upButton, trailing: deleteButton.leadingAnchor).centerY(centerYAnchor)
+        
+        switchView.target = self
+        switchView.action = #selector(selectionChanged)
+        switchView.state = source.active ? .on : .off
+        upButton.target = self
+        upButton.action = #selector(moveSourceUp)
+        upButton.isEnabled = source.idx > 0
+        deleteButton.target = self
+        deleteButton.action = #selector(removeSource)
+    }
+    
+    @objc func selectionChanged(){
+        self.source.active = self.switchView.state == .on
+        self.delegate?.selectionChanged()
+    }
+    
+    @objc func moveSourceUp(){
+        self.delegate?.moveSourceUp(self)
+    }
+    
+    @objc func removeSource(){
+        self.delegate?.removeSource(self)
+    }
+    
+}
+
 class TileSourceActionButton: NSButton{
     
     var source: TileSource = .dummyTileSource
     
 }
+
+
 

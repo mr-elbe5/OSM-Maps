@@ -45,7 +45,7 @@ class TileLayerView: NSView {
     override func draw(_ rect: CGRect) {
         let tile = MapTile.getTile(data: getTileData(rect: rect), tileSource: Settings.shared.tileSource)
         drawTile(tile, rect: rect)
-        if Settings.shared.hasOverlay, Settings.shared.showOverlay, let overlaySource = Settings.shared.overlayTileSource{
+        for overlaySource in Settings.shared.overlayTileSources{
             let overlayTile = MapTile.getTile(data: getTileData(rect: rect), tileSource: overlaySource)
             drawTile(overlayTile, rect: rect, asOverlay: true)
         }

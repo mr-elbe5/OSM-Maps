@@ -29,8 +29,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
-        TileSources.save()
-        TileSources.saveOverlays()
+        TileSources.shared.save()
+        OverlayTileSources.shared.save()
         Settings.shared.save()
         AppStatus.shared.save()
         MapStatus.shared.save()
