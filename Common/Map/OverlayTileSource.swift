@@ -91,7 +91,16 @@ extension OverlayTileSources{
         return list
     }
     
-    func getByUrl(_ url: String) -> TileSource?{
+    func getByName(_ name: String) -> OverlayTileSource?{
+        for i in 0..<count{
+            if self[i].name == name{
+                return self[i]
+            }
+        }
+        return nil
+    }
+    
+    func getByUrl(_ url: String) -> OverlayTileSource?{
         for i in 0..<count{
             if self[i].templateUrl == url{
                 return self[i]
@@ -100,7 +109,7 @@ extension OverlayTileSources{
         return nil
     }
     
-    mutating func remove(_ tileSource: TileSource){
+    mutating func remove(_ tileSource: OverlayTileSource){
         if tileSource != .defaultTileSource{
             self.removeAll(where: { $0 == tileSource})
             if Settings.shared.tileSource == tileSource{

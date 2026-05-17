@@ -25,7 +25,7 @@ typealias MapTileGrid = [MapTileRow]
     var gridWidth: Int = 1
     var gridHeight: Int = 1
     var tileGrid: MapTileGrid = []
-    var overlayGrid: MapTileGrid = []
+    var overlayGrids: [MapTileGrid] = []
     
     var centerTileX: Int = 0
     var centerTileY: Int = 0
@@ -56,13 +56,26 @@ typealias MapTileGrid = [MapTileRow]
         //Logger.debug("grid size = \(gridWidth) x \(gridHeight)")
         for _ in 0..<gridHeight {
             var row = MapTileRow()
-            var overlayRow = MapTileRow()
             for _ in 0..<gridWidth {
                 row.append(MapTile.dummyTile)
-                overlayRow.append(MapTile.dummyTile)
             }
             tileGrid.append(row)
-            overlayGrid.append(overlayRow)
+        }
+        setupOverlayGrids()
+    }
+    
+    func setupOverlayGrids(){
+        overlayGrids.removeAll()
+        for _ in 0..<Settings.shared.overlayTileSources.count{
+            var grid = MapTileGrid()
+            for _ in 0..<gridHeight {
+                var overlayRow = MapTileRow()
+                for _ in 0..<gridWidth {
+                    overlayRow.append(MapTile.dummyTile)
+                }
+                grid.append(overlayRow)
+            }
+            overlayGrids.append(grid)
         }
     }
     
@@ -108,6 +121,10 @@ typealias MapTileGrid = [MapTileRow]
     private func updateTileGrid(){
         //print("update grid")
         tilesLoaded = true
+        let overlaySources = Settings.shared.overlayTileSources
+        if overlaySources.count != overlayGrids.count{
+            setupOverlayGrids()
+        }
         for y in 0..<gridHeight {
             for x in 0..<gridWidth {
                 let currentTile = tileGrid[y][x]
@@ -124,10 +141,13 @@ typealias MapTileGrid = [MapTileRow]
                     }
                     tileGrid[y][x] = tile
                 }
-                if Settings.shared.hasOverlay, let overlaySource = Settings.shared.overlayTileSource{
-                    let currentTile = overlayGrid[y][x]
+                
+                for i in 0..<overlayGrids.count{
+                    let overlaySource = overlaySources[i]
+                    print("overlay source is \(overlaySource.name)")
+                    let currentTile = overlayGrids[i][y][x]
                     if currentTile.zoom != zoom || currentTile.x != newTileX || currentTile.y != newTileY || currentTile.tileSource != Settings.shared.tileSource{
-                        //print("changing overlay tile")
+                        print("changing overlay tile")
                         let tile = MapTile(zoom: zoom, x: newTileX, y: newTileY, tileSource: overlaySource)
                         TileProvider.shared.getTileImage(tile: tile){ success in
                             if !success{
@@ -135,11 +155,11 @@ typealias MapTileGrid = [MapTileRow]
                                 Logger.error("TileLayerView could not load overlay tile \(tile.shortDescription)")
                             }
                         }
-                        overlayGrid[y][x] = tile
+                        overlayGrids[i][y][x] = tile
                     }
-                }
-                else{
-                    overlayGrid[y][x] = MapTile.dummyTile
+                    else{
+                        overlayGrids[i][y][x] = MapTile.dummyTile
+                    }
                 }
             }
         }
@@ -152,7 +172,8 @@ typealias MapTileGrid = [MapTileRow]
         return tileGrid[y][x]
     }
     
-    func getOverlayTile(x: Int, y: Int) -> MapTile?{
+    func getOverlayTile(idx: Int, x: Int, y: Int) -> MapTile?{
+        let overlayGrid = overlayGrids[idx]
         guard x >= 0 && x < overlayGrid[0].count && y >= 0 && y < overlayGrid.count else {
             print("out of range: \(x), \(y)")
             return nil }

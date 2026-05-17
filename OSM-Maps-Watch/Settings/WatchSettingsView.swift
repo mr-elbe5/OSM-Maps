@@ -11,7 +11,7 @@ struct WatchSettingsView: View {
     
     @State var settings = Settings.shared
     @State var sourceName:String = Settings.shared.tileSource.displayName
-    @State var overlaySourceName:String = Settings.shared.overlayTileSource?.displayName ?? "-"
+    @State var overlaySources: OverlayTileSources = OverlayTileSources.shared
     @State var phoneConnector = PhoneConnector.shared
     
     var body: some View {
@@ -37,31 +37,14 @@ struct WatchSettingsView: View {
                     }
                 }
                 Spacer(minLength: 20)
-                Picker("overlay".localizeWithColon(), selection: $overlaySourceName) {
-                    ForEach(OverlayTileSources.shared, id: \.self.displayName) { option in
-                        Text(option.displayName)
-                    }
-                }
-                .pickerStyle(.navigationLink)
-                .onChange(of: overlaySourceName) { oldValue, newValue in
-                    Logger.debug("overlay source name changed from \(oldValue) to \(newValue)")
-                    if let newSource = OverlayTileSources.shared.first(where: { $0.displayName == newValue }) {
-                        Settings.shared.overlayTileSource = newSource
-                        Settings.shared.assertTileDirs()
-                        Settings.shared.showOverlay = true
-                        Logger.debug("set overlay tileSource to \(newSource.name)")
-                        Settings.shared.save()
-                        MapStatus.shared.tilesLoaded = false
-                        MapStatus.shared.updateTiles()
-                    }
-                }
-                Toggle(isOn: $settings.showOverlay) {
-                    Text("showOverlay".localize())
-                    }
-                .onChange(of: settings.showOverlay) { oldValue, newValue in
-                    Settings.shared.save()
-                    MapStatus.shared.tilesLoaded = false
-                    MapStatus.shared.updateTiles()
+                Text("overlays".localize())
+                Spacer(minLength: 10)
+                ForEach($overlaySources.indices, id: \.self) { i in
+                    Toggle(overlaySources[i].displayName, isOn: $overlaySources[i].active)
+                        .onChange(of: overlaySources[i].active){ oldValue, newValue in
+                            OverlayTileSources.shared.save()
+                            MapStatus.shared.updateTiles()
+                        }
                 }
                 Spacer(minLength: 20)
                 Toggle(isOn: $settings.showCurrentLocation) {

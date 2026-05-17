@@ -127,12 +127,9 @@ extension PhoneConnector: WCSessionDelegate {
                 if let tileJson = message["tileJson"] as? String, let tileSources:TileSources = TileSources.fromJSON(encoded: tileJson), let overlayJson = message["overlayJson"] as? String, let overlaySources:OverlayTileSources = OverlayTileSources.fromJSON(encoded: overlayJson){
                     TileSources.shared = tileSources
                     OverlayTileSources.shared = overlaySources
+                    MapStatus.shared.setupOverlayGrids()
                     if !tileSources.contains(Settings.shared.tileSource){
                         Settings.shared.tileSource = .defaultTileSource
-                    }
-                    if overlaySources.isEmpty{
-                        Settings.shared.overlayTileSource = nil
-                        Settings.shared.showOverlay = false
                     }
                     MapStatus.shared.updateTiles()
                     replyHandler(["success": true])

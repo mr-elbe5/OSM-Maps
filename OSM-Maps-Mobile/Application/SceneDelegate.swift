@@ -52,8 +52,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func sceneWillResignActive(_ scene: UIScene) {
         Logger.debug("Scene will resign active, saving state, settings and data")
-        TileSources.save()
-        OverlayTileSources.save()
+        TileSources.shared.save()
+        OverlayTileSources.shared.save()
         Settings.shared.save()
         MapStatus.shared.save()
         AppData.shared.save()
