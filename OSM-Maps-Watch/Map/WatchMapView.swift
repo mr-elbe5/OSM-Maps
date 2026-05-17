@@ -56,7 +56,7 @@ struct MapView: View {
     }
     
     func getOverlayImage(_ idx: Int, _ x: Int, _ y: Int) -> UIImage?{
-        print("get overlay tile")
+        //print("get overlay tile")
         if let tile = mapStatus.getOverlayTile(idx: idx, x: x, y: y){
             if let imageData = tile.imageData{
                 return UIImage(data: imageData)

@@ -144,10 +144,10 @@ typealias MapTileGrid = [MapTileRow]
                 
                 for i in 0..<overlayGrids.count{
                     let overlaySource = overlaySources[i]
-                    print("overlay source is \(overlaySource.name)")
+                    //print("overlay source is \(overlaySource.name)")
                     let currentTile = overlayGrids[i][y][x]
                     if currentTile.zoom != zoom || currentTile.x != newTileX || currentTile.y != newTileY || currentTile.tileSource != Settings.shared.tileSource{
-                        print("changing overlay tile")
+                        //print("changing overlay tile")
                         let tile = MapTile(zoom: zoom, x: newTileX, y: newTileY, tileSource: overlaySource)
                         TileProvider.shared.getTileImage(tile: tile){ success in
                             if !success{
