@@ -1,2 +1,5 @@
 Maps4OSM.xcodeproj/project.xcworkspace/xcuserdata/miro.xcuserdatad
 OSM Maps.xcodeproj/project.xcworkspace/xcuserdata/miro.xcuserdatad/IDEFindNavigatorScopes.plist
+.DS_Store
+Breakpoints*.*
+UserInterfaceState.*

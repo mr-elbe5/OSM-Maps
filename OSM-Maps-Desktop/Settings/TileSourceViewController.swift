@@ -176,7 +176,7 @@ class TileSourceView: PopoverView{
     
     @objc func deleteOverlay(_ sender: AnyObject){
         if let button = sender as? TileSourceActionButton{
-            OverlayTileSources.shared.remove(button.source)
+            OverlayTileSources.shared.remove(obj: button.source)
             OverlayTileSources.shared.save()
             self.setupContent()
         }
