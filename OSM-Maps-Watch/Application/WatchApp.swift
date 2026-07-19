@@ -41,14 +41,16 @@ class WatchAppDelegate: NSObject, WKApplicationDelegate {
     
     func applicationWillResignActive(){
         Logger.debug("app will resign active")
-        if !TrackRecorder.shared.isTracking {
+        if !Settings.shared.followInBackground && !TrackRecorder.shared.isTracking {
+            Logger.debug("stopping location service")
             LocationService.shared.stop()
         }
     }
     
     func applicationDidEnterBackground() {
         Logger.debug("app did enter background")
-        if !TrackRecorder.shared.isTracking {
+        if !Settings.shared.followInBackground && !TrackRecorder.shared.isTracking {
+            Logger.debug("stopping location service")
             LocationService.shared.stop()
         }
     }

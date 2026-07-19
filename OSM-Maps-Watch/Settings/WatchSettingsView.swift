@@ -68,6 +68,14 @@ struct WatchSettingsView: View {
                 .onChange(of: settings.followLocation) { oldValue, newValue in
                     settings.save()
                 }
+                Toggle(isOn: $settings.followInBackground) {
+                    Text("followInBackground".localize())
+                    }
+                .onChange(of: settings.followInBackground) { oldValue, newValue in
+                    settings.save()
+                }
+                Text("followInBackgroundHint".localize())
+                    .hint()
                 Toggle(isOn: $settings.showHeartRate) {
                     Text("showHeartrate".localize())
                     }

@@ -317,6 +317,40 @@
         }
       }
     },
+    "followInBackground" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Hintergrund folgen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Follow in Background"
+          }
+        }
+      }
+    },
+    "followInBackgroundHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Hintergrund folgen hält die App aktiv, auch wenn kein Tracking erfolgt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Following in background keeps app alive even if not in tracking mode."
+          }
+        }
+      }
+    },
     "followLocation" : {
       "extractionState" : "manual",
       "localizations" : {

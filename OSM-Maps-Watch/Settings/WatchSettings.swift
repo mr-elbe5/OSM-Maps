@@ -10,6 +10,7 @@ import Foundation
     
     enum CodingKeys: String, CodingKey {
         case followLocation
+        case followInBackground
         case showCurrentLocation
         case showDirection
         case countTrackpoints
@@ -18,7 +19,8 @@ import Foundation
         case showHeartRate
     }
     
-    var followLocation : Bool = false
+    var followLocation : Bool = true
+    var followInBackground : Bool = true
     var showCurrentLocation : Bool = true
     var showDirection : Bool = true
     var countTrackpoints : Bool = true
@@ -37,6 +39,7 @@ import Foundation
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
         followLocation = try values.decodeIfPresent(Bool.self, forKey: .followLocation) ?? true
+        followInBackground = try values.decodeIfPresent(Bool.self, forKey: .followInBackground) ?? true
         showCurrentLocation = try values.decodeIfPresent(Bool.self, forKey: .showCurrentLocation) ?? true
         if let dist = try values.decodeIfPresent(String.self, forKey: .distanceFilter){
             distanceFilter = LocationDistance(rawValue: dist) ?? .tight
@@ -54,6 +57,7 @@ import Foundation
         var container = encoder.container(keyedBy: CodingKeys.self)
         try super .encode(to: encoder)
         try container.encode(followLocation, forKey: .followLocation)
+        try container.encode(followInBackground, forKey: .followInBackground)
         try container.encode(showCurrentLocation, forKey: .showCurrentLocation)
         try container.encode(showDirection, forKey: .showDirection)
         try container.encode(distanceFilter.rawValue, forKey: .distanceFilter)
