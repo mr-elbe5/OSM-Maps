@@ -17,6 +17,7 @@ class WatchAppDelegate: NSObject, WKApplicationDelegate {
         World.scrollWidthFactor = 1.0
         MapDefaults.startZoom = 14
         TileSources.load()
+        OverlayTileSources.load()
         Settings.load()
         Settings.shared.assertInitialTileDir()
         Settings.shared.followLocation = true

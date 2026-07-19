@@ -17,6 +17,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         World.scrollWidthFactor = 1
         MapDefaults.startZoom = 8
         TileSources.load()
+        OverlayTileSources.load()
         Settings.load()
         Settings.shared.assertInitialTileDir()
         ViewFilter.load()

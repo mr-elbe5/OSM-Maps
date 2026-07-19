@@ -32,6 +32,10 @@ class TileSource: Codable, Hashable{
     var displayName: String
     var templateUrl: String
     
+    var tileDirURL: URL{
+        BasePaths.tileDirURL.appendingPathComponent(name)
+    }
+    
     init(name: String, displayName: String, templateUrl: String){
         self.name = name
         self.displayName = displayName
@@ -54,6 +58,14 @@ class TileSource: Codable, Hashable{
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(name)
+    }
+    
+    func assertTileDir(){
+        FileManager.default.assertDirectory(url: tileDirURL)
+    }
+    
+    func removeTileDir(){
+        FileManager.default.deleteFile(url: tileDirURL)
     }
 }
 
@@ -80,6 +92,7 @@ extension TileSources{
     }
     
     func save(){
+        assertTileDirs()
         StatusManager.shared.saveCodable(key: Self.storeKey, value: self)
         Logger.debug("tile sources saved")
     }
@@ -109,9 +122,27 @@ extension TileSources{
         return nil
     }
     
+    func assertTileDirs(){
+        for i in 0..<count{
+            self[i].assertTileDir()
+        }
+    }
+    
+    func removeTileDirs(){
+        for i in 0..<count{
+            self[i].removeTileDir()
+        }
+    }
+    
     mutating func remove(_ tileSource: TileSource){
         if tileSource != .defaultTileSource{
-            self.removeAll(where: { $0 == tileSource})
+            for i in 0..<count{
+                if self[i] == tileSource{
+                    self.remove(at: i)
+                    tileSource.removeTileDir()
+                    break
+                }
+            }
             if Settings.shared.tileSource == tileSource{
                 Settings.shared.tileSource = .defaultTileSource
             }

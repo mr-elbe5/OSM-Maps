@@ -153,7 +153,6 @@ class TileSourceViewController: ScrollViewController{
     func save(){
         saveTileSource()
         Settings.shared.save()
-        Settings.shared.assertTileDirs()
         self.showDone(title: "ok".localize(), text: "mapSourceSaved".localize())
         MainViewController.shared.mapView.refresh()
     }
@@ -179,7 +178,6 @@ class TileSourceViewController: ScrollViewController{
     func setDefaults(){
         TileSources.setDefaults()
         OverlayTileSources.setDefaults()
-        
         self.loadScrollableSubviews()
     }
     
@@ -191,13 +189,13 @@ class TileSourceViewController: ScrollViewController{
     
     func deleteAllTiles(){
         showDestructiveApprove(title: "clearMapCache".localize(), text: "clearMapCacheHint".localize(table: "Hints")){
-            TileProvider.shared.deleteAllTiles()
+            TileProvider.shared.resetTileDirectories()
         }
     }
     
     func deleteCurrentTiles(){
         showDestructiveApprove(title: "clearCurrentMapCache".localize(), text: "clearCurrentMapCacheHint".localize(table: "Hints")){
-            TileProvider.shared.deleteCurrentTiles()
+            TileProvider.shared.deleteTiles(dirURL: Settings.shared.tileDirURL)
         }
     }
     
@@ -208,7 +206,7 @@ extension TileSourceViewController: OverlayLineDelegate{
     func selectionChanged(){
         for sv in overlaySelectPanel.subviews{
             if let ol = sv as? OverlayLine{
-                ol.source.active = ol.switchView.isOn
+                OverlayTileSources.shared.activate(ol.source, active: ol.switchView.isOn)
             }
         }
     }
@@ -246,7 +244,7 @@ class OverlayLine: UIView{
     
     init(source: OverlayTileSource) {
         self.source = source
-        label = UILabel(text: source.name)
+        label = UILabel(text: source.displayName)
         switchView = UISwitch()
         switchView.preferredStyle = .checkbox
         upButton = UIButton().asIconButton("arrow.up")

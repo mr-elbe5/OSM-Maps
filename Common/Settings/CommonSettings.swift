@@ -6,7 +6,9 @@
 
 import Foundation
 import OSLog
-
+#if os(watchOS)
+@Observable
+#endif
 class CommonSettings: Identifiable, Codable{
     
     static var storeKey = "preferences"
@@ -39,13 +41,13 @@ class CommonSettings: Identifiable, Codable{
     }
     
     var tileDirURL: URL{
-        BasePaths.tileDirURL.appendingPathComponent(tileSource.name)
+        tileSource.tileDirURL
     }
     
     var overlayTileDirURLs: Array<URL>{
         var urls = Array<URL>()
         for source in overlayTileSources{
-            urls.append(BasePaths.tileDirURL.appendingPathComponent(source.name))
+            urls.append(source.tileDirURL)
         }
         return urls
     }
@@ -67,6 +69,11 @@ class CommonSettings: Identifiable, Codable{
         try container.encode(showOverlay, forKey: .showOverlay)
     }
     
+    func save(){
+        StatusManager.shared.saveCodable(key: CommonSettings.storeKey, value: self)
+        Logger.debug("Settings saved")
+    }
+    
     func assertInitialTileDir(){
         FileManager.default.assertDirectory(url: tileDirURL)
         let names = FileManager.default.listAllFiles(dirPath: BasePaths.tileDirURL.path())
@@ -76,19 +83,6 @@ class CommonSettings: Identifiable, Codable{
                 Logger.info("moved file \(name)")
             }
         }
-    }
-    
-    func assertTileDirs(){
-        Logger.debug("asserting \(tileDirURL.lastPathComponent)")
-        FileManager.default.assertDirectory(url: tileDirURL)
-        for url in overlayTileDirURLs{
-            FileManager.default.assertDirectory(url: url)
-        }
-    }
-    
-    func save(){
-        StatusManager.shared.saveCodable(key: CommonSettings.storeKey, value: self)
-        Logger.debug("Settings saved")
     }
     
 }

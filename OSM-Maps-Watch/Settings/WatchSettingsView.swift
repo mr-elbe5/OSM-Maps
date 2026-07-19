@@ -29,7 +29,7 @@ struct WatchSettingsView: View {
                     Logger.debug("source name changed from \(oldValue) to \(newValue)")
                     if let newSource = TileSources.shared.first(where: { $0.displayName == newValue }) {
                         Settings.shared.tileSource = newSource
-                        Settings.shared.assertTileDirs()
+                        TileProvider.shared.tileSourcesChanged()
                         Logger.debug("set tileSource to \(newSource.name)")
                         Settings.shared.save()
                         MapStatus.shared.tilesLoaded = false
@@ -131,7 +131,7 @@ struct WatchSettingsView: View {
                 }
                 Spacer(minLength: 20)
                 Button("clearMapTiles".localize(), action: {
-                        TileProvider.shared.deleteAllTiles()
+                    TileProvider.shared.resetTileDirectories()
                     })
                     .foregroundStyle(.red)
             }

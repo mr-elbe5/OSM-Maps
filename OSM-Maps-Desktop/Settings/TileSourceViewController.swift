@@ -21,20 +21,20 @@ class TileSourceViewController: PopoverViewController {
     
     func clearTiles(){
         showDestructiveApprove(title: "deleteAllTiles".localize(), text: "deleteAllTilesHint".localize(table: "Hints")){
-            TileProvider.shared.deleteAllTiles()
+            TileProvider.shared.resetTileDirectories()
             MainViewController.shared.refreshMap()
         }
     }
     
     func deleteAllTiles(){
         showDestructiveApprove(title: "clearMapCache".localize(), text: "clearMapCacheHint".localize(table: "Hints")){
-            TileProvider.shared.deleteAllTiles()
+            TileProvider.shared.resetTileDirectories()
         }
     }
     
     func deleteCurrentTiles(){
         showDestructiveApprove(title: "clearCurrentMapCache".localize(), text: "clearCurrentMapCacheHint".localize(table: "Hints")){
-            TileProvider.shared.deleteCurrentTiles()
+            TileProvider.shared.deleteTiles(dirURL: Settings.shared.tileDirURL)
         }
     }
     
@@ -192,7 +192,6 @@ class TileSourceView: PopoverView{
         saveTileSource()
         saveOverlay()
         Settings.shared.save()
-        Settings.shared.assertTileDirs()
         MainViewController.shared.mapView.refresh()
     }
     
@@ -288,7 +287,7 @@ class OverlayLine: NSView{
     
     init(source: OverlayTileSource) {
         self.source = source
-        label = NSTextField(labelWithString: source.name)
+        label = NSTextField(labelWithString: source.displayName)
         switchView = NSSwitch()
         upButton = NSButton().asIconButton("arrow.up", color: .white)
         deleteButton = NSButton().asIconButton("trash", color: .systemRed)

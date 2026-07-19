@@ -53,9 +53,10 @@ extension FileManager {
         if !fileExists(atPath: url.path, isDirectory: &isDir) {
             do{
                 try createDirectory(at: url, withIntermediateDirectories: true)
+                Logger.info("created directory: \(url.path)")
             }
             catch let err{
-                Logger.error("FileController could not create directory", err)
+                Logger.error("FileController could not create directory \(url.path)", err)
                 return false
             }
         }

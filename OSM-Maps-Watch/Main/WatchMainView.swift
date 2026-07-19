@@ -91,10 +91,10 @@ struct WatchMainView: View {
             }
             .clipped()
             .frame(maxWidth: .infinity)
-        }
-        .digitalCrownRotation($zoomLevel, from: CGFloat(World.minZoom), through: CGFloat(World.maxZoom), sensitivity: .low)
-        .onChange(of: zoomLevel, initial: false ) {
-            MapStatus.shared.zoomTo(Int(zoomLevel))
+            .focusable(true)
+            .digitalCrownRotation($zoomLevel, from: CGFloat(World.minZoom), through: CGFloat(World.maxZoom), sensitivity: .low, onChange: { evt in
+                MapStatus.shared.zoomTo(Int(zoomLevel))
+            })
         }
     }
         

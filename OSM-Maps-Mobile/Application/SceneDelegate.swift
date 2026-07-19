@@ -20,12 +20,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         AppStatus.shared.updateVersion()
         MapDefaults.startZoom = 14
         TileSources.load()
+        OverlayTileSources.load()
         Settings.load()
         Settings.shared.assertInitialTileDir()
         ViewFilter.load()
         MapStatus.load()
         AppData.load()
-        print("current UTC offset: \(UTCOffset.current.value)")
+        Logger.info("current UTC offset: \(UTCOffset.current.value)")
         
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene

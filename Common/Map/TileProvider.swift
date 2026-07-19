@@ -155,17 +155,26 @@ class TileProvider{
         return false
     }
     
-    func deleteAllTiles(){
-        let count = FileManager.default.deleteAllFiles(dirURL: BasePaths.tileDirURL)
-        Logger.info("TileProvider \(count) tiles cleared")
+    func tileSourcesChanged(){
+        assertTileDirectories()
     }
     
-    func deleteCurrentTiles(){
-        let count = FileManager.default.deleteAllFiles(dirURL: Settings.shared.tileDirURL)
-        Logger.info("TileProvider \(count) tiles cleared")
+    func resetTileDirectories(){
+        FileManager.default.deleteFile(url: BasePaths.tileDirURL)
+        assertTileDirectories()
     }
     
-    func dumpTiles(){
+    func assertTileDirectories(){
+        TileSources.shared.assertTileDirs()
+        OverlayTileSources.shared.assertTileDirs()
+    }
+    
+    func deleteTiles(dirURL: URL){
+        let count = FileManager.default.deleteAllFiles(dirURL: dirURL)
+        Logger.info("TileProvider \(count) tiles deleted")
+    }
+    
+    /*func dumpTiles(){
         var paths = Array<String>()
         if let subpaths = FileManager.default.subpaths(atPath: BasePaths.tileDirURL.path){
             for path in subpaths{
@@ -176,7 +185,7 @@ class TileProvider{
         for path in paths{
             Logger.error(path)
         }
-    }
+    }*/
     
 }
 

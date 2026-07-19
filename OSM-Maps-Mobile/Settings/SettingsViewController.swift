@@ -129,7 +129,7 @@ class SettingsViewController: ScrollViewController{
     
     func deleteAllTiles(){
         showDestructiveApprove(title: "deleteAllTiles".localize(), text: "deleteAllTilesHint".localize(table: "Hints")){
-            TileProvider.shared.deleteAllTiles()
+            TileProvider.shared.resetTileDirectories()
         }
     }
     

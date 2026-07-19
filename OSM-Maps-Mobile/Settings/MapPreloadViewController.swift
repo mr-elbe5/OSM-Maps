@@ -227,13 +227,13 @@ class MapPreloadViewController: ScrollViewController{
     
     func deleteAllTiles(){
         showDestructiveApprove(title: "clearMapCache".localize(), text: "clearMapCacheHint".localize(table: "Hints")){
-            TileProvider.shared.deleteAllTiles()
+            TileProvider.shared.resetTileDirectories()
         }
     }
     
     func deleteCurrentTiles(){
         showDestructiveApprove(title: "clearCurrentMapCache".localize(), text: "clearCurrentMapCacheHint".localize(table: "Hints")){
-            TileProvider.shared.deleteCurrentTiles()
+            TileProvider.shared.deleteTiles(dirURL: Settings.shared.tileDirURL)
         }
     }
     

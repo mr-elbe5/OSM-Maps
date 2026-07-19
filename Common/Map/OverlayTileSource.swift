@@ -11,6 +11,8 @@ class OverlayTileSource: TileSource{
     
     static var waymarkedTrailsSource: OverlayTileSource = OverlayTileSource(name: "waymarkedTrails", displayName: "Waymarked Trails", templateUrl: "https://tile.waymarkedtrails.org/hiking/{z}/{x}/{y}.png")
     
+    static var hikingTrailsSource: OverlayTileSource = OverlayTileSource(name: "hikingTrails", displayName: "Hiking Trails", templateUrl: "https://tiles.elbe5.de/hiking/{z}/{x}/{y}.png")
+    
     enum CodingKeys: String, CodingKey {
         case idx
         case active
@@ -53,7 +55,7 @@ extension OverlayTileSources{
     
     static var storeKey = "overlayTileSources"
     
-    static var shared: OverlayTileSources = [.waymarkedTrailsSource]
+    static var shared: OverlayTileSources = [.waymarkedTrailsSource, .hikingTrailsSource]
     
     static func load(){
         if let list : OverlayTileSources = StatusManager.shared.getCodable(key: OverlayTileSources.storeKey){
@@ -63,14 +65,23 @@ extension OverlayTileSources{
         else{
             Logger.error("no saved data available for overlay tile sources")
         }
+        OverlayTileSources.shared.assertTileDirs()
     }
     
     static func setDefaults(){
-        shared = [.waymarkedTrailsSource]
+        shared = [.waymarkedTrailsSource, .hikingTrailsSource]
+        shared.updateIndices()
         shared.save()
     }
     
+    func assertTileDirs(){
+        for i in 0..<count{
+            self[i].assertTileDir()
+        }
+    }
+    
     func save(){
+        assertTileDirs()
         StatusManager.shared.saveCodable(key: Self.storeKey, value: self)
         Logger.debug("overlay tile sources saved")
     }
@@ -109,13 +120,20 @@ extension OverlayTileSources{
         return nil
     }
     
+    func activate(_ source: OverlayTileSource, active: Bool){
+        source.active = active
+        save()
+    }
+    
     mutating func remove(_ tileSource: OverlayTileSource){
-        if tileSource != .defaultTileSource{
-            self.removeAll(where: { $0 == tileSource})
-            if Settings.shared.tileSource == tileSource{
-                Settings.shared.tileSource = .defaultTileSource
+        for i in 0..<count{
+            if self[i] == tileSource{
+                self.remove(at: i)
+                tileSource.removeTileDir()
+                break
             }
         }
+        save()
     }
     
     mutating func moveUp(idx: Int){
