@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "2600"
-   version = "1.7">
+   version = "2.2">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES"
@@ -35,6 +35,15 @@
                ReferencedContainer = "container:OSM Maps.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "YES">
+            <AutocreatedTestPlanReference>
+            </AutocreatedTestPlanReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -60,7 +69,6 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4E2157FF2DF1DFA9001ED51D"
             BuildableName = "OSM Maps.app"
-            BlueprintName = "OSM-Maps-Watch"
             ReferencedContainer = "container:OSM Maps.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -77,7 +85,6 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4E2157FF2DF1DFA9001ED51D"
             BuildableName = "OSM Maps.app"
-            BlueprintName = "OSM-Maps-Watch"
             ReferencedContainer = "container:OSM Maps.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

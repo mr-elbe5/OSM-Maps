@@ -9,9 +9,6 @@ import CoreLocation
 import WatchKit
 import OSLog
 
-typealias MapTileRow = [MapTile]
-typealias MapTileGrid = [MapTileRow]
-
 @Observable class WatchMapStatus: NSObject{
     
     static var shared = WatchMapStatus()
@@ -24,8 +21,8 @@ typealias MapTileGrid = [MapTileRow]
     let tileExtent: CGFloat = World.tileExtent
     var gridWidth: Int = 1
     var gridHeight: Int = 1
-    var tileGrid: MapTileGrid = []
-    var overlayGrids: [MapTileGrid] = []
+    var tileGrid = TileGrid()
+    var overlayGrids = TileGridList()
     
     var centerTileX: Int = 0
     var centerTileY: Int = 0
@@ -55,11 +52,11 @@ typealias MapTileGrid = [MapTileRow]
         gridHeight = 2 * vertExtraTiles + 1
         //Logger.debug("grid size = \(gridWidth) x \(gridHeight)")
         for _ in 0..<gridHeight {
-            var row = MapTileRow()
+            let line = TileLine()
             for _ in 0..<gridWidth {
-                row.append(MapTile.dummyTile)
+                line.tiles.append(Tile.nullTile)
             }
-            tileGrid.append(row)
+            tileGrid.tileLines.append(line)
         }
         setupOverlayGrids()
     }
@@ -67,13 +64,13 @@ typealias MapTileGrid = [MapTileRow]
     func setupOverlayGrids(){
         overlayGrids.removeAll()
         for _ in 0..<Settings.shared.overlayTileSources.count{
-            var grid = MapTileGrid()
+            let grid = TileGrid()
             for _ in 0..<gridHeight {
-                var overlayRow = MapTileRow()
+                let line = TileLine()
                 for _ in 0..<gridWidth {
-                    overlayRow.append(MapTile.dummyTile)
+                    line.tiles.append(Tile.nullTile)
                 }
-                grid.append(overlayRow)
+                grid.tileLines.append(line)
             }
             overlayGrids.append(grid)
         }
@@ -132,7 +129,7 @@ typealias MapTileGrid = [MapTileRow]
                 let newTileY = centerTileY - vertExtraTiles + y
                 if currentTile.zoom != zoom || currentTile.x != newTileX || currentTile.y != newTileY || currentTile.tileSource != Settings.shared.tileSource{
                     //print("changing tile")
-                    let tile = MapTile(zoom: zoom, x: newTileX, y: newTileY, tileSource: Settings.shared.tileSource)
+                    let tile = Tile(zoom: zoom, x: newTileX, y: newTileY)
                     TileProvider.shared.getTileImage(tile: tile){ success in
                         if !success{
                             self.tilesLoaded = false
@@ -148,7 +145,7 @@ typealias MapTileGrid = [MapTileRow]
                     let currentTile = overlayGrids[i][y][x]
                     if currentTile.zoom != zoom || currentTile.x != newTileX || currentTile.y != newTileY || currentTile.tileSource != Settings.shared.tileSource{
                         //print("changing overlay tile")
-                        let tile = MapTile(zoom: zoom, x: newTileX, y: newTileY, tileSource: overlaySource)
+                        let tile = Tile(zoom: zoom, x: newTileX, y: newTileY, tileSource: overlaySource)
                         TileProvider.shared.getTileImage(tile: tile){ success in
                             if !success{
                                 self.tilesLoaded = false
@@ -158,25 +155,19 @@ typealias MapTileGrid = [MapTileRow]
                         overlayGrids[i][y][x] = tile
                     }
                     else{
-                        overlayGrids[i][y][x] = MapTile.dummyTile
+                        overlayGrids[i][y][x] = Tile.nullTile
                     }
                 }
             }
         }
     }
     
-    func getTile(x: Int, y: Int) -> MapTile?{
-        guard x >= 0 && x < tileGrid[0].count && y >= 0 && y < tileGrid.count else {
-            print("out of range: \(x), \(y)")
-            return nil }
+    func getTile(x: Int, y: Int) -> Tile{
         return tileGrid[y][x]
     }
     
-    func getOverlayTile(idx: Int, x: Int, y: Int) -> MapTile?{
+    func getOverlayTile(idx: Int, x: Int, y: Int) -> Tile{
         let overlayGrid = overlayGrids[idx]
-        guard x >= 0 && x < overlayGrid[0].count && y >= 0 && y < overlayGrid.count else {
-            print("out of range: \(x), \(y)")
-            return nil }
         return overlayGrid[y][x]
     }
     

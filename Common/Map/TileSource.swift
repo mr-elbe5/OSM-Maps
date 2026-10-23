@@ -16,7 +16,6 @@ class TileSource: Codable, Hashable{
     static var dummyTileSource: TileSource = TileSource(name: "dummy", displayName: "Dummy", templateUrl: "")
     
     static var osmSource: TileSource = TileSource(name: "osm", displayName: "OpenStreetMap", templateUrl: "https://tile.openstreetmap.org/{z}/{x}/{y}.png")
-    static var elbe5Source: TileSource = TileSource(name: "elbe5", displayName: "Elbe5 Carto", templateUrl: "https://tiles.elbe5.de/carto/{z}/{x}/{y}.png")
     static var elbe5TopoSource: TileSource = TileSource(name: "elbe5Topo", displayName: "Elbe5 Topo", templateUrl: "https://tiles.elbe5.de/topo/{z}/{x}/{y}.png")
     static var openTopoSource: TileSource = TileSource(name: "openTopo", displayName: "Open Topomap", templateUrl: "https://a.tile.opentopomap.org/{z}/{x}/{y}.png")
     
@@ -75,7 +74,7 @@ extension TileSources{
     
     static var storeKey = "tileSources"
     
-    static var shared: TileSources = [.osmSource, .elbe5Source, .elbe5TopoSource, .openTopoSource]
+    static var shared: TileSources = [.osmSource, .elbe5TopoSource, .openTopoSource]
     
     static func load(){
         if let list : TileSources = StatusManager.shared.getCodable(key: TileSources.storeKey){
@@ -87,7 +86,7 @@ extension TileSources{
     }
     
     static func setDefaults(){
-        shared = [.osmSource, .elbe5Source, .elbe5TopoSource, .openTopoSource]
+        shared = [.osmSource, .elbe5TopoSource, .openTopoSource]
         shared.save()
     }
     

@@ -26,7 +26,31 @@ class WatchConnector: NSObject {
         session.isWatchAppInstalled && session.isPaired && session.activationState == .activated
     }
     
-    func sendTile(_ tile: MapTile, data: Data, completion: @escaping (Bool) -> Void) {
+    func prepareTileUpload(tileGroup: TileRegion, completion: @escaping (Bool) -> Void){
+        if !isWatchConnected {
+            Logger.error("not connected to phone")
+            completion(false)
+            return
+        }
+        let json = TileRegion.toJSON(tileGroup)
+        session.sendMessage([
+            "request": "prepareTileUpload",
+            "tileGroup": json
+        ], replyHandler: {response in
+            DispatchQueue.main.async {
+                if let success = response["success"] as? Bool {
+                    completion(success)
+                }
+                else{
+                    completion(false)
+                }
+            }
+        }) { error in
+            Logger.error("error preparing tile: \(error)")
+        }
+    }
+    
+    func sendTile(_ tile: Tile, data: Data, completion: @escaping (Bool) -> Void) {
         //Logger.debug("sending tile")
         if !isWatchConnected {
             Logger.error("not connected to phone")
@@ -105,7 +129,7 @@ class WatchConnector: NSObject {
         }
     }
     
-    func checkTiles(_ tiles: MapTileDataList, completion: @escaping (MapTileDataList?) -> Void) {
+    func checkTiles(_ tiles: TileRegion, completion: @escaping (TileRegion?) -> Void) {
         Logger.debug("checking tiles")
         if !isWatchConnected {
             Logger.error("not connected to phone")
@@ -114,14 +138,15 @@ class WatchConnector: NSObject {
         }
         if let data = try? JSONEncoder().encode(tiles){
             session.sendMessage([
-                "request": "missingTiles",
+                "request": "checkTiles",
+                "tileSource": Settings.shared.tileSource.name,
                 "data": data as Any
             ], replyHandler: {response in
                 DispatchQueue.main.async {
                     if let success = response["success"] as? Bool, success{
                         if let data = response["data"] as? Data {
-                            if let tilesData = try? JSONDecoder().decode(MapTileDataList.self, from: data){
-                                completion(tilesData)
+                            if let tileRegion = try? JSONDecoder().decode(TileRegion.self, from: data){
+                                completion(tileRegion)
                             }
                             else{
                                 completion(nil)

@@ -15,11 +15,11 @@ protocol UploadDelegate {
 
 class TileUploadOperation : AsyncOperation, @unchecked Sendable {
     
-    var tile : MapTile
+    var tile : Tile
     var data : Data
     var delegate : UploadDelegate? = nil
     
-    init(tile: MapTile, data: Data) {
+    init(tile: Tile, data: Data) {
         self.tile = tile
         self.data = data
         super.init()

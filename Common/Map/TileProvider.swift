@@ -22,7 +22,7 @@ class TileProvider{
     }
     
     func checkSource(_ source: TileSource, onCompletion: @escaping (Bool) -> Void){
-        let tile = MapTile(zoom: 0, x: 0, y: 0, tileSource: source)
+        let tile = Tile(zoom: 0, x: 0, y: 0, tileSource: source)
         let request = URLRequest(url: tile.tileUrl, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 10.0)
         let task = URLSession.shared.dataTask(with: request) { (data, response, err) in
             var statusCode = 0
@@ -50,27 +50,27 @@ class TileProvider{
         }
     }
     
-    func getTileImage(tile: MapTile, result: @escaping (Bool) -> Void) {
+    func getTileImage(tile: Tile, result: @escaping (Bool) -> Void) {
         if !tile.valid {
             return
         }
-        if tile.fileExists, let fileData = FileManager.default.contents(atPath: tile.fileUrl.path){
+        if tile.setImage(){
             //Logger.debug("got local tile")
-            tile.imageData = fileData
             result(true)
         } else {
-            //Logger.debug("loading tile")
+            //Logger.debug("loading tile \(tile.shortDescription)")
             loadTileImage(tile: tile){ success in
                 result(success)
             }
         }
     }
     
-    func loadTileImage(tile: MapTile, result: @escaping (Bool) -> Void) {
+    func loadTileImage(tile: Tile, result: @escaping (Bool) -> Void) {
         if !tile.valid {
             result(false)
             return
         }
+        //Logger.debug("loading tile from  \(tile.tileUrl)")
         let request = URLRequest(url: tile.tileUrl, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 30.0)
         let task = getDownloadTask(request: request){ data in
             if let data = data{
@@ -90,7 +90,7 @@ class TileProvider{
         }
     }
     
-    private func setImageData(_ data: Data, to tile: MapTile){
+    private func setImageData(_ data: Data, to tile: Tile){
         tile.imageData = data
         //Logger.debug("saving tile \(tile.shortDescription)")
         if !self.saveTile(fileUrl: tile.fileUrl, data: data){
@@ -98,9 +98,9 @@ class TileProvider{
         }
     }
     
-    private func retryLoadTileImage(tile: MapTile, tries: Int, result: @escaping (Bool) -> Void) {
+    private func retryLoadTileImage(tile: Tile, tries: Int, result: @escaping (Bool) -> Void) {
         let request = URLRequest(url: tile.tileUrl, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 20.0)
-        //Logger.debug("retrying remote loading tile, try \(tries)")
+        //Logger.debug("retrying remote loading tile from \(tile.tileUrl), try \(tries)")
         let task = getDownloadTask(request: request){ data in
             if let data = data{
                 //Logger.debug("got remote tile, try \(tries)")

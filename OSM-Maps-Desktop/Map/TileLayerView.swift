@@ -43,22 +43,22 @@ class TileLayerView: NSView {
     }
     
     override func draw(_ rect: CGRect) {
-        let tile = MapTile.getTile(data: getTileData(rect: rect), tileSource: Settings.shared.tileSource)
+        let tile = Tile.getTile(data: getTile(rect: rect), tileSource: Settings.shared.tileSource)
         drawTile(tile, rect: rect)
         for overlaySource in Settings.shared.overlayTileSources{
-            let overlayTile = MapTile.getTile(data: getTileData(rect: rect), tileSource: overlaySource)
+            let overlayTile = Tile.getTile(data: getTile(rect: rect), tileSource: overlaySource)
             drawTile(overlayTile, rect: rect, asOverlay: true)
         }
     }
     
-    private func getTileData(rect: CGRect) -> MapTileData{
+    private func getTile(rect: CGRect) -> Tile{
         let x = Int(round(rect.minX / World.tileExtent))
         let y = Int(round(rect.minY / World.tileExtent))
-        return MapTileData(zoom: MapStatus.shared.zoom, x: x, y: y, tileSource: Settings.shared.tileSource)
+        return Tile(zoom: MapStatus.shared.zoom, x: x, y: y, tileSource: Settings.shared.tileSource)
     }
     
     // rect is in contentSize = planetSize
-    func drawTile(_ tile: MapTile, rect: CGRect, asOverlay: Bool = false){
+    func drawTile(_ tile: Tile, rect: CGRect, asOverlay: Bool = false){
         if let imageData = tile.imageData, let image = NSImage(data: imageData){
             image.draw(in: rect)
             return

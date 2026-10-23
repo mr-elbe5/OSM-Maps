@@ -14,10 +14,10 @@ protocol DownloadDelegate {
 
 class TileDownloadOperation : AsyncOperation, @unchecked Sendable {
     
-    var tile : MapTile
+    var tile : Tile
     var delegate : DownloadDelegate? = nil
     
-    init(tile: MapTile) {
+    init(tile: Tile) {
         self.tile = tile
         super.init()
     }

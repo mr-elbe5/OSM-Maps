@@ -20,9 +20,9 @@ struct BasePaths {
     static func initializeDirs() {
         do{
             try FileManager.default.createDirectory(at: URL.applicationSupportDirectory, withIntermediateDirectories: true, attributes: nil)
-            Logger.debug("base dir is: \(URL.applicationSupportDirectory.path)")
-            Logger.debug("document dir is: \(URL.documentsDirectory.path)")
-            Logger.debug("cache dir is: \(URL.cachesDirectory.path)")
+            //Logger.debug("base dir is: \(URL.applicationSupportDirectory.path)")
+            //Logger.debug("document dir is: \(URL.documentsDirectory.path)")
+            //Logger.debug("cache dir is: \(URL.cachesDirectory.path)")
             try FileManager.default.createDirectory(at: statusDirURL, withIntermediateDirectories: true, attributes: nil)
             //Logger.debug("status dir is: \(statusDirURL.path)")
             try FileManager.default.createDirectory(at: tileDirURL, withIntermediateDirectories: true, attributes: nil)

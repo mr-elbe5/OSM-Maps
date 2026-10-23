@@ -64,8 +64,29 @@ class TileSourceViewController: ScrollViewController{
         contentView.addSubviewWithAnchors(saveButton, top: lastView.bottomAnchor, insets: .doubleInsets)
         .centerX(contentView.centerXAnchor)
         
+        let setDefaultsButton = UIButton(name: "setDefaults".localize(), action: UIAction(){ action in
+            self.setDefaults()
+        })
+        contentView.addSubviewBelow(setDefaultsButton, upperView: saveButton)
+        lastView = setDefaultsButton
+        if WatchConnector.shared.isWatchConnected {
+            let watchButton = UIButton(name: "sendToWatch".localize(), action: UIAction(){ action in
+                self.sendToWatch()
+            })
+            contentView.addSubviewBelow(watchButton, upperView: lastView)
+            lastView = watchButton
+        }
+        let clearTileCacheButton = UIButton(name: "clearTileCache".localize(), action: UIAction(){ action in
+            self.deleteAllTiles()
+        })
+        contentView.addSubviewBelow(clearTileCacheButton, upperView: lastView)
+        let clearCurrentTileCacheButton = UIButton(name: "clearCurrentTileCache".localize(), action: UIAction(){ action in
+            self.deleteCurrentTiles()
+        })
+        contentView.addSubviewBelow(clearCurrentTileCacheButton, upperView: clearTileCacheButton)
+            
         var label = UILabel(header: "overlays".localizeWithColon())
-        contentView.addSubviewBelow(label, upperView: saveButton)
+        contentView.addSubviewBelow(label, upperView: clearCurrentTileCacheButton)
         setupOverlaySelectPanel()
         contentView.addSubviewBelow(overlaySelectPanel, upperView: label)
         
@@ -85,27 +106,6 @@ class TileSourceViewController: ScrollViewController{
         hintText.numberOfLines = 0
         hintText.font = .preferredFont(forTextStyle: .footnote)
         contentView.addSubviewBelow(hintText, upperView: lastView, insets: .flatInsets)
-        
-        let setDefaultsButton = UIButton(name: "setDefaults".localize(), action: UIAction(){ action in
-            self.setDefaults()
-        })
-        contentView.addSubviewBelow(setDefaultsButton, upperView: hintText)
-        lastView = setDefaultsButton
-        if WatchConnector.shared.isWatchConnected {
-            let watchButton = UIButton(name: "sendToWatch".localize(), action: UIAction(){ action in
-                self.sendToWatch()
-            })
-            contentView.addSubviewBelow(watchButton, upperView: lastView)
-            lastView = watchButton
-        }
-        let clearTileCacheButton = UIButton(name: "clearTileCache".localize(), action: UIAction(){ action in
-            self.deleteAllTiles()
-        })
-        contentView.addSubviewBelow(clearTileCacheButton, upperView: lastView)
-        let clearCurrentTileCacheButton = UIButton(name: "clearCurrentTileCache".localize(), action: UIAction(){ action in
-            self.deleteCurrentTiles()
-        })
-        contentView.addSubviewBelow(clearCurrentTileCacheButton, upperView: clearTileCacheButton)
             .connectToBottom(of: contentView)
     }
     

@@ -40,15 +40,15 @@ class TileLayerView: UIView {
         let ctx = UIGraphicsGetCurrentContext()!
         upScale = 1.0/ctx.ctm.a*pointToPixelsFactor
         zoom = World.maxZoom - World.zoomLevelAtUpScale(scale: upScale)
-        let tile = MapTile.getTile(data: getTileData(rect: rect), tileSource: Settings.shared.tileSource)
+        let tile = Tile.getTile(data: getTileData(rect: rect), tileSource: Settings.shared.tileSource)
         drawTile(tile, rect: rect)
         for overlaySource in Settings.shared.overlayTileSources{
-            let overlayTile = MapTile.getTile(data: getTileData(rect: rect), tileSource: overlaySource)
+            let overlayTile = Tile.getTile(data: getTileData(rect: rect), tileSource: overlaySource)
             drawTile(overlayTile, rect: rect, asOverlay: true)
         }
     }
     
-    private func getTileData(rect: CGRect) -> MapTileData{
+    private func getTileData(rect: CGRect) -> Tile{
         var x = Int(round(rect.minX / upScale / Double(World.tileSize.width)))
         let currentMaxTiles = Int(World.zoomFactor(at: zoom))
         // for infinite scroll
@@ -56,11 +56,11 @@ class TileLayerView: UIView {
             x -= currentMaxTiles
         }
         let y = Int(round(rect.minY / upScale / Double(World.tileSize.height)))
-        return MapTileData(zoom: zoom, x: x, y: y, tileSource: Settings.shared.tileSource)
+        return Tile(zoom: zoom, x: x, y: y)
     }
     
     // rect is in contentSize = planetSize
-    func drawTile(_ tile: MapTile, rect: CGRect, asOverlay: Bool = false){
+    func drawTile(_ tile: Tile, rect: CGRect, asOverlay: Bool = false){
         if let imageData = tile.imageData, let image = UIImage(data: imageData){
             //Logger.debug("drawing tile \(tile.shortDescription)")
             image.draw(in: rect)
@@ -70,7 +70,7 @@ class TileLayerView: UIView {
             mapGearImage?.draw(in: rect.scaleCenteredBy(0.25))
         }
         TileProvider.shared.getTileImage(tile: tile){ success in
-            //Logger.debug("refresh tile \(tile.shortDescription) \(success)")
+            //Logger.debug("get tile \(tile.shortDescription) \(success)")
             if success{
                 DispatchQueue.main.async {
                     self.setNeedsDisplay(rect)
