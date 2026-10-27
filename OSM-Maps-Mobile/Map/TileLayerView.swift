@@ -77,7 +77,7 @@ class TileLayerView: UIView {
                 }
             }
             else{
-                Logger.error("TileLayerView could not load tile \(tile.shortDescription)")
+                Logger.error("TileLayerView could not load tile \(tile.asString)")
             }
         }
     }

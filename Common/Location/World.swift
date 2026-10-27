@@ -125,6 +125,11 @@ struct World{
         return mapPoint.coordinate
     }
     
+    static func coordinate(scaledPoint : CGPoint, downScale: Double) -> CLLocationCoordinate2D {
+        let mapPoint = worldPoint(scaledX: scaledPoint.x, scaledY: scaledPoint.y, downScale: downScale).normalizedPoint
+        return mapPoint.coordinate
+    }
+    
     static func scaledExtent(downScale: Double) -> Double {
         fullExtent*downScale
     }

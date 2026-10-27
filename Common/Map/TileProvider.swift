@@ -52,13 +52,14 @@ class TileProvider{
     
     func getTileImage(tile: Tile, result: @escaping (Bool) -> Void) {
         if !tile.valid {
+            result(false)
             return
         }
         if tile.setImage(){
-            //Logger.debug("got local tile")
+            Logger.debug("got local tile")
             result(true)
         } else {
-            //Logger.debug("loading tile \(tile.shortDescription)")
+            Logger.debug("loading tile \(tile.asString)")
             loadTileImage(tile: tile){ success in
                 result(success)
             }
@@ -70,11 +71,11 @@ class TileProvider{
             result(false)
             return
         }
-        //Logger.debug("loading tile from  \(tile.tileUrl)")
+        Logger.debug("loading tile from  \(tile.tileUrl)")
         let request = URLRequest(url: tile.tileUrl, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 30.0)
         let task = getDownloadTask(request: request){ data in
             if let data = data{
-                //Logger.debug("got remote tile in first try")
+                Logger.debug("got remote tile in first try")
                 self.setImageData(data, to: tile)
                 result(true)
             }
@@ -92,9 +93,9 @@ class TileProvider{
     
     private func setImageData(_ data: Data, to tile: Tile){
         tile.imageData = data
-        //Logger.debug("saving tile \(tile.shortDescription)")
+        Logger.debug("saving tile \(tile.asString)")
         if !self.saveTile(fileUrl: tile.fileUrl, data: data){
-            Logger.error("TileProvider could not save tile \(tile.shortDescription)")
+            Logger.error("TileProvider could not save tile \(tile.asString)")
         }
     }
     

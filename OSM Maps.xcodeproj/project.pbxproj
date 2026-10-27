@@ -231,7 +231,6 @@
 				View/OSColor.swift,
 				View/OSView.swift,
 				View/OSViewController.swift,
-				View/TileView.swift,
 				View/ViewFilter.swift,
 			);
 			target = 4E2157EC2DF1DF5A001ED51D /* OSM-Maps-Desktop */;

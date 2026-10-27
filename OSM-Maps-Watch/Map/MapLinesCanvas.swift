@@ -35,8 +35,8 @@ struct MapLinesCanvas: View{
             .onChanged { gesture in
                 Settings.shared.followLocation = false
                 let dragOffset = gesture.translation
-                let diff = CGSize(width: dragOffset.width - lastOffset.width, height: dragOffset.height - lastOffset.height)
-                mapStatus.moveBy(offset: diff)
+                let offset = CGSize(width: dragOffset.width - lastOffset.width, height: dragOffset.height - lastOffset.height)
+                mapStatus.moveCenter(by: offset)
                 lastOffset = dragOffset
             }
             .onEnded { _ in

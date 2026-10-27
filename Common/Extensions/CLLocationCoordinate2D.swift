@@ -58,6 +58,12 @@ extension CLLocationCoordinate2D : @retroactive Equatable{
         return String(format: "%.04f", abs(latitude)) + "° " + latitudeText + ", " + String(format: "%.04f", abs(longitude)) + "° "  + longitudeText
     }
     
+    var asLongString : String{
+        let latitudeText = latitude > 0 ? "north".localize(table: "Location") : "south".localize(table: "Location")
+        let longitudeText = longitude > 0 ? "east".localize(table: "Location") : "west".localize(table: "Location")
+        return String(format: "%.06f", abs(latitude)) + "° " + latitudeText + ", " + String(format: "%.06f", abs(longitude)) + "° "  + longitudeText
+    }
+    
     var asShortString : String{
         let latitudeText = latitude > 0 ? "northShort".localize(table: "Location") : "southShort".localize(table: "Location")
         let longitudeText = longitude > 0 ? "eastShort".localize(table: "Location") : "westShort".localize(table: "Location")
