@@ -17,7 +17,7 @@ struct MapButtonMod: ViewModifier {
             .foregroundStyle(.black)
             .font(.system(size: 24))
             .tint(.clear)
-            .frame(width: 40, height: 40)
+            .frame(width: 30, height: 30)
             .clipShape(.circle)
     }
 }
