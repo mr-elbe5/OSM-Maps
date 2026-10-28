@@ -48,7 +48,7 @@ class TileLayerView: UIView {
         }
     }
     
-    private func getTileData(rect: CGRect) -> MapTileData{
+    private func getTileData(rect: CGRect) -> TileData{
         var x = Int(round(rect.minX / upScale / Double(World.tileSize.width)))
         let currentMaxTiles = Int(World.zoomFactor(at: zoom))
         // for infinite scroll
@@ -56,7 +56,7 @@ class TileLayerView: UIView {
             x -= currentMaxTiles
         }
         let y = Int(round(rect.minY / upScale / Double(World.tileSize.height)))
-        return MapTileData(zoom: zoom, x: x, y: y)
+        return TileData(zoom: zoom, x: x, y: y)
     }
     
     // rect is in contentSize = planetSize

@@ -121,7 +121,7 @@ class MapPreloader {
     @discardableResult
     func checkWatchTiles() -> Bool{
         resetWatch()
-        var tileList = MapTileDataList()
+        var tileList = TileDataList()
         if let coordinateRegion = self.coordinateRegion{
             watchTiles.removeAll()
             var tileSets = Dictionary<Int, TileSet>()
@@ -143,7 +143,7 @@ class MapPreloader {
                 guard let tileSet = tileSets[zoom] else { continue }
                 for x in tileSet.minX...tileSet.maxX{
                     for y in tileSet.minY...tileSet.maxY{
-                        let tile = MapTileData(zoom: zoom, x: x, y: y)
+                        let tile = TileData(zoom: zoom, x: x, y: y)
                         tileList.append(tile)
                     }
                 }

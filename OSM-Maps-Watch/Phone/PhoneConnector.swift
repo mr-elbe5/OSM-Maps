@@ -138,8 +138,8 @@ extension PhoneConnector: WCSessionDelegate {
                     replyHandler(["success": false])
                 }
             case "missingTiles":
-                if let data = message["data"] as? Data, let tiles = try? JSONDecoder().decode(MapTileDataList.self, from: data){
-                    var result = MapTileDataList()
+                if let data = message["data"] as? Data, let tiles = try? JSONDecoder().decode(TileDataList.self, from: data){
+                    var result = TileDataList()
                     for tileData in tiles{
                         if !tileData.exists(tileSource: Settings.shared.tileSource) {
                             result.append(tileData)

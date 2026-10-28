@@ -26,7 +26,7 @@ typealias MapTileGrid = [MapTileRow]
     var tileGrid: MapTileGrid = []
     var overlayGrids: [MapTileGrid] = []
     
-    var centerTile: MapTileData = .zero
+    var centerTile: TileData = .zero
     var tileOffset: CGSize = .zero
     var currentLocationOffset: CGSize = .zero
     var zoom: Int = MapDefaults.startZoom
@@ -95,7 +95,7 @@ typealias MapTileGrid = [MapTileRow]
     func updateTiles(){
         let centerTileLeft = scaledWorldCenterX - World.tileExtent/2
         let centerTileTop = scaledWorldCenterY - World.tileExtent/2
-        centerTile = MapTileData(zoom: zoom, x: Int(floor(centerTileLeft / World.tileExtent)), y: Int(floor(centerTileTop / World.tileExtent)))
+        centerTile = TileData(zoom: zoom, x: Int(floor(centerTileLeft / World.tileExtent)), y: Int(floor(centerTileTop / World.tileExtent)))
         //print("centerTile \(centerTileX), \(centerTileY)")
         // diff of tile edge to center plus offset to tile center
         let tileOffsetX = (Double(centerTile.x)*World.tileExtent - scaledWorldCenterX + World.tileExtent/2)

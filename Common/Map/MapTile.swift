@@ -9,7 +9,7 @@ import OSLog
 
 class MapTile{
     
-    static func getTile(data: MapTileData, tileSource: TileSource) -> MapTile{
+    static func getTile(data: TileData, tileSource: TileSource) -> MapTile{
         let tile = MapTile(zoom: data.zoom, x: data.x, y: data.y, tileSource: tileSource)
         //Logger.debug("get tile \(tile.shortDescription)")
         if tile.fileExists, let fileData = FileManager.default.contents(atPath: tile.fileUrl.path){
@@ -70,33 +70,3 @@ class MapTile{
 }
 
 typealias MapTileList = [MapTile]
-
-struct MapTileData: Codable{
-    
-    static var zero = MapTileData(zoom: 0, x: 0, y: 0)
-    
-    init(zoom: Int, x: Int, y: Int) {
-        self.zoom = zoom
-        self.x = x
-        self.y = y
-    }
-    
-    var zoom: Int
-    var x: Int
-    var y: Int
-    
-    var shortDescription : String{
-        "\(zoom)-\(x)-\(y)"
-    }
-    
-    func fileUrl(tileSource: TileSource) -> URL{
-        BasePaths.tileDirURL.appendingPathComponent(tileSource.name).appendingPathComponent("\(shortDescription).png")
-    }
-    
-    func exists(tileSource: TileSource) -> Bool{
-        FileManager.default.fileExists(atPath: fileUrl(tileSource: tileSource).path)
-    }
-    
-}
-
-typealias MapTileDataList = [MapTileData]

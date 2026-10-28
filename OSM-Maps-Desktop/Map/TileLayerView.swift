@@ -51,10 +51,10 @@ class TileLayerView: NSView {
         }
     }
     
-    private func getTileData(rect: CGRect) -> MapTileData{
+    private func getTileData(rect: CGRect) -> TileData{
         let x = Int(round(rect.minX / World.tileExtent))
         let y = Int(round(rect.minY / World.tileExtent))
-        return MapTileData(zoom: MapStatus.shared.zoom, x: x, y: y, tileSource: Settings.shared.tileSource)
+        return TileData(zoom: MapStatus.shared.zoom, x: x, y: y)
     }
     
     // rect is in contentSize = planetSize
