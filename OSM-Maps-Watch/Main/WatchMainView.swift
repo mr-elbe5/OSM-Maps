@@ -75,12 +75,19 @@ struct WatchMainView: View {
                 .mapButton()
                 .position(x: proxy.size.width - 20, y: proxy.size.height - 20)
                 Button(action: {
-                    mapStatus.refresh()
+                    mapStatus.zoomIn()
                 }) {
-                    Image(systemName: "arrow.clockwise")
+                    Image(systemName: "plus.circle")
                 }
                 .mapButton()
-                .position(x: 20, y: proxy.size.height/2)
+                .position(x: 20, y: proxy.size.height - 60)
+                Button(action: {
+                    mapStatus.zoomOut()
+                }) {
+                    Image(systemName: "minus.circle")
+                }
+                .mapButton()
+                .position(x: 20, y: proxy.size.height - 20)
                 if routeStatus.route != nil{
                     NavigationLink(destination: WatchRouteControlView()) {
                         Image(systemName: "point.topright.arrow.triangle.backward.to.point.bottomleft.scurvepath")
@@ -91,10 +98,6 @@ struct WatchMainView: View {
             }
             .clipped()
             .frame(maxWidth: .infinity)
-            .focusable(true)
-            .digitalCrownRotation($zoomLevel, from: CGFloat(World.minZoom), through: CGFloat(World.maxZoom), sensitivity: .low, onChange: { evt in
-                MapStatus.shared.zoomTo(Int(zoomLevel))
-            })
         }
     }
         
