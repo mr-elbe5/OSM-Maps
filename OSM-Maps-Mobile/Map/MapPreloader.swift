@@ -4,176 +4,209 @@
  Copyright: Michael Rönnau mr@elbe5.de
  */
 
-import UIKit
-import UniformTypeIdentifiers
+import CoreLocation
 import OSLog
 
-protocol PreloaderDelegate{
-    func updateValueViews()
-    func updateSliderValue(_ value: Float)
-    func enableDownload(_ flag: Bool)
-    func enableUpload(_ flag: Bool)
-    func enableZoomControls(_ flag: Bool)
-    func downloadFinished()
-    func updateWatchValueViews()
-    func updateWatchSliderValue(_ value: Float)
-}
-
-class MapPreloader{
+class MapPreloader {
     
     static var maxDownloadTiles = 5000
     
-    var delegate: PreloaderDelegate? = nil
-    
-    // map
-    
-    var tileRegion: TileRegion = TileRegion()
-    
-    var tileDownloadQueue : OperationQueue?
-    var tileUploadQueue : OperationQueue?
-    
-    var allPreloadTiles = 0
+    var maxZoom: Int = 16
+    var allTiles = 0
     var existingTiles = 0
-    var preloadErrors = 0
+    var downloadErrors = 0
+    var downloadProgress: Double = 0
     
-    var maxPreloadZoomControl = UISegmentedControl()
-    
-    var maxPreloadZoom : Int = 16
-    
-    // watch upload
-    
-    var uploadPrepared = false
+    var allWatchTiles = 0
     var existingWatchTiles = 0
-    var uploadErrors = 0
+    var uploadedTiles: Int = 0
+    var uploadErrors: Int = 0
+    var uploadProgress: Double = 0
     
-    var uploadableWatchTiles: Int{
-        allPreloadTiles - existingWatchTiles
-    }
+    var showSpinner = false
+    var showPreloadOk: Bool = false
     
-    var watchTileRegion = TileRegion()
+    var downloadQueue: OperationQueue? = nil
+    var uploadQueue: OperationQueue? = nil
     
-    var sliderValue: Float{
-        Float(existingTiles + preloadErrors)/Float(allPreloadTiles)
-    }
-    
-    var watchSliderValue: Float{
-        Float(Float(existingWatchTiles + uploadErrors)/Float(watchTileRegion.size))
-    }
-    
-    // tiles
+    private var coordinateRegion: CoordinateRegion? = nil
+    private var tileSets = Dictionary<Int, TileSet>()
+    private var tiles = MapTileList()
+    private var watchTiles = MapTileList()
     
     func reset(){
-        allPreloadTiles = 0
+        allTiles = 0
         existingTiles = 0
-        preloadErrors = 0
+        downloadErrors = 0
     }
     
-    func setTileRegion(_ tileRegion: TileRegion) -> Bool{
+    func resetWatch(){
+        allWatchTiles = 0
+        existingWatchTiles = 0
+        uploadErrors = 0
+    }
+    
+    @discardableResult
+    func update(coordinareRegion: CoordinateRegion) -> Bool{
+        self.coordinateRegion = coordinareRegion
+        return update()
+    }
+    
+    @discardableResult
+    func update() -> Bool{
         reset()
-        self.tileRegion = tileRegion
-        tileRegion.setupTiles(complete: true)
-        allPreloadTiles = tileRegion.size
-        if allPreloadTiles > MapPreloader.maxDownloadTiles{
-            self.tileRegion = TileRegion()
-            reset()
-            return false
-        }
-        existingTiles = tileRegion.checkExistingTiles(tileSource: Settings.shared.tileSource)
-        delegate?.updateValueViews()
-        delegate?.updateSliderValue(sliderValue)
-        delegate?.enableDownload(tileRegion.size > 0)
-        delegate?.enableUpload(existingTiles == allPreloadTiles)
-        return true
-    }
-    
-    func startDownload(){
-        if tileRegion.size == 0{
-            return
-        }
-        if preloadErrors > 0{
-            preloadErrors = 0
-            delegate?.updateValueViews()
-            delegate?.updateSliderValue(sliderValue)
-        }
-        delegate?.enableDownload(false)
-        delegate?.enableUpload(false)
-        delegate?.enableZoomControls(false)
-        tileDownloadQueue = OperationQueue()
-        tileDownloadQueue!.name = "downloadQueue"
-        tileDownloadQueue!.maxConcurrentOperationCount = 2
-        for tileGrid in tileRegion.zoomGrids{
-            for tileLine in tileGrid.tileLines{
-                for tile in tileLine.tiles{
-                    if !tile.present{
-                        let operation = TileDownloadOperation(tile: tile)
-                        operation.delegate = self
-                        tileDownloadQueue!.addOperation(operation)
-                    }
-                }
+        if let coordinateRegion = self.coordinateRegion{
+            tiles.removeAll()
+            var tileSets = Dictionary<Int, TileSet>()
+            for zoom in World.minZoom...maxZoom{
+                let tileSet = TileSet()
+                tileSet.minX = World.tileX(coordinateRegion.minLongitude, withZoom: zoom)
+                tileSet.maxX = World.tileX(coordinateRegion.maxLongitude, withZoom: zoom)
+                tileSet.minY = World.tileY(coordinateRegion.maxLatitude, withZoom: zoom)
+                tileSet.maxY = World.tileY(coordinateRegion.minLatitude, withZoom: zoom)
+                //Logger.debug("tiles at \(zoom): \(tileSet.size) from \(tileSet.minX),\(tileSet.minY) to \(tileSet.maxX),\(tileSet.maxY)")
+                tileSets[zoom] = tileSet
+                allTiles += tileSet.size
             }
-        }
-    }
-    
-    func cancelDownload(){
-        tileDownloadQueue?.cancelAllOperations()
-        reset()
-        existingTiles = tileRegion.checkExistingTiles(tileSource: Settings.shared.tileSource)
-        delegate?.updateValueViews()
-        delegate?.updateSliderValue(sliderValue)
-        delegate?.enableDownload(true)
-        delegate?.enableUpload(true)
-        delegate?.enableZoomControls(true)
-    }
-    
-    // watch
-    
-    func prepareUpload(){
-        uploadPrepared = false
-        watchTileRegion = tileRegion.getCopy(maxZoom: min(tileRegion.maxZoom, maxPreloadZoom), complete: true)
-        if WatchConnector.shared.isWatchConnected{
-            WatchConnector.shared.checkTiles(watchTileRegion){ region in
-                if let region = region{
-                    self.existingWatchTiles = region.getExistingTiles()
-                    self.delegate?.updateWatchValueViews()
-                    self.delegate?.updateWatchSliderValue(self.watchSliderValue)
-                    self.uploadPrepared = true
-                }
+            if allTiles > Self.maxDownloadTiles{
+                Logger.info("too many tiles")
+                return false
             }
-        }
-    }
-    
-    func startWatchUpload() -> Bool{
-        if WatchConnector.shared.isWatchConnected, uploadPrepared{
-            delegate?.enableUpload(false)
-            uploadErrors = 0
-            tileUploadQueue = OperationQueue()
-            tileUploadQueue!.name = "uploadQueue"
-            tileUploadQueue!.maxConcurrentOperationCount = 1
-            for tileGrid in watchTileRegion.zoomGrids{
-                for tileLine in tileGrid.tileLines{
-                    for tile in tileLine.tiles{
-                        if let data = FileManager.default.readFile(url: tile.fileUrl){
-                            let operation = TileUploadOperation(tile: tile, data:data)
-                            operation.delegate = self
-                            tileUploadQueue!.addOperation(operation)
+            for zoom in tileSets.keys{
+                guard let tileSet = tileSets[zoom] else { continue }
+                for x in tileSet.minX...tileSet.maxX{
+                    for y in tileSet.minY...tileSet.maxY{
+                        let tile = MapTile(zoom: zoom, x: x, y: y, tileSource: Settings.shared.tileSource)
+                        if tile.fileExists{
+                            existingTiles += 1
+                            continue
                         }
+                        tiles.append(tile)
                     }
                 }
             }
             return true
         }
-        else{
-            return false
+        return false
+    }
+    
+    func startDownload(){
+        if tiles.isEmpty{
+            return
+        }
+        if downloadErrors > 0{
+            downloadErrors = 0
+        }
+        showSpinner = true
+        downloadQueue = OperationQueue()
+        downloadQueue!.name = "downloadQueue"
+        downloadQueue!.maxConcurrentOperationCount = 2
+        tiles.forEach { tile in
+            let operation = TileDownloadOperation(tile: tile)
+            operation.delegate = self
+            downloadQueue!.addOperation(operation)
+        }
+    }
+    
+    func cancelDownload(){
+        downloadQueue?.cancelAllOperations()
+        reset()
+        update()
+    }
+    
+    func startWatchTileCheck(){
+        checkWatchTiles()
+    }
+    
+    @discardableResult
+    func checkWatchTiles() -> Bool{
+        resetWatch()
+        var tileList = MapTileDataList()
+        if let coordinateRegion = self.coordinateRegion{
+            watchTiles.removeAll()
+            var tileSets = Dictionary<Int, TileSet>()
+            for zoom in World.minZoom...maxZoom{
+                let tileSet = TileSet()
+                tileSet.minX = World.tileX(coordinateRegion.minLongitude, withZoom: zoom)
+                tileSet.maxX = World.tileX(coordinateRegion.maxLongitude, withZoom: zoom)
+                tileSet.minY = World.tileY(coordinateRegion.maxLatitude, withZoom: zoom)
+                tileSet.maxY = World.tileY(coordinateRegion.minLatitude, withZoom: zoom)
+                //Logger.debug("tiles at \(zoom): \(tileSet.size) from \(tileSet.minX),\(tileSet.minY) to \(tileSet.maxX),\(tileSet.maxY)")
+                tileSets[zoom] = tileSet
+                allWatchTiles += tileSet.size
+            }
+            if allWatchTiles > Self.maxDownloadTiles{
+                Logger.info("too many tiles")
+                return false
+            }
+            for zoom in tileSets.keys{
+                guard let tileSet = tileSets[zoom] else { continue }
+                for x in tileSet.minX...tileSet.maxX{
+                    for y in tileSet.minY...tileSet.maxY{
+                        let tile = MapTileData(zoom: zoom, x: x, y: y, tileSource: Settings.shared.tileSource)
+                        tileList.append(tile)
+                    }
+                }
+            }
+            WatchConnector.shared.checkTiles(tileList){ list in
+                if let missingTiles = list{
+                    for tileData in missingTiles{
+                        self.watchTiles.append(MapTile(zoom: tileData.zoom, x: tileData.x, y: tileData.y, tileSource: Settings.shared.tileSource))
+                    }
+                }
+                self.existingWatchTiles = self.allWatchTiles - self.watchTiles.count
+                Logger.info("watch tiles missing: \(self.watchTiles.count)")
+            }
+            return true
+        }
+        return false
+    }
+    
+    func startWatchUpload(){
+        if watchTiles.isEmpty{
+            return
+        }
+        if WatchConnector.shared.isWatchConnected{
+            uploadedTiles = 0
+            uploadErrors = 0
+            uploadQueue = OperationQueue()
+            uploadQueue!.name = "uploadQueue"
+            uploadQueue!.maxConcurrentOperationCount = 1
+            Logger.info("uploading \(watchTiles.count) tiles")
+            watchTiles.forEach { tile in
+                if let data = FileManager.default.readFile(url: tile.fileUrl){
+                    let operation = TileUploadOperation(tile: tile, data:data)
+                    operation.delegate = self
+                    uploadQueue!.addOperation(operation)
+                }
+                else{
+                    uploadWithError()
+                }
+            }
+            Logger.info("watch upload started")
         }
     }
     
     func cancelWatchUpload(){
-        tileUploadQueue?.cancelAllOperations()
+        uploadQueue?.cancelAllOperations()
+        Logger.info("watch upload canceled")
         reset()
-        reset()
-        delegate?.enableDownload(true)
-        delegate?.enableUpload(true)
-        delegate?.enableZoomControls(true)
+    }
+    
+    private class TileSet{
+        
+        var minX = 0
+        var minY = 0
+        var maxX = 0
+        var maxY = 0
+        
+        init(){
+        }
+        
+        var size : Int{
+            (maxX - minX + 1) * (maxY - minY + 1)
+        }
+        
     }
     
 }
@@ -182,28 +215,27 @@ extension MapPreloader: DownloadDelegate{
     
     func downloadSucceeded() {
         existingTiles += 1
-        if existingTiles > allPreloadTiles{
-            existingTiles = allPreloadTiles
+        if existingTiles > allTiles{
+            existingTiles = allTiles
         }
-        delegate?.updateValueViews()
-        delegate?.updateSliderValue(sliderValue)
+        if allTiles != 0{
+            downloadProgress = Double(existingTiles + downloadErrors) / Double(allTiles)
+        }
         checkCompletion()
     }
     
     func downloadWithError() {
-        preloadErrors += 1
-        delegate?.updateValueViews()
-        delegate?.updateSliderValue(sliderValue)
+        downloadErrors += 1
+        if allTiles != 0{
+            downloadProgress = Double(existingTiles + downloadErrors) / Double(allTiles)
+        }
         checkCompletion()
     }
     
     private func checkCompletion(){
-        if existingTiles + preloadErrors >= allPreloadTiles{
-            delegate?.enableZoomControls(true)
-            delegate?.enableUpload(existingTiles == allPreloadTiles)
-            tileDownloadQueue?.cancelAllOperations()
-            tileDownloadQueue = nil
-            delegate?.downloadFinished()
+        if existingTiles + downloadErrors >= allTiles{
+            downloadQueue?.cancelAllOperations()
+            downloadQueue = nil
         }
     }
     
@@ -212,31 +244,29 @@ extension MapPreloader: DownloadDelegate{
 extension MapPreloader: UploadDelegate{
     
     func uploadSucceeded() {
+        uploadedTiles += 1
         existingWatchTiles += 1
-        delegate?.updateWatchValueViews()
-        delegate?.updateWatchSliderValue(watchSliderValue)
+        if watchTiles.count != 0{
+            uploadProgress = Double(uploadedTiles + uploadErrors)/Double(watchTiles.count)
+        }
         checkWatchCompletion()
     }
     
     func uploadWithError() {
         uploadErrors += 1
-        delegate?.updateWatchValueViews()
-        delegate?.updateWatchSliderValue(watchSliderValue)
+        if watchTiles.count != 0{
+            uploadProgress = Double(uploadedTiles + uploadErrors)/Double(watchTiles.count)
+        }
         checkWatchCompletion()
     }
     
     private func checkWatchCompletion(){
-        if existingWatchTiles + uploadErrors == watchTileRegion.size{
-            delegate?.enableUpload(true)
-            tileUploadQueue?.cancelAllOperations()
-            tileUploadQueue = nil
+        if uploadedTiles + uploadErrors == watchTiles.count{
+            uploadQueue?.cancelAllOperations()
+            uploadQueue = nil
         }
     }
     
 }
 
-
-
-
-    
 

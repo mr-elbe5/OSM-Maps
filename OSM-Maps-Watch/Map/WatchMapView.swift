@@ -47,8 +47,7 @@ struct MapView: View {
     }
     
     func getImage(_ x: Int, _ y: Int) -> UIImage?{
-        let tile = mapStatus.getTile(x: x, y: y)
-        if tile != Tile.nullTile{
+        if let tile = mapStatus.getTile(x: x, y: y){
             if let imageData = tile.imageData{
                 return UIImage(data: imageData)
             }
@@ -58,8 +57,7 @@ struct MapView: View {
     
     func getOverlayImage(_ idx: Int, _ x: Int, _ y: Int) -> UIImage?{
         //print("get overlay tile")
-        let tile = mapStatus.getOverlayTile(idx: idx, x: x, y: y)
-        if tile != Tile.nullTile{
+        if let tile = mapStatus.getOverlayTile(idx: idx, x: x, y: y){
             if let imageData = tile.imageData{
                 return UIImage(data: imageData)
             }

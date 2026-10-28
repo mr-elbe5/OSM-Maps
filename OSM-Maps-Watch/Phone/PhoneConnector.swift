@@ -98,7 +98,7 @@ extension PhoneConnector: WCSessionDelegate {
                 let x = message["x"] as? Int ?? 0
                 let y = message["y"] as? Int ?? 0
                 if let data = message["data"] as? Data{
-                    let tile = Tile(zoom: zoom, x: x, y: y, tileSource: Settings.shared.tileSource)
+                    let tile = MapTile(zoom: zoom, x: x, y: y, tileSource: Settings.shared.tileSource)
                     tile.imageData = data
                     if FileManager.default.fileExists(atPath: tile.fileUrl.path()){
                         FileManager.default.deleteFile(url: tile.fileUrl)
@@ -137,16 +137,15 @@ extension PhoneConnector: WCSessionDelegate {
                 else{
                     replyHandler(["success": false])
                 }
-            case "checkTiles":
-                if let sourceName = message["sourceName"] as? String, let tileSource = TileSources.shared.first(where: {return $0.name == sourceName}), let data = message["data"] as? Data, let tileRegion = try? JSONDecoder().decode(TileRegion.self, from: data){
-                    for tileGrid in tileRegion.zoomGrids{
-                        for tileLine in tileGrid.tileLines{
-                            for tile in tileLine.tiles{
-                                tile.checkFileExists()
-                            }
+            case "missingTiles":
+                if let data = message["data"] as? Data, let tiles = try? JSONDecoder().decode(MapTileDataList.self, from: data){
+                    var result = MapTileDataList()
+                    for tileData in tiles{
+                        if !tileData.exists {
+                            result.append(tileData)
                         }
                     }
-                    if let response = try? JSONEncoder().encode(tileRegion){
+                    if let response = try? JSONEncoder().encode(result){
                         replyHandler(["success": true, "data" : response as Any])
                     }
                     else{

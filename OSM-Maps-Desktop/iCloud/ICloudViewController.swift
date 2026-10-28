@@ -220,13 +220,9 @@ class ICloudView: PopoverView, CloudSynchronizerDelegate {
     
     func updateButtonStates(){
         Task{
-            do{
-                let isOn = try await CKContainer.isConnected()
-                synchronizeFromICloudButton.isEnabled = isOn
-                synchronizeToICloudButton.isEnabled = isOn
-            }
-            catch{
-            }
+            let isOn = try await CKContainer.isConnected()
+            synchronizeFromICloudButton.isEnabled = isOn
+            synchronizeToICloudButton.isEnabled = isOn
         }
     }
     

@@ -24,6 +24,7 @@ struct WatchMainView: View {
                     .frame(width: proxy.size.width, height: proxy.size.height)
                     .background(.secondary)
                     .clipped()
+                    .focusable()
                 MapLinesCanvas(size: proxy.size)
                     .frame(width: proxy.size.width, height: proxy.size.height)
                     .background(.clear)
@@ -90,7 +91,7 @@ struct WatchMainView: View {
             }
             .clipped()
             .frame(maxWidth: .infinity)
-            .focusable()
+            .focusable(true)
             .digitalCrownRotation($zoomLevel, from: CGFloat(World.minZoom), through: CGFloat(World.maxZoom), sensitivity: .low, onChange: { evt in
                 MapStatus.shared.zoomTo(Int(zoomLevel))
             })

@@ -86,12 +86,8 @@ class AudioPlayerView : UIView, AVAudioPlayerDelegate{
             player.rate = 0
             player.volume = volumeSlider.value
             Task(){
-                do{
-                    let duration = try await asset.load(.duration)
-                    addPeriodicTimeObserver(duration: duration)
-                }
-                catch{
-                }
+                let duration = try await asset.load(.duration)
+                addPeriodicTimeObserver(duration: duration)
             }
             rewindButton.isEnabled = false
             volumeSlider.isEnabled = true

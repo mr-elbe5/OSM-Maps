@@ -8,9 +8,9 @@ import SwiftUI
 
 struct TileView: View {
     
-    var mapTile: Tile
+    var mapTile: MapTile
     
-    init(mapTile: Tile) {
+    init(mapTile: MapTile) {
         self.mapTile = mapTile
     }
     

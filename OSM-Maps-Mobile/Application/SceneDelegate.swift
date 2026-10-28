@@ -26,7 +26,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         ViewFilter.load()
         MapStatus.load()
         AppData.load()
-        Logger.info("current tile Source is \(Settings.shared.tileSource.name)")
         Logger.info("current UTC offset: \(UTCOffset.current.value)")
         
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)

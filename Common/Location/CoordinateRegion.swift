@@ -77,7 +77,7 @@ class CoordinateRegion: Equatable, Codable{
         coordinate.latitude >= minLatitude && coordinate.latitude <= maxLatitude && coordinate.longitude >= minLongitude && coordinate.longitude <= maxLongitude
     }
     
-    var string : String{
+    open var string : String{
         "minLatitude = \(minLatitude), maxLatitude = \(maxLatitude), minLongitude = \(minLongitude), maxLongitude = \(maxLongitude)"
     }
     
