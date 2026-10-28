@@ -30,6 +30,20 @@ class TileGrid : Codable{
         Settings.shared.tileSource
     }
     
+    subscript(index: Int) -> TileLine {
+        get {
+            if index < 0 || index >= tileLines.count{
+                return TileLine.emptyLine
+            }
+            return tileLines[index]
+        }
+        set(newValue) {
+            if index >= 0 && index < tileLines.count{
+                tileLines[index] = newValue
+            }
+        }
+    }
+    
     init(){
     }
     
@@ -74,19 +88,11 @@ class TileGrid : Codable{
         }
     }
     
-    func getTile(x: Int, y: Int) -> Tile? {
-        if y < 0 || y >= tileLines.count{
-            return nil
-        }
-        return tileLines[y].getTile(x: x)
+    /*func getTile(xidx: Int, yidx: Int) -> Tile{
+        tileLines[yidx].getTile(xidx: xidx)
     }
     
-    func setTile(tile: Tile, x: Int, y: Int){
-        if y < 0 || y >= tileLines.count{
-            return
-        }
-        tileLines[y].setTile(tile, x: x)
-    }
+    */
     
     func checkExistingTiles(tileSource: TileSource) -> Int{
         var count : Int = 0
@@ -131,6 +137,20 @@ class TileLine : Codable{
         Settings.shared.tileSource
     }
     
+    subscript(index: Int) -> Tile {
+        get {
+            if index < 0 || index >= tiles.count{
+                return Tile.nullTile
+            }
+            return tiles[index]
+        }
+        set(newValue) {
+            if index >= 0 && index < tiles.count{
+                tiles[index] = newValue
+            }
+        }
+    }
+    
     init(){
     }
     
@@ -167,19 +187,11 @@ class TileLine : Codable{
         }
     }
     
-    func getTile(x: Int) -> Tile? {
-        if x < 0 || x >= tiles.count{
-            return nil
-        }
-        return tiles[x]
+    /*func getTile(x: Int) -> Tile{
+        tiles[x]
     }
-
-    func setTile(_ tile: Tile, x: Int) {
-        if x < 0 || x >= tiles.count{
-            return
-        }
-        tiles[x] = tile
-    }
+    
+    */
     
     func checkExistingTiles(tileSource: TileSource) -> Int{
         var count : Int = 0

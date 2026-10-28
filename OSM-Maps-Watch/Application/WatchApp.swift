@@ -18,7 +18,7 @@ class WatchAppDelegate: NSObject, WKApplicationDelegate {
         MapDefaults.startZoom = 14
         TileSources.load()
         OverlayTileSources.load()
-        //Settings.load()
+        Settings.load()
         Settings.shared.assertInitialTileDir()
         Settings.shared.followLocation = true
         WatchMapStatus.shared.zoom = MapDefaults.startZoom

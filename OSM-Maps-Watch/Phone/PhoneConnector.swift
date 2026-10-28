@@ -139,7 +139,6 @@ extension PhoneConnector: WCSessionDelegate {
                 }
             case "checkTiles":
                 if let sourceName = message["sourceName"] as? String, let tileSource = TileSources.shared.first(where: {return $0.name == sourceName}), let data = message["data"] as? Data, let tileRegion = try? JSONDecoder().decode(TileRegion.self, from: data){
-                    Settings.shared.tileSource = tileSource
                     for tileGrid in tileRegion.zoomGrids{
                         for tileLine in tileGrid.tileLines{
                             for tile in tileLine.tiles{

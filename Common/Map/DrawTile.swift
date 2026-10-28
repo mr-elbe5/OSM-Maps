@@ -52,6 +52,7 @@ typealias DrawTileList = Array<DrawTileData>
 extension DrawTileList{
     
     static func getDrawTiles(size: CGSize, zoom: Int, downScale: CGFloat, scaledWorldViewRect: CGRect) -> DrawTileList{
+        let tileSource = Settings.shared.tileSource
         let tileExtent = World.tileExtent
         let minTileX = Int(floor(scaledWorldViewRect.minX/tileExtent))
         let minTileY = Int(floor(scaledWorldViewRect.minY/tileExtent))

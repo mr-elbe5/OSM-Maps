@@ -14,6 +14,7 @@ struct WatchMainView: View {
     @State var healthStatus = WatchHealthStatus.shared
     @State var settings = Settings.shared
     @State var mapStatus = WatchMapStatus.shared
+    @State var zoomLevel: CGFloat = CGFloat(WatchMapStatus.shared.zoom)
     
     var body: some View {
         GeometryReader{ proxy in
@@ -27,10 +28,9 @@ struct WatchMainView: View {
                     .frame(width: proxy.size.width, height: proxy.size.height)
                     .background(.clear)
                     .clipped()
-                CrownView()
                 if settings.showCurrentLocation{
                     WatchLocationView()
-                        .offset(x: mapStatus.tileOffset.x, y: mapStatus.tileOffset.y)
+                        .offset(mapStatus.currentLocationOffset)
                 }
                 AccuracyView()
                     .position(x: 30, y: 15)
@@ -74,26 +74,12 @@ struct WatchMainView: View {
                 .mapButton()
                 .position(x: proxy.size.width - 20, y: proxy.size.height - 20)
                 Button(action: {
-                    WatchMapStatus.shared.refresh()
+                    mapStatus.refresh()
                 }) {
                     Image(systemName: "arrow.clockwise")
                 }
                 .mapButton()
-                .position(x: 20, y: proxy.size.height/3 - 20)
-                Button(action: {
-                    WatchMapStatus.shared.zoomIn()
-                }) {
-                    Image(systemName: "plus")
-                }
-                .mapButton()
-                .position(x: 20, y: proxy.size.height*2/3 - 20)
-                Button(action: {
-                    WatchMapStatus.shared.zoomOut()
-                }) {
-                    Image(systemName: "minus")
-                }
-                .mapButton()
-                .position(x: 20, y: proxy.size.height - 20)
+                .position(x: 20, y: proxy.size.height/2)
                 if routeStatus.route != nil{
                     NavigationLink(destination: WatchRouteControlView()) {
                         Image(systemName: "point.topright.arrow.triangle.backward.to.point.bottomleft.scurvepath")
@@ -104,6 +90,10 @@ struct WatchMainView: View {
             }
             .clipped()
             .frame(maxWidth: .infinity)
+            .focusable()
+            .digitalCrownRotation($zoomLevel, from: CGFloat(World.minZoom), through: CGFloat(World.maxZoom), sensitivity: .low, onChange: { evt in
+                MapStatus.shared.zoomTo(Int(zoomLevel))
+            })
         }
     }
         

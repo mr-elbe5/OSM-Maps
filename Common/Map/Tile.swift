@@ -7,9 +7,9 @@
 import CoreLocation
 import OSLog
 
-@Observable class Tile: NSObject, Codable{
+class Tile: Codable, Equatable{
     
-    static var zero = Tile(zoom: 0, x: 0, y: 0)
+    static var nullTile = Tile(zoom: 0, x: 0, y: 0)
     
     static func == (lhs: Tile, rhs: Tile) -> Bool{
         lhs.x == rhs.x && lhs.y == rhs.y && lhs.zoom == rhs.zoom
@@ -42,7 +42,7 @@ import OSLog
     }
     
     var fileUrl: URL{
-        BasePaths.tileDirURL.appendingPathComponent(tileSource.name).appendingPathComponent("\(asString).png")
+        BasePaths.tileDirURL.appendingPathComponent(tileSource.name).appendingPathComponent("\(shortDescription).png")
     }
     
     var fileExists: Bool{
@@ -78,14 +78,6 @@ import OSLog
         try container.encode(present, forKey: .present)
     }
     
-    func change(zoom: Int, x: Int, y: Int, tileSource: TileSource){
-        self.zoom = zoom
-        self.x = x
-        self.y = y
-        self.tileSource = tileSource
-        self.imageData = nil
-    }
-    
     func checkFileExists(){
         present = fileExists
     }
@@ -94,6 +86,7 @@ import OSLog
         if imageData != nil{
             return true
         }
+        let url = fileUrl
         if fileExists, let fileData = FileManager.default.contents(atPath: fileUrl.path){
             imageData = fileData
             return true
@@ -101,7 +94,7 @@ import OSLog
         return false
     }
     
-    var asString : String{
+    var shortDescription : String{
         "\(zoom)-\(x)-\(y)"
     }
     
@@ -120,9 +113,6 @@ import OSLog
     var tileUrl: URL{
         URL(string: tileSource.templateUrl.replacingOccurrences(of: "{z}", with: String(zoom)).replacingOccurrences(of: "{x}", with: String(x)).replacingOccurrences(of: "{y}", with: String(y)))!
     }
-    
 }
 
 typealias TileList = Array<Tile>
-typealias TileArea = Array<TileList>
-
