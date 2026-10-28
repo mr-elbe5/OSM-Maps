@@ -149,11 +149,15 @@ extension DataViewController{
     func showCloudStatus(){
         let synchronizer = CloudSynchronizer()
         Task{
-            if let status = try await synchronizer.getSyncStatus(){
-                showMessage(title: "syncStatus".localize(), text: status.text)
+            do{
+                if let status = try await synchronizer.getSyncStatus(){
+                    showMessage(title: "syncStatus".localize(), text: status.text)
+                }
+                else{
+                    showError("syncronizeFailed".localize())
+                }
             }
-            else{
-                showError("syncronizeFailed".localize())
+            catch{
             }
         }
     }

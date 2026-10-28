@@ -70,13 +70,13 @@ class TileSourceView: PopoverView{
         addSubviewBelow(label, upperView: tileUrlTemplateField, insets: .defaultInsets)
         var lastView: NSView = label
         
-        for mapServer in TileSources.shared{
+        for tileSource in TileSources.shared{
             let button = TileSourceActionButton()
-            button.asTextButton(mapServer.displayName,target: self, action: #selector(setTileSource))
-            button.source = mapServer
+            button.asTextButton(tileSource.displayName,target: self, action: #selector(setTileSource))
+            button.source = tileSource
             addSubviewWithAnchors(button, top: lastView.bottomAnchor, leading: leadingAnchor)
             let deleteButton = TileSourceActionButton(icon: "trash", color: .systemRed, target: self, action: #selector(deleteTileSource))
-            deleteButton.source = mapServer
+            deleteButton.source = tileSource
             addSubviewWithAnchors(deleteButton, leading: button.trailingAnchor, trailing: trailingAnchor)
                 .centerY(button.centerYAnchor)
                 .width(30)
@@ -133,15 +133,15 @@ class TileSourceView: PopoverView{
     }
     
     @objc func setTileSource(_ sender: AnyObject){
-        if let button = sender as? TileSourceActionButton{
-            self.nameField.text = button.source.displayName
-            self.tileUrlTemplateField.text = button.source.templateUrl
+        if let button = sender as? TileSourceActionButton, let tileSource = button.source{
+            self.nameField.text = tileSource.displayName
+            self.tileUrlTemplateField.text = tileSource.templateUrl
         }
     }
     
     @objc func deleteTileSource(_ sender: AnyObject){
-        if let button = sender as? TileSourceActionButton{
-            TileSources.shared.remove(button.source)
+        if let button = sender as? TileSourceActionButton, let tileSource = button.source{
+            TileSources.shared.remove(tileSource)
             TileSources.shared.save()
             self.setupContent()
         }
@@ -333,7 +333,7 @@ class OverlayLine: NSView{
 
 class TileSourceActionButton: NSButton{
     
-    var source: TileSource = .dummyTileSource
+    var source: TileSource? = nil
     
 }
 

@@ -18,7 +18,7 @@ class MapTile{
         return tile
     }
     
-    static var dummyTile: MapTile = MapTile(zoom: 0, x: 0, y: 0, tileSource: TileSource.dummyTileSource)
+    static var zero: MapTile = MapTile(zoom: 0, x: 0, y: 0, tileSource: TileSource(name: "", displayName: "", templateUrl: ""))
 
     var x: Int
     var y: Int
@@ -73,29 +73,28 @@ typealias MapTileList = [MapTile]
 
 struct MapTileData: Codable{
     
-    init(zoom: Int, x: Int, y: Int, tileSource: TileSource) {
+    static var zero = MapTileData(zoom: 0, x: 0, y: 0)
+    
+    init(zoom: Int, x: Int, y: Int) {
         self.zoom = zoom
         self.x = x
         self.y = y
-        self.tileSource = tileSource
     }
     
     var zoom: Int
     var x: Int
     var y: Int
     
-    var tileSource: TileSource
-    
     var shortDescription : String{
         "\(zoom)-\(x)-\(y)"
     }
     
-    var fileUrl: URL{
+    func fileUrl(tileSource: TileSource) -> URL{
         BasePaths.tileDirURL.appendingPathComponent(tileSource.name).appendingPathComponent("\(shortDescription).png")
     }
     
-    var exists: Bool{
-        FileManager.default.fileExists(atPath: fileUrl.path)
+    func exists(tileSource: TileSource) -> Bool{
+        FileManager.default.fileExists(atPath: fileUrl(tileSource: tileSource).path)
     }
     
 }

@@ -41,7 +41,7 @@ struct MapView: View {
                 }
                 
             }
-            .offset(x: mapStatus.tileOffsetX, y: mapStatus.tileOffsetY)
+            .offset(x: mapStatus.tileOffset.width, y: mapStatus.tileOffset.height)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }

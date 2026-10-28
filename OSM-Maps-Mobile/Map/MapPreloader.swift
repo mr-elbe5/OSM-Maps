@@ -143,7 +143,7 @@ class MapPreloader {
                 guard let tileSet = tileSets[zoom] else { continue }
                 for x in tileSet.minX...tileSet.maxX{
                     for y in tileSet.minY...tileSet.maxY{
-                        let tile = MapTileData(zoom: zoom, x: x, y: y, tileSource: Settings.shared.tileSource)
+                        let tile = MapTileData(zoom: zoom, x: x, y: y)
                         tileList.append(tile)
                     }
                 }

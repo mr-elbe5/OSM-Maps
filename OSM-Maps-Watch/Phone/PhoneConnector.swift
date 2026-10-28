@@ -141,7 +141,7 @@ extension PhoneConnector: WCSessionDelegate {
                 if let data = message["data"] as? Data, let tiles = try? JSONDecoder().decode(MapTileDataList.self, from: data){
                     var result = MapTileDataList()
                     for tileData in tiles{
-                        if !tileData.exists {
+                        if !tileData.exists(tileSource: Settings.shared.tileSource) {
                             result.append(tileData)
                         }
                     }

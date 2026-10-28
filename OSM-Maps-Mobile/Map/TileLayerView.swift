@@ -56,7 +56,7 @@ class TileLayerView: UIView {
             x -= currentMaxTiles
         }
         let y = Int(round(rect.minY / upScale / Double(World.tileSize.height)))
-        return MapTileData(zoom: zoom, x: x, y: y, tileSource: Settings.shared.tileSource)
+        return MapTileData(zoom: zoom, x: x, y: y)
     }
     
     // rect is in contentSize = planetSize

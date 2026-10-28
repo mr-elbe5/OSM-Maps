@@ -21,20 +21,14 @@ typealias MapTileGrid = [MapTileRow]
     var direction: CLLocationDirection = 0
     
     var screenSize = WKInterfaceDevice.current().screenBounds
-    let tileExtent: CGFloat = World.tileExtent
     var gridWidth: Int = 1
     var gridHeight: Int = 1
     var tileGrid: MapTileGrid = []
     var overlayGrids: [MapTileGrid] = []
     
-    var centerTileX: Int = 0
-    var centerTileY: Int = 0
-    var horzExtraTiles: Int = 0
-    var vertExtraTiles: Int = 0
-    var tileOffsetX: CGFloat = 0
-    var tileOffsetY: CGFloat = 0
+    var centerTile: MapTileData = .zero
+    var tileOffset: CGSize = .zero
     var currentLocationOffset: CGSize = .zero
-    
     var zoom: Int = MapDefaults.startZoom
     
     private var downScaleFromWorld = World.downScale(to: MapDefaults.startZoom)
@@ -49,15 +43,13 @@ typealias MapTileGrid = [MapTileRow]
         super.init()
         currentCoordinate = LocationStatus.shared.coordinate
         centerCoordinate = LocationStatus.shared.coordinate
-        horzExtraTiles = Int(floor(screenSize.width/2 / tileExtent)) + 2
-        vertExtraTiles = Int(floor(screenSize.height/2 / tileExtent)) + 2
-        gridWidth = 2 * horzExtraTiles + 1
-        gridHeight = 2 * vertExtraTiles + 1
+        gridWidth = 2 * (Int(floor(screenSize.width/2 / World.tileExtent)) + 2) + 1
+        gridHeight = 2 * (Int(floor(screenSize.height/2 / World.tileExtent)) + 2) + 1
         //Logger.debug("grid size = \(gridWidth) x \(gridHeight)")
         for _ in 0..<gridHeight {
             var row = MapTileRow()
             for _ in 0..<gridWidth {
-                row.append(MapTile.dummyTile)
+                row.append(MapTile.zero)
             }
             tileGrid.append(row)
         }
@@ -71,7 +63,7 @@ typealias MapTileGrid = [MapTileRow]
             for _ in 0..<gridHeight {
                 var overlayRow = MapTileRow()
                 for _ in 0..<gridWidth {
-                    overlayRow.append(MapTile.dummyTile)
+                    overlayRow.append(MapTile.zero)
                 }
                 grid.append(overlayRow)
             }
@@ -101,15 +93,14 @@ typealias MapTileGrid = [MapTileRow]
     }
     
     func updateTiles(){
-        let centerTileLeft = scaledWorldCenterX - tileExtent/2
-        let centerTileTop = scaledWorldCenterY - tileExtent/2
-        centerTileX = Int(floor(centerTileLeft / tileExtent))
-        centerTileY = Int(floor(centerTileTop / tileExtent))
+        let centerTileLeft = scaledWorldCenterX - World.tileExtent/2
+        let centerTileTop = scaledWorldCenterY - World.tileExtent/2
+        centerTile = MapTileData(zoom: zoom, x: Int(floor(centerTileLeft / World.tileExtent)), y: Int(floor(centerTileTop / World.tileExtent)))
         //print("centerTile \(centerTileX), \(centerTileY)")
-        
         // diff of tile edge to center plus offset to tile center
-        tileOffsetX = (Double(centerTileX)*tileExtent - scaledWorldCenterX + tileExtent/2)
-        tileOffsetY = (Double(centerTileY)*tileExtent - scaledWorldCenterY + tileExtent/2)
+        let tileOffsetX = (Double(centerTile.x)*World.tileExtent - scaledWorldCenterX + World.tileExtent/2)
+        let tileOffsetY = (Double(centerTile.y)*World.tileExtent - scaledWorldCenterY + World.tileExtent/2)
+        tileOffset = CGSize(width: tileOffsetX, height: tileOffsetY)
         //print("offset: \(tileOffsetX),\(tileOffsetY)")
         updateTileGrid()
     }
@@ -124,8 +115,8 @@ typealias MapTileGrid = [MapTileRow]
         for y in 0..<gridHeight {
             for x in 0..<gridWidth {
                 let currentTile = tileGrid[y][x]
-                let newTileX = centerTileX - horzExtraTiles + x
-                let newTileY = centerTileY - vertExtraTiles + y
+                let newTileX = centerTile.x - (gridWidth - 1)/2 + x
+                let newTileY = centerTile.y - (gridHeight - 1)/2 + y
                 if currentTile.zoom != zoom || currentTile.x != newTileX || currentTile.y != newTileY || currentTile.tileSource != Settings.shared.tileSource{
                     //print("changing tile")
                     let tile = MapTile(zoom: zoom, x: newTileX, y: newTileY, tileSource: Settings.shared.tileSource)
@@ -154,7 +145,7 @@ typealias MapTileGrid = [MapTileRow]
                         overlayGrids[i][y][x] = tile
                     }
                     else{
-                        overlayGrids[i][y][x] = MapTile.dummyTile
+                        overlayGrids[i][y][x] = MapTile.zero
                     }
                 }
             }
