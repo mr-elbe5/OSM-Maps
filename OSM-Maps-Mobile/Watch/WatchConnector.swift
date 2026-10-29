@@ -105,7 +105,7 @@ class WatchConnector: NSObject {
         }
     }
     
-    func checkTiles(_ tiles: TileDataList, completion: @escaping (TileDataList?) -> Void) {
+    func checkTiles(_ tiles: TileDataBlock, completion: @escaping (TileDataBlock?) -> Void) {
         Logger.debug("checking tiles")
         if !isWatchConnected {
             Logger.error("not connected to phone")
@@ -120,7 +120,7 @@ class WatchConnector: NSObject {
                 DispatchQueue.main.async {
                     if let success = response["success"] as? Bool, success{
                         if let data = response["data"] as? Data {
-                            if let tilesData = try? JSONDecoder().decode(TileDataList.self, from: data){
+                            if let tilesData = try? JSONDecoder().decode(TileDataBlock.self, from: data){
                                 completion(tilesData)
                             }
                             else{

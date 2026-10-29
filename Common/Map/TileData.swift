@@ -7,7 +7,7 @@
 import Foundation
 import OSLog
 
-struct TileData: Codable{
+class TileData: Codable{
     
     static var zero = TileData(zoom: 0, x: 0, y: 0)
     
@@ -61,25 +61,82 @@ extension TileDataGrid{
 
 struct TileDataBlock: Codable{
     
-    var minX: Int
-    var maxX: Int
-    var minY: Int
-    var maxY: Int
-    var minZoom: Int
-    var maxZoom: Int
-    var grids: [TileDataGrid]
+    var minLon: Double = 0
+    var maxLon: Double = 0
+    var minLat: Double = 0
+    var maxLat: Double = 0
+    var minZoom: Int = 0
+    var maxZoom: Int = 0
+    var grids = [TileDataGrid]()
     
-    init(minZoom: Int, maxZoom: Int, minX: Int, maxX: Int, minY: Int, maxY: Int){
+    var size: Int{
+        var count = 0
+        for grid in grids{
+            if !grid.isEmpty{
+                count += grid.count * grid[0].count
+            }
+        }
+        return count
+    }
+    
+    init(){
+    }
+    
+    mutating func setup(minZoom: Int, maxZoom: Int, minLon: Double, maxLon: Double, minLat: Double, maxLat: Double){
         self.minZoom = minZoom
         self.maxZoom = maxZoom
-        self.minX = minX
-        self.maxX = maxX
-        self.minY = minY
-        self.maxY = maxY
-        grids = [TileDataGrid]()
+        self.minLon = minLon
+        self.maxLon = maxLon
+        self.minLat = minLat
+        self.maxLat = maxLat
+        setupGrids()
+    }
+    
+    mutating func update(minZoom: Int, maxZoom: Int){
+        self.minZoom = minZoom
+        self.maxZoom = maxZoom
+        setupGrids()
+    }
+    
+    private mutating func setupGrids(){
+        grids.removeAll()
         for z in minZoom...maxZoom{
-            var grid = TileDataGrid(minX: minX, maxX: maxX, minY: minY, maxY: maxY, zoom: z)
+            let minX = World.tileX(minLon, withZoom: z)
+            let minY = World.tileY(maxLat, withZoom: z)
+            let maxX = World.tileX(maxLon, withZoom: z)
+            let maxY = World.tileY(minLat, withZoom: z)
+            let grid = TileDataGrid(minX: minX, maxX: maxX, minY: minY, maxY: maxY, zoom: z)
+            grids.append(grid)
         }
+    }
+    
+    func checkExistingTiles(tileSource: TileSource) -> Int{
+        var count : Int = 0
+        for grid in grids{
+            for line in grid{
+                for tile in line{
+                    if tile.exists(tileSource: tileSource){
+                        tile.flag = true
+                        count += 1
+                    }
+                }
+            }
+        }
+        return count
+    }
+    
+    func getExistingTiles() -> Int{
+        var count : Int = 0
+        for grid in grids{
+            for line in grid{
+                for tile in line{
+                    if tile.flag{
+                        count += 1
+                    }
+                }
+            }
+        }
+        return count
     }
     
 }

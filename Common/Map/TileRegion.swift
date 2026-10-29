@@ -5,25 +5,34 @@
  */
 
 import CoreLocation
+import OSLog
 
 class TileRegion : CoordinateRegion{
     
+    var minZoom : Int = 0
     var maxZoom : Int = 0
     var size : Int = 0
     
-    var tiles = Dictionary<Int, TileSet>()
+    var tiles = TileDataBlock()
     
-    init(topLeft: CLLocationCoordinate2D, bottomRight: CLLocationCoordinate2D, maxZoom: Int){
+    override init(){
+        super.init()
+    }
+    
+    init(topLeft: CLLocationCoordinate2D, bottomRight: CLLocationCoordinate2D, minZoom: Int, maxZoom: Int){
+        self.minZoom = minZoom
         self.maxZoom = maxZoom
-        size = 0
         super.init(topLeft: topLeft, bottomRight: bottomRight)
-        updateTileSets()
-        for zoom in tiles.keys{
-            if let tileSet = tiles[zoom]{
-                //debug("TileRegion zoom \(zoom): \(tileSet) with size \(tileSet.size)")
-                size += tileSet.size
-            }
-        }
+        tiles.setup(minZoom: minZoom, maxZoom: maxZoom, minLon: minLongitude, maxLon: maxLongitude, minLat: minLatitude, maxLat: maxLatitude)
+        size = tiles.size
+    }
+    
+    init(minLatitude: CLLocationDegrees, maxLatitude: CLLocationDegrees, minLongitude: CLLocationDegrees, maxLongitude: CLLocationDegrees, minZoom: Int,  maxZoom: Int, complete: Bool){
+        self.minZoom = minZoom
+        self.maxZoom = maxZoom
+        super.init(minLatitude: minLatitude, maxLatitude: maxLatitude, minLongitude: minLongitude, maxLongitude: maxLongitude)
+        tiles.setup(minZoom: minZoom, maxZoom: maxZoom, minLon: minLongitude, maxLon: maxLongitude, minLat: minLatitude, maxLat: maxLatitude)
+        size = tiles.size
     }
     
     required init(from decoder: Decoder) throws {
@@ -31,43 +40,22 @@ class TileRegion : CoordinateRegion{
     }
     
     func updateTileSets(){
-        tiles.removeAll()
-        for zoom in 0...maxZoom{
-            let bottomLeftTile = tileCoordinate(latitude: minLatitude, longitude: minLongitude, zoom: zoom)
-            let topRightTile = tileCoordinate(latitude: maxLatitude, longitude: maxLongitude, zoom: zoom)
-            let tileSet = TileSet(minX: bottomLeftTile.x, minY: bottomLeftTile.y, maxX: topRightTile.x, maxY: topRightTile.y)
-            tiles[zoom] = tileSet
-        }
+        tiles.update(minZoom: minZoom, maxZoom: maxZoom)
+        size = tiles.size
     }
     
-    func tileCoordinate(latitude: CLLocationDegrees, longitude: CLLocationDegrees, zoom: Int) -> (x: Int, y: Int){
-        let x = World.tileX(longitude, withZoom: zoom)
-        let y = World.tileY(latitude, withZoom: zoom)
-        return (x: Int(x), y: Int(y))
+    func getCopy(maxZoom: Int, complete: Bool) -> TileRegion{
+        TileRegion(minLatitude: minLatitude, maxLatitude: maxLatitude, minLongitude: minLongitude, maxLongitude: maxLongitude, minZoom: minZoom, maxZoom: maxZoom, complete: complete)
+    }
+    
+    func getJson() -> String{
+        let json:String = toJSON()
+        Logger.debug("encoded tile region size: \(json.size())")
+        return json
     }
     
     override var string : String{
         super.string + ", size = \(size)"
-    }
-    
-}
-
-class TileSet{
-    
-    var minX = 0
-    var minY = 0
-    var maxX = 0
-    var maxY = 0
-    
-    init(minX: Int, minY: Int, maxX: Int, maxY: Int){
-        self.minX = min(minX, maxX)
-        self.maxX = max(maxX, minX)
-        self.minY = min(minY, maxY)
-        self.maxY = max(maxY, minY)
-    }
-    
-    var size : Int{
-        (maxX - minX + 1) * (maxY - minY + 1)
     }
     
 }

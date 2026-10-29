@@ -65,13 +65,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		4E059D7B30922C8500EF9FB0 /* Exceptions for "OSM-Maps-Mobile" folder in "OSM-Maps-Watch" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Assets.xcassets,
-			);
-			target = 4E2157FF2DF1DFA9001ED51D /* OSM-Maps-Watch */;
-		};
 		4E2157E32DF1DE74001ED51D /* Exceptions for "OSM-Maps-Mobile" folder in "OSM-Maps-Mobile" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -261,7 +254,6 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				4E2157E32DF1DE74001ED51D /* Exceptions for "OSM-Maps-Mobile" folder in "OSM-Maps-Mobile" target */,
-				4E059D7B30922C8500EF9FB0 /* Exceptions for "OSM-Maps-Mobile" folder in "OSM-Maps-Watch" target */,
 			);
 			path = "OSM-Maps-Mobile";
 			sourceTree = "<group>";
