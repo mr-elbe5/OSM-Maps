@@ -3435,6 +3435,23 @@
         }
       }
     },
+    "prepareWatchUpload" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hochladen zur Uhr vorbereiten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prepare Upload to Watch"
+          }
+        }
+      }
+    },
     "progress" : {
       "extractionState" : "manual",
       "localizations" : {

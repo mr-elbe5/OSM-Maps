@@ -137,15 +137,14 @@ extension PhoneConnector: WCSessionDelegate {
                 else{
                     replyHandler(["success": false])
                 }
-            case "missingTiles":
-                if let data = message["data"] as? Data, let tiles = try? JSONDecoder().decode(TileDataList.self, from: data){
-                    var result = TileDataList()
-                    for tileData in tiles{
-                        if !tileData.exists(tileSource: Settings.shared.tileSource) {
-                            result.append(tileData)
-                        }
-                    }
-                    if let response = try? JSONEncoder().encode(result){
+            case "checkTiles":
+                if let tileSourceName = message["tileSource"] as? String,
+                   let tileSource = TileSources.shared.getByName(tileSourceName),
+                   let data = message["data"] as? Data,
+                   let tiles = try? JSONDecoder().decode(TileDataBlock.self, from: data){
+                    let existingTiles = tiles.checkExistingTiles(tileSource: tileSource)
+                    print("found \(existingTiles) existing tiles")
+                    if let response = try? JSONEncoder().encode(tiles){
                         replyHandler(["success": true, "data" : response as Any])
                     }
                     else{

@@ -110,6 +110,15 @@ extension TileSources{
         return list
     }
     
+    func getByName(_ name: String) -> TileSource?{
+        for i in 0..<count{
+            if self[i].name == name{
+                return self[i]
+            }
+        }
+        return nil
+    }
+    
     func getByUrl(_ url: String) -> TileSource?{
         for i in 0..<count{
             if self[i].templateUrl == url{

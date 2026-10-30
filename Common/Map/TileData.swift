@@ -115,8 +115,8 @@ struct TileDataBlock: Codable{
         for grid in grids{
             for line in grid{
                 for tile in line{
-                    if tile.exists(tileSource: tileSource){
-                        tile.flag = true
+                    tile.flag = tile.exists(tileSource: tileSource)
+                    if (tile.flag){
                         count += 1
                     }
                 }

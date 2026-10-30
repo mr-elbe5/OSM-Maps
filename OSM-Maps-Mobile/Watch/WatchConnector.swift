@@ -114,12 +114,14 @@ class WatchConnector: NSObject {
         }
         if let data = try? JSONEncoder().encode(tiles){
             session.sendMessage([
-                "request": "missingTiles",
+                "request": "checkTiles",
+                "tileSource": Settings.shared.tileSource.name,
                 "data": data as Any
             ], replyHandler: {response in
                 DispatchQueue.main.async {
                     if let success = response["success"] as? Bool, success{
                         if let data = response["data"] as? Data {
+                            print("data size is \(data.count)")
                             if let tilesData = try? JSONDecoder().decode(TileDataBlock.self, from: data){
                                 completion(tilesData)
                             }

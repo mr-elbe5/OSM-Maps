@@ -27,6 +27,8 @@ class MapPreloadViewController: ScrollViewController{
     
     // watch upload
     
+    var watchConnected = false
+    
     var watchStatusLabel = UILabel(text: "disconnected".localize())
     var prepareWatchUploadButton = UIButton()
     var startWatchUploadButton = UIButton()
@@ -50,7 +52,14 @@ class MapPreloadViewController: ScrollViewController{
         if preloader.tileRegion.tiles.grids.isEmpty{
             setTileRegion()
         }
-        setupPreloadButtons()
+        if preloader.existingTiles == preloader.allPreloadTiles{
+            startPreloadButton.isEnabled = false
+            cancelPreloadButton.isEnabled = false
+        }
+        else{
+            startPreloadButton.isEnabled = true
+            cancelPreloadButton.isEnabled = false
+        }
         if !WatchConnector.shared.isWatchConnected{
             WatchConnector.shared.start()
             DispatchQueue.main.async {
@@ -97,7 +106,12 @@ class MapPreloadViewController: ScrollViewController{
         
         for i: Int in 0...segSize{
             maxPreloadZoomControl.insertSegment(action: UIAction(){ action in
-                self.enableDownload(false)
+                self.calculateTilesButton.isEnabled = true
+                self.startPreloadButton.isEnabled = false
+                self.cancelPreloadButton.isEnabled = false
+                self.prepareWatchUploadButton.isEnabled = false
+                self.startWatchUploadButton.isEnabled = false
+                self.cancelWatchUploadButton.isEnabled = false
                 self.preloader.maxPreloadZoom = i + World.minZoom
             }, at: i, animated: false)
             maxPreloadZoomControl.setTitle(String(i + World.minZoom), forSegmentAt: i)
@@ -214,10 +228,19 @@ class MapPreloadViewController: ScrollViewController{
         contentView.addSubviewWithAnchors(uploadErrorsValueLabel, top: watchProgressView.bottomAnchor, leading: errorsInfo.trailingAnchor)
             .connectToBottom(of: contentView)
         
-        enableZoomControls(true)
-        enableDownload(false)
+        maxPreloadZoomControl.isEnabled = true
+        calculateTilesButton.isEnabled = true
+        startPreloadButton.isEnabled = false
+        cancelPreloadButton.isEnabled = false
+        prepareWatchUploadButton.isEnabled = false
+        startWatchUploadButton.isEnabled = false
+        cancelWatchUploadButton.isEnabled = false
         updateConnectionStatus()
-        
+    }
+    
+    func updateConnectionStatus(){
+        watchConnected = WatchConnector.shared.isWatchConnected
+        watchStatusLabel.text = watchConnected ? "connected".localize() : "disconnected".localize()
     }
     
     func deleteAllTiles(){
@@ -232,32 +255,26 @@ class MapPreloadViewController: ScrollViewController{
         }
     }
     
-    func setupPreloadButtons(){
-        if preloader.existingTiles == preloader.allPreloadTiles{
-            startPreloadButton.isEnabled = false
-            cancelPreloadButton.isEnabled = false
-        }
-        else{
-            startPreloadButton.isEnabled = true
-            cancelPreloadButton.isEnabled = false
-        }
-    }
-    
     func setTileRegion(){
         if !preloader.setTileRegion(MainViewController.shared.mapView.scrollView.tileRegion){
-            updateValueViews()
-            updateSliderValue(0.0)
-            enableDownload(false)
-            enableDownload(false)
             showError("tooManyTiles".localize(param: String(MapPreloader.maxDownloadTiles)))
+        }
+        else{
+            updateDownloadValues()
+            updateSliderValue(preloader.sliderValue)
+            maxPreloadZoomControl.isEnabled = true
+            calculateTilesButton.isEnabled = true
+            startPreloadButton.isEnabled = true
+            cancelPreloadButton.isEnabled = false
+            if watchConnected, preloader.existingTiles == preloader.allPreloadTiles{
+                prepareWatchUploadButton.isEnabled = true
+            }
+            startWatchUploadButton.isEnabled = false
+            cancelWatchUploadButton.isEnabled = false
         }
     }
     
-}
-
-extension MapPreloadViewController: PreloaderDelegate{
-    
-    func updateValueViews(){
+    func updateDownloadValues(){
         allTilesValueLabel.text = String(preloader.allPreloadTiles)
         existingTilesValueLabel.text = String(preloader.existingTiles)
         tilesToLoadValueLabel.text = String(preloader.allPreloadTiles - preloader.existingTiles)
@@ -265,44 +282,8 @@ extension MapPreloadViewController: PreloaderDelegate{
     }
     
     func updateSliderValue(_ value: Float){
-        if preloader.allPreloadTiles != 0{
-            preloadProgressView.progress = value
-        }
+        preloadProgressView.progress = value
     }
-    
-    func enableDownload(_ flag: Bool){
-        startPreloadButton.isEnabled = flag
-        cancelPreloadButton.isEnabled = !flag
-    }
-    
-    func enableUpload(_ flag: Bool){
-        startWatchUploadButton.isEnabled = flag
-        cancelWatchUploadButton.isEnabled = !flag
-    }
-    
-    func enableZoomControls(_ flag: Bool){
-        maxPreloadZoomControl.isEnabled = flag
-    }
-    
-    func downloadFinished(){
-        startPreloadButton.isEnabled = true
-        cancelPreloadButton.isEnabled = false
-    }
-    
-    func updateWatchValueViews(){
-        existingWatchTilesValueLabel.text = String(preloader.existingWatchTiles)
-        uploadErrorsValueLabel.text = String(preloader.uploadErrors)
-    }
-    
-    func updateWatchSliderValue(_ value: Float){
-        watchProgressView.progress = value
-    }
-    
-}
-
-extension MapPreloadViewController{
-    
-    // watch
     
     func prepareWatchUpload(){
         if WatchConnector.shared.isWatchConnected{
@@ -315,7 +296,6 @@ extension MapPreloadViewController{
     
     func startWatchUpload() -> Bool{
         if WatchConnector.shared.isWatchConnected, preloader.uploadPrepared{
-            enableUpload(false)
             showApprove(title: "tilepUload".localize(), text: "uploadingTiles".localize(i: preloader.uploadableWatchTiles))
             return preloader.startWatchUpload()
         }
@@ -327,15 +307,141 @@ extension MapPreloadViewController{
     
     func cancelWatchUpload(){
         preloader.cancelWatchUpload()
-        enableUpload(true)
     }
     
-    func updateConnectionStatus(){
-        watchStatusLabel.text = WatchConnector.shared.isWatchConnected ? "connected".localize() : "disconnected".localize()
-        enableUpload(WatchConnector.shared.isWatchConnected)
+    func updateWatchSliderValue(_ value: Float){
+        watchProgressView.progress = value
+    }
+    
+    func updateUploadValues(){
+        existingWatchTilesValueLabel.text = String(preloader.existingWatchTiles)
+        uploadErrorsValueLabel.text = String(preloader.uploadErrors)
     }
     
 }
+
+extension MapPreloadViewController: PreloaderDelegate{
+    
+    func tileRegionReady(){
+        updateDownloadValues()
+        updateSliderValue(preloader.sliderValue)
+        maxPreloadZoomControl.isEnabled = true
+        calculateTilesButton.isEnabled = true
+        if preloader.tileRegion.size > 0{
+            startPreloadButton.isEnabled = true
+        }
+        else{
+            startPreloadButton.isEnabled = false
+        }
+        cancelPreloadButton.isEnabled = false
+        prepareWatchUploadButton.isEnabled = false
+        startWatchUploadButton.isEnabled = false
+        cancelWatchUploadButton.isEnabled = false
+    }
+    
+    func downloadStarted(){
+        updateDownloadValues()
+        updateSliderValue(preloader.sliderValue)
+        maxPreloadZoomControl.isEnabled = false
+        calculateTilesButton.isEnabled = false
+        startPreloadButton.isEnabled = false
+        cancelPreloadButton.isEnabled = true
+        prepareWatchUploadButton.isEnabled = false
+        startWatchUploadButton.isEnabled = false
+        cancelWatchUploadButton.isEnabled = false
+    }
+    
+    func downloadCanceled(){
+        updateDownloadValues()
+        maxPreloadZoomControl.isEnabled = true
+        calculateTilesButton.isEnabled = true
+        startPreloadButton.isEnabled = false
+        cancelPreloadButton.isEnabled = false
+        prepareWatchUploadButton.isEnabled = false
+        startWatchUploadButton.isEnabled = false
+        cancelWatchUploadButton.isEnabled = false
+    }
+    
+    func downloadSucceeded(){
+        updateDownloadValues()
+        updateSliderValue(preloader.sliderValue)
+    }
+    
+    func downloadWithError(){
+        updateDownloadValues()
+        updateSliderValue(preloader.sliderValue)
+    }
+    
+    func downloadCompleted(){
+        maxPreloadZoomControl.isEnabled = true
+        calculateTilesButton.isEnabled = true
+        startPreloadButton.isEnabled = false
+        cancelPreloadButton.isEnabled = false
+        if watchConnected{
+            prepareWatchUploadButton.isEnabled = true
+        }
+        startWatchUploadButton.isEnabled = false
+        cancelWatchUploadButton.isEnabled = false
+    }
+    
+    func uploadPrepared(){
+        updateUploadValues()
+        updateWatchSliderValue(preloader.watchSliderValue)
+        maxPreloadZoomControl.isEnabled = true
+        calculateTilesButton.isEnabled = true
+        startPreloadButton.isEnabled = false
+        cancelPreloadButton.isEnabled = false
+        prepareWatchUploadButton.isEnabled = false
+        if watchConnected, preloader.uploadPrepared{
+            startWatchUploadButton.isEnabled = true
+        }
+        cancelWatchUploadButton.isEnabled = false
+    }
+    
+    func uploadStarted(){
+        maxPreloadZoomControl.isEnabled = false
+        calculateTilesButton.isEnabled = false
+        startPreloadButton.isEnabled = false
+        cancelPreloadButton.isEnabled = false
+        prepareWatchUploadButton.isEnabled = false
+        startWatchUploadButton.isEnabled = false
+        cancelWatchUploadButton.isEnabled = true
+    }
+    
+    func uploadCanceled(){
+        maxPreloadZoomControl.isEnabled = true
+        calculateTilesButton.isEnabled = true
+        startPreloadButton.isEnabled = false
+        cancelPreloadButton.isEnabled = false
+        prepareWatchUploadButton.isEnabled = false
+        startWatchUploadButton.isEnabled = false
+        cancelWatchUploadButton.isEnabled = false
+    }
+    
+    func uploadSucceeded(){
+        updateUploadValues()
+        updateWatchSliderValue(preloader.watchSliderValue)
+    }
+    
+    func uploadWithError(){
+        updateUploadValues()
+        updateWatchSliderValue(preloader.watchSliderValue)
+    }
+    
+    func uploadCompleted(){
+        updateUploadValues()
+        updateWatchSliderValue(preloader.watchSliderValue)
+        maxPreloadZoomControl.isEnabled = true
+        calculateTilesButton.isEnabled = true
+        startPreloadButton.isEnabled = false
+        cancelPreloadButton.isEnabled = false
+        prepareWatchUploadButton.isEnabled = false
+        startWatchUploadButton.isEnabled = false
+        cancelWatchUploadButton.isEnabled = false
+    }
+    
+}
+
 
 
 

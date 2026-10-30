@@ -9,14 +9,18 @@ import UniformTypeIdentifiers
 import OSLog
 
 protocol PreloaderDelegate{
-    func updateValueViews()
-    func updateSliderValue(_ value: Float)
-    func enableDownload(_ flag: Bool)
-    func enableUpload(_ flag: Bool)
-    func enableZoomControls(_ flag: Bool)
-    func downloadFinished()
-    func updateWatchValueViews()
-    func updateWatchSliderValue(_ value: Float)
+    func tileRegionReady()
+    func downloadStarted()
+    func downloadCanceled()
+    func downloadSucceeded()
+    func downloadWithError()
+    func downloadCompleted()
+    func uploadPrepared()
+    func uploadStarted()
+    func uploadCanceled()
+    func uploadSucceeded()
+    func uploadWithError()
+    func uploadCompleted()
 }
 
 class MapPreloader{
@@ -69,20 +73,14 @@ class MapPreloader{
     }
     
     func setTileRegion(_ tileRegion: TileRegion) -> Bool{
-        reset()
-        self.tileRegion = tileRegion
         tileRegion.updateTileSets()
-        allPreloadTiles = tileRegion.size
-        if allPreloadTiles > MapPreloader.maxDownloadTiles{
-            self.tileRegion = TileRegion()
-            reset()
+        if tileRegion.size > MapPreloader.maxDownloadTiles{
             return false
         }
+        self.tileRegion = tileRegion
+        allPreloadTiles = tileRegion.size
         existingTiles = tileRegion.tiles.checkExistingTiles(tileSource: Settings.shared.tileSource)
-        delegate?.updateValueViews()
-        delegate?.updateSliderValue(sliderValue)
-        delegate?.enableDownload(tileRegion.size > 0)
-        delegate?.enableUpload(existingTiles == allPreloadTiles)
+        delegate?.tileRegionReady()
         return true
     }
     
@@ -90,14 +88,8 @@ class MapPreloader{
         if tileRegion.size == 0{
             return
         }
-        if preloadErrors > 0{
-            preloadErrors = 0
-            delegate?.updateValueViews()
-            delegate?.updateSliderValue(sliderValue)
-        }
-        delegate?.enableDownload(false)
-        delegate?.enableUpload(false)
-        delegate?.enableZoomControls(false)
+        preloadErrors = 0
+        delegate?.downloadStarted()
         tileDownloadQueue = OperationQueue()
         tileDownloadQueue!.name = "downloadQueue"
         tileDownloadQueue!.maxConcurrentOperationCount = 2
@@ -122,11 +114,7 @@ class MapPreloader{
         tileDownloadQueue?.cancelAllOperations()
         reset()
         existingTiles = tileRegion.tiles.checkExistingTiles(tileSource: Settings.shared.tileSource)
-        delegate?.updateValueViews()
-        delegate?.updateSliderValue(sliderValue)
-        delegate?.enableDownload(true)
-        delegate?.enableUpload(true)
-        delegate?.enableZoomControls(true)
+        delegate?.downloadCanceled()
     }
     
     // watch
@@ -138,9 +126,8 @@ class MapPreloader{
             WatchConnector.shared.checkTiles(watchTileRegion.tiles){ region in
                 if let region = region{
                     self.existingWatchTiles = region.getExistingTiles()
-                    self.delegate?.updateWatchValueViews()
-                    self.delegate?.updateWatchSliderValue(self.watchSliderValue)
                     self.uploadPrepared = true
+                    self.delegate?.uploadPrepared()
                 }
             }
         }
@@ -148,7 +135,7 @@ class MapPreloader{
     
     func startWatchUpload() -> Bool{
         if WatchConnector.shared.isWatchConnected, uploadPrepared{
-            delegate?.enableUpload(false)
+            delegate?.uploadStarted()
             uploadErrors = 0
             tileUploadQueue = OperationQueue()
             tileUploadQueue!.name = "uploadQueue"
@@ -174,10 +161,7 @@ class MapPreloader{
     func cancelWatchUpload(){
         tileUploadQueue?.cancelAllOperations()
         reset()
-        reset()
-        delegate?.enableDownload(true)
-        delegate?.enableUpload(true)
-        delegate?.enableZoomControls(true)
+        delegate?.uploadCanceled()
     }
     
 }
@@ -189,25 +173,21 @@ extension MapPreloader: DownloadDelegate{
         if existingTiles > allPreloadTiles{
             existingTiles = allPreloadTiles
         }
-        delegate?.updateValueViews()
-        delegate?.updateSliderValue(sliderValue)
+        delegate?.downloadSucceeded()
         checkCompletion()
     }
     
     func downloadWithError() {
         preloadErrors += 1
-        delegate?.updateValueViews()
-        delegate?.updateSliderValue(sliderValue)
+        delegate?.downloadWithError()
         checkCompletion()
     }
     
     private func checkCompletion(){
         if existingTiles + preloadErrors >= allPreloadTiles{
-            delegate?.enableZoomControls(true)
-            delegate?.enableUpload(existingTiles == allPreloadTiles)
             tileDownloadQueue?.cancelAllOperations()
             tileDownloadQueue = nil
-            delegate?.downloadFinished()
+            delegate?.downloadCompleted()
         }
     }
     
@@ -217,23 +197,21 @@ extension MapPreloader: UploadDelegate{
     
     func uploadSucceeded() {
         existingWatchTiles += 1
-        delegate?.updateWatchValueViews()
-        delegate?.updateWatchSliderValue(watchSliderValue)
+        delegate?.uploadSucceeded()
         checkWatchCompletion()
     }
     
     func uploadWithError() {
         uploadErrors += 1
-        delegate?.updateWatchValueViews()
-        delegate?.updateWatchSliderValue(watchSliderValue)
+        delegate?.uploadWithError()
         checkWatchCompletion()
     }
     
     private func checkWatchCompletion(){
         if existingWatchTiles + uploadErrors == watchTileRegion.size{
-            delegate?.enableUpload(true)
             tileUploadQueue?.cancelAllOperations()
             tileUploadQueue = nil
+            delegate?.uploadCompleted()
         }
     }
     
