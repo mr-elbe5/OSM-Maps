@@ -27,7 +27,7 @@ class TileRegion : CoordinateRegion{
         size = tiles.size
     }
     
-    init(minLatitude: CLLocationDegrees, maxLatitude: CLLocationDegrees, minLongitude: CLLocationDegrees, maxLongitude: CLLocationDegrees, minZoom: Int,  maxZoom: Int, complete: Bool){
+    init(minLatitude: CLLocationDegrees, maxLatitude: CLLocationDegrees, minLongitude: CLLocationDegrees, maxLongitude: CLLocationDegrees, minZoom: Int,  maxZoom: Int){
         self.minZoom = minZoom
         self.maxZoom = maxZoom
         super.init(minLatitude: minLatitude, maxLatitude: maxLatitude, minLongitude: minLongitude, maxLongitude: maxLongitude)
@@ -44,8 +44,10 @@ class TileRegion : CoordinateRegion{
         size = tiles.size
     }
     
-    func getCopy(maxZoom: Int, complete: Bool) -> TileRegion{
-        TileRegion(minLatitude: minLatitude, maxLatitude: maxLatitude, minLongitude: minLongitude, maxLongitude: maxLongitude, minZoom: minZoom, maxZoom: maxZoom, complete: complete)
+    func getCopy(minZoom: Int, maxZoom: Int) -> TileRegion{
+        let tr = TileRegion(minLatitude: minLatitude, maxLatitude: maxLatitude, minLongitude: minLongitude, maxLongitude: maxLongitude, minZoom: minZoom, maxZoom: maxZoom)
+        tr.updateTileSets()
+        return tr
     }
     
     func getJson() -> String{

@@ -395,7 +395,7 @@ extension MapPreloadViewController: PreloaderDelegate{
         if watchConnected, preloader.uploadPrepared{
             startWatchUploadButton.isEnabled = true
         }
-        cancelWatchUploadButton.isEnabled = false
+        cancelWatchUploadButton.isEnabled = true
     }
     
     func uploadStarted(){

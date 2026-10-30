@@ -121,7 +121,7 @@ class MapPreloader{
     
     func prepareUpload(){
         uploadPrepared = false
-        watchTileRegion = tileRegion.getCopy(maxZoom: min(tileRegion.maxZoom, maxPreloadZoom), complete: true)
+        watchTileRegion = tileRegion.getCopy(minZoom: 0, maxZoom: min(tileRegion.maxZoom, maxPreloadZoom))
         if WatchConnector.shared.isWatchConnected{
             WatchConnector.shared.checkTiles(watchTileRegion.tiles){ region in
                 if let region = region{

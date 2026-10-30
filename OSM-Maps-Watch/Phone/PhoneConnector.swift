@@ -142,9 +142,12 @@ extension PhoneConnector: WCSessionDelegate {
                    let tileSource = TileSources.shared.getByName(tileSourceName),
                    let data = message["data"] as? Data,
                    let tiles = try? JSONDecoder().decode(TileDataBlock.self, from: data){
+                    print("data size is \(data.count)")
+                    print("checking \(tiles.size) tiles")
                     let existingTiles = tiles.checkExistingTiles(tileSource: tileSource)
                     print("found \(existingTiles) existing tiles")
                     if let response = try? JSONEncoder().encode(tiles){
+                        print("response size is \(response.count)")
                         replyHandler(["success": true, "data" : response as Any])
                     }
                     else{

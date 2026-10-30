@@ -103,8 +103,8 @@ struct TileDataBlock: Codable{
         for z in minZoom...maxZoom{
             let minX = World.tileX(minLon, withZoom: z)
             let minY = World.tileY(maxLat, withZoom: z)
-            let maxX = World.tileX(maxLon, withZoom: z)
-            let maxY = World.tileY(minLat, withZoom: z)
+            let maxX = World.tileX(maxLon, withZoom: z) + 1
+            let maxY = World.tileY(minLat, withZoom: z) + 1
             let grid = TileDataGrid(minX: minX, maxX: maxX, minY: minY, maxY: maxY, zoom: z)
             grids.append(grid)
         }
