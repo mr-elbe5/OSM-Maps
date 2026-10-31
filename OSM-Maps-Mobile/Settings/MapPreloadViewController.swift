@@ -20,7 +20,7 @@ class MapPreloadViewController: ScrollViewController{
     var startPreloadButton = UIButton()
     var cancelPreloadButton = UIButton()
     
-    var preloadProgressView = UIProgressView()
+    var downloadProgressSlider = UIProgressView()
     
     var preloadErrorsValueLabel = UILabel()
     
@@ -29,11 +29,11 @@ class MapPreloadViewController: ScrollViewController{
     var watchConnected = false
     
     var watchStatusLabel = UILabel(text: "disconnected".localize())
-    var prepareWatchUploadButton = UIButton()
-    var startWatchUploadButton = UIButton()
-    var cancelWatchUploadButton = UIButton()
+    var prepareUploadButton = UIButton()
+    var startUploadButton = UIButton()
+    var cancelUploadButton = UIButton()
     
-    var watchProgressView = UIProgressView()
+    var uploadProgressSlider = UIProgressView()
     
     var existingWatchTilesValueLabel = UILabel()
     var uploadErrorsValueLabel = UILabel()
@@ -147,14 +147,14 @@ class MapPreloadViewController: ScrollViewController{
         
         let preloadProgressLabel = UILabel(hint: "progress".localizeWithColon())
         contentView.addSubviewBelow(preloadProgressLabel, upperView: startPreloadButton)
-        preloadProgressView.progress = 0
-        contentView.addSubviewWithAnchors(preloadProgressView, top: preloadProgressLabel.bottomAnchor, leading: contentView.leadingAnchor, trailing: contentView.trailingAnchor, insets: OSInsets.doubleInsets)
+        downloadProgressSlider.progress = 0
+        contentView.addSubviewWithAnchors(downloadProgressSlider, top: preloadProgressLabel.bottomAnchor, leading: contentView.leadingAnchor, trailing: contentView.trailingAnchor, insets: OSInsets.doubleInsets)
         
         var errorsInfo = UILabel()
         errorsInfo.text = "unloadedTiles".localize()
-        contentView.addSubviewWithAnchors(errorsInfo, top: preloadProgressView.bottomAnchor, leading: contentView.leadingAnchor)
+        contentView.addSubviewWithAnchors(errorsInfo, top: downloadProgressSlider.bottomAnchor, leading: contentView.leadingAnchor)
         preloadErrorsValueLabel.text = String(preloader.preloadErrors)
-        contentView.addSubviewWithAnchors(preloadErrorsValueLabel, top: preloadProgressView.bottomAnchor, leading: errorsInfo.trailingAnchor)
+        contentView.addSubviewWithAnchors(preloadErrorsValueLabel, top: downloadProgressSlider.bottomAnchor, leading: errorsInfo.trailingAnchor)
         
         // watch
         
@@ -169,57 +169,57 @@ class MapPreloadViewController: ScrollViewController{
         contentView.addSubviewWithAnchors(label, top: watchInfo.bottomAnchor, leading: contentView.leadingAnchor)
         contentView.addSubviewWithAnchors(watchStatusLabel, top: watchInfo.bottomAnchor, leading: label.trailingAnchor)
         
-        prepareWatchUploadButton.setTitle("prepareWatchUpload".localize(), for: .normal)
-        prepareWatchUploadButton.setTitleColor(.systemBlue, for: .normal)
-        prepareWatchUploadButton.setTitleColor(.systemGray, for: .disabled)
-        prepareWatchUploadButton.addAction(UIAction(){ action in
+        prepareUploadButton.setTitle("prepareWatchUpload".localize(), for: .normal)
+        prepareUploadButton.setTitleColor(.systemBlue, for: .normal)
+        prepareUploadButton.setTitleColor(.systemGray, for: .disabled)
+        prepareUploadButton.addAction(UIAction(){ action in
             self.prepareWatchUpload()
         }, for: .touchDown)
-        contentView.addSubviewCenteredBelow(prepareWatchUploadButton, upperView: label)
+        contentView.addSubviewCenteredBelow(prepareUploadButton, upperView: label)
         
         let existingWatchTilesLabel = UILabel()
         existingWatchTilesLabel.text = "existingTiles".localize()
-        contentView.addSubviewWithAnchors(existingWatchTilesLabel, top: prepareWatchUploadButton.bottomAnchor, leading: contentView.leadingAnchor)
-        contentView.addSubviewWithAnchors(existingWatchTilesValueLabel, top: prepareWatchUploadButton.bottomAnchor, leading: existingWatchTilesLabel.trailingAnchor)
+        contentView.addSubviewWithAnchors(existingWatchTilesLabel, top: prepareUploadButton.bottomAnchor, leading: contentView.leadingAnchor)
+        contentView.addSubviewWithAnchors(existingWatchTilesValueLabel, top: prepareUploadButton.bottomAnchor, leading: existingWatchTilesLabel.trailingAnchor)
         
-        startWatchUploadButton.setTitle("startWatchUpload".localize(), for: .normal)
-        startWatchUploadButton.setTitleColor(.systemBlue, for: .normal)
-        startWatchUploadButton.setTitleColor(.systemGray, for: .disabled)
-        startWatchUploadButton.addAction(UIAction(){ action in
+        startUploadButton.setTitle("startWatchUpload".localize(), for: .normal)
+        startUploadButton.setTitleColor(.systemBlue, for: .normal)
+        startUploadButton.setTitleColor(.systemGray, for: .disabled)
+        startUploadButton.addAction(UIAction(){ action in
             let started = self.startWatchUpload()
             if !started{
                 self.cancelWatchUpload()
                 self.showError("watchUploadNotStarted".localize())
             }
         }, for: .touchDown)
-        contentView.addSubviewCenteredBelow(startWatchUploadButton, upperView: existingWatchTilesLabel)
+        contentView.addSubviewCenteredBelow(startUploadButton, upperView: existingWatchTilesLabel)
         
-        cancelWatchUploadButton.setTitle("cancel".localize(), for: .normal)
-        cancelWatchUploadButton.setTitleColor(.systemBlue, for: .normal)
-        cancelWatchUploadButton.setTitleColor(.systemGray, for: .disabled)
-        cancelWatchUploadButton.addAction(UIAction(){ action in
+        cancelUploadButton.setTitle("cancel".localize(), for: .normal)
+        cancelUploadButton.setTitleColor(.systemBlue, for: .normal)
+        cancelUploadButton.setTitleColor(.systemGray, for: .disabled)
+        cancelUploadButton.addAction(UIAction(){ action in
             self.cancelWatchUpload()
         }, for: .touchDown)
-        contentView.addSubviewCenteredBelow(cancelWatchUploadButton, upperView: startWatchUploadButton)
+        contentView.addSubviewCenteredBelow(cancelUploadButton, upperView: startUploadButton)
         
         let watchProgressLabel = UILabel(hint: "progress".localizeWithColon())
-        contentView.addSubviewBelow(watchProgressLabel, upperView: cancelWatchUploadButton)
-        watchProgressView.progress = 0
-        contentView.addSubviewBelow(watchProgressView, upperView: watchProgressLabel)
+        contentView.addSubviewBelow(watchProgressLabel, upperView: cancelUploadButton)
+        uploadProgressSlider.progress = 0
+        contentView.addSubviewBelow(uploadProgressSlider, upperView: watchProgressLabel)
         
         errorsInfo = UILabel()
         errorsInfo.text = "unloadedTiles".localize()
-        contentView.addSubviewWithAnchors(errorsInfo, top: watchProgressView.bottomAnchor, leading: contentView.leadingAnchor)
+        contentView.addSubviewWithAnchors(errorsInfo, top: uploadProgressSlider.bottomAnchor, leading: contentView.leadingAnchor)
         uploadErrorsValueLabel.text = String(preloader.uploadErrors)
-        contentView.addSubviewWithAnchors(uploadErrorsValueLabel, top: watchProgressView.bottomAnchor, leading: errorsInfo.trailingAnchor)
+        contentView.addSubviewWithAnchors(uploadErrorsValueLabel, top: uploadProgressSlider.bottomAnchor, leading: errorsInfo.trailingAnchor)
             .connectToBottom(of: contentView)
         
         maxPreloadZoomControl.isEnabled = true
         startPreloadButton.isEnabled = false
         cancelPreloadButton.isEnabled = false
-        prepareWatchUploadButton.isEnabled = false
-        startWatchUploadButton.isEnabled = false
-        cancelWatchUploadButton.isEnabled = false
+        prepareUploadButton.isEnabled = false
+        startUploadButton.isEnabled = false
+        cancelUploadButton.isEnabled = false
         updateConnectionStatus()
     }
     
@@ -241,42 +241,34 @@ class MapPreloadViewController: ScrollViewController{
     }
     
     func setTileRegion(){
+        preloader.uploadPrepared = false
         let tileRegion = TileRegion(coordinateRegion: MainViewController.shared.mapView.scrollView.coordinateRegion, minZoom: World.minZoom, maxZoom: maxZoom)
         if tileRegion.size > MapPreloader.maxDownloadTiles{
-            updateTileValues(tileRegion.size)
+            updateDownloadLabels(tileRegion.size)
             startPreloadButton.isEnabled = false
             cancelPreloadButton.isEnabled = false
-            prepareWatchUploadButton.isEnabled = false
-            startWatchUploadButton.isEnabled = false
-            cancelWatchUploadButton.isEnabled = false
+            prepareUploadButton.isEnabled = false
+            startUploadButton.isEnabled = false
+            cancelUploadButton.isEnabled = false
             showError("tooManyTiles".localize(param: String(MapPreloader.maxDownloadTiles)))
         }
         else{
             preloader.setTileRegion(tileRegion)
-            updateDownloadValues()
-            updateSliderValue(preloader.sliderValue)
+            updateDownloadLabels()
+            updateDownloadSliderValue(preloader.sliderValue)
             maxPreloadZoomControl.isEnabled = true
-            if preloader.tileRegion.size > 0{
-                startPreloadButton.isEnabled = true
-            }
-            else{
-                startPreloadButton.isEnabled = false
-            }
-            cancelPreloadButton.isEnabled = false
-            if watchConnected, preloader.existingTiles == preloader.allPreloadTiles{
-                prepareWatchUploadButton.isEnabled = true
-            }
-            startWatchUploadButton.isEnabled = false
-            cancelWatchUploadButton.isEnabled = false
+            setupPrepareUploadButton()
+            setupStartUploadButton()
+            cancelUploadButton.isEnabled = false
         }
     }
     
-    func updateTileValues(_ size: Int){
+    func updateDownloadLabels(_ size: Int){
         allTilesValueLabel.text = String(size)
         allTilesValueLabel.textColor = .red
     }
     
-    func updateDownloadValues(){
+    func updateDownloadLabels(){
         allTilesValueLabel.text = String(preloader.allPreloadTiles)
         allTilesValueLabel.textColor = .label
         existingTilesValueLabel.text = String(preloader.existingTiles)
@@ -284,8 +276,16 @@ class MapPreloadViewController: ScrollViewController{
         preloadErrorsValueLabel.text = String(preloader.preloadErrors)
     }
     
-    func updateSliderValue(_ value: Float){
-        preloadProgressView.progress = value
+    func updateDownloadSliderValue(_ value: Float){
+        downloadProgressSlider.progress = value
+    }
+    
+    func setupPrepareUploadButton(){
+        prepareUploadButton.isEnabled = watchConnected && preloader.allPreloadTiles > 0 && preloader.allPreloadTiles == preloader.existingTiles && !preloader.uploadPrepared
+    }
+    
+    func setupStartUploadButton(){
+        startUploadButton.isEnabled = watchConnected && preloader.allPreloadTiles > 0 && preloader.allPreloadTiles == preloader.existingTiles && preloader.uploadPrepared
     }
     
     func prepareWatchUpload(){
@@ -311,11 +311,11 @@ class MapPreloadViewController: ScrollViewController{
         preloader.cancelWatchUpload()
     }
     
-    func updateWatchSliderValue(_ value: Float){
-        watchProgressView.progress = value
+    func updateUploadSliderValue(_ value: Float){
+        uploadProgressSlider.progress = value
     }
     
-    func updateUploadValues(){
+    func updateUploadLabels(){
         existingWatchTilesValueLabel.text = String(preloader.existingWatchTiles)
         uploadErrorsValueLabel.text = String(preloader.uploadErrors)
     }
@@ -325,97 +325,93 @@ class MapPreloadViewController: ScrollViewController{
 extension MapPreloadViewController: PreloaderDelegate{
     
     func downloadStarted(){
-        updateDownloadValues()
-        updateSliderValue(preloader.sliderValue)
+        updateDownloadLabels()
+        updateDownloadSliderValue(preloader.sliderValue)
         maxPreloadZoomControl.isEnabled = false
         startPreloadButton.isEnabled = false
         cancelPreloadButton.isEnabled = true
-        prepareWatchUploadButton.isEnabled = false
-        startWatchUploadButton.isEnabled = false
-        cancelWatchUploadButton.isEnabled = false
+        prepareUploadButton.isEnabled = false
+        startUploadButton.isEnabled = false
+        cancelUploadButton.isEnabled = false
     }
     
     func downloadCanceled(){
-        updateDownloadValues()
+        updateDownloadLabels()
         maxPreloadZoomControl.isEnabled = true
         startPreloadButton.isEnabled = false
         cancelPreloadButton.isEnabled = false
-        prepareWatchUploadButton.isEnabled = false
-        startWatchUploadButton.isEnabled = false
-        cancelWatchUploadButton.isEnabled = false
+        setupPrepareUploadButton()
+        setupStartUploadButton()
+        cancelUploadButton.isEnabled = false
     }
     
     func downloadSucceeded(){
-        updateDownloadValues()
-        updateSliderValue(preloader.sliderValue)
+        updateDownloadLabels()
+        updateDownloadSliderValue(preloader.sliderValue)
     }
     
     func downloadWithError(){
-        updateDownloadValues()
-        updateSliderValue(preloader.sliderValue)
+        updateDownloadLabels()
+        updateDownloadSliderValue(preloader.sliderValue)
     }
     
     func downloadCompleted(){
         maxPreloadZoomControl.isEnabled = true
         startPreloadButton.isEnabled = false
         cancelPreloadButton.isEnabled = false
-        if watchConnected{
-            prepareWatchUploadButton.isEnabled = true
-        }
-        startWatchUploadButton.isEnabled = false
-        cancelWatchUploadButton.isEnabled = false
+        setupPrepareUploadButton()
+        setupStartUploadButton()
+        cancelUploadButton.isEnabled = false
     }
     
     func uploadPrepared(){
-        updateUploadValues()
-        updateWatchSliderValue(preloader.watchSliderValue)
+        updateUploadLabels()
+        updateUploadSliderValue(preloader.watchSliderValue)
         maxPreloadZoomControl.isEnabled = true
         startPreloadButton.isEnabled = false
         cancelPreloadButton.isEnabled = false
-        prepareWatchUploadButton.isEnabled = false
-        if watchConnected, preloader.uploadPrepared{
-            startWatchUploadButton.isEnabled = true
-        }
-        cancelWatchUploadButton.isEnabled = true
+        setupPrepareUploadButton()
+        setupStartUploadButton()
+        cancelUploadButton.isEnabled = true
     }
     
     func uploadStarted(){
         maxPreloadZoomControl.isEnabled = false
         startPreloadButton.isEnabled = false
         cancelPreloadButton.isEnabled = false
-        prepareWatchUploadButton.isEnabled = false
-        startWatchUploadButton.isEnabled = false
-        cancelWatchUploadButton.isEnabled = true
+        prepareUploadButton.isEnabled = false
+        startUploadButton.isEnabled = false
+        cancelUploadButton.isEnabled = true
     }
     
     func uploadCanceled(){
         maxPreloadZoomControl.isEnabled = true
         startPreloadButton.isEnabled = false
         cancelPreloadButton.isEnabled = false
-        prepareWatchUploadButton.isEnabled = false
-        startWatchUploadButton.isEnabled = false
-        cancelWatchUploadButton.isEnabled = false
+        setupPrepareUploadButton()
+        setupStartUploadButton()
+        cancelUploadButton.isEnabled = false
     }
     
     func uploadSucceeded(){
-        updateUploadValues()
-        updateWatchSliderValue(preloader.watchSliderValue)
+        updateUploadLabels()
+        updateUploadSliderValue(preloader.watchSliderValue)
     }
     
     func uploadWithError(){
-        updateUploadValues()
-        updateWatchSliderValue(preloader.watchSliderValue)
+        updateUploadLabels()
+        updateUploadSliderValue(preloader.watchSliderValue)
     }
     
     func uploadCompleted(){
-        updateUploadValues()
-        updateWatchSliderValue(preloader.watchSliderValue)
+        updateUploadLabels()
+        updateUploadSliderValue(preloader.watchSliderValue)
         maxPreloadZoomControl.isEnabled = true
         startPreloadButton.isEnabled = false
         cancelPreloadButton.isEnabled = false
-        prepareWatchUploadButton.isEnabled = false
-        startWatchUploadButton.isEnabled = false
-        cancelWatchUploadButton.isEnabled = false
+        setupPrepareUploadButton()
+        setupStartUploadButton()
+        cancelUploadButton.isEnabled = false
     }
     
 }
