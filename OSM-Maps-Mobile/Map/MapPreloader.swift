@@ -9,7 +9,6 @@ import UniformTypeIdentifiers
 import OSLog
 
 protocol PreloaderDelegate{
-    func tileRegionReady()
     func downloadStarted()
     func downloadCanceled()
     func downloadSucceeded()
@@ -26,6 +25,7 @@ protocol PreloaderDelegate{
 class MapPreloader{
     
     static var maxDownloadTiles = 5000
+    static var defaultMaxPreloadZoom : Int = 8
     
     var delegate: PreloaderDelegate? = nil
     
@@ -41,8 +41,6 @@ class MapPreloader{
     var preloadErrors = 0
     
     var maxPreloadZoomControl = UISegmentedControl()
-    
-    var maxPreloadZoom : Int = 16
     
     // watch upload
     
@@ -72,16 +70,10 @@ class MapPreloader{
         preloadErrors = 0
     }
     
-    func setTileRegion(_ tileRegion: TileRegion) -> Bool{
-        tileRegion.updateTileSets()
-        if tileRegion.size > MapPreloader.maxDownloadTiles{
-            return false
-        }
+    func setTileRegion(_ tileRegion: TileRegion){
         self.tileRegion = tileRegion
         allPreloadTiles = tileRegion.size
         existingTiles = tileRegion.tiles.checkExistingTiles(tileSource: Settings.shared.tileSource)
-        delegate?.tileRegionReady()
-        return true
     }
     
     func startDownload(){
@@ -100,7 +92,7 @@ class MapPreloader{
                 let line = grid[y]
                 for x in 0..<line.count{
                     let tile = tiles.grids[z][y][x]
-                    if !tile.flag{
+                    if !tile.present{
                         let operation = TileDownloadOperation(tile: MapTile(zoom: tile.zoom, x: tile.x, y: tile.y, tileSource: Settings.shared.tileSource))
                         operation.delegate = self
                         tileDownloadQueue!.addOperation(operation)
@@ -121,11 +113,12 @@ class MapPreloader{
     
     func prepareUpload(){
         uploadPrepared = false
-        watchTileRegion = tileRegion.getCopy(minZoom: 0, maxZoom: min(tileRegion.maxZoom, maxPreloadZoom))
+        watchTileRegion = tileRegion.getCopy(minZoom: tileRegion.minZoom, maxZoom: tileRegion.maxZoom)
         if WatchConnector.shared.isWatchConnected{
-            WatchConnector.shared.checkTiles(watchTileRegion.tiles){ region in
-                if let region = region{
-                    self.existingWatchTiles = region.getExistingTiles()
+            WatchConnector.shared.prepareTileUpload(watchTileRegion.tiles){ tiles in
+                if let tiles = tiles{
+                    self.watchTileRegion.tiles = tiles
+                    self.existingWatchTiles = tiles.getExistingTiles()
                     self.uploadPrepared = true
                     self.delegate?.uploadPrepared()
                 }
@@ -143,6 +136,9 @@ class MapPreloader{
             for tileGrid in watchTileRegion.tiles.grids{
                 for tileLine in tileGrid{
                     for tile in tileLine{
+                        if tile.present{
+                            continue
+                        }
                         if let data = FileManager.default.readFile(url: tile.fileUrl(tileSource: Settings.shared.tileSource)){
                             let operation = TileUploadOperation(tile: MapTile(zoom: tile.zoom, x: tile.x, y: tile.y, tileSource: Settings.shared.tileSource), data:data)
                             operation.delegate = self

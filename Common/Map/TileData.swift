@@ -20,7 +20,7 @@ class TileData: Codable{
     var zoom: Int
     var x: Int
     var y: Int
-    var flag: Bool = false
+    var present: Bool = false
     
     var shortDescription : String{
         "\(zoom)-\(x)-\(y)"
@@ -44,13 +44,16 @@ extension TileDataGrid{
     
     init(minX: Int, maxX: Int, minY: Int, maxY: Int, zoom: Int){
         self.init()
+        var count = 0
         for y in minY...maxY{
             var line = TileDataList()
             for x in minX...maxX{
                 line.append(TileData(zoom: zoom, x: x, y: y))
+                count += 1
             }
             append(line)
         }
+        print("created grid of \(count) tiles")
     }
     
     func get(x: Int, y: Int) -> TileData{
@@ -103,8 +106,8 @@ struct TileDataBlock: Codable{
         for z in minZoom...maxZoom{
             let minX = World.tileX(minLon, withZoom: z)
             let minY = World.tileY(maxLat, withZoom: z)
-            let maxX = World.tileX(maxLon, withZoom: z) + 1
-            let maxY = World.tileY(minLat, withZoom: z) + 1
+            let maxX = World.tileX(maxLon, withZoom: z)
+            let maxY = World.tileY(minLat, withZoom: z)
             let grid = TileDataGrid(minX: minX, maxX: maxX, minY: minY, maxY: maxY, zoom: z)
             grids.append(grid)
         }
@@ -115,8 +118,8 @@ struct TileDataBlock: Codable{
         for grid in grids{
             for line in grid{
                 for tile in line{
-                    tile.flag = tile.exists(tileSource: tileSource)
-                    if (tile.flag){
+                    tile.present = tile.exists(tileSource: tileSource)
+                    if (tile.present){
                         count += 1
                     }
                 }
@@ -130,7 +133,7 @@ struct TileDataBlock: Codable{
         for grid in grids{
             for line in grid{
                 for tile in line{
-                    if tile.flag{
+                    if tile.present{
                         count += 1
                     }
                 }

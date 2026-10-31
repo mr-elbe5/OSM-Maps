@@ -11,8 +11,7 @@ import OSLog
 class MapPreloadViewController: ScrollViewController{
     
     var maxPreloadZoomControl = UISegmentedControl()
-    
-    var calculateTilesButton = UIButton()
+    var maxZoom = MapPreloader.defaultMaxPreloadZoom
     
     var allTilesValueLabel = UILabel()
     var existingTilesValueLabel = UILabel()
@@ -106,32 +105,19 @@ class MapPreloadViewController: ScrollViewController{
         
         for i: Int in 0...segSize{
             maxPreloadZoomControl.insertSegment(action: UIAction(){ action in
-                self.calculateTilesButton.isEnabled = true
-                self.startPreloadButton.isEnabled = false
-                self.cancelPreloadButton.isEnabled = false
-                self.prepareWatchUploadButton.isEnabled = false
-                self.startWatchUploadButton.isEnabled = false
-                self.cancelWatchUploadButton.isEnabled = false
-                self.preloader.maxPreloadZoom = i + World.minZoom
+                self.maxZoom = i + World.minZoom
+                self.setTileRegion()
             }, at: i, animated: false)
             maxPreloadZoomControl.setTitle(String(i + World.minZoom), forSegmentAt: i)
         }
         maxPreloadZoomControl.setTitleTextAttributes(segmentTitleAttributes, for: .normal)
-        maxPreloadZoomControl.selectedSegmentIndex = preloader.maxPreloadZoom - World.minZoom
+        maxPreloadZoomControl.selectedSegmentIndex = maxZoom - World.minZoom
         contentView.addSubviewBelow(maxPreloadZoomControl, upperView: label)
-        
-        calculateTilesButton.setTitle("recalculateTiles".localize(), for: .normal)
-        calculateTilesButton.setTitleColor(.systemBlue, for: .normal)
-        calculateTilesButton.setTitleColor(.systemGray, for: .disabled)
-        calculateTilesButton.addAction(UIAction(){ action in
-            self.setTileRegion()
-        }, for: .touchDown)
-        contentView.addSubviewCenteredBelow(calculateTilesButton, upperView: maxPreloadZoomControl)
         
         let allTilesLabel = UILabel()
         allTilesLabel.text = "allTilesForDownload".localize()
-        contentView.addSubviewWithAnchors(allTilesLabel, top: calculateTilesButton.bottomAnchor, leading: contentView.leadingAnchor)
-        contentView.addSubviewWithAnchors(allTilesValueLabel, top: calculateTilesButton.bottomAnchor, leading: allTilesLabel.trailingAnchor)
+        contentView.addSubviewWithAnchors(allTilesLabel, top: maxPreloadZoomControl.bottomAnchor, leading: contentView.leadingAnchor)
+        contentView.addSubviewWithAnchors(allTilesValueLabel, top: maxPreloadZoomControl.bottomAnchor, leading: allTilesLabel.trailingAnchor)
         
         let existingTilesLabel = UILabel()
         existingTilesLabel.text = "existingTiles".localize()
@@ -229,7 +215,6 @@ class MapPreloadViewController: ScrollViewController{
             .connectToBottom(of: contentView)
         
         maxPreloadZoomControl.isEnabled = true
-        calculateTilesButton.isEnabled = true
         startPreloadButton.isEnabled = false
         cancelPreloadButton.isEnabled = false
         prepareWatchUploadButton.isEnabled = false
@@ -256,15 +241,27 @@ class MapPreloadViewController: ScrollViewController{
     }
     
     func setTileRegion(){
-        if !preloader.setTileRegion(MainViewController.shared.mapView.scrollView.tileRegion){
+        let tileRegion = TileRegion(coordinateRegion: MainViewController.shared.mapView.scrollView.coordinateRegion, minZoom: World.minZoom, maxZoom: maxZoom)
+        if tileRegion.size > MapPreloader.maxDownloadTiles{
+            updateTileValues(tileRegion.size)
+            startPreloadButton.isEnabled = false
+            cancelPreloadButton.isEnabled = false
+            prepareWatchUploadButton.isEnabled = false
+            startWatchUploadButton.isEnabled = false
+            cancelWatchUploadButton.isEnabled = false
             showError("tooManyTiles".localize(param: String(MapPreloader.maxDownloadTiles)))
         }
         else{
+            preloader.setTileRegion(tileRegion)
             updateDownloadValues()
             updateSliderValue(preloader.sliderValue)
             maxPreloadZoomControl.isEnabled = true
-            calculateTilesButton.isEnabled = true
-            startPreloadButton.isEnabled = true
+            if preloader.tileRegion.size > 0{
+                startPreloadButton.isEnabled = true
+            }
+            else{
+                startPreloadButton.isEnabled = false
+            }
             cancelPreloadButton.isEnabled = false
             if watchConnected, preloader.existingTiles == preloader.allPreloadTiles{
                 prepareWatchUploadButton.isEnabled = true
@@ -274,8 +271,14 @@ class MapPreloadViewController: ScrollViewController{
         }
     }
     
+    func updateTileValues(_ size: Int){
+        allTilesValueLabel.text = String(size)
+        allTilesValueLabel.textColor = .red
+    }
+    
     func updateDownloadValues(){
         allTilesValueLabel.text = String(preloader.allPreloadTiles)
+        allTilesValueLabel.textColor = .label
         existingTilesValueLabel.text = String(preloader.existingTiles)
         tilesToLoadValueLabel.text = String(preloader.allPreloadTiles - preloader.existingTiles)
         preloadErrorsValueLabel.text = String(preloader.preloadErrors)
@@ -296,7 +299,6 @@ class MapPreloadViewController: ScrollViewController{
     
     func startWatchUpload() -> Bool{
         if WatchConnector.shared.isWatchConnected, preloader.uploadPrepared{
-            showApprove(title: "tilepUload".localize(), text: "uploadingTiles".localize(i: preloader.uploadableWatchTiles))
             return preloader.startWatchUpload()
         }
         else{
@@ -322,28 +324,10 @@ class MapPreloadViewController: ScrollViewController{
 
 extension MapPreloadViewController: PreloaderDelegate{
     
-    func tileRegionReady(){
-        updateDownloadValues()
-        updateSliderValue(preloader.sliderValue)
-        maxPreloadZoomControl.isEnabled = true
-        calculateTilesButton.isEnabled = true
-        if preloader.tileRegion.size > 0{
-            startPreloadButton.isEnabled = true
-        }
-        else{
-            startPreloadButton.isEnabled = false
-        }
-        cancelPreloadButton.isEnabled = false
-        prepareWatchUploadButton.isEnabled = false
-        startWatchUploadButton.isEnabled = false
-        cancelWatchUploadButton.isEnabled = false
-    }
-    
     func downloadStarted(){
         updateDownloadValues()
         updateSliderValue(preloader.sliderValue)
         maxPreloadZoomControl.isEnabled = false
-        calculateTilesButton.isEnabled = false
         startPreloadButton.isEnabled = false
         cancelPreloadButton.isEnabled = true
         prepareWatchUploadButton.isEnabled = false
@@ -354,7 +338,6 @@ extension MapPreloadViewController: PreloaderDelegate{
     func downloadCanceled(){
         updateDownloadValues()
         maxPreloadZoomControl.isEnabled = true
-        calculateTilesButton.isEnabled = true
         startPreloadButton.isEnabled = false
         cancelPreloadButton.isEnabled = false
         prepareWatchUploadButton.isEnabled = false
@@ -374,7 +357,6 @@ extension MapPreloadViewController: PreloaderDelegate{
     
     func downloadCompleted(){
         maxPreloadZoomControl.isEnabled = true
-        calculateTilesButton.isEnabled = true
         startPreloadButton.isEnabled = false
         cancelPreloadButton.isEnabled = false
         if watchConnected{
@@ -388,7 +370,6 @@ extension MapPreloadViewController: PreloaderDelegate{
         updateUploadValues()
         updateWatchSliderValue(preloader.watchSliderValue)
         maxPreloadZoomControl.isEnabled = true
-        calculateTilesButton.isEnabled = true
         startPreloadButton.isEnabled = false
         cancelPreloadButton.isEnabled = false
         prepareWatchUploadButton.isEnabled = false
@@ -400,7 +381,6 @@ extension MapPreloadViewController: PreloaderDelegate{
     
     func uploadStarted(){
         maxPreloadZoomControl.isEnabled = false
-        calculateTilesButton.isEnabled = false
         startPreloadButton.isEnabled = false
         cancelPreloadButton.isEnabled = false
         prepareWatchUploadButton.isEnabled = false
@@ -410,7 +390,6 @@ extension MapPreloadViewController: PreloaderDelegate{
     
     func uploadCanceled(){
         maxPreloadZoomControl.isEnabled = true
-        calculateTilesButton.isEnabled = true
         startPreloadButton.isEnabled = false
         cancelPreloadButton.isEnabled = false
         prepareWatchUploadButton.isEnabled = false
@@ -432,7 +411,6 @@ extension MapPreloadViewController: PreloaderDelegate{
         updateUploadValues()
         updateWatchSliderValue(preloader.watchSliderValue)
         maxPreloadZoomControl.isEnabled = true
-        calculateTilesButton.isEnabled = true
         startPreloadButton.isEnabled = false
         cancelPreloadButton.isEnabled = false
         prepareWatchUploadButton.isEnabled = false

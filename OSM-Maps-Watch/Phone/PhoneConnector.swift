@@ -137,11 +137,12 @@ extension PhoneConnector: WCSessionDelegate {
                 else{
                     replyHandler(["success": false])
                 }
-            case "checkTiles":
+            case "prepareTileUpload":
                 if let tileSourceName = message["tileSource"] as? String,
                    let tileSource = TileSources.shared.getByName(tileSourceName),
                    let data = message["data"] as? Data,
                    let tiles = try? JSONDecoder().decode(TileDataBlock.self, from: data){
+                    Settings.shared.tileSource = tileSource
                     print("data size is \(data.count)")
                     print("checking \(tiles.size) tiles")
                     let existingTiles = tiles.checkExistingTiles(tileSource: tileSource)

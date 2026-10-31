@@ -105,8 +105,8 @@ class WatchConnector: NSObject {
         }
     }
     
-    func checkTiles(_ tiles: TileDataBlock, completion: @escaping (TileDataBlock?) -> Void) {
-        Logger.debug("checking tiles")
+    func prepareTileUpload(_ tiles: TileDataBlock, completion: @escaping (TileDataBlock?) -> Void) {
+        Logger.debug("preparing tile upload")
         if !isWatchConnected {
             Logger.error("not connected to phone")
             completion(nil)
@@ -114,7 +114,7 @@ class WatchConnector: NSObject {
         }
         if let data = try? JSONEncoder().encode(tiles){
             session.sendMessage([
-                "request": "checkTiles",
+                "request": "prepareTileUpload",
                 "tileSource": Settings.shared.tileSource.name,
                 "data": data as Any
             ], replyHandler: {response in
