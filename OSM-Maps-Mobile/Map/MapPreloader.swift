@@ -9,8 +9,6 @@ import UniformTypeIdentifiers
 import OSLog
 
 protocol PreloaderDelegate{
-    func downloadStarted()
-    func downloadCanceled()
     func downloadSucceeded()
     func downloadWithError()
     func downloadCompleted()
@@ -64,12 +62,6 @@ class MapPreloader{
     
     // tiles
     
-    func reset(){
-        allPreloadTiles = 0
-        existingTiles = 0
-        preloadErrors = 0
-    }
-    
     func setTileRegion(_ tileRegion: TileRegion){
         self.tileRegion = tileRegion
         allPreloadTiles = tileRegion.size
@@ -77,11 +69,7 @@ class MapPreloader{
     }
     
     func startDownload(){
-        if tileRegion.size == 0{
-            return
-        }
         preloadErrors = 0
-        delegate?.downloadStarted()
         tileDownloadQueue = OperationQueue()
         tileDownloadQueue!.name = "downloadQueue"
         tileDownloadQueue!.maxConcurrentOperationCount = 2
@@ -104,9 +92,7 @@ class MapPreloader{
     
     func cancelDownload(){
         tileDownloadQueue?.cancelAllOperations()
-        reset()
         existingTiles = tileRegion.tiles.checkExistingTiles(tileSource: Settings.shared.tileSource)
-        delegate?.downloadCanceled()
     }
     
     // watch
@@ -156,7 +142,6 @@ class MapPreloader{
     
     func cancelWatchUpload(){
         tileUploadQueue?.cancelAllOperations()
-        reset()
         delegate?.uploadCanceled()
     }
     

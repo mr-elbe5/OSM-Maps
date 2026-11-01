@@ -90,7 +90,7 @@ extension PhoneConnector: WCSessionDelegate {
     }
     
     func session(_: WCSession, didReceiveMessage message: [String: Any], replyHandler: @escaping ([String: Any]) -> Void) {
-        Logger.error("didReceiveMessage: \(message["request"] as? String ?? "")")
+        //Logger.debug("didReceiveMessage: \(message["request"] as? String ?? "")")
         if let request = message["request"] as? String {
             switch request {
             case "tileUpload":
@@ -104,7 +104,7 @@ extension PhoneConnector: WCSessionDelegate {
                         FileManager.default.deleteFile(url: tile.fileUrl)
                     }
                     if FileManager.default.saveFile(data: data, url: tile.fileUrl){
-                        Logger.error("file \(tile.fileUrl.lastPathComponent) received from phone")
+                        //Logger.debug("file \(tile.fileUrl.lastPathComponent) received from phone")
                         replyHandler(["success": true])
                     }
                     else{
@@ -143,12 +143,12 @@ extension PhoneConnector: WCSessionDelegate {
                    let data = message["data"] as? Data,
                    let tiles = try? JSONDecoder().decode(TileDataBlock.self, from: data){
                     Settings.shared.tileSource = tileSource
-                    print("data size is \(data.count)")
-                    print("checking \(tiles.size) tiles")
-                    let existingTiles = tiles.checkExistingTiles(tileSource: tileSource)
-                    print("found \(existingTiles) existing tiles")
+                    //print("data size is \(data.count)")
+                    //print("checking \(tiles.size) tiles")
+                    //let existingTiles = tiles.checkExistingTiles(tileSource: tileSource)
+                    //print("found \(existingTiles) existing tiles")
                     if let response = try? JSONEncoder().encode(tiles){
-                        print("response size is \(response.count)")
+                        //print("response size is \(response.count)")
                         replyHandler(["success": true, "data" : response as Any])
                     }
                     else{

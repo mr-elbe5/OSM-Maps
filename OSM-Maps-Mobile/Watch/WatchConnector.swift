@@ -121,7 +121,7 @@ class WatchConnector: NSObject {
                 DispatchQueue.main.async {
                     if let success = response["success"] as? Bool, success{
                         if let data = response["data"] as? Data {
-                            print("data size is \(data.count)")
+                            //print("data size is \(data.count)")
                             if let tilesData = try? JSONDecoder().decode(TileDataBlock.self, from: data){
                                 completion(tilesData)
                             }

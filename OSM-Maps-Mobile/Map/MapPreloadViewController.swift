@@ -133,7 +133,7 @@ class MapPreloadViewController: ScrollViewController{
         startPreloadButton.setTitleColor(.systemBlue, for: .normal)
         startPreloadButton.setTitleColor(.systemGray, for: .disabled)
         startPreloadButton.addAction(UIAction(){ action in
-            self.preloader.startDownload()
+            self.startDownload()
         }, for: .touchDown)
         contentView.addSubviewWithAnchors(startPreloadButton, top: tilesToLoadLabel.bottomAnchor, leading: contentView.leadingAnchor, trailing: contentView.centerXAnchor)
         
@@ -141,7 +141,7 @@ class MapPreloadViewController: ScrollViewController{
         cancelPreloadButton.setTitleColor(.systemBlue, for: .normal)
         cancelPreloadButton.setTitleColor(.systemGray, for: .disabled)
         cancelPreloadButton.addAction(UIAction(){ action in
-            self.preloader.cancelDownload()
+            self.cancelDownload()
         }, for: .touchDown)
         contentView.addSubviewWithAnchors(cancelPreloadButton, top: tilesToLoadLabel.bottomAnchor, leading: contentView.centerXAnchor, trailing: contentView.trailingAnchor)
         
@@ -257,10 +257,37 @@ class MapPreloadViewController: ScrollViewController{
             updateDownloadLabels()
             updateDownloadSliderValue(preloader.sliderValue)
             maxPreloadZoomControl.isEnabled = true
+            startPreloadButton.isEnabled = true
+            cancelPreloadButton.isEnabled = false
             setupPrepareUploadButton()
             setupStartUploadButton()
             cancelUploadButton.isEnabled = false
         }
+    }
+    
+    func startDownload(){
+        if preloader.tileRegion.size > 0{
+            self.preloader.startDownload()
+            updateDownloadLabels()
+            updateDownloadSliderValue(preloader.sliderValue)
+            maxPreloadZoomControl.isEnabled = false
+            startPreloadButton.isEnabled = false
+            cancelPreloadButton.isEnabled = true
+            prepareUploadButton.isEnabled = false
+            startUploadButton.isEnabled = false
+            cancelUploadButton.isEnabled = false
+        }
+    }
+    
+    func cancelDownload(){
+        self.preloader.cancelDownload()
+        updateDownloadLabels()
+        maxPreloadZoomControl.isEnabled = true
+        startPreloadButton.isEnabled = false
+        cancelPreloadButton.isEnabled = false
+        setupPrepareUploadButton()
+        setupStartUploadButton()
+        cancelUploadButton.isEnabled = false
     }
     
     func updateDownloadLabels(_ size: Int){
@@ -324,27 +351,6 @@ class MapPreloadViewController: ScrollViewController{
 
 extension MapPreloadViewController: PreloaderDelegate{
     
-    func downloadStarted(){
-        updateDownloadLabels()
-        updateDownloadSliderValue(preloader.sliderValue)
-        maxPreloadZoomControl.isEnabled = false
-        startPreloadButton.isEnabled = false
-        cancelPreloadButton.isEnabled = true
-        prepareUploadButton.isEnabled = false
-        startUploadButton.isEnabled = false
-        cancelUploadButton.isEnabled = false
-    }
-    
-    func downloadCanceled(){
-        updateDownloadLabels()
-        maxPreloadZoomControl.isEnabled = true
-        startPreloadButton.isEnabled = false
-        cancelPreloadButton.isEnabled = false
-        setupPrepareUploadButton()
-        setupStartUploadButton()
-        cancelUploadButton.isEnabled = false
-    }
-    
     func downloadSucceeded(){
         updateDownloadLabels()
         updateDownloadSliderValue(preloader.sliderValue)
@@ -385,9 +391,8 @@ extension MapPreloadViewController: PreloaderDelegate{
     }
     
     func uploadCanceled(){
+        preloader.uploadPrepared = false
         maxPreloadZoomControl.isEnabled = true
-        startPreloadButton.isEnabled = false
-        cancelPreloadButton.isEnabled = false
         setupPrepareUploadButton()
         setupStartUploadButton()
         cancelUploadButton.isEnabled = false
@@ -404,6 +409,7 @@ extension MapPreloadViewController: PreloaderDelegate{
     }
     
     func uploadCompleted(){
+        preloader.uploadPrepared = false
         updateUploadLabels()
         updateUploadSliderValue(preloader.watchSliderValue)
         maxPreloadZoomControl.isEnabled = true
