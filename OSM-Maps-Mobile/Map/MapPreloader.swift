@@ -20,12 +20,23 @@ protocol PreloaderDelegate{
     func uploadCompleted()
 }
 
+enum PreloaderStatus{
+    case idle
+    case downloading
+    case uploading
+}
+
 class MapPreloader{
     
     static var maxDownloadTiles = 5000
     static var defaultMaxPreloadZoom : Int = 8
     
     var delegate: PreloaderDelegate? = nil
+    
+    // state
+    
+    var status: PreloaderStatus = .idle
+    var uploadPrepared = false
     
     // map
     
@@ -42,7 +53,6 @@ class MapPreloader{
     
     // watch upload
     
-    var uploadPrepared = false
     var existingWatchTiles = 0
     var uploadErrors = 0
     
@@ -66,14 +76,28 @@ class MapPreloader{
         self.tileRegion = tileRegion
         allPreloadTiles = tileRegion.size
         existingTiles = tileRegion.tiles.checkExistingTiles(tileSource: Settings.shared.tileSource)
+        switch status{
+        case .downloading:
+            cancelDownload()
+        case .uploading:
+            cancelWatchUpload()
+        default:
+            break
+        }
+        status = .idle
     }
     
-    func startDownload(){
+    func startDownload() -> Bool{
+        if status != .idle{
+            return false
+        }
         preloadErrors = 0
         tileDownloadQueue = OperationQueue()
         tileDownloadQueue!.name = "downloadQueue"
         tileDownloadQueue!.maxConcurrentOperationCount = 2
         let tiles = tileRegion.tiles
+        status = .downloading
+        uploadPrepared = false
         for z in 0..<tiles.grids.count{
             let grid = tileRegion.tiles.grids[z]
             for y in 0..<grid.count{
@@ -88,17 +112,21 @@ class MapPreloader{
                 }
             }
         }
+        return true
     }
     
     func cancelDownload(){
         tileDownloadQueue?.cancelAllOperations()
         existingTiles = tileRegion.tiles.checkExistingTiles(tileSource: Settings.shared.tileSource)
+        status = .idle
     }
     
     // watch
     
-    func prepareUpload(){
-        uploadPrepared = false
+    func prepareUpload(success: @escaping (Bool) -> Void){
+        if status != .idle{
+            return success(false)
+        }
         watchTileRegion = tileRegion.getCopy(minZoom: tileRegion.minZoom, maxZoom: tileRegion.maxZoom)
         if WatchConnector.shared.isWatchConnected{
             WatchConnector.shared.prepareTileUpload(watchTileRegion.tiles){ tiles in
@@ -107,13 +135,25 @@ class MapPreloader{
                     self.existingWatchTiles = tiles.getExistingTiles()
                     self.uploadPrepared = true
                     self.delegate?.uploadPrepared()
+                    success(true)
+                }
+                else{
+                    self.uploadPrepared = false
+                    success(false)
                 }
             }
+        }
+        else{
+            success(false)
         }
     }
     
     func startWatchUpload() -> Bool{
-        if WatchConnector.shared.isWatchConnected, uploadPrepared{
+        if status != .idle || !uploadPrepared{
+            return false
+        }
+        if WatchConnector.shared.isWatchConnected{
+            status = .uploading
             delegate?.uploadStarted()
             uploadErrors = 0
             tileUploadQueue = OperationQueue()
@@ -155,16 +195,16 @@ extension MapPreloader: DownloadDelegate{
             existingTiles = allPreloadTiles
         }
         delegate?.downloadSucceeded()
-        checkCompletion()
+        checkDownloadComplete()
     }
     
     func downloadWithError() {
         preloadErrors += 1
         delegate?.downloadWithError()
-        checkCompletion()
+        checkDownloadComplete()
     }
     
-    private func checkCompletion(){
+    private func checkDownloadComplete(){
         if existingTiles + preloadErrors >= allPreloadTiles{
             tileDownloadQueue?.cancelAllOperations()
             tileDownloadQueue = nil
@@ -179,16 +219,16 @@ extension MapPreloader: UploadDelegate{
     func uploadSucceeded() {
         existingWatchTiles += 1
         delegate?.uploadSucceeded()
-        checkWatchCompletion()
+        checkUploadComplete()
     }
     
     func uploadWithError() {
         uploadErrors += 1
         delegate?.uploadWithError()
-        checkWatchCompletion()
+        checkUploadComplete()
     }
     
-    private func checkWatchCompletion(){
+    private func checkUploadComplete(){
         if existingWatchTiles + uploadErrors == watchTileRegion.size{
             tileUploadQueue?.cancelAllOperations()
             tileUploadQueue = nil

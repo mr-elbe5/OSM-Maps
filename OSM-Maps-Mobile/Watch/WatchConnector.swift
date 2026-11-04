@@ -23,7 +23,26 @@ class WatchConnector: NSObject {
     }
     
     var isWatchConnected: Bool {
-        session.isWatchAppInstalled && session.isPaired && session.activationState == .activated
+        session.isWatchAppInstalled && session.isPaired && session.activationState == .activated && session.isReachable == true
+    }
+    
+    func requestConnection(success: @escaping (Bool) -> Void) {
+        Logger.debug("sending connection request")
+        let request = ["request": "connection"]
+        session.sendMessage(
+            request,
+            replyHandler: { response in
+                Logger.debug("Received response \(response)")
+                DispatchQueue.main.async {
+                    let result = response["connected"] as? Bool ?? false
+                    success(result)
+                }
+            },
+            errorHandler: { error in
+                Logger.error("Error sending message:", error)
+                success(false)
+            }
+        )
     }
     
     func sendTile(_ tile: MapTile, data: Data, completion: @escaping (Bool) -> Void) {
@@ -138,7 +157,7 @@ class WatchConnector: NSObject {
                     }
                 }
             }) { error in
-                Logger.error("error checking tiles: \(error)")
+                Logger.error("error preparing tile upload: \(error)")
                 completion(nil)
             }
         }

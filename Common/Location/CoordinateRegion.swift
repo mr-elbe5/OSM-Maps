@@ -77,6 +77,20 @@ class CoordinateRegion: Equatable, Codable{
         coordinate.latitude >= minLatitude && coordinate.latitude <= maxLatitude && coordinate.longitude >= minLongitude && coordinate.longitude <= maxLongitude
     }
     
+    func getMaxZoomForTileNumber(_ num: Int) -> Int{
+        for i in 0..<World.maxZoom - World.minZoom{
+            let z = World.maxZoom - i
+            let minX = World.tileX(minLongitude, withZoom: z)
+            let minY = World.tileY(maxLatitude, withZoom: z)
+            let maxX = World.tileX(maxLongitude, withZoom: z)
+            let maxY = World.tileY(minLatitude, withZoom: z)
+            if 2*(maxX - minX + 1)*(maxY - minY + 1) < num{
+                return z
+            }
+        }
+        return World.minZoom
+    }
+    
     open var string : String{
         "minLatitude = \(minLatitude), maxLatitude = \(maxLatitude), minLongitude = \(minLongitude), maxLongitude = \(maxLongitude)"
     }

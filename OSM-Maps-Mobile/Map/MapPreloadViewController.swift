@@ -10,6 +10,8 @@ import OSLog
 
 class MapPreloadViewController: ScrollViewController{
     
+    var coordinateRegion = CoordinateRegion()
+    
     var maxPreloadZoomControl = UISegmentedControl()
     var maxZoom = MapPreloader.defaultMaxPreloadZoom
     
@@ -26,9 +28,10 @@ class MapPreloadViewController: ScrollViewController{
     
     // watch upload
     
+    var watchTestButton = UIButton()
     var watchConnected = false
     
-    var watchStatusLabel = UILabel(text: "disconnected".localize())
+    var watchStatusLabel = UILabel(text: "unknown".localize())
     var prepareUploadButton = UIButton()
     var startUploadButton = UIButton()
     var cancelUploadButton = UIButton()
@@ -42,6 +45,8 @@ class MapPreloadViewController: ScrollViewController{
     
     override func loadView() {
         title = "mapPreload".localize()
+        coordinateRegion = MainViewController.shared.mapView.scrollView.coordinateRegion
+        maxZoom = coordinateRegion.getMaxZoomForTileNumber(MapPreloader.maxDownloadTiles)
         super.loadView()
         view.addSubviewFillingSafeArea(scrollView, insets: .zero)
         scrollView.backgroundColor = .systemBackground
@@ -51,19 +56,8 @@ class MapPreloadViewController: ScrollViewController{
         if preloader.tileRegion.tiles.grids.isEmpty{
             setTileRegion()
         }
-        if preloader.existingTiles == preloader.allPreloadTiles{
-            startPreloadButton.isEnabled = false
-            cancelPreloadButton.isEnabled = false
-        }
-        else{
-            startPreloadButton.isEnabled = true
-            cancelPreloadButton.isEnabled = false
-        }
         if !WatchConnector.shared.isWatchConnected{
             WatchConnector.shared.start()
-            DispatchQueue.main.async {
-                self.updateConnectionStatus()
-            }
         }
     }
     
@@ -169,6 +163,18 @@ class MapPreloadViewController: ScrollViewController{
         contentView.addSubviewWithAnchors(label, top: watchInfo.bottomAnchor, leading: contentView.leadingAnchor)
         contentView.addSubviewWithAnchors(watchStatusLabel, top: watchInfo.bottomAnchor, leading: label.trailingAnchor)
         
+        watchTestButton.setTitle("testWatchConnection".localize(), for: .normal)
+        watchTestButton.setTitleColor(.systemBlue, for: .normal)
+        watchTestButton.setTitleColor(.systemGray, for: .disabled)
+        watchTestButton.addAction(UIAction(){ action in
+            self.testWatchConnection()
+        }, for: .touchDown)
+        contentView.addSubviewCenteredBelow(watchTestButton, upperView: label)
+        
+        label = UILabel(text: "watchStatus".localizeWithColon())
+        contentView.addSubviewWithAnchors(label, top: watchTestButton.bottomAnchor, leading: contentView.leadingAnchor)
+        contentView.addSubviewWithAnchors(watchStatusLabel, top: watchInfo.bottomAnchor, leading: label.trailingAnchor)
+        
         prepareUploadButton.setTitle("prepareWatchUpload".localize(), for: .normal)
         prepareUploadButton.setTitleColor(.systemBlue, for: .normal)
         prepareUploadButton.setTitleColor(.systemGray, for: .disabled)
@@ -214,18 +220,7 @@ class MapPreloadViewController: ScrollViewController{
         contentView.addSubviewWithAnchors(uploadErrorsValueLabel, top: uploadProgressSlider.bottomAnchor, leading: errorsInfo.trailingAnchor)
             .connectToBottom(of: contentView)
         
-        maxPreloadZoomControl.isEnabled = true
-        startPreloadButton.isEnabled = false
-        cancelPreloadButton.isEnabled = false
-        prepareUploadButton.isEnabled = false
         startUploadButton.isEnabled = false
-        cancelUploadButton.isEnabled = false
-        updateConnectionStatus()
-    }
-    
-    func updateConnectionStatus(){
-        watchConnected = WatchConnector.shared.isWatchConnected
-        watchStatusLabel.text = watchConnected ? "connected".localize() : "disconnected".localize()
     }
     
     func deleteAllTiles(){
@@ -242,52 +237,31 @@ class MapPreloadViewController: ScrollViewController{
     
     func setTileRegion(){
         preloader.uploadPrepared = false
-        let tileRegion = TileRegion(coordinateRegion: MainViewController.shared.mapView.scrollView.coordinateRegion, minZoom: World.minZoom, maxZoom: maxZoom)
+        let tileRegion = TileRegion(coordinateRegion: coordinateRegion, minZoom: World.minZoom, maxZoom: maxZoom)
         if tileRegion.size > MapPreloader.maxDownloadTiles{
             updateDownloadLabels(tileRegion.size)
-            startPreloadButton.isEnabled = false
-            cancelPreloadButton.isEnabled = false
-            prepareUploadButton.isEnabled = false
-            startUploadButton.isEnabled = false
-            cancelUploadButton.isEnabled = false
             showError("tooManyTiles".localize(param: String(MapPreloader.maxDownloadTiles)))
         }
         else{
             preloader.setTileRegion(tileRegion)
             updateDownloadLabels()
             updateDownloadSliderValue(preloader.sliderValue)
-            maxPreloadZoomControl.isEnabled = true
-            startPreloadButton.isEnabled = true
-            cancelPreloadButton.isEnabled = false
-            setupPrepareUploadButton()
-            setupStartUploadButton()
-            cancelUploadButton.isEnabled = false
         }
+        updateButtons()
     }
     
     func startDownload(){
-        if preloader.tileRegion.size > 0{
-            self.preloader.startDownload()
+        if preloader.tileRegion.size > 0, self.preloader.startDownload(){
             updateDownloadLabels()
             updateDownloadSliderValue(preloader.sliderValue)
-            maxPreloadZoomControl.isEnabled = false
-            startPreloadButton.isEnabled = false
-            cancelPreloadButton.isEnabled = true
-            prepareUploadButton.isEnabled = false
-            startUploadButton.isEnabled = false
-            cancelUploadButton.isEnabled = false
+            updateButtons()
         }
     }
     
     func cancelDownload(){
-        self.preloader.cancelDownload()
+        preloader.cancelDownload()
         updateDownloadLabels()
-        maxPreloadZoomControl.isEnabled = true
-        startPreloadButton.isEnabled = false
-        cancelPreloadButton.isEnabled = false
-        setupPrepareUploadButton()
-        setupStartUploadButton()
-        cancelUploadButton.isEnabled = false
+        updateButtons()
     }
     
     func updateDownloadLabels(_ size: Int){
@@ -307,17 +281,48 @@ class MapPreloadViewController: ScrollViewController{
         downloadProgressSlider.progress = value
     }
     
-    func setupPrepareUploadButton(){
-        prepareUploadButton.isEnabled = watchConnected && preloader.allPreloadTiles > 0 && preloader.allPreloadTiles == preloader.existingTiles && !preloader.uploadPrepared
+    func updateButtons(){
+        switch preloader.status{
+        case .downloading:
+            startPreloadButton.isEnabled = false
+            prepareUploadButton.isEnabled = false
+            startUploadButton.isEnabled = false
+        case .uploading:
+            startPreloadButton.isEnabled = false
+            prepareUploadButton.isEnabled = false
+            startUploadButton.isEnabled = false
+        default:
+            startPreloadButton.isEnabled = true
+            prepareUploadButton.isEnabled = true
+            startUploadButton.isEnabled = preloader.uploadPrepared == true
+        }
     }
     
-    func setupStartUploadButton(){
-        startUploadButton.isEnabled = watchConnected && preloader.allPreloadTiles > 0 && preloader.allPreloadTiles == preloader.existingTiles && preloader.uploadPrepared
+    func testWatchConnection(){
+        if !WatchConnector.shared.isWatchConnected{
+            watchStatusLabel.text = "disconnected".localize()
+        }
+        else{
+            WatchConnector.shared.requestConnection(){ success in
+                DispatchQueue.main.async{
+                    self.watchStatusLabel.text = success ? "connected".localize() : "disconnected".localize()
+                }
+            }
+        }
     }
     
     func prepareWatchUpload(){
         if WatchConnector.shared.isWatchConnected{
-            preloader.prepareUpload()
+            preloader.prepareUpload(){ success in
+                if !success{
+                    DispatchQueue.main.async {
+                        self.showError("watchNotReachable".localize())
+                    }
+                }
+                DispatchQueue.main.async{
+                    self.updateButtons()
+                }
+            }
         }
         else{
             showError("watchNotConnected".localize())
@@ -362,40 +367,21 @@ extension MapPreloadViewController: PreloaderDelegate{
     }
     
     func downloadCompleted(){
-        maxPreloadZoomControl.isEnabled = true
-        startPreloadButton.isEnabled = false
-        cancelPreloadButton.isEnabled = false
-        setupPrepareUploadButton()
-        setupStartUploadButton()
-        cancelUploadButton.isEnabled = false
+        updateButtons()
     }
     
     func uploadPrepared(){
         updateUploadLabels()
         updateUploadSliderValue(preloader.watchSliderValue)
-        maxPreloadZoomControl.isEnabled = true
-        startPreloadButton.isEnabled = false
-        cancelPreloadButton.isEnabled = false
-        setupPrepareUploadButton()
-        setupStartUploadButton()
-        cancelUploadButton.isEnabled = true
+        updateButtons()
     }
     
     func uploadStarted(){
-        maxPreloadZoomControl.isEnabled = false
-        startPreloadButton.isEnabled = false
-        cancelPreloadButton.isEnabled = false
-        prepareUploadButton.isEnabled = false
-        startUploadButton.isEnabled = false
-        cancelUploadButton.isEnabled = true
+        updateButtons()
     }
     
     func uploadCanceled(){
-        preloader.uploadPrepared = false
-        maxPreloadZoomControl.isEnabled = true
-        setupPrepareUploadButton()
-        setupStartUploadButton()
-        cancelUploadButton.isEnabled = false
+        updateButtons()
     }
     
     func uploadSucceeded(){
@@ -412,12 +398,7 @@ extension MapPreloadViewController: PreloaderDelegate{
         preloader.uploadPrepared = false
         updateUploadLabels()
         updateUploadSliderValue(preloader.watchSliderValue)
-        maxPreloadZoomControl.isEnabled = true
-        startPreloadButton.isEnabled = false
-        cancelPreloadButton.isEnabled = false
-        setupPrepareUploadButton()
-        setupStartUploadButton()
-        cancelUploadButton.isEnabled = false
+        updateButtons()
     }
     
 }

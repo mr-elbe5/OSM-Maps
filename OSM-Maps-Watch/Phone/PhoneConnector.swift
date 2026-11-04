@@ -93,6 +93,9 @@ extension PhoneConnector: WCSessionDelegate {
         //Logger.debug("didReceiveMessage: \(message["request"] as? String ?? "")")
         if let request = message["request"] as? String {
             switch request {
+            case "connection":
+                Logger.debug("got connection request")
+                replyHandler(["connected": true as Any])
             case "tileUpload":
                 let zoom = message["zoom"] as? Int ?? 0
                 let x = message["x"] as? Int ?? 0
@@ -143,12 +146,9 @@ extension PhoneConnector: WCSessionDelegate {
                    let data = message["data"] as? Data,
                    let tiles = try? JSONDecoder().decode(TileDataBlock.self, from: data){
                     Settings.shared.tileSource = tileSource
-                    //print("data size is \(data.count)")
-                    //print("checking \(tiles.size) tiles")
-                    //let existingTiles = tiles.checkExistingTiles(tileSource: tileSource)
-                    //print("found \(existingTiles) existing tiles")
+                    let existingTiles = tiles.checkExistingTiles(tileSource: tileSource)
+                    print("preparing upload: found \(existingTiles) existing tiles")
                     if let response = try? JSONEncoder().encode(tiles){
-                        //print("response size is \(response.count)")
                         replyHandler(["success": true, "data" : response as Any])
                     }
                     else{

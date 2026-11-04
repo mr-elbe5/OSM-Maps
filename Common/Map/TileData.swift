@@ -56,6 +56,13 @@ extension TileDataGrid{
         print("created grid of \(count) tiles")
     }
     
+    var size: Int{
+        if !isEmpty{
+            return count * self[0].count
+        }
+        return 0
+    }
+    
     func get(x: Int, y: Int) -> TileData{
         self[y][x]
     }
@@ -76,7 +83,7 @@ struct TileDataBlock: Codable{
         var count = 0
         for grid in grids{
             if !grid.isEmpty{
-                count += grid.count * grid[0].count
+                count += grid.size
             }
         }
         return count
@@ -111,6 +118,17 @@ struct TileDataBlock: Codable{
             let grid = TileDataGrid(minX: minX, maxX: maxX, minY: minY, maxY: maxY, zoom: z)
             grids.append(grid)
         }
+    }
+    
+    func getMaxZoomForTileNumber(_ num: Int) -> Int{
+        if !grids.isEmpty{
+            for  i in grids.count - 1...0{
+                if 2*grids[i].size < num{
+                    return minZoom + i
+                }
+            }
+        }
+        return 0
     }
     
     func checkExistingTiles(tileSource: TileSource) -> Int{
