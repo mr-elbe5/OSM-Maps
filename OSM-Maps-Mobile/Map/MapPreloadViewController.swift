@@ -26,21 +26,6 @@ class MapPreloadViewController: ScrollViewController{
     
     var preloadErrorsValueLabel = UILabel()
     
-    // watch upload
-    
-    var watchTestButton = UIButton()
-    var watchConnected = false
-    
-    var watchStatusLabel = UILabel(text: "unknown".localize())
-    var prepareUploadButton = UIButton()
-    var startUploadButton = UIButton()
-    var cancelUploadButton = UIButton()
-    
-    var uploadProgressSlider = UIProgressView()
-    
-    var existingWatchTilesValueLabel = UILabel()
-    var uploadErrorsValueLabel = UILabel()
-    
     var preloader = MapPreloader()
     
     override func loadView() {
@@ -94,7 +79,7 @@ class MapPreloadViewController: ScrollViewController{
         contentView.addSubviewBelow(sourceLabel, upperView: note)
         
         let segSize = World.maxZoom - World.minZoom
-        var label = UILabel(text: "maxZoom".localize())
+        let label = UILabel(text: "maxZoom".localize())
         contentView.addSubviewBelow(label, upperView: sourceLabel)
         
         for i: Int in 0...segSize{
@@ -144,83 +129,12 @@ class MapPreloadViewController: ScrollViewController{
         downloadProgressSlider.progress = 0
         contentView.addSubviewWithAnchors(downloadProgressSlider, top: preloadProgressLabel.bottomAnchor, leading: contentView.leadingAnchor, trailing: contentView.trailingAnchor, insets: OSInsets.doubleInsets)
         
-        var errorsInfo = UILabel()
+        let errorsInfo = UILabel()
         errorsInfo.text = "unloadedTiles".localize()
         contentView.addSubviewWithAnchors(errorsInfo, top: downloadProgressSlider.bottomAnchor, leading: contentView.leadingAnchor)
         preloadErrorsValueLabel.text = String(preloader.preloadErrors)
         contentView.addSubviewWithAnchors(preloadErrorsValueLabel, top: downloadProgressSlider.bottomAnchor, leading: errorsInfo.trailingAnchor)
-        
-        // watch
-        
-        let watchHeader = UILabel(header: "watchUploadArea".localize())
-        contentView.addSubviewBelow(watchHeader, upperView: preloadErrorsValueLabel)
-        
-        let watchInfo = UILabel(hint: "watchUploadHint".localize(table: "Hints"))
-        watchInfo.numberOfLines = 0
-        contentView.addSubviewBelow(watchInfo, upperView: watchHeader)
-        
-        label = UILabel(text: "watchStatus".localizeWithColon())
-        contentView.addSubviewWithAnchors(label, top: watchInfo.bottomAnchor, leading: contentView.leadingAnchor)
-        contentView.addSubviewWithAnchors(watchStatusLabel, top: watchInfo.bottomAnchor, leading: label.trailingAnchor)
-        
-        watchTestButton.setTitle("testWatchConnection".localize(), for: .normal)
-        watchTestButton.setTitleColor(.systemBlue, for: .normal)
-        watchTestButton.setTitleColor(.systemGray, for: .disabled)
-        watchTestButton.addAction(UIAction(){ action in
-            self.testWatchConnection()
-        }, for: .touchDown)
-        contentView.addSubviewCenteredBelow(watchTestButton, upperView: label)
-        
-        label = UILabel(text: "watchStatus".localizeWithColon())
-        contentView.addSubviewWithAnchors(label, top: watchTestButton.bottomAnchor, leading: contentView.leadingAnchor)
-        contentView.addSubviewWithAnchors(watchStatusLabel, top: watchInfo.bottomAnchor, leading: label.trailingAnchor)
-        
-        prepareUploadButton.setTitle("prepareWatchUpload".localize(), for: .normal)
-        prepareUploadButton.setTitleColor(.systemBlue, for: .normal)
-        prepareUploadButton.setTitleColor(.systemGray, for: .disabled)
-        prepareUploadButton.addAction(UIAction(){ action in
-            self.prepareWatchUpload()
-        }, for: .touchDown)
-        contentView.addSubviewCenteredBelow(prepareUploadButton, upperView: label)
-        
-        let existingWatchTilesLabel = UILabel()
-        existingWatchTilesLabel.text = "existingTiles".localize()
-        contentView.addSubviewWithAnchors(existingWatchTilesLabel, top: prepareUploadButton.bottomAnchor, leading: contentView.leadingAnchor)
-        contentView.addSubviewWithAnchors(existingWatchTilesValueLabel, top: prepareUploadButton.bottomAnchor, leading: existingWatchTilesLabel.trailingAnchor)
-        
-        startUploadButton.setTitle("startWatchUpload".localize(), for: .normal)
-        startUploadButton.setTitleColor(.systemBlue, for: .normal)
-        startUploadButton.setTitleColor(.systemGray, for: .disabled)
-        startUploadButton.addAction(UIAction(){ action in
-            let started = self.startWatchUpload()
-            if !started{
-                self.cancelWatchUpload()
-                self.showError("watchUploadNotStarted".localize())
-            }
-        }, for: .touchDown)
-        contentView.addSubviewCenteredBelow(startUploadButton, upperView: existingWatchTilesLabel)
-        
-        cancelUploadButton.setTitle("cancel".localize(), for: .normal)
-        cancelUploadButton.setTitleColor(.systemBlue, for: .normal)
-        cancelUploadButton.setTitleColor(.systemGray, for: .disabled)
-        cancelUploadButton.addAction(UIAction(){ action in
-            self.cancelWatchUpload()
-        }, for: .touchDown)
-        contentView.addSubviewCenteredBelow(cancelUploadButton, upperView: startUploadButton)
-        
-        let watchProgressLabel = UILabel(hint: "progress".localizeWithColon())
-        contentView.addSubviewBelow(watchProgressLabel, upperView: cancelUploadButton)
-        uploadProgressSlider.progress = 0
-        contentView.addSubviewBelow(uploadProgressSlider, upperView: watchProgressLabel)
-        
-        errorsInfo = UILabel()
-        errorsInfo.text = "unloadedTiles".localize()
-        contentView.addSubviewWithAnchors(errorsInfo, top: uploadProgressSlider.bottomAnchor, leading: contentView.leadingAnchor)
-        uploadErrorsValueLabel.text = String(preloader.uploadErrors)
-        contentView.addSubviewWithAnchors(uploadErrorsValueLabel, top: uploadProgressSlider.bottomAnchor, leading: errorsInfo.trailingAnchor)
             .connectToBottom(of: contentView)
-        
-        startUploadButton.isEnabled = false
     }
     
     func deleteAllTiles(){
@@ -236,7 +150,6 @@ class MapPreloadViewController: ScrollViewController{
     }
     
     func setTileRegion(){
-        preloader.uploadPrepared = false
         let tileRegion = TileRegion(coordinateRegion: coordinateRegion, minZoom: World.minZoom, maxZoom: maxZoom)
         if tileRegion.size > MapPreloader.maxDownloadTiles{
             updateDownloadLabels(tileRegion.size)
@@ -285,71 +198,9 @@ class MapPreloadViewController: ScrollViewController{
         switch preloader.status{
         case .downloading:
             startPreloadButton.isEnabled = false
-            prepareUploadButton.isEnabled = false
-            startUploadButton.isEnabled = false
-        case .uploading:
-            startPreloadButton.isEnabled = false
-            prepareUploadButton.isEnabled = false
-            startUploadButton.isEnabled = false
         default:
             startPreloadButton.isEnabled = true
-            prepareUploadButton.isEnabled = true
-            startUploadButton.isEnabled = preloader.uploadPrepared == true
         }
-    }
-    
-    func testWatchConnection(){
-        if !WatchConnector.shared.isWatchConnected{
-            watchStatusLabel.text = "disconnected".localize()
-        }
-        else{
-            WatchConnector.shared.requestConnection(){ success in
-                DispatchQueue.main.async{
-                    self.watchStatusLabel.text = success ? "connected".localize() : "disconnected".localize()
-                }
-            }
-        }
-    }
-    
-    func prepareWatchUpload(){
-        if WatchConnector.shared.isWatchConnected{
-            preloader.prepareUpload(){ success in
-                if !success{
-                    DispatchQueue.main.async {
-                        self.showError("watchNotReachable".localize())
-                    }
-                }
-                DispatchQueue.main.async{
-                    self.updateButtons()
-                }
-            }
-        }
-        else{
-            showError("watchNotConnected".localize())
-        }
-    }
-    
-    func startWatchUpload() -> Bool{
-        if WatchConnector.shared.isWatchConnected, preloader.uploadPrepared{
-            return preloader.startWatchUpload()
-        }
-        else{
-            showError("watchNotConnected".localize())
-            return false
-        }
-    }
-    
-    func cancelWatchUpload(){
-        preloader.cancelWatchUpload()
-    }
-    
-    func updateUploadSliderValue(_ value: Float){
-        uploadProgressSlider.progress = value
-    }
-    
-    func updateUploadLabels(){
-        existingWatchTilesValueLabel.text = String(preloader.existingWatchTiles)
-        uploadErrorsValueLabel.text = String(preloader.uploadErrors)
     }
     
 }
@@ -367,37 +218,6 @@ extension MapPreloadViewController: PreloaderDelegate{
     }
     
     func downloadCompleted(){
-        updateButtons()
-    }
-    
-    func uploadPrepared(){
-        updateUploadLabels()
-        updateUploadSliderValue(preloader.watchSliderValue)
-        updateButtons()
-    }
-    
-    func uploadStarted(){
-        updateButtons()
-    }
-    
-    func uploadCanceled(){
-        updateButtons()
-    }
-    
-    func uploadSucceeded(){
-        updateUploadLabels()
-        updateUploadSliderValue(preloader.watchSliderValue)
-    }
-    
-    func uploadWithError(){
-        updateUploadLabels()
-        updateUploadSliderValue(preloader.watchSliderValue)
-    }
-    
-    func uploadCompleted(){
-        preloader.uploadPrepared = false
-        updateUploadLabels()
-        updateUploadSliderValue(preloader.watchSliderValue)
         updateButtons()
     }
     

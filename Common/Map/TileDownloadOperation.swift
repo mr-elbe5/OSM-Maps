@@ -32,7 +32,7 @@ class TileDownloadOperation : AsyncOperation, @unchecked Sendable {
             }
             else{
                 DispatchQueue.main.async { [self] in
-                    //Logger.debug("TileDownloadOperation loading \(tile.shortDescription)")
+                    Logger.debug("TileDownloadOperation loading \(tile.shortDescription)")
                     delegate?.downloadWithError()
                 }
             }

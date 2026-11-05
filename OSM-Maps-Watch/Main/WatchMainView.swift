@@ -54,6 +54,16 @@ struct WatchMainView: View {
                         .foregroundColor(.black)
                         .offset(x: 35, y: proxy.size.height/2 - 18)
                 }
+                NavigationLink(destination: WatchSettingsView()) {
+                    Image(systemName: "gear")
+                }
+                .mapButton()
+                .position(x: proxy.size.width - 20, y: 20)
+                NavigationLink(destination: MapSettingsView()) {
+                    Image(systemName: "map")
+                }
+                .mapButton()
+                .position(x: proxy.size.width - 20, y: (proxy.size.height - 40)/3 + 20)
                 if !settings.followLocation{
                     Button(action: {
                         Settings.shared.followLocation = true
@@ -62,13 +72,8 @@ struct WatchMainView: View {
                         Image(systemName: "record.circle")
                     }
                     .mapButton()
-                    .position(x: proxy.size.width - 20, y: proxy.size.height/2)
+                    .position(x: proxy.size.width - 20, y: (proxy.size.height - 40)*2/3 + 20)
                 }
-                NavigationLink(destination: WatchSettingsView()) {
-                    Image(systemName: "gear")
-                }
-                .mapButton()
-                .position(x: proxy.size.width - 20, y: 20)
                 NavigationLink(destination: WatchTrackControlView()) {
                     Image(systemName: trackRecorder.isTracking ? "figure.walk" : "figure.stand")
                 }
@@ -80,7 +85,7 @@ struct WatchMainView: View {
                     Image(systemName: "plus.circle")
                 }
                 .mapButton()
-                .position(x: 20, y: proxy.size.height - 60)
+                .position(x: 20, y: (proxy.size.height - 40)*2/3 + 20)
                 Button(action: {
                     mapStatus.zoomOut()
                 }) {

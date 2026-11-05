@@ -79,6 +79,23 @@
         }
       }
     },
+    "allTiles" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Kacheln"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All Tiles"
+          }
+        }
+      }
+    },
     "arrived" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -109,6 +126,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Cancel"
+          }
+        }
+      }
+    },
+    "cancelPreload" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorladen abbrechen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel Preload"
           }
         }
       }
@@ -317,6 +351,23 @@
         }
       }
     },
+    "existingTiles" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorhandene Kacheln"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Existing Tiles"
+          }
+        }
+      }
+    },
     "followInBackground" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -402,8 +453,39 @@
         }
       }
     },
-    "Key" : {
-      "extractionState" : "manual"
+    "mapSettings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karteneinstellungen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Map Settings"
+          }
+        }
+      }
+    },
+    "maxZoom" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max. Zoom"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Max. Zoom"
+          }
+        }
+      }
     },
     "no" : {
       "extractionState" : "manual",
@@ -486,6 +568,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Overlays"
+          }
+        }
+      }
+    },
+    "preloadTiles" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kartenkacheln vorladen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preload Map Tiles"
           }
         }
       }
@@ -707,6 +806,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Start"
+          }
+        }
+      }
+    },
+    "startPreload" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorladen starten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start Preload"
           }
         }
       }

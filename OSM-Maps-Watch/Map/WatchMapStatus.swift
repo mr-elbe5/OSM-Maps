@@ -37,6 +37,20 @@ typealias MapTileGrid = [MapTileRow]
     
     var tilesLoaded = false
     
+    var coordinateRegion: CoordinateRegion{
+        if let centerCoordinate = centerCoordinate{
+            let scaledCenter = World.scaledPoint(centerCoordinate, downScale: downScaleFromWorld)
+            let topLeft = CGPoint(x: scaledCenter.x - screenSize.width/2, y: scaledCenter.y - screenSize.height/2)
+            let bottomRight = CGPoint(x: scaledCenter.x + screenSize.width/2, y: scaledCenter.y + screenSize.height/2)
+            return CoordinateRegion(topLeft: World.coordinate(scaledX: topLeft.x, scaledY: topLeft.y, downScale: downScaleFromWorld), bottomRight: World.coordinate(scaledX: bottomRight.x, scaledY: bottomRight.y, downScale: downScaleFromWorld))
+        }
+        return CoordinateRegion()
+    }
+    
+    var maxZoom: Int{
+        coordinateRegion.getMaxZoomForTileNumber(MapPreloader.maxDownloadTiles)
+    }
+    
     // tile 16/34530/21183
     
     override init(){

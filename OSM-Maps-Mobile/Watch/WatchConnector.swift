@@ -23,53 +23,7 @@ class WatchConnector: NSObject {
     }
     
     var isWatchConnected: Bool {
-        session.isWatchAppInstalled && session.isPaired && session.activationState == .activated && session.isReachable == true
-    }
-    
-    func requestConnection(success: @escaping (Bool) -> Void) {
-        Logger.debug("sending connection request")
-        let request = ["request": "connection"]
-        session.sendMessage(
-            request,
-            replyHandler: { response in
-                Logger.debug("Received response \(response)")
-                DispatchQueue.main.async {
-                    let result = response["connected"] as? Bool ?? false
-                    success(result)
-                }
-            },
-            errorHandler: { error in
-                Logger.error("Error sending message:", error)
-                success(false)
-            }
-        )
-    }
-    
-    func sendTile(_ tile: MapTile, data: Data, completion: @escaping (Bool) -> Void) {
-        //Logger.debug("sending tile")
-        if !isWatchConnected {
-            Logger.error("not connected to phone")
-            completion(false)
-            return
-        }
-        session.sendMessage([
-            "request": "tileUpload",
-            "zoom": tile.zoom,
-            "x": tile.x,
-            "y": tile.y,
-            "data": data as Any
-        ], replyHandler: {response in
-            DispatchQueue.main.async {
-                if let success = response["success"] as? Bool {
-                    completion(success)
-                }
-                else{
-                    completion(false)
-                }
-            }
-        }) { error in
-            Logger.error("error sending tile: \(error)")
-        }
+        session.isWatchAppInstalled && session.isPaired && session.activationState == .activated
     }
     
     func sendRoute(_ route: Route, completion: @escaping (Bool) -> Void) {
@@ -124,48 +78,6 @@ class WatchConnector: NSObject {
         }
     }
     
-    func prepareTileUpload(_ tiles: TileDataBlock, completion: @escaping (TileDataBlock?) -> Void) {
-        Logger.debug("preparing tile upload")
-        if !isWatchConnected {
-            Logger.error("not connected to phone")
-            completion(nil)
-            return
-        }
-        if let data = try? JSONEncoder().encode(tiles){
-            session.sendMessage([
-                "request": "prepareTileUpload",
-                "tileSource": Settings.shared.tileSource.name,
-                "data": data as Any
-            ], replyHandler: {response in
-                DispatchQueue.main.async {
-                    if let success = response["success"] as? Bool, success{
-                        if let data = response["data"] as? Data {
-                            //print("data size is \(data.count)")
-                            if let tilesData = try? JSONDecoder().decode(TileDataBlock.self, from: data){
-                                completion(tilesData)
-                            }
-                            else{
-                                completion(nil)
-                            }
-                        }
-                        else{
-                            completion(nil)
-                        }
-                    }
-                    else{
-                        completion(nil)
-                    }
-                }
-            }) { error in
-                Logger.error("error preparing tile upload: \(error)")
-                completion(nil)
-            }
-        }
-        else{
-            Logger.error("could not encode tiles")
-            completion(nil)
-        }
-    }
 }
 
 extension WatchConnector: WCSessionDelegate {

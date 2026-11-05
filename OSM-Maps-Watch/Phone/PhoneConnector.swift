@@ -82,6 +82,21 @@ import OSLog
             }
         )
     }
+    
+    func preloadTiles(completion: @escaping (Bool) -> Void) {
+        //Logger.info("watch saving track")
+        let request = ["request": "preparePreload"] as [String : Any]
+        session?.sendMessage(
+            request,
+            replyHandler: { response in
+                
+            },
+            errorHandler: { error in
+                Logger.error("Error sending message:", error)
+                completion(false)
+            }
+        )
+    }
 }
 
 extension PhoneConnector: WCSessionDelegate {

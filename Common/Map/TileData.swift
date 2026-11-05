@@ -53,7 +53,7 @@ extension TileDataGrid{
             }
             append(line)
         }
-        print("created grid of \(count) tiles")
+        //print("created grid of \(count) tiles")
     }
     
     var size: Int{
